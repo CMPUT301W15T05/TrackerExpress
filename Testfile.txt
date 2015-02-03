@@ -3,3 +3,4 @@ Jesse Emery
 Sean Baergen
 Rishi Barnwal
 Peter Crinklaw
+Randy Hu
