@@ -1,9 +1,7 @@
-import java.util.Date;
-
 import junit.framework.TestCase;
 
 
-public class ExpenseItemTest extends TestCase {
+public class ClaimTest extends TestCase {
 
 	protected void setUp() throws Exception {
 		super.setUp();
@@ -11,7 +9,7 @@ public class ExpenseItemTest extends TestCase {
 	
 	public void testContructWithParameters(){
 		try{
-			ExpenseItem claim = constructWithParameters();
+			Claim claim = constructWithParameters();
 		}
 		catch (Exception e){
 			fail();
@@ -21,7 +19,7 @@ public class ExpenseItemTest extends TestCase {
 	
 	public void testContructWithoutParameters(){
 		try{
-			ExpenseItem claim = new ExpenseItem();
+			Claim claim = new Claim();
 		}
 		catch (Exception e){
 			fail();
@@ -30,22 +28,22 @@ public class ExpenseItemTest extends TestCase {
 	}
 	
 	public void testIsComplete(){
-		ExpenseItem claim = new Expense();
+		Claim claim = new Expense();
 		assertFalse(claim.isComplete());
 		
-		ExpenseItem claim = constructWithParameters();
+		Claim claim = constructWithParameters();
 		assertTrue(claim.isComplete());
 	}
 	
 	public void testMarkAsIncomplete(){
-		ExpenseItem claim = constructWithParameters();
+		Claim claim = constructWithParameters();
 		claim.markAsIncomplete();
 		assertFalse(claim.isComplete());
 	}
 	
 	
 	public void testUnmarkAsIncomplete(){
-		ExpenseItem claim = constructWithParameters();
+		Claim claim = constructWithParameters();
 		claim.markAsIncomplete();
 		claim.unmarkAsIncomplete();		
 		assertTrue(claim.isComplete());
@@ -54,7 +52,7 @@ public class ExpenseItemTest extends TestCase {
 	//even if they uncheck the incomplete button, if parameters are missing,
 	//the claim should still be incomplete
 	public void testUnmarkAsIncompleteWithMissingParameters(){
-		ExpenseItem claim = new Expense();
+		Claim claim = new Expense();
 		claim.markAsIncomplete();
 		claim.unmarkAsIncomplete();		
 		assertFalse(claim.isComplete());
@@ -62,7 +60,7 @@ public class ExpenseItemTest extends TestCase {
 	
 	
 	public void testGetDate(){
-		ExpenseItem claimItem = constructWithParameters();
+		Claim claimItem = constructWithParameters();
 		assertTrue(claimItem.getDate().equals(new Date(11111)));
 	}
 	
@@ -70,22 +68,22 @@ public class ExpenseItemTest extends TestCase {
 	//but maybe it should just be res/values/string objects, referenced in java
 	//like R.String.currency_CAD
 	public void testGetCategory(){
-		ExpenseItem claimItem = constructWithParameters();
+		Claim claimItem = constructWithParameters();
 		assertTrue(claimItem.getCategory().equals(Category.VEHICLE_RENTAL));
 	}
 	
 	public void testGetDescription(){
-		ExpenseItem claimItem = constructWithParameters();
+		Claim claimItem = constructWithParameters();
 		assertTrue(claimItem.getDescription().equals("A description"));
 	}
 	
 	public void testGetAmountSpent(){
-		ExpenseItem claimItem = constructWithParameters();
+		Claim claimItem = constructWithParameters();
 		assertTrue(claimItem.getAmountSpent().equals(1000));
 	}
 	
 	public void testGetCurrency(){
-		ExpenseItem claimItem = constructWithParameters();
+		Claim claimItem = constructWithParameters();
 		assertTrue(claimItem.getCurrency().equals(Currency.CAD));
 	}
 	
@@ -94,37 +92,37 @@ public class ExpenseItemTest extends TestCase {
 	
 	
 	public void testSetDate(){
-		ExpenseItem claim = new ExpenseItem();
+		Claim claim = new Claim();
 		claim.setDate(new Date(11111));
 		assertTrue(claimItem.getDate().equals(new Date(11111)));
 	}
 	
 	public void testSetCategory(){
-		ExpenseItem claim = new ExpenseItem();
+		Claim claim = new Claim();
 		claim.setCategory(Category.VEHICLE_RENTAL);
 		assertTrue(claimItem.getCategory().equals(Category.VEHICLE_RENTAL));
 	}
 	
 	public void testSetDescription(){
-		ExpenseItem claim = new ExpenseItem();
+		Claim claim = new Claim();
 		claim.setDescription("A description");
 		assertTrue(claimItem.getDescription().equals("A description"));
 	}
 	
 	public void testSetAmountSpent(){
-		ExpenseItem claim = new ExpenseItem();
+		Claim claim = new Claim();
 		claim.setAmountSpend(1000);
 		assertTrue(claimItem.getAmountSpent().equals(1000));
 	}
 	
 	public void testSetCurrency(){
-		ExpenseItem claim = new ExpenseItem();
+		Claim claim = new Claim();
 		claim.setCurrency(Currency.CAD);
 		assertTrue(claimItem.getCurrency().equals(Currency.CAD));
 	}
 
 	
-	private ExpenseItem constructWithParameters(){
+	private Claim constructWithParameters(){
 		return new Expense(new Date(11111), Category.VEHICLE_RENTAL, "A description", 
 				1000, Currency.CAD);
 	}
