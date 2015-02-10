@@ -54,7 +54,7 @@ public class ExpenseItemTest extends TestCase {
 	//even if they uncheck the incomplete button, if parameters are missing,
 	//the claim should still be incomplete
 	public void testUnmarkAsIncompleteWithMissingParameters(){
-		ExpenseItem expense = new Expense();
+		ExpenseItem expense = new ExpenseItem();
 		expense.markAsIncomplete();
 		expense.unmarkAsIncomplete();		
 		assertFalse(expense.isComplete());

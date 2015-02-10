@@ -1,4 +1,6 @@
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import junit.framework.TestCase;
 
@@ -72,7 +74,8 @@ public class ClaimTest extends TestCase {
 	
 	public void testSetClaimantName(){
 		Claim claim = constructWithParameters();
-		assertTrue(claim.getClaimantName().equals("PETER"));
+		claim.setClaimantName("PEEEETER");
+		assertTrue(claim.getClaimantName().equals("PEEEETER"));
 	}
 	
 	public void testSetStartDate(){
@@ -87,7 +90,7 @@ public class ClaimTest extends TestCase {
 		assertTrue(claim.getEndDate().equals(new Date(33333)));
 	}
 
-	public void testSetDestinations(){
+	public void testAddDestination(){
 		Claim claim = constructWithParameters();
 		claim.getDestinations().add(new Destination("third place", "third reason"));
 		
@@ -99,6 +102,14 @@ public class ClaimTest extends TestCase {
 		assertTrue(claim.getDestinations().equals(expected));
 	}
 	
+	
+	//just checks that the object returns is the same as the one tested in ExpenselistTest. 
+	//it would be redundant to actually test if the expense list works, that's ExpenselistTest's job
+	public void testGetExpenseList(){
+		Claim claim = constructWithParameters();
+		Object el = claim.getExpenseList();
+		assertTrue(el instanceof ExpenseList);
+	}
 	
 	
 	private Claim constructWithParameters(){
