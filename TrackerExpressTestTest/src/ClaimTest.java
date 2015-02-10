@@ -1,3 +1,5 @@
+import java.util.Date;
+
 import junit.framework.TestCase;
 
 
@@ -12,8 +14,7 @@ public class ClaimTest extends TestCase {
 			Claim claim = constructWithParameters();
 		}
 		catch (Exception e){
-			fail();
-			System.out.println("Expense Item Constructor threw exception.");
+			fail("Claim Constructor threw exception.");
 		}
 	}
 	
@@ -22,109 +23,86 @@ public class ClaimTest extends TestCase {
 			Claim claim = new Claim();
 		}
 		catch (Exception e){
-			fail();
-			System.out.println("Expense Item Constructor threw exception.");
+			fail("Claim Constructor threw exception.");
 		}
 	}
 	
+	
 	public void testIsComplete(){
-		Claim claim = new Expense();
+		Claim claim = new Claim();
 		assertFalse(claim.isComplete());
 		
-		Claim claim = constructWithParameters();
+		claim = constructWithParameters();
 		assertTrue(claim.isComplete());
-	}
-	
-	public void testMarkAsIncomplete(){
-		Claim claim = constructWithParameters();
-		claim.markAsIncomplete();
+		
+		ExpenseItem e = new ExpenseItem();
+		e.markAsIncomplete();
+		claim.getExpenses().add(e);
 		assertFalse(claim.isComplete());
-	}
-	
-	
-	public void testUnmarkAsIncomplete(){
-		Claim claim = constructWithParameters();
-		claim.markAsIncomplete();
-		claim.unmarkAsIncomplete();		
-		assertTrue(claim.isComplete());
-	}
-	
-	//even if they uncheck the incomplete button, if parameters are missing,
-	//the claim should still be incomplete
-	public void testUnmarkAsIncompleteWithMissingParameters(){
-		Claim claim = new Expense();
-		claim.markAsIncomplete();
-		claim.unmarkAsIncomplete();		
-		assertFalse(claim.isComplete());
-	}
-	
-	
-	public void testGetDate(){
-		Claim claimItem = constructWithParameters();
-		assertTrue(claimItem.getDate().equals(new Date(11111)));
-	}
-	
-	//i wrote this test thinking Categories woud be an enum we make
-	//but maybe it should just be res/values/string objects, referenced in java
-	//like R.String.currency_CAD
-	public void testGetCategory(){
-		Claim claimItem = constructWithParameters();
-		assertTrue(claimItem.getCategory().equals(Category.VEHICLE_RENTAL));
-	}
-	
-	public void testGetDescription(){
-		Claim claimItem = constructWithParameters();
-		assertTrue(claimItem.getDescription().equals("A description"));
-	}
-	
-	public void testGetAmountSpent(){
-		Claim claimItem = constructWithParameters();
-		assertTrue(claimItem.getAmountSpent().equals(1000));
-	}
-	
-	public void testGetCurrency(){
-		Claim claimItem = constructWithParameters();
-		assertTrue(claimItem.getCurrency().equals(Currency.CAD));
-	}
-	
-	
-	
-	
-	
-	public void testSetDate(){
-		Claim claim = new Claim();
-		claim.setDate(new Date(11111));
-		assertTrue(claimItem.getDate().equals(new Date(11111)));
-	}
-	
-	public void testSetCategory(){
-		Claim claim = new Claim();
-		claim.setCategory(Category.VEHICLE_RENTAL);
-		assertTrue(claimItem.getCategory().equals(Category.VEHICLE_RENTAL));
-	}
-	
-	public void testSetDescription(){
-		Claim claim = new Claim();
-		claim.setDescription("A description");
-		assertTrue(claimItem.getDescription().equals("A description"));
-	}
-	
-	public void testSetAmountSpent(){
-		Claim claim = new Claim();
-		claim.setAmountSpend(1000);
-		assertTrue(claimItem.getAmountSpent().equals(1000));
-	}
-	
-	public void testSetCurrency(){
-		Claim claim = new Claim();
-		claim.setCurrency(Currency.CAD);
-		assertTrue(claimItem.getCurrency().equals(Currency.CAD));
 	}
 
+
+	
+	public void testGetClaimantName(){
+		Claim claim = constructWithParameters();
+		assertTrue(claim.getClaimantName().equals("PETER"));
+	}
+	
+	public void testGetStartDate(){
+		Claim claim = constructWithParameters();
+		assertTrue(claim.getStartDate().equals(new Date(11111)));
+	}
+	
+	public void testGetEndDate(){
+		Claim claim = constructWithParameters();
+		assertTrue(claim.getEndDate().equals(new Date(22222)));
+	}
+
+	public void testGetDestinations(){
+		Claim claim = constructWithParameters();
+		
+		List<Destination> expected = new ArrayList<Destination>();
+		expected.add(new Destination("etown", "born here"));
+		expected.add(new Destination("cow town", "reason"));
+		
+		assertTrue(claim.getDestinations().equals(expected));
+	}
+	
+	
+	
+	public void testSetClaimantName(){
+		Claim claim = constructWithParameters();
+		assertTrue(claim.getClaimantName().equals("PETER"));
+	}
+	
+	public void testSetStartDate(){
+		Claim claim = constructWithParameters();
+		claim.setStartDate(new Date(33333));
+		assertTrue(claim.getStartDate().equals(new Date(33333)));
+	}
+	
+	public void testSetEndDate(){
+		Claim claim = constructWithParameters();
+		claim.setEndDate(new Date(33333));
+		assertTrue(claim.getEndDate().equals(new Date(33333)));
+	}
+
+	public void testSetDestinations(){
+		Claim claim = constructWithParameters();
+		claim.getDestinations().add(new Destination("third place", "third reason"));
+		
+		List<Destination> expected = new ArrayList<Destination>();
+		expected.add(new Destination("etown", "born here"));
+		expected.add(new Destination("cow town", "reason"));
+		expected.add(new Destination("third place", "third reason"));
+		
+		assertTrue(claim.getDestinations().equals(expected));
+	}
+	
+	
 	
 	private Claim constructWithParameters(){
-		return new Expense(new Date(11111), Category.VEHICLE_RENTAL, "A description", 
-				1000, Currency.CAD);
+		return new Claim("PETER", new Date(11111), new Date(22222), new Destination("etown", "born here"), new Destination("cow town", "reason"));
 	}
 	
 		
