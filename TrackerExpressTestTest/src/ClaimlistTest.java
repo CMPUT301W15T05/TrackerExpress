@@ -1,7 +1,5 @@
 import java.util.Collection;
 
-import ca.ualberta.cs.expensetracker.test.Claim;
-import ca.ualberta.cs.expensetracker.test.ClaimList;
 import junit.framework.TestCase;
 
 
@@ -32,6 +30,7 @@ public class ClaimlistTest extends TestCase {
 		ClaimList claimList = new ClaimList();
 		String claimName  = "A Claim";
 		Claim testClaim = new Claim(claimName);
+		
 		claimList.addClaim(testClaim);
 		Collection<Claim> claim = claimList.getClaim();
 		
