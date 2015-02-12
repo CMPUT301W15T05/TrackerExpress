@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 import group5.trackerexpress.Claim;
 import group5.trackerexpress.R;
 import group5.trackerexpress.ViewClaimActivity;
@@ -18,8 +20,8 @@ public class ViewClaimActivityTest extends
 	}
 	
 	public void deleteExpenseTest (){
-		ListView before = (ListView) findViewById(R.id.lv_claims);
-		ArrayAdapter<Claim> 
+		ListView lv_before = (ListView) findViewById(R.id.lv_claims);
+		ArrayAdapter<Claim> before = (ArrayAdapter<Claim>) lv_before.getAdapter();
 	}
 	
 	public void editExpenseTest() {
