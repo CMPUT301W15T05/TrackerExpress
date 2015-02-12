@@ -1,3 +1,4 @@
+package group5.trackerexpress.test;
 import java.util.Collection;
 
 import junit.framework.TestCase;
