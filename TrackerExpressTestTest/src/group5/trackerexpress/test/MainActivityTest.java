@@ -65,17 +65,49 @@ public class MainActivityTest extends
 	}
 
 	
+	//not really complete, since it assumes claims already exist.
 	public void testFilterTag(){
 		View tag = createTagAndReturnTagTextView();
 		
 		tag.findViewById(R.id.tag_checkbox).performClick();
 		
+		
 		clickTab(MainActivity.INDEX_OF_MY_CLAIMS_TAB);
 		
-		getActivity().findViewById(R.id.claims_list)
+		
+		//TODO: need to add this tag to a claim
+		
+		
+
+		//check if only one claim is displayed:
+		ListAdapter adapter = ((ListView) getActivity().findViewById(R.id.claims_list_view)).getAdapter();
+		assertEquals("Not right amount of claims displayed after filtering.", adapter.getCount(), 1);
+
+		//check if claim has the expected name:
+		View claimListItem = (View) adapter.getItem(0);
+		assertTrue("The right claims didn't filter.", 
+				((TextView) claimListItem.findViewById(R.id.action_settings)).getText().equals("Business Trip"));
+		
+		clickTab(MainActivity.INDEX_OF_TAGS_TAB);
+		
+		deleteTag(tag);
 	}
 	
 
+	/*
+	 * Takes the id of a text view and sets the text to a string.
+	 */
+	private void setText(int id, String text) {
+		((EditText) getActivity().findViewById(id)).setText(text);
+	}
+	
+	/*
+	 * Takes the id of a button view and clicks on it.
+	 */
+	private void clickButton(int buttonId) {
+		getActivity().findViewById(buttonId).performClick();
+	}
+	
 	
 	private View createTagAndReturnTagTextView() {
 		
@@ -89,13 +121,7 @@ public class MainActivityTest extends
 		return (View) getTagArrayAdapter().getItem(newItemPosition);
 	}
 
-	private void setText(int id, String text) {
-		((EditText) getActivity().findViewById(id)).setText(text);
-	}
-	
-	private void clickButton(int buttonId) {
-		((Button) getActivity().findViewById(buttonId)).performClick();
-	}
+
 	
 	private void deleteTag(View tag) {
 
