@@ -22,6 +22,11 @@ import android.widget.TextView;
 public class MainActivity extends FragmentActivity implements
 		ActionBar.TabListener {
 
+	public static final int INDEX_OF_MY_CLAIMS_TAB = 1;
+	public static final int INDEX_OF_TAGS_TAB = 1;
+	public static final int INDEX_OF_APPROVE_CLAIMS_TAB = 1;
+
+
 	/**
 	 * The {@link android.support.v4.view.PagerAdapter} that will provide
 	 * fragments for each of the sections. We use a
