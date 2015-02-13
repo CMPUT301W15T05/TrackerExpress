@@ -127,8 +127,6 @@ public class MainActivityTest extends
 	
 	
 	
-	
-	//Note: Assumed that calling toString() on a listView element gives you that element's text
 	public void testCreateTag(){
 		
 		clickTab(MainActivity.INDEX_OF_TAGS_TAB);

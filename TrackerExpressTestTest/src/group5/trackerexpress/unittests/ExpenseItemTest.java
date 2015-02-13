@@ -1,4 +1,4 @@
-package group5.trackerexpress.test;
+package group5.trackerexpress.unittests;
 import java.util.Date;
 
 import junit.framework.TestCase;
