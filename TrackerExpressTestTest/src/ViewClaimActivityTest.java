@@ -1,15 +1,18 @@
 import java.util.ArrayList;
 
 import group5.trackerexpress.Claim;
+import group5.trackerexpress.Expense;
 import group5.trackerexpress.R;
 import group5.trackerexpress.ViewClaimActivity;
 import android.app.Activity;
 import android.app.Instrumentation;
 import android.test.ActivityInstrumentationTestCase2;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 
 
 public class ViewClaimActivityTest extends
@@ -26,25 +29,35 @@ public class ViewClaimActivityTest extends
 	}
 	
 	public void deleteExpenseTest (){
-		ListView lv_before = (ListView) findViewById(R.id.lv_expenses);
-		ArrayAdapter<Expense> before = (ArrayAdapter<Claim>) lv_before.getAdapter();
+		final ListView lv_before = (ListView) findViewById(R.id.lv_expenses);
+		final ArrayAdapter<Expense> adapter = (ArrayAdapter<Expense>) lv_before.getAdapter();
+		final TextView tv_lv_item;
+		final Button b_deleteExpense = (Button) findViewById(R.id.b_delete_expense);
 		
 		Activity activity = getActivity();
 		
 		String title = "Expense title";
 		addExpense(title);
 		
+		final TextView returned;
+		
+		String retrieved = adapter.getItem(0).getTitle();
 		instrumentation.runOnMainSync(new Runnable() {
 
 			@Override
 			public void run() {
 				// TODO Auto-generated method stub
-				
+				returned = (TextView) adapter.getView(0, tv_lv_item, lv_before);
+				returned.performLongClick();
+				b_deleteExpense.performClick();
 			}
 			
 		});
-		
+				
 		instrumentation.waitForIdleSync();
+
+		// check if the first item is still the first item (i.e. expense deleted)
+		assertTrue( !(adapter.getItem(0).getTitle().equals(title)) );
 	}
 	
 	public void editExpenseTest() {
