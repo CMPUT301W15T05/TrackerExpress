@@ -28,7 +28,7 @@ public class ViewClaimActivityTest extends
 		super.setUp();
 	}
 	
-	public void deleteExpenseTest (){
+	public void testDeleteExpense (){
 		final ListView lv_before = (ListView) findViewById(R.id.lv_expenses);
 		final ArrayAdapter<Expense> adapter = (ArrayAdapter<Expense>) lv_before.getAdapter();
 		final TextView tv_lv_item;
@@ -60,7 +60,7 @@ public class ViewClaimActivityTest extends
 		assertTrue( !(adapter.getItem(0).getTitle().equals(title)) );
 	}
 	
-	public void editExpenseTest() {
+	public void testEditExpense() {
 		
 	}
 	

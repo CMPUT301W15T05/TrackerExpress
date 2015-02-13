@@ -1,6 +1,6 @@
 import group5.trackerexpress.MainActivity;
 import android.test.ActivityInstrumentationTestCase2;
-
+import group5.trackerexpress.R;
 
 public class MainActivityTest extends
 		ActivityInstrumentationTestCase2<MainActivity> {
@@ -13,4 +13,7 @@ public class MainActivityTest extends
 		super.setUp();
 	}
 
+	public void testReturnClaim(){
+		
+	}
 }
