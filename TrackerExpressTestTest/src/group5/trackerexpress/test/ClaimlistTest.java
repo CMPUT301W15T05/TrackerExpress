@@ -59,25 +59,21 @@ public class ClaimlistTest extends TestCase {
 	}
 	
 	
-	public void sortByDates() {
-        Comparator<ClaimList> comperator = new Comparator<ClaimList>() {
-            @Override
-            public int compareTo(ClaimDetails another) 
-            {
-                if (another == null) return 1;
-                // sort descending, most recent first
-                return another.date.compareTo(date);
-            }
-
-			@Override
-			public int compare(ClaimList lhs, ClaimList rhs) {
-				// TODO Auto-generated method stub
-				return 0;
-			}
-        };
-        Collections.sort(dataFromDB, comperator);
-        lv1.setAdapter(new CustomListViewAdapter(this, dataFromDB));
-    }
+	public void TestClaimOrder(){
+		ClaimList claimList = new ClaimList();
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("yyy-MM-dd");
+		
+		// will retrieve the text of the second column (date) of the first row (Claimlist).
+		String pulled1 = claimList.ListItems.Item(1).ListSubItems.Item(1).Text;
+		String pulled2 = claimList.ListItems.Item(2).ListSubItems.Item(1).Text;
+		
+		Date date1 = sdf.parse(pulled1);
+    		Date date2 = sdf.parse(pulled2);
+    	
+    		assertTrue(date1.before(date2));
+		
+	}
 	
 	
 }
