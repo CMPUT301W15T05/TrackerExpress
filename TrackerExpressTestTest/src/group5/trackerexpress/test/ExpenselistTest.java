@@ -21,7 +21,7 @@ public class ExpenselistTest extends TestCase {
 		String expName  = "An expense item";
 		
 		Expense testExp = new Expense(expName);
-		expList.addClaim(testExp);
+		expList.add(testExp);
 		
 		assertTrue("Empty expense list", expList.size()==1);
 		assertTrue("Test expense item not contained", expList.contains(testExp));
@@ -34,7 +34,7 @@ public class ExpenselistTest extends TestCase {
 		
 		String expName  = "An expense item";
 		Expense testExp = new Expense(expName);
-		expList.addClaim(testExp);
+		expList.add(testExp);
 		Collection<Expense> claim = expList.getExpense();
 		
 		assertTrue("Empty expense list", claim.size()==1);
@@ -49,10 +49,10 @@ public class ExpenselistTest extends TestCase {
 		String expName  = "An expense item";
 		Expense testExp = new Expense(expName);
 		
-		expList.addClaim(testExp);
+		expList.add(testExp);
 		assertTrue("List size isn't big enough", expList.size()==1);
 		assertTrue("", expList.contains(testExp));
-		expList.removeClaim(testExp);
+		expList.remove(testExp);
 		assertTrue("List size isn't small enough", expList.size()==0);
 		assertFalse("test expense item still contained", expList.contains(testExp));
 	}

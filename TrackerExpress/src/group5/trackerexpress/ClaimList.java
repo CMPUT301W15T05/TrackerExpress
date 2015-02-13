@@ -11,16 +11,20 @@ public class ClaimList {
 		claimList = new ArrayList<Claim>();
 	}
 
-	public Collection<Claim> getClaim() {
+	public Collection<Claim> getList() {
 		return claimList;
 	}
 
-	public void addClaim(Claim testClaim) {
+	public void add(Claim testClaim) {
 		claimList.add(testClaim);
 		 
 	}
+	
+	public Claim get(String claimId) {
+		return null;
+	}
 
-	public void removeClaim(Claim testClaim) {
+	public void remove(Claim testClaim) {
 		claimList.remove(testClaim);
 		
 	}

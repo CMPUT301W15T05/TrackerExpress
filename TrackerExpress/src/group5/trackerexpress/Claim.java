@@ -28,4 +28,22 @@ public class Claim {
 		
 	}
 
+
+	public void addExpense(Expense expense) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	public Expense getExpense(String string) throws ExpenseNotFoundException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	public void removeExpense(String string) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

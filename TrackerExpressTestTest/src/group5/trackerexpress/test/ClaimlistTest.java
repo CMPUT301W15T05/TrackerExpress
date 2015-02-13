@@ -25,7 +25,7 @@ public class ClaimlistTest extends TestCase {
 		ClaimList claimList = new ClaimList();
 		String claimName  = "A Claim";
 		Claim testClaim = new Claim(claimName);
-		claimList.addClaim(testClaim);
+		claimList.add(testClaim);
 		assertTrue("Empty claim list", claimList.size()==1);
 		assertTrue("Test claim not contained", claimList.contains(testClaim));
 	}
@@ -37,8 +37,8 @@ public class ClaimlistTest extends TestCase {
 		String claimName  = "A Claim";
 		Claim testClaim = new Claim(claimName);
 		
-		claimList.addClaim(testClaim);
-		Collection<Claim> claim = claimList.getClaim();
+		claimList.add(testClaim);
+		Collection<Claim> claim = claimList.getList();
 		
 		assertTrue("Empty claim list", claim.size()==1);
 		assertTrue("Test claim not contained", claim.contains(testClaim));
@@ -50,10 +50,10 @@ public class ClaimlistTest extends TestCase {
 		ClaimList claimList = new ClaimList();
 		String claimName  = "A Claim";
 		Claim testClaim = new Claim(claimName);
-		claimList.addClaim(testClaim);
+		claimList.add(testClaim);
 		assertTrue("List size isn't big enough", claimList.size()==1);
 		assertTrue("", claimList.contains(testClaim));
-		claimList.removeClaim(testClaim);
+		claimList.remove(testClaim);
 		assertTrue("List size isn't small enough", claimList.size()==0);
 		assertFalse("test claim still contained", claimList.contains(testClaim));
 	}
