@@ -1,5 +1,7 @@
 package group5.trackerexpress;
 
+import android.view.View;
+
 public class Claim {
 	
 	protected String claimName;
@@ -18,6 +20,12 @@ public class Claim {
 	public String getTitle() {
 		// TODO Auto-generated method stub
 		return "";
+	}
+
+
+	public void addTag(View businessTag) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
