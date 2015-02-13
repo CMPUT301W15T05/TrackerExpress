@@ -1,8 +1,14 @@
 package group5.trackerexpress.test;
+import group5.trackerexpress.Claim;
+import group5.trackerexpress.Expense;
 import group5.trackerexpress.MainActivity;
+import android.app.Activity;
+import android.app.Instrumentation;
 import android.test.ActivityInstrumentationTestCase2;
 import android.test.ViewAsserts;
 import android.view.View;
+import android.widget.Adapter;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListAdapter;
@@ -12,6 +18,8 @@ import group5.trackerexpress.R;
 
 public class MainActivityTest extends
 		ActivityInstrumentationTestCase2<MainActivity> {
+	
+	Instrumentation instrumentation;
 
 	public MainActivityTest(String name) {
 		super(MainActivity.class);
@@ -24,6 +32,100 @@ public class MainActivityTest extends
 	public void testReturnClaim(){
 		
 	}
+	
+	public void testDeleteClaim (){
+		final ListView claimlist = (ListView) findViewById(R.id.claimlist);
+		final ArrayAdapter<Claim> adapter = (ArrayAdapter<Claim>) claimlist.getAdapter();
+		final TextView claim_name;
+		final Button b_deleteClaim = (Button) findViewById(R.id.b_deleteClaim);
+		
+		Activity activity = getActivity();
+		
+		String title = "A Claim";
+		addClaim(title);
+		
+		final TextView returned;
+		
+		String retrieved = adapter.getItem(0).getTitle();
+		instrumentation.runOnMainSync(new Runnable() {
+
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				returned = (TextView) adapter.getView(0, claim_name, claimlist);
+				returned.performLongClick();
+				b_deleteClaim.performClick();
+			}
+			
+		});
+				
+		instrumentation.waitForIdleSync();
+
+		// check if the first item is still the first item (i.e. claim deleted)
+		assertTrue( !(adapter.getItem(0).getTitle().equals(title)) );
+	}
+	
+
+	public void testEditclaim() {
+		final String rename = "new claim name";
+		
+		final ListView claimlist = (ListView) findViewById(R.id.claimlist);
+		final Button b_editclaim = (Button) findViewById(R.id.b_editclaim);
+		final EditText et_claim_new_name = (EditText) findViewById(R.id.et_claim_new_name);
+		final Button b_saveedit = (Button) findViewById(R.id.b_saveedit);
+		final Button b_cancleedit = (Button) findViewById(R.id.b_cancleedit);
+		final TextView claimlistItem;
+		final ArrayAdapter<Claim> adapter = (ArrayAdapter<Claim>) claimlist.getAdapter();
+		
+		Activity activity = getActivity();
+		addClaim(rename);
+		
+		String retrived = adapter.getItem(0).getTitle();
+		
+		final TextView returned;
+		
+		instrumentation.runOnMainSync(new Runnable() {
+
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				returned = (TextView) adapter.getView(0, claimlistItem, claimlist);
+				returned.performLongClick();
+				b_editclaim.performClick();
+				returned.setText(rename);
+				b_saveedit.performClick();
+			}
+		});
+				
+		instrumentation.waitForIdleSync();
+
+		// check if the first item is edited.
+		assertTrue( adapter.getItem(0).getTitle().equals(rename) );
+		
+	}
+	
+	
+	private void addClaim(final String name){
+		final Button b_creatclaim = (Button) findViewById(R.id.b_creatclaim);
+		final EditText et_claimTitle = (EditText) findViewById(R.id.et_claimTitle);
+		final Button b_saveclaim = (Button) findViewById(R.id.b_saveclaim);
+		instrumentation.runOnMainSync(new Runnable() {
+
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				b_creatclaim.performClick();
+				et_claimTitle.setText( name );
+				b_saveclaim.performClick();
+			}
+			
+		});
+		
+		instrumentation.waitForIdleSync();
+	}
+	
+	
+	
 	
 	
 	//Note: Assumed that calling toString() on a listView element gives you that element's text
