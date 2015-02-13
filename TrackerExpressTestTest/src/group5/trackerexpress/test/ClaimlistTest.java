@@ -1,5 +1,10 @@
 package group5.trackerexpress.test;
+import group5.trackerexpress.Claim;
+import group5.trackerexpress.ClaimList;
+
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 
 import junit.framework.TestCase;
 
@@ -53,6 +58,26 @@ public class ClaimlistTest extends TestCase {
 		assertFalse("test claim still contained", claimList.contains(testClaim));
 	}
 	
+	
+	public void sortByDates() {
+        Comparator<ClaimList> comperator = new Comparator<ClaimList>() {
+            @Override
+            public int compareTo(ClaimDetails another) 
+            {
+                if (another == null) return 1;
+                // sort descending, most recent first
+                return another.date.compareTo(date);
+            }
+
+			@Override
+			public int compare(ClaimList lhs, ClaimList rhs) {
+				// TODO Auto-generated method stub
+				return 0;
+			}
+        };
+        Collections.sort(dataFromDB, comperator);
+        lv1.setAdapter(new CustomListViewAdapter(this, dataFromDB));
+    }
 	
 	
 }
