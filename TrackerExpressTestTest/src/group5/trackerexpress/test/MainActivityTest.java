@@ -1,5 +1,6 @@
 package group5.trackerexpress.test;
 import group5.trackerexpress.Claim;
+import group5.trackerexpress.Controller;
 import group5.trackerexpress.Expense;
 import group5.trackerexpress.MainActivity;
 import android.app.Activity;
@@ -167,30 +168,35 @@ public class MainActivityTest extends
 	
 	//not really complete, since it assumes claims already exist.
 	public void testFilterTag(){
-		View tag = createTagAndReturnTagTextView();
+		View businessTag = createTagAndReturnTagTextView();
+		View pleasureTag = createTagAndReturnTagTextView();
 		
-		tag.findViewById(R.id.tag_checkbox).performClick();
-		
+		businessTag.findViewById(R.id.tag_checkbox).performClick();
 		
 		clickTab(MainActivity.INDEX_OF_MY_CLAIMS_TAB);
 		
 		
-		//TODO: need to add this tag to a claim
+		//FIXME Not really sure how to make these claims. This probably doesn't work:
+		Claim businessTrip = new Claim("Business Trip");
+		Claim pleasureCruise = new Claim("Pleasure Cruise");
 		
+		businessTrip.addTag(businessTag);
+		businessTrip.addTag(pleasureTag);
 		
+		Controller.addClaim(businessTrip);
+		Controller.addClaim(pleasureCruise);
 
 		//check if only one claim is displayed:
 		ListAdapter adapter = ((ListView) getActivity().findViewById(R.id.claims_list_view)).getAdapter();
 		assertEquals("Not right amount of claims displayed after filtering.", adapter.getCount(), 1);
 
-		//check if claim has the expected name:
-		View claimListItem = (View) adapter.getItem(0);
+		
 		assertTrue("The right claims didn't filter.", 
-				((TextView) claimListItem.findViewById(R.id.action_settings)).getText().equals("Business Trip"));
+				((Claim) adapter.getItem(0)).getName().equals("Business Trip"));
 		
 		clickTab(MainActivity.INDEX_OF_TAGS_TAB);
 		
-		deleteTag(tag);
+		deleteTag(businessTag);
 	}
 	
 
