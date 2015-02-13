@@ -26,15 +26,13 @@ public class ViewClaimActivityTest extends
 	}
 	
 	public void deleteExpenseTest (){
-		ListView lv_before = (ListView) findViewById(R.id.lv_claims);
-		ArrayAdapter<Claim> before = (ArrayAdapter<Claim>) lv_before.getAdapter();
+		ListView lv_before = (ListView) findViewById(R.id.lv_expenses);
+		ArrayAdapter<Expense> before = (ArrayAdapter<Claim>) lv_before.getAdapter();
 		
 		Activity activity = getActivity();
 		
-		String title = "Claim title";
-		addClaim(title);
-		
-		
+		String title = "Expense title";
+		addExpense(title);
 		
 		instrumentation.runOnMainSync(new Runnable() {
 
@@ -53,7 +51,23 @@ public class ViewClaimActivityTest extends
 		
 	}
 	
-	private void addExpense(String name){
+	private void addExpense(final String name){
+		final Button b_addExpense = (Button) findViewById(R.id.b_add_expense);
+		final EditText et_expenseTitle = (EditText) findViewById(R.id.et_expense_title);
+		final Button b_saveExpense = (Button) findViewById(R.id.b_save_expense);
+		instrumentation.runOnMainSync(new Runnable() {
+
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				b_addExpense.performClick();
+				et_expenseTitle.setText( name );
+				b_saveExpense.performClick();
+				// Assuming adding an incomplete claim will not prompt a new message
+			}
+			
+		});
 		
+		instrumentation.waitForIdleSync();
 	}
 }
