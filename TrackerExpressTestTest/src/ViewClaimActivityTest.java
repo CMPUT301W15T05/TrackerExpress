@@ -53,26 +53,6 @@ public class ViewClaimActivityTest extends
 		
 	}
 	
-	private void addClaim(final String name){
-		final Button b_addClaim = (Button) findViewById(R.id.b_add_claim);
-		final EditText et_claimTitle = (EditText) findViewById(R.id.et_claim_title);
-		final Button b_saveClaim = (Button) findViewById(R.id.b_save_claim);
-		instrumentation.runOnMainSync(new Runnable() {
-
-			@Override
-			public void run() {
-				// TODO Auto-generated method stub
-				b_addClaim.performClick();
-				et_claimTitle.setText( name );
-				b_saveClaim.performClick();
-				// Assuming adding an incomplete claim will not prompt a new message
-			}
-			
-		});
-		
-		instrumentation.waitForIdleSync();
-	}
-	
 	private void addExpense(String name){
 		
 	}
