@@ -8,10 +8,10 @@ import android.graphics.drawable.Drawable;
 import android.test.ActivityInstrumentationTestCase2;
 import android.widget.ImageView;
 
-public class AddReceipt extends
+public class ReceiptTest extends
 		ActivityInstrumentationTestCase2<TrackerExpressReceipt> {
 
-	public AddReceipt() {
+	public ReceiptTest() {
 		super(TrackerExpressReceipt.class);
 	}
 
