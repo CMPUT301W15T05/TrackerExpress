@@ -38,6 +38,7 @@ public class ViewClaimActivityTest extends
 		Activity activity = getActivity();
 		
 		String title = "Expense title";
+		// Add expense just in case there are none
 		addExpense(title);
 		
 		final TextView returned;
@@ -50,6 +51,7 @@ public class ViewClaimActivityTest extends
 				// TODO Auto-generated method stub
 				returned = (TextView) adapter.getView(0, tv_lv_item, lv_before);
 				returned.performLongClick();
+				// delete first expense
 				b_deleteExpense.performClick();
 			}
 			
@@ -62,6 +64,50 @@ public class ViewClaimActivityTest extends
 	}
 	
 	public void testEditExpense() {
+		final ListView lv_before = (ListView) findViewById(R.id.lv_expenses);
+		final ArrayAdapter<Expense> adapter = (ArrayAdapter<Expense>) lv_before.getAdapter();
+		final TextView tv_lv_item;
+		final Button b_editExpense = (Button) findViewById(R.id.b_edit_expense);
+		final EditText et_expenseTitle = (EditText) findViewById(R.id.et_expense_title);
+		final Button b_saveExpense = (Button) findViewById(R.id.b_save_expense);
+		
+		Activity activity = getActivity();
+		
+		String otitle = "Old title";
+		final String ntitle = "New title";
+		addExpense(otitle);
+		
+		final TextView returned;
+		
+		String retrieved = adapter.getItem(0).getTitle();
+		instrumentation.runOnMainSync(new Runnable(){
+
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				returned = (TextView) adapter.getView(0, tv_lv_item, lv_before);
+				returned.performLongClick();
+				b_editExpense.performClick();
+				// Enter Expense Editing Screen
+				et_expenseTitle.setText(ntitle);
+				returned = (TextView) adapter.getView(0, tv_lv_item, lv_before);
+				//Edit title to new title = "New title"
+				b_saveExpense.performClick();
+				// Return to list of expenses
+			}
+			
+			
+		});
+		
+		instrumentation.waitForIdleSync();
+		
+		assertTrue(adapter.getItem(0).getTitle().equals(ntitle));
+	}
+	
+	public void testExpensesOrdered(){
+		ListView lv = (ListView) findViewById(R.id.lv_expenses);
+		ArrayAdapter<Expense> adapter = (ArrayAdapter<Expense>)  lv.getAdapter();
+		
 		
 	}
 	
@@ -78,6 +124,7 @@ public class ViewClaimActivityTest extends
 				et_expenseTitle.setText( name );
 				b_saveExpense.performClick();
 				// Assuming adding an incomplete claim will not prompt a new message
+				// Saving returns to list of Expenses
 			}
 			
 		});
