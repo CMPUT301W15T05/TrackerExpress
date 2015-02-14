@@ -3,14 +3,17 @@ import group5.trackerexpress.Claim;
 import group5.trackerexpress.ClaimList;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 import junit.framework.TestCase;
 
 
-public class ClaimlistTest extends TestCase {
+public class ClaimListTest extends TestCase {
 	
 	
 	
@@ -60,20 +63,43 @@ public class ClaimlistTest extends TestCase {
 	}
 	
 	
-	public void TestClaimOrder(){
+	public void testClaimOrder(){
 		ClaimList claimList = new ClaimList();
 		
-		SimpleDateFormat sdf = new SimpleDateFormat("yyy-MM-dd");
+		// Named so they come out in this order
+		Claim c1 = new Claim("3");
+		Claim c2 = new Claim("1");
+		Claim c3 = new Claim("2");
 		
-		// will retrieve the text of the second column (date) of the first row (Claimlist).
-		String pulled1 = claimList.ListItems.Item(1).ListSubItems.Item(1).Text;
-		String pulled2 = claimList.ListItems.Item(2).ListSubItems.Item(1).Text;
+		GregorianCalendar d1 = new GregorianCalendar();
+		GregorianCalendar d2 = new GregorianCalendar();
+		GregorianCalendar d3 = new GregorianCalendar();
 		
-		Date date1 = sdf.parse(pulled1);
-    		Date date2 = sdf.parse(pulled2);
+		d1.set(Calendar.YEAR, 1995);
+		d1.set(Calendar.MONTH, 11); // december = 12
+		d1.set(Calendar.DAY_OF_MONTH, 12);
+		
+		d2.set(Calendar.YEAR, 1995);
+		d2.set(Calendar.MONTH, 0); // january = 0
+		d2.set(Calendar.DAY_OF_MONTH, 12);
+		
+		d3.set(Calendar.YEAR, 1995);
+		d3.set(Calendar.MONTH, 1); // february = 1
+		d3.set(Calendar.DAY_OF_MONTH, 12);
+		
+		
+		c1.setDate(d1);
+		c2.setDate(d2);
+		c3.setDate(d3);
     	
-    		assertTrue(date1.before(date2));
-		
+		claimList.add(c1);
+		claimList.add(c2);
+		claimList.add(c3);
+
+		assertTrue ( claimList.getList().get(0).getTitle().equals("1") );
+		assertTrue ( claimList.getList().get(1).getTitle().equals("2") );
+		assertTrue ( claimList.getList().get(2).getTitle().equals("3") );
+
 	}
 	
 	

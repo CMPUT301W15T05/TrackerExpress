@@ -31,6 +31,27 @@ public class MainActivityTest extends
 	}
 
 	public void testReturnClaim(){
+		final ListView claimlist = (ListView) findViewById(R.id.approve_claim_list);
+		final Adapter adapter = claimlist.getAdapter(); 
+
+		instrumentation.runOnMainSync(new Runnable(){
+
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				clickTab(MainActivity.INDEX_OF_APPROVE_CLAIMS_TAB);
+				// main activity will have an approve_claims_tab
+				try{
+					// Assumes there is a claim already submitted
+					adapter.getItem(0);
+				} catch (ArrayIndexOutOfBoundsException e) {
+					
+				}
+			}
+			
+				
+		});
+		
 		
 	}
 	

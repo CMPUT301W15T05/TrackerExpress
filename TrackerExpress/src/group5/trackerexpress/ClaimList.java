@@ -11,7 +11,7 @@ public class ClaimList {
 		claimList = new ArrayList<Claim>();
 	}
 
-	public Collection<Claim> getList() {
+	public ArrayList<Claim> getList() {
 		return claimList;
 	}
 

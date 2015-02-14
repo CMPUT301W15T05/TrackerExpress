@@ -1,5 +1,7 @@
 package group5.trackerexpress;
 
+import java.util.GregorianCalendar;
+
 import android.view.View;
 
 public class Claim {
@@ -12,6 +14,11 @@ public class Claim {
 	}
 	
 	
+	public Claim() {
+		// TODO Auto-generated constructor stub
+	}
+
+
 	public String getName() {
 		// TODO Auto-generated method stub
 		return claimName;
@@ -42,6 +49,12 @@ public class Claim {
 
 
 	public void removeExpense(String string) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	public void setDate(GregorianCalendar d1) {
 		// TODO Auto-generated method stub
 		
 	}
