@@ -104,13 +104,6 @@ public class ViewClaimActivityTest extends
 		assertTrue(adapter.getItem(0).getTitle().equals(ntitle));
 	}
 	
-	public void testExpensesOrdered(){
-		ListView lv = (ListView) findViewById(R.id.lv_expenses);
-		ArrayAdapter<Expense> adapter = (ArrayAdapter<Expense>)  lv.getAdapter();
-		
-		
-	}
-	
 	private void addExpense(final String name){
 		final Button b_addExpense = (Button) findViewById(R.id.b_add_expense);
 		final EditText et_expenseTitle = (EditText) findViewById(R.id.et_expense_title);
