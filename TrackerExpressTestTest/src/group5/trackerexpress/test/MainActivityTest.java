@@ -33,7 +33,13 @@ public class MainActivityTest extends
 	public void testReturnClaim(){
 		final ListView claimlist = (ListView) findViewById(R.id.approve_claim_list);
 		final Adapter adapter = claimlist.getAdapter(); 
-
+		final TextView claim_name;
+		final Button b_returnClaim = (Button) findViewById(R.id.b_return_claim);
+		final EditText et_comments = (EditText) findViewById(R.id.et_comments)
+		final TextView returned;
+		
+		final int claimId;
+		
 		instrumentation.runOnMainSync(new Runnable(){
 
 			@Override
@@ -43,15 +49,34 @@ public class MainActivityTest extends
 				// main activity will have an approve_claims_tab
 				try{
 					// Assumes there is a claim already submitted
-					adapter.getItem(0);
+					claimId = adapter.getItem(0).getId();
 				} catch (ArrayIndexOutOfBoundsException e) {
-					
+					return;
 				}
+				
+				returned = (TextView) adapter.getView(0, claim_name, claimlist);
+				returned.performClick();
+				// View claim and there will be a visible input box to leave comments
+				et_comments.setText("whatever");
+				b_returnClaim.performClick();
+				// Return to list of approved claims
 			}
 			
 				
 		});
 		
+		instrumentation.waitForIdleSync();
+		
+		// Check if list is now empty
+		try{
+			adapter.getItem(0);
+		} catch (ArrayIndexOutOfBoundsException e) {
+			assertTrue( "claim removed from list?", true); // Claim is successfully removed from the list 
+		}
+		
+		// Checks if the first claim is different from the original first claim ( i.e. claim is removed after being returned )
+		int firstClaimId = adapter.getItem(0).getId();
+		assertTrue( "claim removed from list?", firstClaimId != claimId );
 		
 	}
 	
