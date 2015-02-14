@@ -1,9 +1,9 @@
 package group5.trackerexpress.test;
 
-import java.util.Date;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 import group5.trackerexpress.Claim;
-import group5.trackerexpress.ClaimList;
 import group5.trackerexpress.Controller;
 import group5.trackerexpress.Expense;
 import group5.trackerexpress.ExpenseNotFoundException;
@@ -11,52 +11,66 @@ import junit.framework.TestCase;
 
 public class ExpenseTest extends TestCase {
 
+	// Note: Might add ClaimList to grab claim from if we throw errors on same 
+	// claim name creation
+	private Claim claim;
 	
-	private ClaimList claims;
-
-
-	public void setup() {
-		claims = new ClaimList();
-		claims.add(new Claim("Test Claim"));
+	// All tests for Claim class should be dealt with to ensure setUp works 
+	// properly. We are assuming Claim will not cause any test failures.
+	public void setUp() { 
+		claim = new Claim("Test Claim");
 	}
-
 	
-	public void testAddExpense(){
 	
-		//Claimant selects claim to edit and adds the expense:
-		claims.get("Test Claim").addExpense(new Expense("Test Expense"));
+	public void testAddExpense() {	
+		// Claimant selects claim to edit and adds the expense:
+		Expense testExpense = new Expense("Test Expense");
+		claim.addExpense(testExpense); // Note: Might change to ExpenseList.add(Expense) instead
 		
 		try {
-			claims.get("Test Claim").getExpense("TestExpense");
+			assertEquals("Expense not in claim's expense list", claim.getExpense("TestExpense"), testExpense);
 		} catch (ExpenseNotFoundException e) {
-			fail("Expesne not found.");
+			fail("Expense not found.");
 		}
 	}
 	
-	public void testEditExpense(){
-		try {
-			claims.get("Test Claim").addExpense(new Expense("Test Expense"));
-			claims.get("Test Claim").getExpense("Test Expense").setDate(new Date(11111));
+	
+	public void testEditExpense() {
+		GregorianCalendar d1 = new GregorianCalendar();
 
+		d1.set(Calendar.YEAR, 1995);
+		d1.set(Calendar.MONTH, 11);
+		d1.set(Calendar.DAY_OF_MONTH, 12);
+
+		Expense testExpense = new Expense("Test Expense");
+		claim.addExpense(testExpense);
+		testExpense.setDate(d1);
 		
-			assertTrue(claims.get("Test Claim").getExpense("Test Expense").getDate().equals(new Date(11111)));
+		assertEquals("Expense not updated", testExpense.getDate(), d1);
+		
+		try {
+			
+			Expense testExpenseEdited = claim.getExpense("Test Expense");
+			assertEquals("Expense not updated when grabbed from claim", testExpenseEdited.getDate(), d1);
 			
 			
 		} catch (ExpenseNotFoundException e) {
-			fail("Expesne not found.");
+			fail("Expense not found.");
 		}
 	}
 	
-	public void testDeleteExpense(){
-		claims.get("Test Claim").addExpense(new Expense("Test Expense"));
+	
+	public void testDeleteExpense() {
+		Expense testExpense = new Expense("Test Expense");
+		claim.addExpense(testExpense);
 		
-		claims.get("Test Claim").removeExpense("Test Expense");
+		claim.removeExpense("Test Expense");
 		
 		try {
-			claims.get("Test Claim").getExpense("TestExpense");
+			claim.getExpense("Test Expense");
 			fail("Expense not deleted.");
 		}
-		catch(ExpenseNotFoundException e){
+		catch(ExpenseNotFoundException e) {
 			
 		}
 	}

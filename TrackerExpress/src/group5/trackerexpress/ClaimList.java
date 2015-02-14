@@ -7,7 +7,7 @@ import java.util.Collection;
 public class ClaimList {
 	protected ArrayList<Claim> claimList;
 	
-	public ClaimList(){
+	public ClaimList() {
 		claimList = new ArrayList<Claim>();
 	}
 

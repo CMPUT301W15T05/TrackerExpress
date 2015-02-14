@@ -8,6 +8,11 @@ public class Claim {
 	
 	protected String claimName;
 
+	public static final int IN_PROGRESS = 0;
+	public static final int SUBMITTED = 1;
+	public static final int RETURNED = 2;
+	public static final int APPROVED = 3;
+
 	public Claim(String claimName) {
 		// TODO Auto-generated constructor stub
 		this.claimName = claimName;
@@ -54,7 +59,25 @@ public class Claim {
 	}
 
 
-	public void setDate(GregorianCalendar d1) {
+	public void setStartDate(GregorianCalendar d1) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	public GregorianCalendar getStartDate() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	public void setStatus(int status) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	public int getStatus() {
+		return 0;
 		// TODO Auto-generated method stub
 		
 	}
