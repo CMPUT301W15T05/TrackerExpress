@@ -23,7 +23,7 @@ public class ClaimListTest extends TestCase {
 	}
 	
 	
-	// this is test case for 01.01.01
+	// this is test case for 01.01.01 and 01.02.01
 	public void testAddClaimList() {
 		
 		ClaimList claimList = new ClaimList();
