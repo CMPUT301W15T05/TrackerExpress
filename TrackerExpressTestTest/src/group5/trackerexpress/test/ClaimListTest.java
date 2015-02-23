@@ -23,7 +23,7 @@ public class ClaimListTest extends TestCase {
 	}
 	
 	
-	
+	// this is test case for 01.01.01
 	public void testAddClaimList() {
 		
 		ClaimList claimList = new ClaimList();
@@ -35,7 +35,7 @@ public class ClaimListTest extends TestCase {
 	}
 	
 	
-	
+	// this is test case for 01.03.01
 	public void testGetClaimList() {
 		ClaimList claimList = new ClaimList();
 		String claimName = "A Claim";
@@ -49,7 +49,7 @@ public class ClaimListTest extends TestCase {
 	}
 	
 	
-	
+	// this is test case for 01.05.01
 	public void testRemoveClaimList() {
 		ClaimList claimList = new ClaimList();
 		String claimName = "A Claim";
@@ -62,7 +62,7 @@ public class ClaimListTest extends TestCase {
 		assertFalse("test claim still contained", claimList.contains(testClaim));
 	}
 	
-	
+	// this is test case for 02.02.01 and 02.01.01
 	public void testClaimOrder() {
 		ClaimList claimList = new ClaimList();
 		
