@@ -17,7 +17,7 @@ public class ClaimTest extends TestCase {
 		claimList = new ClaimList();
 	}
 	
-	
+	// this is test case for 01.01.01
 	public void testAddClaim() {
 		Claim claim = new Claim("Test Claim");
 		claimList.add(claim);
@@ -25,7 +25,7 @@ public class ClaimTest extends TestCase {
 		assertTrue("Claim not added to claimList", claimList.contains(claim));
 	}
 	
-	
+	// this is test case for 01.04.01
 	public void testEditClaim() {
 		GregorianCalendar d1 = new GregorianCalendar();
 
@@ -44,7 +44,7 @@ public class ClaimTest extends TestCase {
 		assertEquals("Claim not updated when grabbed from claim list", testClaimEdited.getStartDate(), d1);
 	}
 	
-	
+	// this is test case for 01.05.01
 	public void testDeleteClaim() {
 		Claim testClaim = new Claim("Test Claim");
 		claimList.add(testClaim);
