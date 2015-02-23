@@ -80,6 +80,7 @@ public class MainActivityTest extends
 		
 	}
 	
+	// this is test case for 01.05.01
 	public void testDeleteClaim (){
 		final ListView claimlist = (ListView) findViewById(R.id.claimlist);
 		final ArrayAdapter<Claim> adapter = (ArrayAdapter<Claim>) claimlist.getAdapter();
@@ -112,7 +113,7 @@ public class MainActivityTest extends
 		assertTrue( !(adapter.getItem(0).getTitle().equals(title)) );
 	}
 	
-
+	// this is test case for 01.04.01
 	public void testEditclaim() {
 		final String rename = "new claim name";
 		
