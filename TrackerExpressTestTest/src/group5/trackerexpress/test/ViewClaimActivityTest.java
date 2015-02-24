@@ -29,7 +29,7 @@ public class ViewClaimActivityTest extends
 		super.setUp();
 	}
 	
-	// 
+	// test case for 04.07.01
 	public void testDeleteExpense (){
 		final ListView lv_before = (ListView) findViewById(R.id.lv_expenses);
 		final ArrayAdapter<Expense> adapter = (ArrayAdapter<Expense>) lv_before.getAdapter();
