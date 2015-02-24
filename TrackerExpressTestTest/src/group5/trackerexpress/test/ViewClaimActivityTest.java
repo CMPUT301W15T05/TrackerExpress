@@ -127,7 +127,7 @@ public class ViewClaimActivityTest extends
 		instrumentation.waitForIdleSync();
 	}
 	
-	// Testing small part of 05.01.01, rest of testing is in ExpenseListTEst
+	// test case for 04.05.01
 	public void testViewExpense(){
 		// Claimant selects claim to edit and adds the expense:
 		final Button b_viewExpense = (Button) findViewById(R.id.b_view_expense);
