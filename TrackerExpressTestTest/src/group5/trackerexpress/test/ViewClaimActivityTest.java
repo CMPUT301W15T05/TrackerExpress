@@ -126,4 +126,36 @@ public class ViewClaimActivityTest extends
 		
 		instrumentation.waitForIdleSync();
 	}
+	
+	// Testing small part of 05.01.01, rest of testing is in ExpenseListTEst
+	public void testViewExpense(){
+		// Claimant selects claim to edit and adds the expense:
+		final Button b_viewExpense = (Button) findViewById(R.id.b_view_expense);
+		final TextView returned;
+		final TextView status = (TextView) findViewById(R.id.tv_expense_status);
+
+		final ArrayAdapter<Expense> adapter = (ArrayAdapter<Expense>) lv_before.getAdapter();
+		String testExpense = "Whatever";
+		addExpense(testExpense); // Note: Might change to ExpenseList.add(Expense) instead
+		
+		instrumentation.runOnMainSync(new Runnable(){
+
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				returned = (TextView) adapter.getView(0, tv_lv_item, lv_before);
+				returned.performLongClick();
+				b_viewExpense.performClick();
+				// Click the new expense
+			}
+			
+			
+		});
+		
+		// Viewing the expense, check it is incomplete
+		assertTrue( status.getText().toString().equals("Incomplete") );
+		
+		
+		
+	}
 }

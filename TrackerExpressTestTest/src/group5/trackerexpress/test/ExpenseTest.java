@@ -3,6 +3,7 @@ package group5.trackerexpress.test;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
+import android.widget.TextView;
 import group5.trackerexpress.Claim;
 import group5.trackerexpress.Controller;
 import group5.trackerexpress.Expense;
@@ -21,7 +22,7 @@ public class ExpenseTest extends TestCase {
 		claim = new Claim("Test Claim");
 	}
 	
-	// this is a test for 05.01.01 and 04.05.01
+	// this is a test for 04.08.01
 	public void testAddExpense() {	
 		// Claimant selects claim to edit and adds the expense:
 		Expense testExpense = new Expense("Test Expense");
@@ -34,7 +35,7 @@ public class ExpenseTest extends TestCase {
 		}
 	}
 	
-	// this is a test for 05.01.01 and 04.05.01
+	// this is a test for 04.06.01
 	public void testEditExpense() {
 		GregorianCalendar d1 = new GregorianCalendar();
 

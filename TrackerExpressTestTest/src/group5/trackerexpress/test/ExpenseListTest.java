@@ -9,7 +9,7 @@ import java.util.GregorianCalendar;
 
 import junit.framework.TestCase;
 
-
+// Mostly a model test for 05.01.01
 public class ExpenseListTest extends TestCase {
 	
 	
