@@ -61,6 +61,7 @@ public class ExpenseListTest extends TestCase {
 		assertFalse("Test expense item still contained", expList.contains(testExp));
 	}
 	
+	// this is a model test for 05.01.01
 	public void testExpenseOrder() {
 		ExpenseList expenseList = new ExpenseList();
 		
@@ -68,29 +69,7 @@ public class ExpenseListTest extends TestCase {
 		Expense e1 = new Expense("1");
 		Expense e2 = new Expense("2");
 		Expense e3 = new Expense("3");
-		
-		// Should NOT be order by date, instead by order of entry
-		/*
-		GregorianCalendar d1 = new GregorianCalendar();
-		GregorianCalendar d2 = new GregorianCalendar();
-		GregorianCalendar d3 = new GregorianCalendar();
-		
-		d1.set(Calendar.YEAR, 1995);
-		d1.set(Calendar.MONTH, 11); // december = 11 (Note: was 12)
-		d1.set(Calendar.DAY_OF_MONTH, 12);
-		
-		d2.set(Calendar.YEAR, 1995);
-		d2.set(Calendar.MONTH, 0); // january = 0
-		d2.set(Calendar.DAY_OF_MONTH, 12);
-		
-		d3.set(Calendar.YEAR, 1995);
-		d3.set(Calendar.MONTH, 1); // february = 1
-		d3.set(Calendar.DAY_OF_MONTH, 12);
-		
-		
-		e1.setDate(d1);
-		e2.setDate(d2);
-		e3.setDate(d3);*/
+
     	
 		expenseList.add(e1);
 		expenseList.add(e2);

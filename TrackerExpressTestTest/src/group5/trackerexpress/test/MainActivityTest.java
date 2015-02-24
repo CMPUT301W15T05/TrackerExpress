@@ -30,6 +30,7 @@ public class MainActivityTest extends
 		super.setUp();
 	}
 
+	// this is a test case for 08.07.01
 	public void testReturnClaim(){
 		final ListView claimlist = (ListView) findViewById(R.id.approve_claim_list);
 		final Adapter adapter = claimlist.getAdapter(); 
@@ -151,7 +152,6 @@ public class MainActivityTest extends
 		assertTrue( adapter.getItem(0).getTitle().equals(rename) );
 		
 	}
-	
 	
 	private void addClaim(final String name){
 		final Button b_creatclaim = (Button) findViewById(R.id.b_creatclaim);

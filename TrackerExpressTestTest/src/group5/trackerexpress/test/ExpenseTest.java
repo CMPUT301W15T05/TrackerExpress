@@ -21,7 +21,7 @@ public class ExpenseTest extends TestCase {
 		claim = new Claim("Test Claim");
 	}
 	
-	
+	// this is a test for 05.01.01 and 04.05.01
 	public void testAddExpense() {	
 		// Claimant selects claim to edit and adds the expense:
 		Expense testExpense = new Expense("Test Expense");
@@ -34,7 +34,7 @@ public class ExpenseTest extends TestCase {
 		}
 	}
 	
-	
+	// this is a test for 05.01.01 and 04.05.01
 	public void testEditExpense() {
 		GregorianCalendar d1 = new GregorianCalendar();
 
@@ -59,7 +59,7 @@ public class ExpenseTest extends TestCase {
 		}
 	}
 	
-	
+	// this is a test case for 04.07.01
 	public void testDeleteExpense() {
 		Expense testExpense = new Expense("Test Expense");
 		claim.addExpense(testExpense);
