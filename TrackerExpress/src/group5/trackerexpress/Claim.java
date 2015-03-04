@@ -9,7 +9,7 @@ public class Claim {
 	
 	private String claimName;
 	private ArrayList<Expense> expenseList;
-	private ArrayList<String> destination = new ArrayList<String>();
+	private ArrayList<String[]> destination = new ArrayList<String[]>();
 	private int status; 
 	private Date startDate;
 	private Date endDate; 
@@ -54,7 +54,7 @@ public class Claim {
 	}
 
 
-	public ArrayList<Expense> getExpense(String string) throws ExpenseNotFoundException {
+	public ArrayList<Expense> getExpenseList() {
 		// TODO Auto-generated method stub
 		return expenseList;
 	}
@@ -77,10 +77,57 @@ public class Claim {
 		
 	}
 	
-	public void addDestination(String string){
-		destination.add(string);
+	public void addDestination(String place, String descriptions){
+		String[] travelInfo = new String[2];
+		travelInfo[0] = place;
+		travelInfo[1] = descriptions;
+		destination.add(travelInfo);
+	}
+	
+
+	public String getClaimName() {
+		return claimName;
 	}
 
+
+	public void setClaimName(String claimName) {
+		this.claimName = claimName;
+	}
+
+
+	public ArrayList<String[]> getDestination() {
+		return destination;
+	}
+
+
+	public void setDestination(ArrayList<String[]> destination) {
+		this.destination = destination;
+	}
+
+
+	public UUID getUuid() {
+		return uuid;
+	}
+
+
+	public void setUuid(UUID uuid) {
+		this.uuid = uuid;
+	}
+
+
+	public Date getStartDate() {
+		return startDate;
+	}
+
+
+	public Date getEndDate() {
+		return endDate;
+	}
+
+
+	public void setExpenseList(ArrayList<Expense> expenseList) {
+		this.expenseList = expenseList;
+	}
 
 
 	public void setStatus(int status) {
