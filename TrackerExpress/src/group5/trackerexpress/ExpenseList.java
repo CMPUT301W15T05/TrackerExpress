@@ -3,7 +3,8 @@ package group5.trackerexpress;
 import java.util.ArrayList;
 
 public class ExpenseList {
-	protected ArrayList<Expense> expenseList;
+	private ArrayList<Expense> expenseList;
+	private ArrayList<Integer> expenseIds;
 	
 	public ExpenseList() {
 		expenseList = new ArrayList<Expense>();
@@ -13,9 +14,8 @@ public class ExpenseList {
 		return expenseList;
 	}
 
-	public void add(Expense testExpense) {
-		expenseList.add(testExpense);
-		 
+	public void add(Expense expense) {
+		expenseList.add(expense);
 	}
 	
 	public Expense get(String expenseId) {
