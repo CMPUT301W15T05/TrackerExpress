@@ -12,6 +12,7 @@ public class ClaimList {
 	
 	public ClaimList() {
 		claimList = new ArrayList<Claim>();
+		claimIds = new ArrayList<UUID>();
 	}
 
 	public ArrayList<Claim> getClaimList() {
