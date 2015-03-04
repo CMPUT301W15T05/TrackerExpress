@@ -20,8 +20,9 @@ public class Claim {
 	public static final int APPROVED = 3;
 	
 	
-	UUID uuid = UUID.randomUUID();
+	private UUID uuid = UUID.randomUUID();
     
+	
 	public Claim(String claimName) {
 		// TODO Auto-generated constructor stub
 		this.claimName = claimName;
@@ -30,10 +31,21 @@ public class Claim {
 	}
 	
 
+	public UUID getuuid(){
+		return uuid; 
+	}
+	
+	public void setuuid(UUID uuid){
+		this.uuid = uuid; 
+	}
+	
+	
 	public String getName() {
 		// TODO Auto-generated method stub
 		return this.claimName;
 	}
+	
+	
 
 
 	public void addExpense(Expense expense) {
