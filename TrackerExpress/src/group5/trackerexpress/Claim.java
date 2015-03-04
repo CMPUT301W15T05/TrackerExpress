@@ -30,23 +30,25 @@ public class Claim {
 		
 	}
 	
+	public UUID getUuid() {
+		return uuid;
+	}
+	
+	public void setUuid(UUID uuid) {
+		this.uuid = uuid;
+	}	
+	
+	
+	
+	public String getClaimName() {
+		return claimName;
+	}
 
-	public UUID getuuid(){
-		return uuid; 
-	}
-	
-	public void setuuid(UUID uuid){
-		this.uuid = uuid; 
-	}
-	
-	
-	public String getName() {
-		// TODO Auto-generated method stub
-		return this.claimName;
-	}
-	
-	
 
+	public void setClaimName(String claimName) {
+		this.claimName = claimName;
+	}
+	
 
 	public void addExpense(Expense expense) {
 		expenseList.add(expense);
@@ -58,7 +60,14 @@ public class Claim {
 		// TODO Auto-generated method stub
 		return expenseList;
 	}
-
+	
+	
+	public void setExpenseList(ArrayList<Expense> expenseList) {
+		this.expenseList = expenseList;
+	}
+	
+	
+	
 
 	public void removeExpense(String string) {
 		// TODO Auto-generated method stub
@@ -72,11 +81,19 @@ public class Claim {
 		
 	}
 	
+	public Date getStartDate() {
+		return startDate;
+	}	
+	
 	public void setEndDate(Date d2){
 		this.endDate = d2;
 		
 	}
 	
+	public Date getEndDate() {
+		return endDate;
+	}
+		
 	public void addDestination(String place, String descriptions){
 		String[] travelInfo = new String[2];
 		travelInfo[0] = place;
@@ -84,56 +101,19 @@ public class Claim {
 		destination.add(travelInfo);
 	}
 	
-
-	public String getClaimName() {
-		return claimName;
-	}
-
-
-	public void setClaimName(String claimName) {
-		this.claimName = claimName;
-	}
-
-
-	public ArrayList<String[]> getDestination() {
-		return destination;
-	}
-
-
 	public void setDestination(ArrayList<String[]> destination) {
 		this.destination = destination;
 	}
-
-
-	public UUID getUuid() {
-		return uuid;
-	}
-
-
-	public void setUuid(UUID uuid) {
-		this.uuid = uuid;
-	}
-
-
-	public Date getStartDate() {
-		return startDate;
-	}
-
-
-	public Date getEndDate() {
-		return endDate;
-	}
-
-
-	public void setExpenseList(ArrayList<Expense> expenseList) {
-		this.expenseList = expenseList;
-	}
-
+	
+	public ArrayList<String[]> getDestination() {
+		return destination;
+	}	
+	
+	
 
 	public void setStatus(int status) {
 		// TODO Auto-generated method stub
 		this.status = status;
-		
 		
 	}
 	
