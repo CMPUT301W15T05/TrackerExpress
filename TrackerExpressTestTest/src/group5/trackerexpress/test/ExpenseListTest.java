@@ -30,13 +30,21 @@ public class ExpenseListTest extends TestCase {
 	public void testRemoveExpenseList() {
 		ExpenseList expList = new ExpenseList();
 		Expense testExp = new Expense();
+		UUID testUuid = testExp.getUuid();
 		
 		expList.addExpense(testExp);
 		assertTrue("List size isn't big enough", expList.size()==1);
-		assertTrue("Test expense item is not contained", expList.contains(testExp));
-		expList.remove(testExp);
+		assertTrue("Test expense item is not contained", 
+					testExp.equals(expList.getExpense(testUuid)) );
+		expList.deleteExpense(testExp.getUuid());
 		assertTrue("List size isn't small enough", expList.size()==0);
-		assertFalse("Test expense item still contained", expList.contains(testExp));
+		
+		try{
+			testExp.equals(expList.getExpense(testUuid));
+			assertTrue("This should not have happened", false);
+		} catch( IndexOutOfBoundsException e ){
+			assertTrue("This shoould happen", true);			
+		}
 	}
 	
 	// this is a model test for 05.01.01
@@ -45,24 +53,23 @@ public class ExpenseListTest extends TestCase {
 		
 		// Named so they come out in this order
 		Expense e1 = new Expense();
-		UUID e1uuid = e1.getUuid();
 		e1.setTitle("1");
 		Expense e2 = new Expense();
-		UUID e2uuid = e2.getUuid();
 		e2.setTitle("2");
 		Expense e3 = new Expense();
-		UUID e3uuid = e3.getUuid();
 		e3.setTitle("3");
 
     	
-		expenseList.add(e1);
-		expenseList.add(e2);
-		expenseList.add(e3);
+		expenseList.addExpense(e1);
+		expenseList.addExpense(e2);
+		expenseList.addExpense(e3);
 
-		assertTrue("List size isn't correct", expenseList.size()==3);
-		assertTrue("Item '1' is not first",  expenseList.getList().get(0).getTitle().equals("1") );
-		assertTrue("Item '2' is not second", expenseList.getList().get(1).getTitle().equals("2") );
-		assertTrue("Item '3' is not last", expenseList.getList().get(2).getTitle().equals("3") );
+		assertTrue("Item '1' is not first",  
+					expenseList.getExpenseList().get(0).getTitle().equals(e1) );
+		assertTrue("Item '2' is not second", 
+					expenseList.getExpenseList().get(1).getTitle().equals(e2) );
+		assertTrue("Item '3' is not last", 
+					expenseList.getExpenseList().get(2).getTitle().equals(e3) );
 
 	}
 }
