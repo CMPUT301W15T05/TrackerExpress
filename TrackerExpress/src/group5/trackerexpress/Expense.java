@@ -13,17 +13,11 @@ public class Expense {
 	public static final int NO_FLAG = 0;
 	public static final int FLAG = 1;
 
-	
-	
-	private UUID uuid = UUID.randomUUID();
-
-	public Expense(String title) {
-		// TODO Auto-generated constructor stub
-		this.title = title;
-	}
+	private UUID uuid;
 	
 	public Expense() {
 		// TODO Auto-generated constructor stub
+		uuid = UUID.randomUUID();
 	}
 
 	public String getTitle() {

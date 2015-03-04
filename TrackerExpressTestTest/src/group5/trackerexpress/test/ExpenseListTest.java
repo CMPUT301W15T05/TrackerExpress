@@ -1,12 +1,7 @@
 package group5.trackerexpress.test;
 import group5.trackerexpress.Expense;
 import group5.trackerexpress.ExpenseList;
-
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Collection;
-import java.util.GregorianCalendar;
-
 import junit.framework.TestCase;
 
 // Mostly a model test for 05.01.01
