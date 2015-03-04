@@ -49,21 +49,22 @@ public class ClaimList {
 		});
 	}
 
-	public Claim get(UUID claimId) {
+	public Claim getClaim(UUID claimId) {
 		int index = claimIds.indexOf(claimId);
 		return claimList.get(index);
 	}
 
-	public void remove(Claim claim) {
-		claimList.remove(claim);
-		regenerateUUIDList();
+	public void deleteClaim(UUID claimId) {
+		int index = claimIds.indexOf(claimId);
+		try{
+			claimIds.remove(index);
+			claimList.remove(index);
+		} catch( IndexOutOfBoundsException e ){
+			throw new RuntimeException(e);
+		}
 	}
 
 	public int size() {
 		return claimList.size();
-	}
-
-	public boolean contains(Claim claim) {
-		return claimList.contains(claim);
 	}
 }
