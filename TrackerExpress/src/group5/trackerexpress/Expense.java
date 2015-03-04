@@ -62,9 +62,4 @@ public class Expense {
 	public int getOrder() { // returns order from within it's list
 		return order;
 	}
-
-	public UUID getId() {
-		// TODO Auto-generated method stub
-		return uuid;
-	}
 }

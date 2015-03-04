@@ -3,7 +3,6 @@ import group5.trackerexpress.Claim;
 import group5.trackerexpress.ClaimList;
 import group5.trackerexpress.Date;
 
-import java.util.Calendar;
 import java.util.UUID;
 
 import junit.framework.TestCase;
