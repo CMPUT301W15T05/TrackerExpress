@@ -29,7 +29,7 @@ public class ClaimList {
 		claimIds = new ArrayList<UUID>();
 		
 		for ( Claim c: claimList ){
-			claimIds.add( c.getuuid() );
+			claimIds.add( c.getUuid() );
 		}
 	}
 	
@@ -41,8 +41,8 @@ public class ClaimList {
 			@Override
 			public int compare(Claim lhs, Claim rhs) {
 				// TODO Auto-generated method stub	
-				int lhs_date = lhs.getStartDate().getDate();
-				int rhs_date = rhs.getStartDate().getDate();
+				Integer lhs_date = lhs.getStartDate().getDate();
+				Integer rhs_date = rhs.getStartDate().getDate();
 				return lhs_date.compareTo(rhs_date);
 			}
 			
