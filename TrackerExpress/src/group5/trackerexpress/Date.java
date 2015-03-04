@@ -13,7 +13,7 @@ public class Date implements Comparable{
 		this.yyyy = yyyy;
 	}
 
-	public int getDate(){
+	public Integer getDate(){
 		return yyyy * 10000 + mm * 100 + dd;
 	}
 	
