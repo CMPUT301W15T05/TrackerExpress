@@ -6,8 +6,8 @@ import java.util.UUID;
 public class Expense {
 	
 	private String title;
-	private ArrayList<Expense> expenseList;
 	private int status; 
+	private int order;
 	private Date date;
     
 	public static final int NO_FLAG = 0;
@@ -42,7 +42,7 @@ public class Expense {
 	}
 
 	public int getOrder() { // returns order from within it's list
-		return 0;
+		return order;
 	}
 
 	public UUID getId() {
