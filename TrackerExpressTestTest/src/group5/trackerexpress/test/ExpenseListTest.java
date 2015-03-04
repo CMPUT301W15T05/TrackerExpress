@@ -13,8 +13,6 @@ public class ExpenseListTest extends TestCase {
 		assertTrue("Empty expense list", expList.size()==0);
 	}
 	
-	
-	
 	public void testAddExpenseList() {
 		ExpenseList expList = new ExpenseList();
 		String expName = "An expense item";
@@ -25,8 +23,6 @@ public class ExpenseListTest extends TestCase {
 		assertTrue("Empty expense list", expList.size()==1);
 		assertTrue("Test expense item not contained", expList.contains(testExp));
 	}
-	
-	
 	
 	public void testGetExpenseList() {
 		ExpenseList expList = new ExpenseList();

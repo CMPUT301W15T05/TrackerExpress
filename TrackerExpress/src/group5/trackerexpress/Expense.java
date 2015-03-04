@@ -10,6 +10,30 @@ public class Expense {
 	private int order;
 	private Date date;
     
+	public int getStatus() {
+		return status;
+	}
+
+	public void setStatus(int status) {
+		this.status = status;
+	}
+
+	public UUID getUuid() {
+		return uuid;
+	}
+
+	public void setUuid(UUID uuid) {
+		this.uuid = uuid;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public void setOrder(int order) {
+		this.order = order;
+	}
+
 	public static final int NO_FLAG = 0;
 	public static final int FLAG = 1;
 
