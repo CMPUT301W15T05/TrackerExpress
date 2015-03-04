@@ -3,6 +3,7 @@ import java.util.UUID;
 
 import group5.trackerexpress.Expense;
 import group5.trackerexpress.ExpenseList;
+import group5.trackerexpress.ExpenseNotFoundException;
 import junit.framework.TestCase;
 
 // Mostly a model test for 05.01.01
@@ -14,7 +15,7 @@ public class ExpenseListTest extends TestCase {
 		assertTrue("Empty expense list", expList.size()==0);
 	}
 	
-	public void testAddExpenseList() {
+	public void testAddExpenseList() throws ExpenseNotFoundException {
 		ExpenseList expList = new ExpenseList();
 		
 		Expense testExp = new Expense();
@@ -27,7 +28,7 @@ public class ExpenseListTest extends TestCase {
 	}	
 	
 	
-	public void testRemoveExpenseList() {
+	public void testRemoveExpenseList() throws ExpenseNotFoundException {
 		ExpenseList expList = new ExpenseList();
 		Expense testExp = new Expense();
 		UUID testUuid = testExp.getUuid();

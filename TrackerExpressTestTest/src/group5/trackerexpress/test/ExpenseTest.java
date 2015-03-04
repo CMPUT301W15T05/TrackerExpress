@@ -2,6 +2,7 @@ package group5.trackerexpress.test;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.UUID;
 
 import android.widget.TextView;
 import group5.trackerexpress.Claim;
@@ -27,10 +28,13 @@ public class ExpenseTest extends TestCase {
 	public void testAddExpense() {	
 		// Claimant selects claim to edit and adds the expense:
 		Expense testExpense = new Expense("Test Expense");
+		
+		UUID expenseUuid = testExpense.getUuid();
+		
 		claim.addExpense(testExpense); // Note: Might change to ExpenseList.add(Expense) instead
 		
 		try {
-			assertEquals("Expense not in claim's expense list", claim.getExpense("TestExpense"), testExpense);
+			assertEquals("Expense not in claim's expense list", claim.getExpenseList().getExpense(expenseUuid), testExpense);
 		} catch (ExpenseNotFoundException e) {
 			fail("Expense not found.");
 		}
@@ -48,11 +52,13 @@ public class ExpenseTest extends TestCase {
 		claim.addExpense(testExpense);
 		testExpense.setDate(d1);
 		
+		UUID expenseUuid = testExpense.getUuid();
+		
 		assertEquals("Expense not updated", testExpense.getDate(), d1);
 		
 		try {
 			
-			Expense testExpenseEdited = claim.getExpense("Test Expense");
+			Expense testExpenseEdited = claim.getExpenseList().getExpense(expenseUuid);
 			assertEquals("Expense not updated when grabbed from claim", testExpenseEdited.getDate(), d1);
 			
 			
@@ -64,12 +70,15 @@ public class ExpenseTest extends TestCase {
 	// this is a test case for 04.07.01
 	public void testDeleteExpense() {
 		Expense testExpense = new Expense("Test Expense");
+		
+		UUID expenseUuid = testExpense.getUuid();
+		
 		claim.addExpense(testExpense);
 		
-		claim.removeExpense("Test Expense");
+		claim.removeExpense(expenseUuid);
 		
 		try {
-			claim.getExpense("Test Expense");
+			claim.getExpenseList().getExpense(expenseUuid);
 			fail("Expense not deleted.");
 		}
 		catch(ExpenseNotFoundException e) {

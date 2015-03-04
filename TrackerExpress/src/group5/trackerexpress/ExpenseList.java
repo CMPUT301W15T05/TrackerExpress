@@ -21,7 +21,7 @@ public class ExpenseList {
 		expenseIds.add(expense.getUuid());
 	}
 	
-	public Expense getExpense(UUID expenseId) {
+	public Expense getExpense(UUID expenseId) throws ExpenseNotFoundException {
 		int index = expenseIds.indexOf(expenseId);
 		
 		return expenseList.get(index);

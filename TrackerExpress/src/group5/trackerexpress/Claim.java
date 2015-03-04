@@ -8,7 +8,7 @@ import android.view.View;
 public class Claim {
 	
 	private String claimName;
-	private ArrayList<Expense> expenseList;
+	private ExpenseList expenseList;
 	private ArrayList<String[]> destination = new ArrayList<String[]>();
 	private int status; 
 	private Date startDate;
@@ -26,7 +26,7 @@ public class Claim {
 	public Claim(String claimName) {
 		// TODO Auto-generated constructor stub
 		this.claimName = claimName;
-		this.expenseList = new ArrayList<Expense>();
+		this.expenseList = new ExpenseList();
 		
 	}
 	
@@ -51,27 +51,28 @@ public class Claim {
 	
 
 	public void addExpense(Expense expense) {
-		expenseList.add(expense);
+		expenseList.addExpense(expense);
 		
 	}
 
 
-	public ArrayList<Expense> getExpenseList() {
+	public ExpenseList getExpenseList() {
 		// TODO Auto-generated method stub
 		return expenseList;
 	}
 	
 	
-	public void setExpenseList(ArrayList<Expense> expenseList) {
+	public void setExpenseList(ExpenseList expenseList) {
 		this.expenseList = expenseList;
 	}
 	
 	
 	
 
-	public void removeExpense(String string) {
+	public void removeExpense(UUID expenseUuid) {
 		// TODO Auto-generated method stub
-		expenseList.remove(expenseList.indexOf(string));
+		expenseList.deleteExpense(expenseUuid);
+		//expenseList.remove(expenseList.indexOf(string));
 	}
 
 
