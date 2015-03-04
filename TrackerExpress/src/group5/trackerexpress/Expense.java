@@ -44,6 +44,11 @@ public class Expense {
 		uuid = UUID.randomUUID();
 	}
 
+	public Expense(String string) {
+		this.title = string;
+		uuid = UUID.randomUUID();
+	}
+
 	public String getTitle() {
 		// TODO Auto-generated method stub
 		return title;

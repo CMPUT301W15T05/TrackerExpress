@@ -18,7 +18,7 @@ public class ExpenseList {
 
 	public void addExpense(Expense expense) {
 		expenseList.add(expense);
-		expenseIds.add(expense.getId());
+		expenseIds.add(expense.getUuid());
 	}
 	
 	public Expense getExpense(UUID expenseId) {

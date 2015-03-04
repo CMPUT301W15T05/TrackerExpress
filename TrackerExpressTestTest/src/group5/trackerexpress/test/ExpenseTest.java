@@ -6,6 +6,7 @@ import java.util.GregorianCalendar;
 import android.widget.TextView;
 import group5.trackerexpress.Claim;
 import group5.trackerexpress.Controller;
+import group5.trackerexpress.Date;
 import group5.trackerexpress.Expense;
 import group5.trackerexpress.ExpenseNotFoundException;
 import junit.framework.TestCase;
@@ -37,11 +38,11 @@ public class ExpenseTest extends TestCase {
 	
 	// this is a test for 04.06.01
 	public void testEditExpense() {
-		GregorianCalendar d1 = new GregorianCalendar();
+		Date d1 = new Date();
 
-		d1.set(Calendar.YEAR, 1995);
-		d1.set(Calendar.MONTH, 11);
-		d1.set(Calendar.DAY_OF_MONTH, 12);
+		d1.setYYYY(1995);
+		d1.setMM(11);
+		d1.setDD(12);
 
 		Expense testExpense = new Expense("Test Expense");
 		claim.addExpense(testExpense);

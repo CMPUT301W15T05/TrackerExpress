@@ -67,4 +67,11 @@ public class ClaimList {
 	public int size() {
 		return claimList.size();
 	}
+
+	public boolean contains(Claim claim) {
+		if (claimList.contains(claim)) {
+			return true;
+		};
+		return false;
+	}
 }
