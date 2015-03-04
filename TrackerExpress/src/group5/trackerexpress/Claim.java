@@ -1,83 +1,85 @@
 package group5.trackerexpress;
 
-import java.util.GregorianCalendar;
+import java.util.ArrayList;
+import java.util.UUID;
 
 import android.view.View;
 
 public class Claim {
 	
-	protected String claimName;
-
+	private String claimName;
+	private ArrayList<Expense> expenseList;
+	private ArrayList<String> destination = new ArrayList<String>();
+	private int status; 
+	private Date startDate;
+	private Date endDate; 
+    
 	public static final int IN_PROGRESS = 0;
 	public static final int SUBMITTED = 1;
 	public static final int RETURNED = 2;
 	public static final int APPROVED = 3;
-
+	
+	
+	UUID uuid = UUID.randomUUID();
+    
 	public Claim(String claimName) {
 		// TODO Auto-generated constructor stub
 		this.claimName = claimName;
+		this.expenseList = new ArrayList<Expense>();
+		
 	}
 	
-	
-	public Claim() {
-		// TODO Auto-generated constructor stub
-	}
-
 
 	public String getName() {
 		// TODO Auto-generated method stub
-		return claimName;
-	}
-
-	public String getTitle() {
-		// TODO Auto-generated method stub
-		return "";
-	}
-
-
-	public void addTag(View businessTag) {
-		// TODO Auto-generated method stub
-		
+		return this.claimName;
 	}
 
 
 	public void addExpense(Expense expense) {
-		// TODO Auto-generated method stub
+		expenseList.add(expense);
 		
 	}
 
 
-	public Expense getExpense(String string) throws ExpenseNotFoundException {
+	public ArrayList<Expense> getExpense(String string) throws ExpenseNotFoundException {
 		// TODO Auto-generated method stub
-		return null;
+		return expenseList;
 	}
 
 
 	public void removeExpense(String string) {
 		// TODO Auto-generated method stub
+		expenseList.remove(expenseList.indexOf(string));
+	}
+
+
+	public void setStartDate( Date d1) {
+		// TODO Auto-generated method stub
+		this.startDate = d1;
 		
 	}
-
-
-	public void setStartDate(GregorianCalendar d1) {
-		// TODO Auto-generated method stub
+	
+	public void setEndDate(Date d2){
+		this.endDate = d2;
 		
 	}
-
-
-	public GregorianCalendar getStartDate() {
-		// TODO Auto-generated method stub
-		return null;
+	
+	public void addDestination(String string){
+		destination.add(string);
 	}
+
 
 
 	public void setStatus(int status) {
 		// TODO Auto-generated method stub
+		this.status = status;
+		
 		
 	}
 	
 	public int getStatus() {
-		return 0;
+		return status;
 		// TODO Auto-generated method stub
 		
 	}
