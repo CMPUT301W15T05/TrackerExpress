@@ -1,6 +1,6 @@
 package group5.trackerexpress;
 
-import java.util.GregorianCalendar;
+import java.util.UUID;
 
 public class Expense {
 
@@ -17,17 +17,22 @@ public class Expense {
 		return "";
 	}
 
-	public void setDate(GregorianCalendar d1) {
+	public void setDate(Date d1) {
 		// TODO Auto-generated method stub
 		
 	}
 
-	public GregorianCalendar getDate() {
+	public Date getDate() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	public int getOrder() { // returns order from within it's list
 		return 0;
+	}
+
+	public UUID getId() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
