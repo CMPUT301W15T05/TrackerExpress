@@ -1,19 +1,27 @@
 package group5.trackerexpress;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
 
 import android.app.Activity;
 
 public class TagController implements TController {
 
-	private List<Tag> tags;
+	private static final String FILENAME = "tags.sav";
+	private Map<Long, Tag> tags;
 	private static TagController tagController;
 	
 	private TagController(Activity context){
-		this.tags = new ArrayList<Tag>();
 		
-		//TODO: Use File I/O to populate tags
+		try {
+			this.tags = new FileManager<HashMap<Long, Tag>>().getFile(context, FILENAME);
+		} catch (IOException e) {
+			System.err.println ("Tags file not found, making a fresh tags list.");
+			this.tags = new HashMap<Long, Tag>();
+		}
+
 	}
 	
 	public static TagController getTagController(Activity context) {
@@ -22,33 +30,24 @@ public class TagController implements TController {
 		return tagController;
 	}
 	
-	//NOTE: tagIndex might end up having to be tagId, with tags being a map instead of a list.
-	public Tag getTag(int tagIndex){
-		return tags.get(tagIndex);
+	public String getTag(long tagId){
+		return tags.get(tagId).toString();
 	}
 	
-	public void addTag(Activity context, Tag tag){
-		tags.add(tag);
+	public long addTagAndReturnId(Activity context, String tagString){
+		long tagId = new Random().nextLong();
+		tags.put(tagId, new Tag(tagString));
+		this.saveData(context);
+		return tagId;
+	}
+	
+	public void deleteTag(Activity context, long tagId){
+		tags.remove(tagId);
 		this.saveData(context);
 	}
 	
-	public void addTag(Activity context, String tagString){
-		tags.add(new Tag(tagString));
-		this.saveData(context);
-	}
-	
-	public void removeTag(Activity context, Tag tag){
-		tags.remove(tag);
-		this.saveData(context);
-	}
-	
-	public void removeTag(Activity context, int tagIndex){
-		tags.remove(tagIndex);
-		this.saveData(context);
-	}
-	
-	public void renameTag(Activity context, int tagIndex, String newName){
-		this.getTag(tagIndex).rename(newName);
+	public void renameTag(Activity context, long tagId, String newName){
+		this.tags.get(tagId).rename(newName);
 		this.saveData(context);
 	}
 
