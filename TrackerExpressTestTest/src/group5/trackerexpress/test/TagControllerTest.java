@@ -24,5 +24,32 @@ ActivityInstrumentationTestCase2<MainActivity> {
 		controller = TagController.getTagController(activity);
 	}
 	
+
+	
+	public void testCreateTag(){
+		long tagId = controller.addTagAndReturnId(activity, "Business");
+		assertTrue("Tag couldn't be added", controller.getTag(tagId).equals("Business"));
+		
+		controller.deleteTag(activity, tagId);
+	}
+	
+	
+	public void testRenameTag(){
+		long tagId = controller.addTagAndReturnId(activity, "Business");
+		controller.renameTag(activity, tagId, "Pleasure");
+		assertTrue("Tag couldn't be renamed", controller.getTag(tagId).equals("Pleasure"));
+
+		controller.deleteTag(activity, tagId);
+	}
+	
+	public void testDeleteTag(){
+		long tagId = controller.addTagAndReturnId(activity, "Business");
+		int numTagsBeforeDeletion = controller.getNumTags();
+		
+		controller.deleteTag(activity, tagId);
+
+		assertTrue("Tag couldn't be deleted", controller.getTag(tagId) == null);
+		assertTrue("Tag couldn't be deleted", controller.getNumTags() == numTagsBeforeDeletion - 1);
+	}
 	
 }

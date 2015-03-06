@@ -13,20 +13,15 @@ public class TagController implements TController {
 	private Map<Long, Tag> tags;
 	private static TagController tagController;
 	
-	private TagController(Activity context){
-		
-		try {
-			this.tags = new FileManager<HashMap<Long, Tag>>().getFile(context, FILENAME);
-		} catch (IOException e) {
-			System.err.println ("Tags file not found, making a fresh tags list.");
-			this.tags = new HashMap<Long, Tag>();
-		}
+	private TagController(){
 
 	}
-	
+
+
 	public static TagController getTagController(Activity context) {
-		if (tagController == null)
-			tagController = new TagController(context);
+		if (tagController == null)		
+			tagController = new TagController();
+		tagController.loadData(context);
 		return tagController;
 	}
 	
@@ -53,6 +48,26 @@ public class TagController implements TController {
 
 	
 	private void saveData(Activity context) {
-		//TODO: Save data using fileIO calls
+		try {
+			new FileManager<Map<Long, Tag>>().saveFile(context, FILENAME, tags);
+		} catch (IOException e) {
+			System.err.println ("Could not save tags.");
+			throw new RuntimeException();
+		}
 	}
+	
+	private void loadData(Activity context) {
+		try {
+			this.tags = new FileManager<Map<Long, Tag>>().loadFile(context, FILENAME);
+		} catch (IOException e) {
+			System.err.println ("Tags file not found, making a fresh tags list.");
+			this.tags = new HashMap<Long, Tag>();
+		}
+	}
+
+
+	public int getNumTags() {
+		return tags.size();
+	}
+	
 }

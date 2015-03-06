@@ -25,7 +25,7 @@ public class FileManager<T> {
 		fos.close();
 	}
 	
-	public T getFile(Activity context, String fileName) throws IOException {		
+	public T loadFile(Activity context, String fileName) throws IOException {		
 
 		FileInputStream fis = context.openFileInput(fileName);
 		
