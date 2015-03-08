@@ -1,16 +1,19 @@
 package group5.trackerexpress.test;
 
+import java.util.UUID;
+
 import group5.trackerexpress.MainActivity;
 import group5.trackerexpress.TagController;
 import android.app.Activity;
 import android.app.Instrumentation;
+import android.content.Context;
 import android.test.ActivityInstrumentationTestCase2;
 
 public class TagControllerTest extends
 ActivityInstrumentationTestCase2<MainActivity> {
 
 	Instrumentation instrumentation;
-	Activity activity;
+	Context context;
 	TagController controller;
 
 	public TagControllerTest() {
@@ -20,33 +23,34 @@ ActivityInstrumentationTestCase2<MainActivity> {
 	protected void setUp() throws Exception {
 		super.setUp();
 		instrumentation = getInstrumentation();
-		activity = getActivity();
-		controller = TagController.getTagController(activity);
+		context = getActivity();
+		TagController.initialize(context);
+		controller = TagController.getInstance();
 	}
 	
 
 	
 	public void testCreateTag(){
-		long tagId = controller.addTagAndReturnId(activity, "Business");
-		assertTrue("Tag couldn't be added", controller.getTag(tagId).equals("Business"));
+		UUID tagId = controller.addTag("Business");
+		assertTrue("Tag couldn't be added", controller.getTag(tagId).toString().equals("Business"));
 		
-		controller.deleteTag(activity, tagId);
+		controller.deleteTag(tagId);
 	}
-	
+
 	
 	public void testRenameTag(){
-		long tagId = controller.addTagAndReturnId(activity, "Business");
-		controller.renameTag(activity, tagId, "Pleasure");
+		UUID tagId = controller.addTag("Business");
+		controller.renameTag(tagId, "Pleasure");
 		assertTrue("Tag couldn't be renamed", controller.getTag(tagId).equals("Pleasure"));
 
-		controller.deleteTag(activity, tagId);
+		controller.deleteTag(tagId);
 	}
 	
 	public void testDeleteTag(){
-		long tagId = controller.addTagAndReturnId(activity, "Business");
+		UUID tagId = controller.addTag("Business");
 		int numTagsBeforeDeletion = controller.getNumTags();
 		
-		controller.deleteTag(activity, tagId);
+		controller.deleteTag(tagId);
 
 		assertTrue("Tag couldn't be deleted", controller.getTag(tagId) == null);
 		assertTrue("Tag couldn't be deleted", controller.getNumTags() == numTagsBeforeDeletion - 1);

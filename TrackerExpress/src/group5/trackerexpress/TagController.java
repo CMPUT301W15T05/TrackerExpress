@@ -4,64 +4,102 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+import java.util.UUID;
 
 import android.app.Activity;
+import android.content.Context;
 
 public class TagController implements TController {
 
 	private static final String FILENAME = "tags.sav";
-	private Map<Long, Tag> tags;
-	private static TagController tagController;
+	private Map<UUID, Tag> tags;
+	private Context context;
+	private static TagController instance;
 	
-	private TagController(){
-
+	private TagController(Context context){
+		this.context = context;
 	}
 
 
-	public static TagController getTagController(Activity context) {
-		if (tagController == null)		
-			tagController = new TagController();
-		tagController.loadData(context);
-		return tagController;
+	public static TagController getInstance() throws ExceptionControllerNotInitialized {
+		if (instance == null)		
+			throw new ExceptionControllerNotInitialized();
+		instance.loadData();
+		return instance;
 	}
 	
-	public String getTag(long tagId){
+	/*!
+	 * Initializes the tag controller making a singleton and storing a context
+	 * for file IO. MAKE SURE ACTIVITY THAT INITIALIZES DOESN'T STOP, THATS WOULD BE BAD
+	 */
+	public static TagController initialize(Context context) throws ExceptionControllerAlreadyInitialized {
+		if (instance != null)
+			throw new ExceptionControllerAlreadyInitialized();
+		instance = new TagController(context);
+		return instance;
+	}
+	
+	public String getTag(UUID tagId){
+		this.loadData();
 		return tags.get(tagId).toString();
 	}
-	
-	public long addTagAndReturnId(Activity context, String tagString){
-		long tagId = new Random().nextLong();
-		tags.put(tagId, new Tag(tagString));
-		this.saveData(context);
-		return tagId;
-	}
-	
-	public void deleteTag(Activity context, long tagId){
-		tags.remove(tagId);
-		this.saveData(context);
-	}
-	
-	public void renameTag(Activity context, long tagId, String newName){
-		this.tags.get(tagId).rename(newName);
-		this.saveData(context);
-	}
 
+	public void setTag(Tag tag){
+		this.loadData();
+		tags.put(tag.getUuid(), tag);
+		this.saveData();
+	}
 	
-	private void saveData(Activity context) {
+	//Adds a tag, taking either a tag object or just a string.
+	//Returns the UUID, incase you need it
+	public UUID addTag(String tagString){
+		this.loadData();
+		Tag newTag = new Tag(tagString);
+		tags.put(newTag.getUuid(), newTag);
+		this.saveData();
+		return newTag.getUuid();
+	}
+	
+	public UUID addTag(Tag newTag){
+		this.loadData();
+		tags.put(newTag.getUuid(), newTag);
+		this.saveData();
+		return newTag.getUuid();
+	}
+	
+	public void deleteTag(UUID tagId){
+		this.loadData();
+		tags.remove(tagId);
+		this.saveData();
+	}
+	
+	public void deleteTag(Tag tag){
+		this.loadData();
+		tags.remove(tag);
+		this.saveData();
+	}
+	
+	public void renameTag(UUID tagId, String newName){
+		this.loadData();
+		this.tags.get(tagId).rename(newName);
+		this.saveData();
+	}
+	
+	private void saveData() {
 		try {
-			new FileManager<Map<Long, Tag>>().saveFile(context, FILENAME, tags);
+			new FileCourrier<Map<UUID, Tag>>().saveFile(context, FILENAME, tags);
 		} catch (IOException e) {
 			System.err.println ("Could not save tags.");
 			throw new RuntimeException();
 		}
 	}
-	
-	private void loadData(Activity context) {
+
+	private void loadData() {
 		try {
-			this.tags = new FileManager<Map<Long, Tag>>().loadFile(context, FILENAME);
+			this.tags = new FileCourrier<Map<UUID, Tag>>().loadFile(context, FILENAME);
 		} catch (IOException e) {
 			System.err.println ("Tags file not found, making a fresh tags list.");
-			this.tags = new HashMap<Long, Tag>();
+			this.tags = new HashMap<UUID, Tag>();
 		}
 	}
 
@@ -69,5 +107,5 @@ public class TagController implements TController {
 	public int getNumTags() {
 		return tags.size();
 	}
-	
+
 }

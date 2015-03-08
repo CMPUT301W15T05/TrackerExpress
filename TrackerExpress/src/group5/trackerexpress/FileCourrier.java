@@ -11,11 +11,12 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import android.app.Activity;
+import android.content.Context;
 
-public class FileManager<T> {
+public class FileCourrier<T> {
 
 	
-	public void saveFile(Activity context, String fileName, T file) throws IOException {
+	public void saveFile(Context context, String fileName, T file) throws IOException {
 		
 		FileOutputStream fos = context.openFileOutput(fileName, 0);
 		Gson gson = new Gson();
@@ -25,13 +26,11 @@ public class FileManager<T> {
 		fos.close();
 	}
 	
-	public T loadFile(Activity context, String fileName) throws IOException {		
+	public T loadFile(Context context, String fileName) throws IOException {		
 
-		FileInputStream fis = context.openFileInput(fileName);
-		
-		Gson gson = new Gson();
-		
 		//From joshua2ua in lab 3:
+		FileInputStream fis = context.openFileInput(fileName);
+		Gson gson = new Gson();
 		Type dataType = new TypeToken<T>() {}.getType();
 		InputStreamReader isr = new InputStreamReader(fis);
 		T file = gson.fromJson(isr, dataType);
