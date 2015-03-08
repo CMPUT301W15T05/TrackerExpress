@@ -18,29 +18,13 @@ public class TagListArrayAdapter extends ArrayAdapter<Tag>
 	implements CompoundButton.OnCheckedChangeListener{
 	private ArrayList<Tag> tagList;
 	private Context context;
-	private static SelectedTagList selected = new SelectedTagList();
 	
 	public TagListArrayAdapter(Context context, ArrayList<Tag> tags){
-		super(context, R.layout.fragment_tags_list_item);
+		super(context, R.layout.fragment_tags_list_item, tags);
 		this.tagList = tags;
 		this.context = context;
 	}
 	
-	private static class SelectedTagList{
-		private ArrayList<Tag> selected;
-		
-		public SelectedTagList(){
-			selected = new ArrayList<Tag>();
-		}
-		
-		public void selectTag( Tag t ){
-			selected.add(t);
-		}
-		
-		public boolean isSelected( Tag  t ){
-			return selected.contains(t);
-		}
-	}
 	
 	private static class TagHolder{
 		public TextView tagName;
@@ -59,6 +43,7 @@ public class TagListArrayAdapter extends ArrayAdapter<Tag>
 			holder.tagName = (TextView) v.findViewById(R.id.tv_tags_list_item);
 			holder.chkBox = (CheckBox) v.findViewById(R.id.cb_tags_list_item);
 		
+			v.setTag(holder);
 		} else {
 			holder = (TagHolder) v.getTag();
 		}
@@ -75,7 +60,6 @@ public class TagListArrayAdapter extends ArrayAdapter<Tag>
 	public void onCheckedChanged(CompoundButton buttonView,
 			boolean isChecked) {
 		// TODO Auto-generated method stub
-	    mCheckStates.put((Integer) buttonView.getTag(), isChecked);    
-
+	    
 	}
 }

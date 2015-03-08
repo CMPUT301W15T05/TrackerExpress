@@ -199,7 +199,7 @@ public class MainActivity extends FragmentActivity implements
 		}
 	}
 
-	public class FragmentMyClaims extends Fragment {
+	public static class FragmentMyClaims extends Fragment {
 		/**
 		 * The fragment argument representing the section number for this
 		 * fragment.
@@ -222,15 +222,16 @@ public class MainActivity extends FragmentActivity implements
 		}
 	}
 
-	public class FragmentTagList extends Fragment{
+	public static class FragmentTagList extends Fragment{
 		/**
 		 * The fragment argument representing the section number for this
 		 * fragment.
 		 */
 		public static final String ARG_SECTION_NUMBER = "section_number";
 
-		private ListView lv_tag_list = (ListView) findViewById(R.id.lv_tags);
+		private ListView lv_tag_list;
 		private CheckBox chkBox;
+		private TagListArrayAdapter adapter;
 		
 		public FragmentTagList() {
 		}
@@ -241,15 +242,31 @@ public class MainActivity extends FragmentActivity implements
 			View rootView = inflater.inflate(R.layout.fragment_tags_list,
 					container, false);
 			
-			chkBox = (CheckBox) findViewById(R.id.cb_tags_list_item);
-
+			lv_tag_list = (ListView) rootView.findViewById(R.id.lv_tags);
+			chkBox = (CheckBox) rootView.findViewById(R.id.cb_tags_list_item);
+			
+			ArrayList<Tag> listOfTags = new ArrayList<Tag>();
+			
+			Tag t1 = new Tag("Tag1");
+			Tag t2 = new Tag("Tag2");
+			Tag t3 = new Tag("Tag3");
+			Tag t4 = new Tag("Tag4");
+			
+			listOfTags.add(t1);
+			listOfTags.add(t2);
+			listOfTags.add(t3);
+			listOfTags.add(t4);
+			
+			adapter = new TagListArrayAdapter( getActivity().getBaseContext(), listOfTags );
+			lv_tag_list.setAdapter(adapter);
+			
 			return rootView;
 		}
 
 
 	}
 
-	public class FragmentGlobalClaims extends Fragment {
+	public static class FragmentGlobalClaims extends Fragment {
 		/**
 		 * The fragment argument representing the section number for this
 		 * fragment.
