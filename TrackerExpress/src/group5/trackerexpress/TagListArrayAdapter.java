@@ -4,25 +4,34 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.TextView;
 
-public class TagListArrayAdapter extends ArrayAdapter<Tag> 
-	implements CompoundButton.OnCheckedChangeListener{
+// http://androidcocktail.blogspot.it/2012/04/adding-checkboxes-to-custom-listview-in.html
+public class TagListArrayAdapter extends ArrayAdapter<Tag> {
+	
 	private ArrayList<Tag> tagList;
 	private Context context;
+	boolean[] checkBoxState;
 	
 	public TagListArrayAdapter(Context context, ArrayList<Tag> tags){
 		super(context, R.layout.fragment_tags_list_item, tags);
 		this.tagList = tags;
 		this.context = context;
+		
+		checkBoxState = new boolean[tags.size()];
+		for ( int i = 0; i < tags.size(); i++ ){
+			checkBoxState[i] = tags.get(i).isSelected();
+		}
 	}
 	
 	
@@ -32,7 +41,7 @@ public class TagListArrayAdapter extends ArrayAdapter<Tag>
 	}
 	
 	@Override
-	public View getView(int position, View convertView, ViewGroup parent){
+	public View getView(final int position, View convertView, ViewGroup parent){
 		View v = convertView;
 		TagHolder holder = new TagHolder();
 		
@@ -53,13 +62,22 @@ public class TagListArrayAdapter extends ArrayAdapter<Tag>
 		holder.chkBox.setChecked(t.isSelected());
 		holder.chkBox.setTag(t);
 		
+		holder.chkBox.setChecked(checkBoxState[position]);
+
+		holder.chkBox.setOnClickListener(new View.OnClickListener(){
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				if (((CheckBox)v).isChecked()){
+					checkBoxState[position] = true;
+					tagList.get(position).setSelected(true);
+				} else {
+					checkBoxState[position] = false;
+					tagList.get(position).setSelected(false);
+				}
+			}	
+		});
+		
 		return v;
-	}
-	
-	@Override
-	public void onCheckedChanged(CompoundButton buttonView,
-			boolean isChecked) {
-		// TODO Auto-generated method stub
-	    
 	}
 }
