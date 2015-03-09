@@ -1,5 +1,6 @@
 package group5.trackerexpress;
 
+import java.util.ArrayList;
 import java.util.Locale;
 
 import android.app.ActionBar;
@@ -11,12 +12,16 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.NavUtils;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.ListView;
 import android.widget.TextView;
 
 public class MainActivity extends FragmentActivity implements
@@ -25,7 +30,6 @@ public class MainActivity extends FragmentActivity implements
 	public static final int INDEX_OF_MY_CLAIMS_TAB = 1;
 	public static final int INDEX_OF_TAGS_TAB = 1;
 	public static final int INDEX_OF_APPROVE_CLAIMS_TAB = 1;
-
 
 	/**
 	 * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -41,6 +45,8 @@ public class MainActivity extends FragmentActivity implements
 	 * The {@link ViewPager} that will host the section contents.
 	 */
 	ViewPager mViewPager;
+	
+	private ArrayList<Tag> tagList;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -123,10 +129,25 @@ public class MainActivity extends FragmentActivity implements
 			// getItem is called to instantiate the fragment for the given page.
 			// Return a DummySectionFragment (defined as a static inner class
 			// below) with the page number as its lone argument.
-			Fragment fragment = new DummySectionFragment();
+			Fragment fragment = null;
 			Bundle args = new Bundle();
-			args.putInt(DummySectionFragment.ARG_SECTION_NUMBER, position + 1);
+			args.putInt(FragmentMyClaims.ARG_SECTION_NUMBER, position + 1 );
+			
+			switch( position ){
+				case 0: 
+					fragment = new FragmentMyClaims();
+					break;
+				case 1:
+					fragment = new FragmentTagList();
+					break;
+				case 2:
+					fragment = new FragmentGlobalClaims();
+					break;
+				default: Log.i("myMessage", "This should never happen");
+			}
+			
 			fragment.setArguments(args);
+
 			return fragment;
 		}
 
@@ -163,6 +184,79 @@ public class MainActivity extends FragmentActivity implements
 		public static final String ARG_SECTION_NUMBER = "section_number";
 
 		public DummySectionFragment() {
+		}
+
+		@Override
+		public View onCreateView(LayoutInflater inflater, ViewGroup container,
+				Bundle savedInstanceState) {
+			View rootView = inflater.inflate(R.layout.fragment_main_dummy,
+					container, false);
+			TextView dummyTextView = (TextView) rootView
+					.findViewById(R.id.section_label);
+			dummyTextView.setText(Integer.toString(getArguments().getInt(
+					ARG_SECTION_NUMBER)));
+			return rootView;
+		}
+	}
+
+	public class FragmentMyClaims extends Fragment {
+		/**
+		 * The fragment argument representing the section number for this
+		 * fragment.
+		 */
+		public static final String ARG_SECTION_NUMBER = "section_number";
+
+		public FragmentMyClaims() {
+		}
+
+		@Override
+		public View onCreateView(LayoutInflater inflater, ViewGroup container,
+				Bundle savedInstanceState) {
+			View rootView = inflater.inflate(R.layout.fragment_main_dummy,
+					container, false);
+			TextView dummyTextView = (TextView) rootView
+					.findViewById(R.id.section_label);
+			dummyTextView.setText(Integer.toString(getArguments().getInt(
+					ARG_SECTION_NUMBER)));
+			return rootView;
+		}
+	}
+
+	public class FragmentTagList extends Fragment{
+		/**
+		 * The fragment argument representing the section number for this
+		 * fragment.
+		 */
+		public static final String ARG_SECTION_NUMBER = "section_number";
+
+		private ListView lv_tag_list = (ListView) findViewById(R.id.lv_tags);
+		private CheckBox chkBox;
+		
+		public FragmentTagList() {
+		}
+
+		@Override
+		public View onCreateView(LayoutInflater inflater, ViewGroup container,
+				Bundle savedInstanceState) {
+			View rootView = inflater.inflate(R.layout.fragment_tags_list,
+					container, false);
+			
+			chkBox = (CheckBox) findViewById(R.id.cb_tags_list_item);
+
+			return rootView;
+		}
+
+
+	}
+
+	public class FragmentGlobalClaims extends Fragment {
+		/**
+		 * The fragment argument representing the section number for this
+		 * fragment.
+		 */
+		public static final String ARG_SECTION_NUMBER = "section_number";
+
+		public FragmentGlobalClaims() {
 		}
 
 		@Override
