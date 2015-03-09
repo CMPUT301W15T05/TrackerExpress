@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:padding="15dp"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+   <EditText
+        android:id="@+id/editDescription"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:hint="Description..."/>
+
+    <EditText
+        android:id="@+id/editDate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Date..."
+        android:inputType="date" />
+
+    <Spinner
+        android:id="@+id/categorySpinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <Spinner
+        android:id="@+id/currencySpinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <EditText
+        android:id="@+id/editText3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10" />
+
+    <CheckBox
+        android:id="@+id/incompleteCheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Flag as incomplete" />
+
+    <Button
+        android:id="@+id/createExpenseButton"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Create Expense" />
+
+</LinearLayout>
