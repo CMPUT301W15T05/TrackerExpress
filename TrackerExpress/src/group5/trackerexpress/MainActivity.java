@@ -1,10 +1,12 @@
 package group5.trackerexpress;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Locale;
 
 import android.app.ActionBar;
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -243,29 +245,28 @@ public class MainActivity extends FragmentActivity implements
 				Bundle savedInstanceState) {
 			View rootView = inflater.inflate(R.layout.fragment_tags_list,
 					container, false);
-			
+
 			lv_tag_list = (ListView) rootView.findViewById(R.id.lv_tags);
 			chkBox = (CheckBox) rootView.findViewById(R.id.cb_tags_list_item);
-			
-	        lv_tag_list.setOnItemLongClickListener( new OnItemLongClickListener() {
+
+			lv_tag_list.setOnItemLongClickListener( new OnItemLongClickListener() {
 				@Override
 				public boolean onItemLongClick(AdapterView<?> parent,
 						View view, int position, long id) {
-					
-					
+
+
 					return false;
 				}
-	        });
-			
+			});
+
+			/*
 			ArrayList<Tag> listOfTags = new ArrayList<Tag>();
-			
-			
-			
+
 			// Example of adding tags
 			Tag t1 = new Tag("Tag1");
-			t1.setSelected(false);
+			t1.setSelected(this, false);
 			Tag t2 = new Tag("Tag2");
-			t2.setSelected(true);
+			t2.setSelected(this, true);
 			Tag t3 = new Tag("Tag3");
 			Tag t4 = new Tag("Tag4");
 			Tag t5 = new Tag("Tag5");
@@ -291,7 +292,10 @@ public class MainActivity extends FragmentActivity implements
 			listOfTags.add(t11);
 			listOfTags.add(t12);
 			listOfTags.add(t13);
-			
+			*/
+	        
+	        Collection<Tag> listOfTags = TagController.getInstance(getActivity()).getTagMap().getTags();
+	        
 			adapter = new TagListArrayAdapter( getActivity().getBaseContext(), listOfTags );
 			lv_tag_list.setAdapter(adapter);
 			
@@ -322,6 +326,10 @@ public class MainActivity extends FragmentActivity implements
 					ARG_SECTION_NUMBER)));
 			return rootView;
 		}
+	}
+
+	public Context getThis() {
+		return this;
 	}
 
 }
