@@ -2,7 +2,7 @@ package group5.trackerexpress;
 
 // Simple date object that consists of an integer
 // in the form of DDMMYYYY
-public class Date implements Comparable{
+public class Date implements Comparable<Date>{
 	private Integer dd;
 	private Integer mm;
 	private Integer yyyy;
@@ -45,7 +45,7 @@ public class Date implements Comparable{
 	}
 	
 	@Override
-	public int compareTo(Object d) {
+	public int compareTo(Date d) {
 		// TODO Auto-generated method stub
 		if ( ! (d instanceof Date) ){
 			// Just return they are not equal. 
@@ -55,7 +55,7 @@ public class Date implements Comparable{
 		}
 		
 		Integer int1 = (Integer) this.getDate();
-		Integer int2 = (Integer) ((Date) d).getDate();
+		Integer int2 = (Integer) d.getDate();
 		
 		return int1.compareTo(int2);
 	}

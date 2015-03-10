@@ -1,19 +1,13 @@
 package group5.trackerexpress;
 
 import java.util.ArrayList;
-import java.util.UUID;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.ListView;
-import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.TextView;
 
 // http://androidcocktail.blogspot.it/2012/04/adding-checkboxes-to-custom-listview-in.html
