@@ -2,6 +2,7 @@ package group5.trackerexpress;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -39,8 +40,8 @@ public class TagMap extends TModel{
 	}
 	
 	
-	public void getTag(UUID id){
-		tags.get(id);
+	public Tag getTag(UUID id){
+		return tags.get(id);
 	}
 
 	public void clear(Context context){
@@ -66,8 +67,8 @@ public class TagMap extends TModel{
 		return tags.size();
 	}
 
-	public Collection<Tag> getTags() {
-		return tags.values();
+	public ArrayList<Tag> getTags() {
+		return new ArrayList<Tag>(tags.values());
 	}
 
 }

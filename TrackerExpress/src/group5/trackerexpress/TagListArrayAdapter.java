@@ -70,10 +70,10 @@ public class TagListArrayAdapter extends ArrayAdapter<Tag> {
 				// TODO Auto-generated method stub
 				if (((CheckBox)v).isChecked()){
 					checkBoxState[position] = true;
-					tagList.get(position).setSelected(true);
+					tagList.get(position).setSelected(context, true);
 				} else {
 					checkBoxState[position] = false;
-					tagList.get(position).setSelected(false);
+					tagList.get(position).setSelected(context, false);
 				}
 			}	
 		});

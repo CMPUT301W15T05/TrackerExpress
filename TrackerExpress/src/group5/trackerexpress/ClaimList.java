@@ -20,8 +20,8 @@ public class ClaimList extends TModel{
 		loadData(context);
 	}
 
-	public void getClaim(UUID id){
-		claims.get(id);
+	public Claim getClaim(UUID id){
+		return claims.get(id);
 	}
 
 	public void clear(Context context){

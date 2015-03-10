@@ -294,7 +294,7 @@ public class MainActivity extends FragmentActivity implements
 			listOfTags.add(t13);
 			*/
 	        
-	        Collection<Tag> listOfTags = TagController.getInstance(getActivity()).getTagMap().getTags();
+	        ArrayList<Tag> listOfTags = TagController.getInstance(getActivity()).getTagMap().getTags();
 	        
 			adapter = new TagListArrayAdapter( getActivity().getBaseContext(), listOfTags );
 			lv_tag_list.setAdapter(adapter);
