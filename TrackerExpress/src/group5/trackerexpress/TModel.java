@@ -33,6 +33,7 @@ public class TModel {
         
         TagController.getInstance(context).getTagMap().saveData(context);
         ClaimController.getInstance(context).getClaimList().saveData(context);		
+        UserController.getInstance(context).getUser().saveData(context);		
     }
     
     
