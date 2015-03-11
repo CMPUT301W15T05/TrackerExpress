@@ -52,26 +52,16 @@
         android:layout_height="wrap_content"
         android:text="@string/action_destination" />
 
-    <LinearLayout
+
+
+    <Button
+        android:id="@+id/buttonEditTags"
+        style="?android:attr/buttonStyleSmall"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal" >
+        android:layout_gravity="end"
+        android:text="@string/action_select_tag" />
 
-        <EditText
-            android:id="@+id/editClaimTag"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="@string/promote_claim_tags" />
-
-        <Button
-            android:id="@+id/buttonEditTags"
-            style="?android:attr/buttonStyleSmall"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:text="@string/action_select_tag" />
-    </LinearLayout>
 
     <EditText
         android:id="@+id/editClaimDescription"

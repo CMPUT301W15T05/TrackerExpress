@@ -24,75 +24,82 @@ public final class R {
         public static final int ic_launcher=0x7f020000;
     }
     public static final class id {
-        public static final int action_settings=0x7f050023;
-        public static final int buttonAddDestination=0x7f050006;
-        public static final int buttonCreateClaim=0x7f050009;
-        public static final int buttonEditTags=0x7f050008;
-        public static final int categorySpinner=0x7f050014;
-        public static final int cb_tags_list_item=0x7f05001c;
-        public static final int createAccountButton=0x7f050021;
-        public static final int createExpenseButton=0x7f050017;
-        public static final int currencySpinner=0x7f050015;
-        public static final int editClaimDescription=0x7f050004;
+        public static final int Add_tags_in_claim=0x7f050011;
+        public static final int action_settings=0x7f050026;
+        public static final int buttonAddDestination=0x7f050005;
+        public static final int buttonCreateClaim=0x7f050008;
+        public static final int buttonEditTags=0x7f050006;
+        public static final int button_add_tags_in_claim=0x7f050012;
+        public static final int button_done_selecting_tags=0x7f050014;
+        public static final int categorySpinner=0x7f050017;
+        public static final int cb_tags_list_item=0x7f05001f;
+        public static final int createAccountButton=0x7f050024;
+        public static final int createExpenseButton=0x7f05001a;
+        public static final int currencySpinner=0x7f050018;
+        public static final int editClaimDescription=0x7f050007;
         public static final int editClaimEndDate=0x7f050001;
         public static final int editClaimName=0x7f050002;
         public static final int editClaimStartDate=0x7f050000;
-        public static final int editClaimTag=0x7f050007;
         public static final int editClaimTitle=0x7f050003;
-        public static final int editDate=0x7f050013;
-        public static final int editDescription=0x7f050012;
-        public static final int email=0x7f05000d;
-        public static final int email_login_form=0x7f05000c;
-        public static final int email_sign_in_button=0x7f050010;
-        public static final int incompleteCheckBox=0x7f050016;
-        public static final int listViewDestinations=0x7f050005;
-        public static final int logInButton=0x7f050020;
-        public static final int login=0x7f05000f;
-        public static final int login_form=0x7f05000b;
-        public static final int login_progress=0x7f05000a;
-        public static final int logoTextView=0x7f050022;
-        public static final int lv_global_claims=0x7f050018;
-        public static final int lv_my_claims=0x7f05001a;
-        public static final int lv_tags=0x7f05001b;
-        public static final int op_delete_tag=0x7f050024;
-        public static final int op_edit_tag=0x7f050025;
-        public static final int pager=0x7f050011;
-        public static final int password=0x7f05000e;
-        public static final int passwordText=0x7f05001e;
-        public static final int section_label=0x7f050019;
-        public static final int tv_tags_list_item=0x7f05001d;
-        public static final int usernameText=0x7f05001f;
+        public static final int editDate=0x7f050016;
+        public static final int editDescription=0x7f050015;
+        public static final int email=0x7f05000c;
+        public static final int email_login_form=0x7f05000b;
+        public static final int email_sign_in_button=0x7f05000f;
+        public static final int incompleteCheckBox=0x7f050019;
+        public static final int listViewDestinations=0x7f050004;
+        public static final int listView_select_tags=0x7f050013;
+        public static final int logInButton=0x7f050023;
+        public static final int login=0x7f05000e;
+        public static final int login_form=0x7f05000a;
+        public static final int login_progress=0x7f050009;
+        public static final int logoTextView=0x7f050025;
+        public static final int lv_global_claims=0x7f05001b;
+        public static final int lv_my_claims=0x7f05001d;
+        public static final int lv_tags=0x7f05001e;
+        public static final int op_delete_tag=0x7f050027;
+        public static final int op_edit_tag=0x7f050028;
+        public static final int pager=0x7f050010;
+        public static final int password=0x7f05000d;
+        public static final int passwordText=0x7f050021;
+        public static final int section_label=0x7f05001c;
+        public static final int tv_tags_list_item=0x7f050020;
+        public static final int usernameText=0x7f050022;
     }
     public static final class layout {
         public static final int activity_edit_claim=0x7f030000;
         public static final int activity_login=0x7f030001;
         public static final int activity_main=0x7f030002;
-        public static final int edit_expense=0x7f030003;
-        public static final int fragment_global_claims=0x7f030004;
-        public static final int fragment_main_dummy=0x7f030005;
-        public static final int fragment_my_claims=0x7f030006;
-        public static final int fragment_tags_list=0x7f030007;
-        public static final int fragment_tags_list_item=0x7f030008;
-        public static final int log_in=0x7f030009;
+        public static final int activity_select_tags=0x7f030003;
+        public static final int edit_expense=0x7f030004;
+        public static final int fragment_global_claims=0x7f030005;
+        public static final int fragment_main_dummy=0x7f030006;
+        public static final int fragment_my_claims=0x7f030007;
+        public static final int fragment_tags_list=0x7f030008;
+        public static final int fragment_tags_list_item=0x7f030009;
+        public static final int log_in=0x7f03000a;
     }
     public static final class menu {
         public static final int main=0x7f080000;
         public static final int tag_list_popup=0x7f080001;
     }
     public static final class string {
+        public static final int action_add_tag=0x7f06000e;
         public static final int action_create_claim=0x7f06000d;
         public static final int action_destination=0x7f06000a;
+        public static final int action_done_selecting_tag=0x7f06000f;
         public static final int action_select_tag=0x7f06000c;
         public static final int action_settings=0x7f060001;
-        public static final int action_sign_in=0x7f060011;
-        public static final int action_sign_in_short=0x7f060012;
+        public static final int action_sign_in=0x7f060014;
+        public static final int action_sign_in_short=0x7f060015;
         /**  strings for main screen 
          */
         public static final int app_name=0x7f060000;
-        public static final int error_field_required=0x7f060016;
-        public static final int error_incorrect_password=0x7f060015;
-        public static final int error_invalid_email=0x7f060013;
-        public static final int error_invalid_password=0x7f060014;
+        public static final int error_field_required=0x7f060019;
+        public static final int error_incorrect_password=0x7f060018;
+        public static final int error_invalid_email=0x7f060016;
+        public static final int error_invalid_password=0x7f060017;
+        public static final int promote_add_tag=0x7f060010;
         public static final int promote_claim_end_date=0x7f060008;
         /**  strings for edit claim 
          */
@@ -103,9 +110,9 @@ public final class R {
         public static final int promote_description=0x7f060009;
         /**  Strings related to login 
          */
-        public static final int prompt_email=0x7f06000f;
-        public static final int prompt_password=0x7f060010;
-        public static final int title_activity_login=0x7f06000e;
+        public static final int prompt_email=0x7f060012;
+        public static final int prompt_password=0x7f060013;
+        public static final int title_activity_login=0x7f060011;
         public static final int title_section1=0x7f060002;
         public static final int title_section2=0x7f060003;
         public static final int title_section3=0x7f060004;
