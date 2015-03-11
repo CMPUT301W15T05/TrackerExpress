@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- strings for edit claim -->
-    <string name="promote_claim_name">Name</string>
-    <string name="promote_claim_title">Title</string>
+    <string name="promote_claim_name">Name of Person</string>
+    <string name="promote_claim_title">Title of Claim</string>
     <string name="promote_claim_start_date">Start Date</string>
     <string name="promote_claim_end_date">End Date</string>
     <string name="promote_description">Description</string>
@@ -13,6 +13,9 @@
     <string name="action_add_tag">Add Tag</string>
     <string name="action_done_selecting_tag">Done</string>
     <string name="promote_add_tag">Add Tags Here</string>
+    <string name="promote_claim_destination_input">Destination</string>
+    <string name="promote_claim_destination_reason">Reason</string>
+    <string name="action_done_destination_popup">Done</string>
     
     
 </resources>

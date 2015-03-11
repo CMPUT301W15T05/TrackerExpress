@@ -62,7 +62,6 @@
         android:layout_gravity="end"
         android:text="@string/action_select_tag" />
 
-
     <EditText
         android:id="@+id/editClaimDescription"
         android:layout_width="match_parent"

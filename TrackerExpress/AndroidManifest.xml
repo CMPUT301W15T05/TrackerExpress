@@ -25,9 +25,15 @@
         <activity
             android:name=".LoginActivity"
             android:label="@string/title_activity_login"
-            android:windowSoftInputMode="adjustResize|stateVisible" >
+            android:windowSoftInputMode="adjustResize|stateVisible" ></activity>
             
-        </activity>
+        <activity
+            android:name=".EditClaimActivity" ></activity>
+                
+        <activity
+            android:name=".DestinationActivity" ></activity>
+        
+        
     </application>
 
     <!-- To auto-complete the email text field in the login form with the user's emails -->
