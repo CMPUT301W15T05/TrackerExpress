@@ -24,7 +24,9 @@ import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ListView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends FragmentActivity implements
 		ActionBar.TabListener {
@@ -55,6 +57,14 @@ public class MainActivity extends FragmentActivity implements
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
+		// INITIALIZING CONTROLLER
+    	try {
+			TagController.initialize(this.getBaseContext());
+		} catch (ExceptionControllerAlreadyInitialized e1) {
+			// TODO Auto-generated catch block
+			throw new RuntimeException(e1);
+		}
+		
 		// Set up the action bar.
 		final ActionBar actionBar = getActionBar();
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
@@ -247,19 +257,9 @@ public class MainActivity extends FragmentActivity implements
 			lv_tag_list = (ListView) rootView.findViewById(R.id.lv_tags);
 			chkBox = (CheckBox) rootView.findViewById(R.id.cb_tags_list_item);
 			
-	        lv_tag_list.setOnItemLongClickListener( new OnItemLongClickListener() {
-				@Override
-				public boolean onItemLongClick(AdapterView<?> parent,
-						View view, int position, long id) {
-					
-					
-					return false;
-				}
-	        });
-			
-			ArrayList<Tag> listOfTags = new ArrayList<Tag>();
-			
-			
+			lv_tag_list.setItemsCanFocus(true);
+						
+			final ArrayList<Tag> listOfTags = new ArrayList<Tag>();
 			
 			// Example of adding tags
 			Tag t1 = new Tag("Tag1");
@@ -292,13 +292,52 @@ public class MainActivity extends FragmentActivity implements
 			listOfTags.add(t12);
 			listOfTags.add(t13);
 			
+	        lv_tag_list.setOnItemLongClickListener( new OnItemLongClickListener() {
+				@Override
+				public boolean onItemLongClick(AdapterView<?> parent,
+						View view, final int position, long id) {
+					
+					PopupMenu popup = new PopupMenu(getActivity(), view);
+					popup.getMenuInflater().inflate(R.menu.tag_list_popup, popup.getMenu());
+					
+					popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+	                    public boolean onMenuItemClick(MenuItem item) {
+	                        switch(item.getItemId()){
+	                        case R.id.op_delete_tag: 
+	                        	Tag t = (Tag) lv_tag_list.getAdapter().getItem(position);
+
+	                        	try {
+									TagController.getInstance().deleteTag(t.getUuid());
+								} catch (ExceptionControllerNotInitialized e) {
+									// TODO Auto-generated catch block
+									throw new RuntimeException(e);
+								}
+	                        	listOfTags.remove(t);
+	                        	TagListArrayAdapter a = new TagListArrayAdapter( getActivity().getBaseContext(), listOfTags );
+	                			lv_tag_list.setAdapter(a);
+	                        	break;
+	                        case R.id.op_edit_tag: 
+	                        	break;
+	                        default: break;
+	                        }
+	                    	
+	                        return true;
+	                    }
+	                });
+					
+		            popup.show();
+					return false;
+				}
+	        });
+	        
+			
+			
+			
 			adapter = new TagListArrayAdapter( getActivity().getBaseContext(), listOfTags );
 			lv_tag_list.setAdapter(adapter);
 			
 			return rootView;
 		}
-
-
 	}
 
 	public static class FragmentGlobalClaims extends Fragment {
