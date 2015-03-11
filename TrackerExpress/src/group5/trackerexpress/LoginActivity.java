@@ -5,7 +5,6 @@ import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.LoaderManager.LoaderCallbacks;
-import android.content.ContentResolver;
 import android.content.CursorLoader;
 import android.content.Loader;
 import android.database.Cursor;
@@ -43,7 +42,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 	 * Keep track of the login task to ensure we can cancel it if requested.
 	 */
 	private UserLoginTask mAuthTask = null;
-
+	private User user = UserController.getInstance(this).getUser();
 	// UI references.
 	private AutoCompleteTextView mEmailView;
 	private EditText mPasswordView;
@@ -106,6 +105,10 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 		// Store values at the time of the login attempt.
 		String email = mEmailView.getText().toString();
 		String password = mPasswordView.getText().toString();
+		
+		// Update User object
+		user.setEmail(this, email);
+		user.setPassword(this, password);
 
 		boolean cancel = false;
 		View focusView = null;
@@ -146,7 +149,16 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 
 	private boolean isEmailValid(String email) {
 		// TODO: Replace this with your own logic
-		return email.contains("@");
+		boolean valid = true;
+		if (!email.contains("."))
+			valid = false;
+		else if (email.indexOf("@") == 0) // Check if there are chars before @ symbol
+			valid = false;
+		else if (email.indexOf("@") == email.length()-1) // Check if there are chars after @ symbol
+			valid = false;
+		else if (!email.contains("@"))
+			valid = false;
+		return valid;
 	}
 
 	private boolean isPasswordValid(String password) {

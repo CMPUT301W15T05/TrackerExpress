@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- strings for edit claim -->
+    <string name="promote_claim_name">Name</string>
+    <string name="promote_claim_title">Title</string>
+    <string name="promote_claim_start_date">Start Date</string>
+    <string name="promote_claim_end_date">End Date</string>
+    <string name="promote_description">Description</string>
+    <string name="action_destination">Add/Edit Destination</string>
+    <string name="promote_claim_tags">Tag</string>
+    <string name="action_select_tag">Select Tags</string>
+    <string name="action_create_claim">Create Claim</string>
+    <string name="action_add_tag">Add Tag</string>
+    <string name="action_done_selecting_tag">Done</string>
+    <string name="promote_add_tag">Add Tags Here</string>
+    
+    
+</resources>

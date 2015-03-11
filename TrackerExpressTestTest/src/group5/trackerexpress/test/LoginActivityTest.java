@@ -10,4 +10,6 @@ public class LoginActivityTest extends TestCase {
 	private LoginActivity lia;
 	
 	AutoCompleteTextView mEmailView = (AutoCompleteTextView) lia.findViewById(R.id.email);
+	
+	
 }

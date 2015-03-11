@@ -3,9 +3,9 @@ package group5.trackerexpress;
 import java.util.ArrayList;
 import java.util.UUID;
 
-import android.view.View;
+import android.content.Context;
 
-public class Claim {
+public class Claim extends TModel implements Comparable<Claim>{
 	
 	private String claimName;
 	private ExpenseList expenseList;
@@ -34,76 +34,78 @@ public class Claim {
 		return uuid;
 	}
 	
-	public void setUuid(UUID uuid) {
+	public void setUuid(Context context, UUID uuid) {
 		this.uuid = uuid;
+		notifyViews(context);
 	}	
-	
-	
 	
 	public String getClaimName() {
 		return claimName;
 	}
 
-
-	public void setClaimName(String claimName) {
+	public void setClaimName(Context context, String claimName) {
 		this.claimName = claimName;
+		notifyViews(context);
 	}
 	
 
-	public void addExpense(Expense expense) {
+	public void addExpense(Context context, Expense expense) {
 		expenseList.addExpense(expense);
-		
+		notifyViews(context);		
 	}
 
 
 	public ExpenseList getExpenseList() {
-		// TODO Auto-generated method stub
 		return expenseList;
 	}
 	
 	
-	public void setExpenseList(ExpenseList expenseList) {
+	public void setExpenseList(Context context, ExpenseList expenseList) {
 		this.expenseList = expenseList;
+		notifyViews(context);
 	}
 	
 	
 	
 
-	public void removeExpense(UUID expenseUuid) {
+	public void removeExpense(Context context, UUID expenseUuid) {
 		// TODO Auto-generated method stub
 		expenseList.deleteExpense(expenseUuid);
 		//expenseList.remove(expenseList.indexOf(string));
+		notifyViews(context);		
 	}
 
 
-	public void setStartDate( Date d1) {
+	public void setStartDate(Context context, Date d1) {
 		// TODO Auto-generated method stub
 		this.startDate = d1;
-		
+		notifyViews(context);
 	}
 	
 	public Date getStartDate() {
 		return startDate;
 	}	
 	
-	public void setEndDate(Date d2){
+	public void setEndDate(Context context, Date d2){
 		this.endDate = d2;
-		
+		notifyViews(context);
 	}
 	
 	public Date getEndDate() {
 		return endDate;
 	}
 		
-	public void addDestination(String place, String descriptions){
+	public void addDestination(Context context, String place, String descriptions){
 		String[] travelInfo = new String[2];
 		travelInfo[0] = place;
 		travelInfo[1] = descriptions;
 		destination.add(travelInfo);
+		notifyViews(context);
 	}
 	
-	public void setDestination(ArrayList<String[]> destination) {
+	public void setDestination(Context context, ArrayList<String[]> destination) {
 		this.destination = destination;
+		notifyViews(context);
 	}
 	
 	public ArrayList<String[]> getDestination() {
@@ -112,16 +114,18 @@ public class Claim {
 	
 	
 
-	public void setStatus(int status) {
-		// TODO Auto-generated method stub
+	public void setStatus(Context context, int status) {
 		this.status = status;
-		
+		notifyViews(context);
 	}
 	
 	public int getStatus() {
 		return status;
-		// TODO Auto-generated method stub
-		
+	}
+
+	@Override
+	public int compareTo(Claim arg0) {
+		return startDate.compareTo(arg0.getStartDate());
 	}
 
 }

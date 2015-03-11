@@ -1,19 +1,13 @@
 package group5.trackerexpress;
 
 import java.util.ArrayList;
-import java.util.UUID;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.ListView;
-import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.TextView;
 
 // http://androidcocktail.blogspot.it/2012/04/adding-checkboxes-to-custom-listview-in.html
@@ -70,10 +64,10 @@ public class TagListArrayAdapter extends ArrayAdapter<Tag> {
 				// TODO Auto-generated method stub
 				if (((CheckBox)v).isChecked()){
 					checkBoxState[position] = true;
-					tagList.get(position).setSelected(true);
+					tagList.get(position).setSelected(context, true);
 				} else {
 					checkBoxState[position] = false;
-					tagList.get(position).setSelected(false);
+					tagList.get(position).setSelected(context, false);
 				}
 			}	
 		});

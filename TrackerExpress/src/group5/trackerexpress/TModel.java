@@ -2,6 +2,7 @@ package group5.trackerexpress;
 
 import java.util.ArrayList;
 import java.util.List;
+import android.content.Context;
 
 public class TModel {
     private List<TView> views;
@@ -20,9 +21,16 @@ public class TModel {
         views.remove(view);
     }
 
-    public void notifyViews() {
+    public void notifyViews(Context context) {
         for (TView view : views) {
         	view.update(this);
         }
+        
+        TagController.getInstance(context).getTagMap().saveData(context);
+        ClaimController.getInstance(context).getClaimList().saveData(context);		
+        UserController.getInstance(context).getUser().saveData(context);		
     }
+    
+    
+
 }

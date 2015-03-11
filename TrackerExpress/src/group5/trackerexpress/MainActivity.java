@@ -5,15 +5,14 @@ import java.util.Locale;
 
 import android.app.ActionBar;
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.NavUtils;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,7 +21,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
@@ -56,14 +54,6 @@ public class MainActivity extends FragmentActivity implements
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-
-		// INITIALIZING CONTROLLER
-    	try {
-			TagController.initialize(this.getBaseContext());
-		} catch (ExceptionControllerAlreadyInitialized e1) {
-			// TODO Auto-generated catch block
-			throw new RuntimeException(e1);
-		}
 		
 		// Set up the action bar.
 		final ActionBar actionBar = getActionBar();
@@ -242,7 +232,6 @@ public class MainActivity extends FragmentActivity implements
 		public static final String ARG_SECTION_NUMBER = "section_number";
 
 		private ListView lv_tag_list;
-		private CheckBox chkBox;
 		private TagListArrayAdapter adapter;
 		
 		public FragmentTagList() {
@@ -253,45 +242,13 @@ public class MainActivity extends FragmentActivity implements
 				Bundle savedInstanceState) {
 			View rootView = inflater.inflate(R.layout.fragment_tags_list,
 					container, false);
-			
+
 			lv_tag_list = (ListView) rootView.findViewById(R.id.lv_tags);
-			chkBox = (CheckBox) rootView.findViewById(R.id.cb_tags_list_item);
 			
 			lv_tag_list.setItemsCanFocus(true);
 						
-			final ArrayList<Tag> listOfTags = new ArrayList<Tag>();
-			
-			// Example of adding tags
-			Tag t1 = new Tag("Tag1");
-			t1.setSelected(false);
-			Tag t2 = new Tag("Tag2");
-			t2.setSelected(true);
-			Tag t3 = new Tag("Tag3");
-			Tag t4 = new Tag("Tag4");
-			Tag t5 = new Tag("Tag5");
-			Tag t6 = new Tag("Tag6");
-			Tag t7 = new Tag("Tag7");
-			Tag t8 = new Tag("Tag8");
-			Tag t9 = new Tag("Tag9");
-			Tag t10 = new Tag("Tag10");
-			Tag t11 = new Tag("Tag11");
-			Tag t12 = new Tag("Tag12");
-			Tag t13 = new Tag("Tag13");
-			
-			listOfTags.add(t1);
-			listOfTags.add(t2);
-			listOfTags.add(t3);
-			listOfTags.add(t4);
-			listOfTags.add(t5);
-			listOfTags.add(t6);
-			listOfTags.add(t7);
-			listOfTags.add(t8);
-			listOfTags.add(t9);
-			listOfTags.add(t10);
-			listOfTags.add(t11);
-			listOfTags.add(t12);
-			listOfTags.add(t13);
-			
+			final ArrayList<Tag> listOfTags = TagController.getInstance(getActivity()).getTagMap().getTags();
+	        
 	        lv_tag_list.setOnItemLongClickListener( new OnItemLongClickListener() {
 				@Override
 				public boolean onItemLongClick(AdapterView<?> parent,
@@ -306,12 +263,9 @@ public class MainActivity extends FragmentActivity implements
 	                        case R.id.op_delete_tag: 
 	                        	Tag t = (Tag) lv_tag_list.getAdapter().getItem(position);
 
-	                        	try {
-									TagController.getInstance().deleteTag(t.getUuid());
-								} catch (ExceptionControllerNotInitialized e) {
-									// TODO Auto-generated catch block
-									throw new RuntimeException(e);
-								}
+	                        	// DEAR PETER: Can we get a deleteTag thing or a set TagController list
+								// TagController.getInstance(getActivity().getBaseContext()).deleteTag(t.getUuid());
+
 	                        	listOfTags.remove(t);
 	                        	TagListArrayAdapter a = new TagListArrayAdapter( getActivity().getBaseContext(), listOfTags );
 	                			lv_tag_list.setAdapter(a);
@@ -330,9 +284,7 @@ public class MainActivity extends FragmentActivity implements
 				}
 	        });
 	        
-			
-			
-			
+	        
 			adapter = new TagListArrayAdapter( getActivity().getBaseContext(), listOfTags );
 			lv_tag_list.setAdapter(adapter);
 			
@@ -361,6 +313,10 @@ public class MainActivity extends FragmentActivity implements
 					ARG_SECTION_NUMBER)));
 			return rootView;
 		}
+	}
+
+	public Context getThis() {
+		return this;
 	}
 
 }
