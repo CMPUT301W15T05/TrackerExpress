@@ -20,25 +20,23 @@
         <activity
             android:name=".LoginActivity"
             android:label="@string/title_activity_login"
-<<<<<<< HEAD
-            android:windowSoftInputMode="adjustResize|stateVisible" ></activity>
+            android:windowSoftInputMode="adjustResize|stateVisible" >
+        </activity>
             
         <activity
-            android:name=".EditClaimActivity" ></activity>
-                
-        <activity
-            android:name=".DestinationActivity" ></activity>
-        
-        
-=======
-            android:windowSoftInputMode="adjustResize|stateVisible" >
+            android:name=".EditClaimActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
->>>>>>> f92152b46f9861ad725939692d076728469eb23d
+                
+        <activity
+            android:name=".SelectTag_claim_Activity" >
+            android:windowSoftInputMode="adjustResize|stateVisible" >
+            
+        </activity>
     </application>
 
     <!-- To auto-complete the email text field in the login form with the user's emails -->

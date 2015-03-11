@@ -46,19 +46,19 @@ public class EditClaimActivity extends Activity {
 		
 		
 		createDestinationButton();
-		tagCalimButton();
+		tagClaimButton();
 		
 		
 		
 	}
 	
 	
-	private void tagCalimButton() {
+	private void createDestinationButton() {
 		// TODO Auto-generated method stub
 		
-		final Button addTagsButton = (Button) findViewById(R.id.buttonEditTags);
+		final Button editDestinationButton = (Button) findViewById(R.id.buttonAddDestination);
 		
-		addTagsButton.setOnClickListener(new View.OnClickListener() {
+		editDestinationButton.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
@@ -77,18 +77,18 @@ public class EditClaimActivity extends Activity {
 						popupWindow.dismiss();
 					}
 				});
-				popupWindow.showAsDropDown(addTagsButton,50,-30);
+				popupWindow.showAsDropDown(editDestinationButton,-1000,-30);
 			}
 		});
 	}
 				
 
 
-	private void createDestinationButton(){
+	private void tagClaimButton(){
 		
-		Button editDestinationButton = (Button) findViewById(R.id.buttonAddDestination);
+		Button addTagsButton= (Button) findViewById(R.id.buttonEditTags);
 		
-		editDestinationButton.setOnClickListener(new View.OnClickListener() {
+		addTagsButton.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
@@ -97,7 +97,7 @@ public class EditClaimActivity extends Activity {
 				Toast.makeText(EditClaimActivity.this, "Loading", Toast.LENGTH_SHORT). show();
 				
 				// launch CreateNewClaimActivity.
-				Intent intent = new Intent(EditClaimActivity.this, DestinationActivity.class);
+				Intent intent = new Intent(EditClaimActivity.this, SelectTag_claim_Activity.class);
 		    	startActivity(intent);
 			}
 		});
