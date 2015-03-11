@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 import android.content.Context;
-import android.view.View;
 
 public class Claim extends TModel implements Comparable<Claim>{
 	
@@ -126,7 +125,7 @@ public class Claim extends TModel implements Comparable<Claim>{
 
 	@Override
 	public int compareTo(Claim arg0) {
-		return startDate.compareTo(arg0);
+		return startDate.compareTo(arg0.getStartDate());
 	}
 
 }

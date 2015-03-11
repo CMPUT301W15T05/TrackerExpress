@@ -1,12 +1,7 @@
 package group5.trackerexpress;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-
 import android.content.Context;
 
 public class TModel {
@@ -33,6 +28,7 @@ public class TModel {
         
         TagController.getInstance(context).getTagMap().saveData(context);
         ClaimController.getInstance(context).getClaimList().saveData(context);		
+        UserController.getInstance(context).getUser().saveData(context);		
     }
     
     

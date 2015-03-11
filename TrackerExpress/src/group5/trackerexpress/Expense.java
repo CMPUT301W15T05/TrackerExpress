@@ -1,6 +1,5 @@
 package group5.trackerexpress;
 
-import java.util.ArrayList;
 import java.util.UUID;
 
 import android.content.Context;
