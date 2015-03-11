@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="15dp" >
+
+    <EditText
+        android:id="@+id/editDescription"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:hint="Description..." />
+
+    <EditText
+        android:id="@+id/editDate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Date..."
+        android:inputType="date" />
+
+    <Spinner
+        android:id="@+id/categorySpinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="100" >
+
+        <EditText
+            android:id="@+id/editAmount"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="25"
+            android:ems="10"
+            android:hint="Amount Spent..." />
+
+        <Spinner
+            android:id="@+id/currencySpinner"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="75" />
+    </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/TakeAPhoto"
+        android:layout_width="fill_parent"
+        android:layout_height="75dp"
+        android:layout_weight="0.82" />
+
+    <CheckBox
+        android:id="@+id/incompleteCheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="Flag as incomplete" />
+
+    <Button
+        android:id="@+id/createExpenseButton"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Create Expense" />
+
+</LinearLayout>
