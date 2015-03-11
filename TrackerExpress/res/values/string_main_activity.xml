@@ -7,4 +7,6 @@
     <string name="title_section2">Tags</string>
     <string name="title_section3">Global Claims</string>
     
+    <string name="popup_delete"> Delete </string>
+    <string name="popup_edit"> Edit </string>
 </resources>
