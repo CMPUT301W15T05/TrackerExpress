@@ -4,14 +4,17 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 import android.app.ActionBar;
+import android.app.AlertDialog;
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.text.Editable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -20,11 +23,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
-import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class MainActivity extends FragmentActivity implements
 		ActionBar.TabListener {
@@ -244,7 +246,6 @@ public class MainActivity extends FragmentActivity implements
 					container, false);
 
 			lv_tag_list = (ListView) rootView.findViewById(R.id.lv_tags);
-			
 			lv_tag_list.setItemsCanFocus(true);
 						
 			final ArrayList<Tag> listOfTags = TagController.getInstance(getActivity()).getTagMap().getTags();
@@ -259,9 +260,10 @@ public class MainActivity extends FragmentActivity implements
 					
 					popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
 	                    public boolean onMenuItemClick(MenuItem item) {
+                        	Tag t = (Tag) lv_tag_list.getAdapter().getItem(position);
+                        	
 	                        switch(item.getItemId()){
 	                        case R.id.op_delete_tag: 
-	                        	Tag t = (Tag) lv_tag_list.getAdapter().getItem(position);
 
 	                        	// DEAR PETER: Can we get a deleteTag thing or a set TagController list
 								// TagController.getInstance(getActivity().getBaseContext()).deleteTag(t.getUuid());
@@ -270,7 +272,9 @@ public class MainActivity extends FragmentActivity implements
 	                        	TagListArrayAdapter a = new TagListArrayAdapter( getActivity().getBaseContext(), listOfTags );
 	                			lv_tag_list.setAdapter(a);
 	                        	break;
-	                        case R.id.op_edit_tag: 
+	                        case R.id.op_edit_tag:
+	                        	
+	                        	
 	                        	break;
 	                        default: break;
 	                        }
@@ -289,6 +293,24 @@ public class MainActivity extends FragmentActivity implements
 			lv_tag_list.setAdapter(adapter);
 			
 			return rootView;
+		}
+		private void getName(){
+			String message = "Enter a new name";
+			final EditText input = new EditText(getActivity());
+
+			new AlertDialog.Builder(getActivity())
+		    .setTitle("Rename Tag")
+		    .setMessage(message)
+		    .setView(input)
+		    .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+		        public void onClick(DialogInterface dialog, int whichButton) {
+		            Editable value = input.getText(); 
+		        }
+		    }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+		        public void onClick(DialogInterface dialog, int whichButton) {
+		            // Do nothing.
+		        }
+		    }).show();
 		}
 	}
 
