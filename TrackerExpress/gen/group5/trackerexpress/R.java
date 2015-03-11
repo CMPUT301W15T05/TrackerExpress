@@ -33,11 +33,11 @@ public final class R {
         public static final int editDate=0x7f080009;
         public static final int editDescription=0x7f080008;
         public static final int editText3=0x7f08000c;
-        public static final int email=0x7f080003;
         public static final int email_login_form=0x7f080002;
-        public static final int email_sign_in_button=0x7f080006;
         public static final int incompleteCheckBox=0x7f08000d;
         public static final int logInButton=0x7f080017;
+        public static final int logInEmailText=0x7f080003;
+        public static final int logInPasswordText=0x7f080004;
         public static final int login=0x7f080005;
         public static final int login_form=0x7f080001;
         public static final int login_progress=0x7f080000;
@@ -48,9 +48,9 @@ public final class R {
         public static final int op_delete_tag=0x7f08001b;
         public static final int op_edit_tag=0x7f08001c;
         public static final int pager=0x7f080007;
-        public static final int password=0x7f080004;
         public static final int passwordText=0x7f080015;
         public static final int section_label=0x7f080010;
+        public static final int signInButton=0x7f080006;
         public static final int tv_tags_list_item=0x7f080014;
         public static final int usernameText=0x7f080016;
     }
