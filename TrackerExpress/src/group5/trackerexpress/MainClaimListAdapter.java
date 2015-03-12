@@ -10,11 +10,11 @@ import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
-public class MainClaimListArrayAdapter extends ArrayAdapter<Claim> {
-	private ArrayList<Claim> claimList;
+public class MainClaimListAdapter extends ArrayAdapter<Claim> {
+	private Claim[] claimList;
 	private Context context;
 	
-	public MainClaimListArrayAdapter(Context context, ArrayList<Claim> claims){
+	public MainClaimListAdapter(Context context, Claim[] claims){
 		super(context, R.layout.fragment_my_claims_item, claims);
 		this.claimList = claims;
 		this.context = context;
@@ -46,7 +46,7 @@ public class MainClaimListArrayAdapter extends ArrayAdapter<Claim> {
 			holder = (ClaimHolder) v.getTag();
 		}
 		
-		Claim c = claimList.get(position);
+		Claim c = claimList[position];
 		holder.claimName.setText(c.getClaimName());
 		holder.destinations.setText(c.toStringDestinations());
 		holder.amounts.setText(c.getExpenseList().toStringTotalCurrencies());

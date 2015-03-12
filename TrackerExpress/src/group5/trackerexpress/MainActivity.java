@@ -8,6 +8,7 @@ import android.app.AlertDialog;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -215,6 +216,7 @@ public class MainActivity extends FragmentActivity implements
 		public static final String ARG_SECTION_NUMBER = "section_number";
 
 		private ListView lv_claim_list;
+		private MainClaimListAdapter adapter;
 		private Button b_add_claim;
 		
 		public FragmentMyClaims() {
@@ -226,7 +228,26 @@ public class MainActivity extends FragmentActivity implements
 			View rootView = inflater.inflate(R.layout.fragment_my_claims,
 					container, false);
 			lv_claim_list = (ListView) rootView.findViewById(R.id.lv_my_claims);
+			lv_claim_list.setItemsCanFocus(true);
+			b_add_claim = (Button) rootView.findViewById(R.id.b_add_claim);
 			
+			final ClaimList listOfClaims = ClaimController.getInstance(getActivity()).getClaimList();
+			final Claim[] arrayClaims = listOfClaims.getAllClaims();
+			
+			adapter = new MainClaimListAdapter(getActivity(), arrayClaims);
+			lv_claim_list.setAdapter(adapter);
+			
+			b_add_claim.setOnClickListener(new Button.OnClickListener(){
+
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					Intent intent = new Intent( getActivity(), EditClaimActivity.class );
+					intent.putExtra("isNewClaim", true);
+					startActivity(intent);
+				}
+				
+			});
 			
 			return rootView;
 		}
@@ -240,7 +261,7 @@ public class MainActivity extends FragmentActivity implements
 		public static final String ARG_SECTION_NUMBER = "section_number";
 
 		private ListView lv_tag_list;
-		private MainTagListArrayAdapter adapter;
+		private MainTagListAdapter adapter;
 		private Editable value = null;
 		private Button b_add_tag;
 		
@@ -270,7 +291,7 @@ public class MainActivity extends FragmentActivity implements
 			    		Tag newTag = new Tag(name);
 			    		mapOfTags.addTag(getActivity(), newTag);
 			    		listOfTags.add(newTag);
-			    		MainTagListArrayAdapter a = new MainTagListArrayAdapter( myContext, listOfTags );
+			    		MainTagListAdapter a = new MainTagListAdapter( myContext, listOfTags );
             			lv_tag_list.setAdapter(a);
 			    	}
 			    	
@@ -296,7 +317,7 @@ public class MainActivity extends FragmentActivity implements
 	                        case R.id.op_delete_tag: 
 	                        	// Delete tag off of Tag ArrayList for listview
 	                        	listOfTags.remove(t);
-	                        	MainTagListArrayAdapter a = new MainTagListArrayAdapter( getActivity().getBaseContext(), listOfTags );
+	                        	MainTagListAdapter a = new MainTagListAdapter( getActivity().getBaseContext(), listOfTags );
 	                			lv_tag_list.setAdapter(a);
 	                			// Delete it off the model
 	                        	mapOfTags.deleteTag(getActivity(), t.getUuid());
