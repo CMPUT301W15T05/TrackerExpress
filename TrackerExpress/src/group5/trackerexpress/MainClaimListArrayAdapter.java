@@ -49,25 +49,9 @@ public class MainClaimListArrayAdapter extends ArrayAdapter<Claim> {
 		Claim c = claimList.get(position);
 		holder.claimName.setText(c.getClaimName());
 		holder.destinations.setText(c.toStringDestinations());
+		//holder.amounts.setText(text);
+		//holder.tags.setText(text);
 		
-		/*
-		
-		holder.chkBox.setChecked(checkBoxState[position]);
-
-		holder.chkBox.setOnClickListener(new View.OnClickListener(){
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				if (((CheckBox)v).isChecked()){
-					checkBoxState[position] = true;
-					tagList.get(position).setSelected(context, true);
-				} else {
-					checkBoxState[position] = false;
-					tagList.get(position).setSelected(context, false);
-				}
-			}	
-		});
-		*/
 		return v;
 	}
 }

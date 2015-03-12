@@ -8,8 +8,10 @@ public class Expense extends TModel{
 	
 	private String title;
 	private int status; 
-	private int order;
 	private Date date;
+	private UUID uuid;
+	private String currency;
+	private Double amount;
 	
 	public Expense() {
 		uuid = UUID.randomUUID();
@@ -38,17 +40,6 @@ public class Expense extends TModel{
 		notifyViews(context);
 	}
 
-	public void setOrder(Context context, int order) {
-		this.order = order;
-		notifyViews(context);
-	}
-
-	public static final int NO_FLAG = 0;
-	public static final int FLAG = 1;
-
-	private UUID uuid;
-	
-
 	public String getTitle() {
 		// TODO Auto-generated method stub
 		return title;
@@ -64,7 +55,22 @@ public class Expense extends TModel{
 		return date;
 	}
 
-	public int getOrder() { // returns order from within it's list
-		return order;
+	public String getCurrency() {
+		return currency;
 	}
+
+	public void setCurrency(Context context, String currency) {
+		this.currency = currency;
+		notifyViews(context);
+	}
+
+	public Double getAmount() {
+		return amount;
+	}
+
+	public void setAmount(Context context, Double amount) {
+		this.amount = amount;
+		notifyViews(context);
+	}
+
 }
