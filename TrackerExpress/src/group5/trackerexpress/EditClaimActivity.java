@@ -74,6 +74,7 @@ public class EditClaimActivity extends Activity {
 	
 	private void editExistingclaim(Claim claim) {
 		// TODO Auto-generated method stub
+		
 		ClaimName.setText(claim.getuserName());
 		ClaimTitle.setText(claim.getClaimName());
 		StartDateYear.setText(claim.getStartDate().getYYYY());
@@ -89,15 +90,19 @@ public class EditClaimActivity extends Activity {
 		
 		String SDateY = StartDateYear.getText().toString();
 		int mySDateY = Integer.parseInt(SDateY);
+		
 		String SDateM = StartDateMonth.getText().toString();
 		int mySDateM = Integer.parseInt(SDateM);
+		
 		String SDateD = StartDateDay.getText().toString();
 		int mySDateD = Integer.parseInt(SDateD);
 		
 		String EDateY = EndDateYear.getText().toString();
 		int myEDateY = Integer.parseInt(EDateY);
+		
 		String EDateM = EndDateMonth.getText().toString();
 		int myEDateM = Integer.parseInt(EDateM);
+		
 		String EDateD = EndDateDay.getText().toString();
 		int myEDateD = Integer.parseInt(EDateD);
 		
@@ -109,6 +114,7 @@ public class EditClaimActivity extends Activity {
 		
 		Date d1 = new Date(mySDateY, mySDateM, mySDateD);
 		Date d2 = new Date(myEDateY, myEDateM, myEDateD);
+		
 		claim.setStartDate(this, d1);
 		claim.setEndDate(this, d2);
 		claim.setDescription(this, Descrip);
@@ -132,10 +138,8 @@ public class EditClaimActivity extends Activity {
 
 	private void newClaimcreate() {
 		// TODO Auto-generated method stub
-		
-		
-		
-		
+		/* create a new claim object and use the controller 
+		to get access to the claimList and add the new claim to claimList.*/
 		
 		Button editDestinationButton = (Button) findViewById(R.id.buttonAddDestination);
 		
