@@ -139,6 +139,44 @@ public class EditClaimActivity extends Activity {
 		// TODO Auto-generated method stub
 		/* create a new claim object and use the controller 
 		to get access to the claimList and add the new claim to claimList.*/
+		Claim newclaim = new Claim(null);
+		final ClaimList claimlist = ClaimController.getInstance(this).getClaimList();
+		
+		
+		String claimUser = ClaimName.getText().toString();
+		String Claim_title = ClaimTitle.getText().toString();
+		
+		String SDateY = StartDateYear.getText().toString();
+		int mySDateY = Integer.parseInt(SDateY);
+		
+		String SDateM = StartDateMonth.getText().toString();
+		int mySDateM = Integer.parseInt(SDateM);
+		
+		String SDateD = StartDateDay.getText().toString();
+		int mySDateD = Integer.parseInt(SDateD);
+		
+		String EDateY = EndDateYear.getText().toString();
+		int myEDateY = Integer.parseInt(EDateY);
+		
+		String EDateM = EndDateMonth.getText().toString();
+		int myEDateM = Integer.parseInt(EDateM);
+		
+		String EDateD = EndDateDay.getText().toString();
+		int myEDateD = Integer.parseInt(EDateD);
+		
+		String Descrip = Description.getText().toString();
+		
+		newclaim.setuserName(this, claimUser);
+		newclaim.setClaimName(this, Claim_title);
+		
+		Date d1 = new Date(mySDateY, mySDateM, mySDateD);
+		Date d2 = new Date(myEDateY, myEDateM, myEDateD);
+		
+		newclaim.setStartDate(this, d1);
+		newclaim.setEndDate(this, d2);
+		newclaim.setDescription(this, Descrip);
+		
+		
 		
 		Button editDestinationButton = (Button) findViewById(R.id.buttonAddDestination);
 		
@@ -152,7 +190,7 @@ public class EditClaimActivity extends Activity {
 		});
 		
 		tagClaimButton();
-		
+		claimlist.addClaim(this, newclaim);
 	}
 
 

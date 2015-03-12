@@ -26,27 +26,17 @@ public final class R {
     public static final class id {
         public static final int Add_tags_in_claim=0x7f050023;
         public static final int TakeAPhoto=0x7f050016;
-<<<<<<< HEAD
-        public static final int action_settings=0x7f050033;
-        public static final int b_add_tag=0x7f05002b;
-=======
         public static final int action_settings=0x7f050038;
         public static final int b_add_claim=0x7f05002a;
         public static final int b_add_tag=0x7f050030;
->>>>>>> 81c148847045c57e98454a6caafd0dcaa9ba0593
         public static final int buttonAddDestination=0x7f05000d;
         public static final int buttonCreateClaim=0x7f050010;
         public static final int buttonEditTags=0x7f05000e;
         public static final int button_add_tags_in_claim=0x7f050024;
         public static final int button_done_selecting_tags=0x7f050026;
         public static final int categorySpinner=0x7f050013;
-<<<<<<< HEAD
-        public static final int cb_tags_list_item=0x7f05002c;
-        public static final int createAccountButton=0x7f050031;
-=======
         public static final int cb_tags_list_item=0x7f050031;
         public static final int createAccountButton=0x7f050036;
->>>>>>> 81c148847045c57e98454a6caafd0dcaa9ba0593
         public static final int createExpenseButton=0x7f050018;
         public static final int currencySpinner=0x7f050015;
         public static final int editAmount=0x7f050014;
@@ -69,26 +59,12 @@ public final class R {
         public static final int inputDestinationReason=0x7f050022;
         public static final int listViewDestinations=0x7f05000c;
         public static final int listView_select_tags=0x7f050025;
-<<<<<<< HEAD
-        public static final int logInButton=0x7f050030;
-=======
         public static final int logInButton=0x7f050035;
->>>>>>> 81c148847045c57e98454a6caafd0dcaa9ba0593
         public static final int logInEmailText=0x7f05001c;
         public static final int logInPasswordText=0x7f05001d;
         public static final int login=0x7f05001e;
         public static final int login_form=0x7f05001a;
         public static final int login_progress=0x7f050019;
-<<<<<<< HEAD
-        public static final int logoTextView=0x7f050032;
-        public static final int lv_global_claims=0x7f050027;
-        public static final int lv_my_claims=0x7f050029;
-        public static final int lv_tags=0x7f05002a;
-        public static final int op_delete_tag=0x7f050034;
-        public static final int op_edit_tag=0x7f050035;
-        public static final int pager=0x7f050020;
-        public static final int passwordText=0x7f05002e;
-=======
         public static final int logoTextView=0x7f050037;
         public static final int lv_global_claims=0x7f050027;
         public static final int lv_my_claims=0x7f050029;
@@ -97,22 +73,16 @@ public final class R {
         public static final int op_edit_tag=0x7f05003a;
         public static final int pager=0x7f050020;
         public static final int passwordText=0x7f050033;
->>>>>>> 81c148847045c57e98454a6caafd0dcaa9ba0593
         public static final int section_label=0x7f050028;
         public static final int signInButton=0x7f05001f;
         public static final int textViewClaimEndDate=0x7f050008;
         public static final int textViewClaimStartDate=0x7f050004;
-<<<<<<< HEAD
-        public static final int tv_tags_list_item=0x7f05002d;
-        public static final int usernameText=0x7f05002f;
-=======
         public static final int tv_main_claim_list_amounts=0x7f05002d;
         public static final int tv_main_claim_list_destinations=0x7f05002c;
         public static final int tv_main_claim_list_name=0x7f05002b;
         public static final int tv_main_claim_list_tags=0x7f05002e;
         public static final int tv_tags_list_item=0x7f050032;
         public static final int usernameText=0x7f050034;
->>>>>>> 81c148847045c57e98454a6caafd0dcaa9ba0593
     }
     public static final class layout {
         public static final int activity_edit_claim=0x7f030000;
@@ -135,25 +105,6 @@ public final class R {
         public static final int tag_list_popup=0x7f080001;
     }
     public static final class string {
-<<<<<<< HEAD
-        public static final int action_add_tag=0x7f06000f;
-        public static final int action_create_claim=0x7f06000e;
-        public static final int action_destination=0x7f06000b;
-        public static final int action_done_destination_popup=0x7f060014;
-        public static final int action_done_selecting_tag=0x7f060010;
-        public static final int action_select_tag=0x7f06000d;
-        public static final int action_settings=0x7f060001;
-        public static final int action_sign_in=0x7f06001d;
-        public static final int action_sign_in_short=0x7f06001e;
-        /**  strings for main screen 
-         */
-        public static final int app_name=0x7f060000;
-        public static final int button_add_tag=0x7f060007;
-        public static final int error_field_required=0x7f060022;
-        public static final int error_incorrect_password=0x7f060021;
-        public static final int error_invalid_email=0x7f06001f;
-        public static final int error_invalid_password=0x7f060020;
-=======
         public static final int action_add_tag=0x7f060010;
         public static final int action_create_claim=0x7f06000f;
         public static final int action_destination=0x7f06000c;
@@ -174,32 +125,10 @@ public final class R {
         public static final int error_incorrect_password=0x7f060022;
         public static final int error_invalid_email=0x7f060020;
         public static final int error_invalid_password=0x7f060021;
->>>>>>> 81c148847045c57e98454a6caafd0dcaa9ba0593
         /**  strings for taglist tab 
          */
         public static final int popup_delete=0x7f060005;
         public static final int popup_edit=0x7f060006;
-<<<<<<< HEAD
-        public static final int promote_add_tag=0x7f060011;
-        public static final int promote_claim_destination_input=0x7f060012;
-        public static final int promote_claim_destination_reason=0x7f060013;
-        /**  strings for edit claim 
-         */
-        public static final int promote_claim_name=0x7f060008;
-        public static final int promote_claim_tags=0x7f06000c;
-        public static final int promote_claim_title=0x7f060009;
-        public static final int promote_day=0x7f060019;
-        public static final int promote_description=0x7f06000a;
-        public static final int promote_month=0x7f060018;
-        public static final int promote_year=0x7f060017;
-        /**  Strings related to login 
-         */
-        public static final int prompt_email=0x7f06001b;
-        public static final int prompt_password=0x7f06001c;
-        public static final int text_End_Date=0x7f060016;
-        public static final int text_Start_Date=0x7f060015;
-        public static final int title_activity_login=0x7f06001a;
-=======
         public static final int promote_add_tag=0x7f060012;
         public static final int promote_claim_destination_input=0x7f060013;
         public static final int promote_claim_destination_reason=0x7f060014;
@@ -219,7 +148,6 @@ public final class R {
         public static final int text_End_Date=0x7f060017;
         public static final int text_Start_Date=0x7f060016;
         public static final int title_activity_login=0x7f06001b;
->>>>>>> 81c148847045c57e98454a6caafd0dcaa9ba0593
         public static final int title_section1=0x7f060002;
         public static final int title_section2=0x7f060003;
         public static final int title_section3=0x7f060004;
