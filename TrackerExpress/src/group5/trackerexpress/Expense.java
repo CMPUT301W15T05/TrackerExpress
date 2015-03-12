@@ -72,5 +72,5 @@ public class Expense extends TModel{
 		this.amount = amount;
 		notifyViews(context);
 	}
-
+	
 }

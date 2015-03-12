@@ -49,7 +49,7 @@ public class MainClaimListArrayAdapter extends ArrayAdapter<Claim> {
 		Claim c = claimList.get(position);
 		holder.claimName.setText(c.getClaimName());
 		holder.destinations.setText(c.toStringDestinations());
-		//holder.amounts.setText(text);
+		holder.amounts.setText(c.getExpenseList().toStringTotalCurrencies());
 		//holder.tags.setText(text);
 		
 		return v;
