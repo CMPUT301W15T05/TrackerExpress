@@ -119,6 +119,18 @@ public class Claim extends TModel implements Comparable<Claim>{
 		notifyViews(context);
 	}
 	
+	public String toStringDestinations(){
+		// Get the destinations in a list format
+		String str_destinations = "";
+		for ( int i = 0; i < destination.size() - 1; i++ ){
+			str_destinations += destination.get(i)[0] + ", ";
+		}
+		if ( destination.size() > 1 ){
+			str_destinations += destination.get(destination.size() - 1);
+		}
+		return str_destinations;
+	}
+	
 	public ArrayList<String[]> getDestination() {
 		return destination;
 	}	
@@ -131,7 +143,6 @@ public class Claim extends TModel implements Comparable<Claim>{
 	public String getDescription(){
 		return Description; 
 	}
-	
 	
 
 	public void setStatus(Context context, int status) {

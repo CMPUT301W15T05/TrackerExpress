@@ -35,7 +35,7 @@ public class EditClaimActivity extends Activity {
 	private EditText DesRea;
 
 	private ArrayList<String[]> Destination;
-	private ArrayAdapter<String[]>aapter;
+	private ArrayAdapter<String[]>adapter;
 	
 	
 	@Override
@@ -58,16 +58,15 @@ public class EditClaimActivity extends Activity {
 		
 		
 		Intent intent = this.getIntent();
-	    UUID serialisedId = (UUID) intent.getSerializableExtra("claimUUID");
 	    boolean isNewClaim = (boolean) intent.getBooleanExtra("isNewClaim", true);
-	    final Claim claim = ClaimController.getInstance(this).getClaimList().getClaim(serialisedId);
 	    
 	    if (isNewClaim == true){
 	    	newClaimcreate();
+	    } else {
+		    UUID serialisedId = (UUID) intent.getSerializableExtra("claimUUID");
+		    final Claim claim = ClaimController.getInstance(this).getClaimList().getClaim(serialisedId);
+		    editExistingclaim(claim);
 	    }
-	    
-	    editExistingclaim(claim);
-	    
 		
 	}
 	

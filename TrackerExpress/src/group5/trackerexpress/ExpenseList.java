@@ -40,4 +40,29 @@ public class ExpenseList {
 	public int size() {
 		return expenseList.size();
 	}
+	
+	public String toStringTotalCurrencies(){
+		String ret = "";
+		ArrayList<String> currencies = new ArrayList<String>();
+		ArrayList<Double> amounts = new ArrayList<Double>();
+		
+		for ( Expense e: expenseList ){
+			int index = amounts.indexOf( e.getCurrency() );
+			if ( index != -1 ){
+				amounts.set(index, amounts.get(index) + e.getAmount() );
+			} else {
+				currencies.add(e.getCurrency() );
+				amounts.add(0.0);
+			}
+		}
+		
+		for ( int i = 0; i < currencies.size() - 1; i++ ){
+			ret += amounts.get(i) + " " + currencies.get(i) + ", ";
+		}
+		if ( currencies.size() > 1 ){
+			ret += amounts.get(amounts.size()-1) + " " + currencies.get(currencies.size()-1);
+		}
+		
+		return ret;
+	}
 }

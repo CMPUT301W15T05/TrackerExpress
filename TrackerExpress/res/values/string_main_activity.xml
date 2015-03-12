@@ -12,4 +12,7 @@
     <string name="popup_edit"> Edit </string>
     <string name="button_add_tag" > Add Tag </string>
     
+    <!-- strings for myclaims tab -->
+    <string name="button_add_claim"> Add Claim </string>
+    
 </resources>
