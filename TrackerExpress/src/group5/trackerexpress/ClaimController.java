@@ -11,7 +11,6 @@ public class ClaimController implements TController {
 		this.claims = new ClaimList(context);
 	}
 
-
 	public static ClaimController getInstance(Context context){
 		if (instance == null){		
 			instance = new ClaimController(context);

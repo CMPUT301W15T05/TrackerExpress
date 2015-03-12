@@ -7,7 +7,9 @@ import android.content.Context;
 
 public class Claim extends TModel implements Comparable<Claim>{
 	
+	private String userName;
 	private String claimName;
+	private String Description;
 	private ExpenseList expenseList;
 	private ArrayList<String[]> destination = new ArrayList<String[]>();
 	private int status; 
@@ -38,6 +40,15 @@ public class Claim extends TModel implements Comparable<Claim>{
 		this.uuid = uuid;
 		notifyViews(context);
 	}	
+	
+	public String getuserName(){
+		return userName;
+	}
+	
+	public void setuserName(Context context, String userName){
+		this.userName = userName;
+		notifyViews(context);
+	}
 	
 	public String getClaimName() {
 		return claimName;
@@ -95,10 +106,10 @@ public class Claim extends TModel implements Comparable<Claim>{
 		return endDate;
 	}
 		
-	public void addDestination(Context context, String place, String descriptions){
+	public void addDestination(Context context, String place, String Reason){
 		String[] travelInfo = new String[2];
 		travelInfo[0] = place;
-		travelInfo[1] = descriptions;
+		travelInfo[1] = Reason;
 		destination.add(travelInfo);
 		notifyViews(context);
 	}
@@ -111,6 +122,15 @@ public class Claim extends TModel implements Comparable<Claim>{
 	public ArrayList<String[]> getDestination() {
 		return destination;
 	}	
+	
+	public void setDescription(Context context, String Description){
+		this.Description = Description;
+		notifyViews(context);
+	}
+	
+	public String getDescription(){
+		return Description; 
+	}
 	
 	
 
