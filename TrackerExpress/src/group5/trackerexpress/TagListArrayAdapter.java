@@ -3,6 +3,7 @@ package group5.trackerexpress;
 import java.util.ArrayList;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,11 +22,13 @@ public class TagListArrayAdapter extends ArrayAdapter<Tag> {
 		super(context, R.layout.fragment_tags_list_item, tags);
 		this.tagList = tags;
 		this.context = context;
-		
+
 		checkBoxState = new boolean[tags.size()];
+
 		for ( int i = 0; i < tags.size(); i++ ){
 			checkBoxState[i] = tags.get(i).isSelected();
 		}
+		
 	}
 	
 	
