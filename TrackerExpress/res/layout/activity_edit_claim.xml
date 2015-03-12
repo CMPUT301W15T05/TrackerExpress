@@ -20,29 +20,94 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="@string/promote_claim_title" />
+    
+    <TextView
+            android:id="@+id/textViewClaimStartDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/text_Start_Date" />
+    
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="38dp"
+        android:orientation="horizontal" >
+        
+        <EditText
+            android:id="@+id/editClaimStartDateYear"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:hint="@string/promote_year"
+            android:inputType="number" />
 
-    <EditText
-        android:id="@id/editClaimStartDate"
+        <EditText
+            android:id="@+id/editClaimStartDateMonth"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:hint="@string/promote_month"
+            android:inputType="number" />
+
+        <EditText
+            android:id="@+id/editClaimStartDateDay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:hint="@string/promote_day"
+            android:inputType="number" />
+        
+    </LinearLayout>
+    
+    <TextView
+            android:id="@+id/textViewClaimEndDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/text_End_Date" />
+    
+        
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="@string/promote_claim_start_date"
-        android:inputType="date" />
+        android:orientation="horizontal" >
+        
+        <EditText
+            android:id="@+id/editClaimEndDateYear"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:hint="@string/promote_year"
+            android:inputType="number" />
 
-    <EditText
-        android:id="@id/editClaimEndDate"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="@string/promote_claim_end_date"
-        android:inputType="date" />
+        <EditText
+            android:id="@+id/editClaimEndDateMonth"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:hint="@string/promote_month"
+            android:inputType="numberDecimal" />
+
+        <EditText
+            android:id="@+id/editClaimEndDateDay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:hint="@string/promote_day"
+            android:inputType="number" />
+        
+    </LinearLayout>
 
     <ListView
         android:id="@+id/listViewDestinations"
         android:layout_width="wrap_content"
         android:layout_height="78dp"
         android:layout_weight="0.01" >
-
     </ListView>
 
     <Button

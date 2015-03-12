@@ -1,7 +1,5 @@
 package group5.trackerexpress;
 
-import group5.trackerexpress.MainTagListArrayAdapter.TagHolder;
-
 import java.util.ArrayList;
 
 import android.content.Context;
@@ -50,18 +48,9 @@ public class MainClaimListArrayAdapter extends ArrayAdapter<Claim> {
 		
 		Claim c = claimList.get(position);
 		holder.claimName.setText(c.getClaimName());
+		holder.destinations.setText(c.toStringDestinations());
 		
-		// Get the destinations in a list format
-		String str_destinations = "";
-		ArrayList<String[]> destinations = c.getDestination();
-		for ( int i = 0; i < destinations.size() - 1; i++ ){
-			str_destinations += destinations.get(i)[0] + ", ";
-		}
-		if ( destinations.size() > 1 ){
-			str_destinations += destinations.get(destinations.size() - 1);
-		}
-		holder.destinations.setText(str_destinations);
-		
+		/*
 		
 		holder.chkBox.setChecked(checkBoxState[position]);
 
@@ -78,7 +67,7 @@ public class MainClaimListArrayAdapter extends ArrayAdapter<Claim> {
 				}
 			}	
 		});
-		
+		*/
 		return v;
 	}
 }
