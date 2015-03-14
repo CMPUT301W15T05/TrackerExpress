@@ -37,7 +37,6 @@ public class EditClaimActivity extends Activity {
 	private ArrayList<String[]> Destination;
 	private ArrayAdapter<String[]>adapter;
 	
-	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -57,21 +56,88 @@ public class EditClaimActivity extends Activity {
 		Description = (EditText) findViewById(R.id.editClaimDescription);
 		
 		
-		Intent intent = this.getIntent();
-	    boolean isNewClaim = (boolean) intent.getBooleanExtra("isNewClaim", true);
+		final Intent intent = this.getIntent();
+	    final boolean isNewClaim = (boolean) intent.getBooleanExtra("isNewClaim", true);
 	    
-	    if (isNewClaim == true){
-	    	newClaimcreate();
-	    } else {
-		    UUID serialisedId = (UUID) intent.getSerializableExtra("claimUUID");
-		    final Claim claim = ClaimController.getInstance(this).getClaimList().getClaim(serialisedId);
-		    editExistingclaim(claim);
-	    }
+	    
+	    Button addTagsButton= (Button) findViewById(R.id.buttonEditTags);
+		
+		addTagsButton.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				
+				// display message "Creating new claim".
+				Toast.makeText(EditClaimActivity.this, "Loading", Toast.LENGTH_SHORT). show();
+				
+				// launch CreateNewClaimActivity.
+				Intent intent = new Intent(EditClaimActivity.this, SelectTag_claim_Activity.class);
+		    	startActivity(intent);
+			}
+		});
+	    
+		
+		
+		/* create a dummy 2d destination array once the create_claim_button is clicked, 
+		 * it will save this array into the claim.(use getDestination(this, ArrayList<String[]> yourDestination*/
+		
+		
+		
+		
+	    Button editDestinationButton = (Button) findViewById(R.id.buttonAddDestination);
+		
+		editDestinationButton.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				createDestinationButton();
+				
+			}
+		});
+		
+	    
+	    
+	    Button done = (Button) findViewById(R.id.buttonCreateClaim);
+	    done.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+			    if (isNewClaim == true){
+			    	Claim newclaim = new Claim("");
+			    	newClaimcreate(newclaim);
+			    } else {
+				    UUID serialisedId = (UUID) intent.getSerializableExtra("claimUUID");
+				    final Claim claim = ClaimController.getInstance(EditClaimActivity.this).getClaimList().getClaim(serialisedId);
+				    editExistingclaim(claim);
+			    }
+			    Toast.makeText(EditClaimActivity.this, "Updating", Toast.LENGTH_SHORT). show();
+				
+				// launch CreateNewClaimActivity.
+				Intent intent = new Intent(EditClaimActivity.this, MainActivity.class);
+		    	startActivity(intent);
+			}
+		});
+	    
+	    Button cancel = (Button) findViewById(R.id.button_cancel_edit_claim);
+	    cancel.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Toast.makeText(EditClaimActivity.this, "Canceling", Toast.LENGTH_SHORT). show();
+				
+				// launch CreateNewClaimActivity.
+				Intent intent = new Intent(EditClaimActivity.this, MainActivity.class);
+		    	startActivity(intent);
+			}
+		});
+	    
+
+	    
 		
 	}
 	
 	
-	private void editExistingclaim(Claim claim) {
+	private void editExistingclaim(final Claim claim) {
 		// TODO Auto-generated method stub
 		
 		ClaimName.setText(claim.getuserName());
@@ -119,27 +185,13 @@ public class EditClaimActivity extends Activity {
 		claim.setDescription(this, Descrip);
 		
 		
-		Button editDestinationButton = (Button) findViewById(R.id.buttonAddDestination);
-		
-		editDestinationButton.setOnClickListener(new View.OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				createDestinationButton();
-				
-			}
-		});
-		
-		tagClaimButton();
-		
 	}
 
 
-	private void newClaimcreate() {
+	private void newClaimcreate(Claim newclaim) {
 		// TODO Auto-generated method stub
 		/* create a new claim object and use the controller 
 		to get access to the claimList and add the new claim to claimList.*/
-		Claim newclaim = new Claim(null);
 		final ClaimList claimlist = ClaimController.getInstance(this).getClaimList();
 		
 		
@@ -177,19 +229,6 @@ public class EditClaimActivity extends Activity {
 		newclaim.setDescription(this, Descrip);
 		
 		
-		
-		Button editDestinationButton = (Button) findViewById(R.id.buttonAddDestination);
-		
-		editDestinationButton.setOnClickListener(new View.OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				createDestinationButton();
-				
-			}
-		});
-		
-		tagClaimButton();
 		claimlist.addClaim(this, newclaim);
 	}
 
@@ -211,9 +250,10 @@ public class EditClaimActivity extends Activity {
 		helperBuilder.setPositiveButton("Done", new DialogInterface.OnClickListener() {
 					
 			public void onClick(DialogInterface dialog, int which) {
+				
 				String Des_Name = DesName.getText().toString();
 				String Des_Rea = DesRea.getText().toString();
-				
+				//   claim.addDestination(EditClaimActivity.this, Des_Name, Des_Rea);
 				
 						
 			}
@@ -232,27 +272,6 @@ public class EditClaimActivity extends Activity {
 		helpDialog.show();
 				
 				
-	}
-				
-
-
-	private void tagClaimButton(){
-		
-		Button addTagsButton= (Button) findViewById(R.id.buttonEditTags);
-		
-		addTagsButton.setOnClickListener(new View.OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				
-				// display message "Creating new claim".
-				Toast.makeText(EditClaimActivity.this, "Loading", Toast.LENGTH_SHORT). show();
-				
-				// launch CreateNewClaimActivity.
-				Intent intent = new Intent(EditClaimActivity.this, SelectTag_claim_Activity.class);
-		    	startActivity(intent);
-			}
-		});
 	}
 
 
