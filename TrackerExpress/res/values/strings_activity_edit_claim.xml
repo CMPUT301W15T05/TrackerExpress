@@ -19,6 +19,7 @@
     <string name="promote_year">YYYY</string>
     <string name="promote_month">MM (01-12)</string>
     <string name="promote_day">DD (01-31)</string>
+    <string name="action_calcel_edit_claim">Cancel</string>
     
     
 </resources>

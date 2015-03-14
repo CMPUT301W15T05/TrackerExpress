@@ -76,8 +76,6 @@ public class Claim extends TModel implements Comparable<Claim>{
 		notifyViews(context);
 	}
 	
-	
-	
 
 	public void removeExpense(Context context, UUID expenseUuid) {
 		// TODO Auto-generated method stub
@@ -114,9 +112,21 @@ public class Claim extends TModel implements Comparable<Claim>{
 		notifyViews(context);
 	}
 	
+	
 	public void setDestination(Context context, ArrayList<String[]> destination) {
 		this.destination = destination;
 		notifyViews(context);
+	}
+	
+	public ArrayList<String> DestinationReason(){
+		final ArrayList<String> destinationreason = new ArrayList<String>();
+		String destination_reason = "";
+		for (int i = 0; i< destination.size(); i++){
+			destination_reason = destination.get(i)[0]+ " - " + destination.get(i)[1];
+			destinationreason.add(destination_reason);
+			destination_reason = "";
+		}
+		return destinationreason;
 	}
 	
 	public String toStringDestinations(){
@@ -125,9 +135,8 @@ public class Claim extends TModel implements Comparable<Claim>{
 		for ( int i = 0; i < destination.size() - 1; i++ ){
 			str_destinations += destination.get(i)[0] + ", ";
 		}
-		if ( destination.size() > 1 ){
-			str_destinations += destination.get(destination.size() - 1);
-		}
+		
+		str_destinations += destination.get(destination.size() - 1);
 		return str_destinations;
 	}
 	
