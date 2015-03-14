@@ -24,6 +24,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -218,6 +219,9 @@ public class MainActivity extends FragmentActivity implements
 		private ListView lv_claim_list;
 		private MainClaimListAdapter adapter;
 		private Button b_add_claim;
+
+		// Menu items to hide when selecting an option on a claim
+		private static final int[] submittedOrApprovedHiddenItems = {R.id.op_edit_claim, R.id.op_submit_claim};
 		
 		public FragmentMyClaims() {
 		}
@@ -225,11 +229,15 @@ public class MainActivity extends FragmentActivity implements
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container,
 				Bundle savedInstanceState) {
+			
 			View rootView = inflater.inflate(R.layout.fragment_my_claims,
 					container, false);
+			
+			// Fragment's views
 			lv_claim_list = (ListView) rootView.findViewById(R.id.lv_my_claims);
 			lv_claim_list.setItemsCanFocus(true);
 			b_add_claim = (Button) rootView.findViewById(R.id.b_add_claim);
+			
 			
 			final ClaimList listOfClaims = ClaimController.getInstance(getActivity()).getClaimList();
 			final Claim[] arrayClaims = listOfClaims.getAllClaims();
@@ -245,6 +253,24 @@ public class MainActivity extends FragmentActivity implements
 					Intent intent = new Intent( getActivity(), EditClaimActivity.class );
 					intent.putExtra("isNewClaim", true);
 					startActivity(intent);
+				}
+				
+			});
+			
+			lv_claim_list.setOnItemClickListener(new OnItemClickListener(){
+
+				@Override
+				public void onItemClick(AdapterView<?> a, View v,
+						int position, long arg3) {
+					// TODO Auto-generated method stub
+					
+					Claim c = (Claim) lv_claim_list.getAdapter().getItem(position);
+					
+					
+					
+					if ( c.getStatus() == Claim.SUBMITTED || c.getStatus() == Claim.APPROVED ){
+						
+					}
 				}
 				
 			});
@@ -343,12 +369,15 @@ public class MainActivity extends FragmentActivity implements
 					return false;
 				}
 	        });
+	        Log.i("myMessage", Integer.toString(listOfTags.size()));
 	        /*
 	         * Causes error since TagListArrayAdapter uses listOfTags.get() which apparently is 
 	         * an Hashmap cast as an ArrayList<Tag> 
-			adapter = new TagListArrayAdapter( myContext, listOfTags );
-			lv_tag_list.setAdapter(adapter);
+	        listOfTags.get(0); <- Something is up with get()
+			adapter = new MainTagListAdapter( myContext, listOfTags );
 			*/
+			lv_tag_list.setAdapter(adapter);
+
 			return rootView;
 		}
 		private void getName(){
