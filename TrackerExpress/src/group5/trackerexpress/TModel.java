@@ -2,6 +2,7 @@ package group5.trackerexpress;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import android.content.Context;
 
 public class TModel {
@@ -22,13 +23,20 @@ public class TModel {
     }
 
     public void notifyViews(Context context) {
+		System.out.println ("Notifying views within notifyViews");
+		System.out.println ("Starting view looping");
         for (TView view : views) {
+			System.out.println ("Looping dem views");
         	view.update(this);
         }
-        
+		System.out.println ("View Looping finished");
+
         TagController.getInstance(context).getTagMap().saveData(context);
-        ClaimController.getInstance(context).getClaimList().saveData(context);		
-        UserController.getInstance(context).getUser().saveData(context);		
+		System.out.println ("Tag controller good");
+        ClaimController.getInstance(context).getClaimList().saveData(context);	
+		System.out.println ("Claim controller good");	
+        UserController.getInstance(context).getUser().saveData(context);	
+		System.out.println ("User controller good");	
     }
     
     

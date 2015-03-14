@@ -20,7 +20,8 @@ public class TagMap extends TModel{
 
 	public void saveData(Context context) {
 		try {
-			new FileCourrier<Map<UUID, Tag>>().saveFile(context, FILENAME, tags);
+			new FileCourrier<TagMap>(this).saveFile(context, FILENAME, this);
+			//new FileCourrier<Map<UUID, Tag>>(this).saveFile(context, FILENAME, tags);
 		} catch (IOException e) {
 			System.err.println ("Could not save tags.");
 			throw new RuntimeException();
@@ -28,8 +29,16 @@ public class TagMap extends TModel{
 	}
 
 	public void loadData(Context context) {
+		TagMap tagMap;
 		try {
-			this.tags = new FileCourrier<Map<UUID, Tag>>().loadFile(context, FILENAME);
+			tagMap = new FileCourrier<TagMap>(this).loadFile(context, FILENAME);
+			if (tagMap.tags == null) {
+				System.err.println ("TAGMAP ALSO NULL ALSO NULL");
+				this.tags = new HashMap<UUID, Tag>();
+			} else {
+				this.tags = tagMap.tags;
+			}
+			//this.tags = new FileCourrier<Map<UUID, Tag>>((Map<UUID, Tag>) this).loadFile(context, FILENAME);
 		} catch (FileNotFoundException e) {
 			System.err.println ("Tags file not found, making a fresh tags list.");
 			this.tags = new HashMap<UUID, Tag>();

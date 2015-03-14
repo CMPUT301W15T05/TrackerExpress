@@ -7,6 +7,12 @@
     <string name="title_section2">Tags</string>
     <string name="title_section3">Global Claims</string>
     
+    <!-- strings for taglist tab -->
     <string name="popup_delete"> Delete </string>
     <string name="popup_edit"> Edit </string>
+    <string name="button_add_tag" > Add Tag </string>
+    
+    <!-- strings for myclaims tab -->
+    <string name="button_add_claim"> Add Claim </string>
+    
 </resources>

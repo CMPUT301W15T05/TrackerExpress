@@ -12,7 +12,7 @@ public class Date implements Comparable<Date>{
 		this.mm = mm;
 		this.yyyy = yyyy;
 	}
-
+	
 	public Date() {
 	}
 
@@ -32,7 +32,7 @@ public class Date implements Comparable<Date>{
 		this.mm = mm;
 	}
 	
-	public int MM(){
+	public int getMM(){
 		return mm;
 	}
 	
@@ -40,7 +40,7 @@ public class Date implements Comparable<Date>{
 		this.yyyy = yyyy;
 	}
 	
-	public int YYYY(){
+	public int getYYYY(){
 		return yyyy;
 	}
 	

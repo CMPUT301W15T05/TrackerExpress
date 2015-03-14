@@ -33,6 +33,7 @@ public class CreateAccountActivity extends AccountFormActivity {
 	private EditText mEmailView;
 	private EditText mPasswordView;
 	private EditText mConfirmPasswordView;
+	private EditText mNameView;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +51,7 @@ public class CreateAccountActivity extends AccountFormActivity {
 				+ " " + "</font>" + "<small>" + hintText[1] + "</small>" ));
 		
 		mConfirmPasswordView = (EditText) findViewById(R.id.createAccountConfirmPasswordText);
+		mNameView = (EditText) findViewById(R.id.createAccountNameText);
 		
 		Button mConfirmCreateAccountButton = (Button) findViewById(R.id.confirmCreateAccountButton);
 		mConfirmCreateAccountButton.setOnClickListener(new OnClickListener() {
@@ -93,7 +95,16 @@ public class CreateAccountActivity extends AccountFormActivity {
 		String email = mEmailView.getText().toString();
 		String password = mPasswordView.getText().toString();
 		String confirmPassword = mConfirmPasswordView.getText().toString();
-		String name = mConfirmPasswordView.getText().toString();
+		String name = mNameView.getText().toString();
+		
+		// Check that the user has entered a name
+		if (TextUtils.isEmpty(name)) {
+			setError(mNameView, R.string.error_field_required);
+			return;
+		} else if (name.split(" ").length < 2) {
+			setError(mNameView, R.string.error_invalid_name);
+			return;
+		}
 		
 		if (emailErrors(email, mEmailView) || 
 				passwordErrors(password, mPasswordView)) {
@@ -153,10 +164,19 @@ public class CreateAccountActivity extends AccountFormActivity {
 			// Email wasn't found in database, so add it right away
 
 			// Update User object
-			User user = UserController.getInstance(CreateAccountActivity.this).getUser();
-			user.setEmail(CreateAccountActivity.this, mEmail);
-			user.setPassword(CreateAccountActivity.this, mPassword);
+			System.out.println ("Updating user start");
+			UserController usercontroller = UserController.getInstance(CreateAccountActivity.this);
+			System.out.println ("User controller good");
+			User user = usercontroller.getUser();
+			System.out.println ("User instance good");
 			user.setName(CreateAccountActivity.this, mName);
+			System.out.println ("User set name good");
+			user.setEmail(CreateAccountActivity.this, mEmail);
+			System.out.println ("User set email good");
+			user.setPassword(CreateAccountActivity.this, mPassword);
+			System.out.println ("User set password good");
+			
+			System.out.println ("Updating user good");
 			
 			// TODO: add user to the proper database
 			
@@ -171,8 +191,11 @@ public class CreateAccountActivity extends AccountFormActivity {
 			// properly with finish()
 			if (success == ACCOUNT_SUCCESS) {
 				Intent intent = new Intent(CreateAccountActivity.this, MainActivity.class);
+				System.err.println ("Creating intent good");
 		    	startActivity(intent);
+				System.err.println ("Starting intent good");
 				finish();
+				System.err.println ("Exiting activity good");
 			} else if (success == EMAIL_TAKEN) {
 				showProgress(false);
 				setError(mEmailView, R.string.error_email_taken);

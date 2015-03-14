@@ -14,6 +14,11 @@ import com.google.gson.reflect.TypeToken;
 import android.content.Context;
 
 public class FileCourrier<T> {
+	private T type;
+	
+	public FileCourrier(T type) {
+		this.type = type;
+	}
 	
 	public void saveFile(Context context, String fileName, T file) throws IOException, NullPointerException {
 
@@ -28,12 +33,32 @@ public class FileCourrier<T> {
 	public T loadFile(Context context, String fileName) throws IOException, FileNotFoundException, NullPointerException {		
 
 		//From joshua2ua in lab 3:
+		System.out.println ("File Input Start");
 		FileInputStream fis = context.openFileInput(fileName);
+		
+		System.out.println ("G1");
 		Gson gson = new Gson();
-		Type dataType = new TypeToken<T>() {}.getType();
+		
+		System.out.println ("G2");
+		//Type dataType = new TypeToken<T>() {}.getType();
+
+		//System.out.println ();
+		System.out.println (type.getClass().toString());
+		
+		System.out.println ("G3");
 		InputStreamReader isr = new InputStreamReader(fis);
-		T file = gson.fromJson(isr, dataType);
+		
+		System.out.println ("G4");
+		T file = (T) gson.fromJson(isr, type.getClass());
+		
+		System.out.println ("G5");
 		fis.close();
+		
+
+		System.out.println (file.getClass().getName());
+		System.out.println (file.getClass().toString());
+
+		System.out.println ("- = - = - ULTIMATE GOAL - = - = -");
 		
 		return file;
 	}

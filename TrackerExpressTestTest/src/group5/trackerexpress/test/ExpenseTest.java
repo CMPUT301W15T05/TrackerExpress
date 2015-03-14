@@ -4,9 +4,9 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.UUID;
 
+import android.content.Context;
 import android.widget.TextView;
 import group5.trackerexpress.Claim;
-import group5.trackerexpress.Controller;
 import group5.trackerexpress.Date;
 import group5.trackerexpress.Expense;
 import group5.trackerexpress.ExpenseNotFoundException;
@@ -17,6 +17,7 @@ public class ExpenseTest extends TestCase {
 	// Note: Might add ClaimList to grab claim from if we throw errors on same 
 	// claim name creation
 	private Claim claim;
+	private Context context;
 	
 	// All tests for Claim class should be dealt with to ensure setUp works 
 	// properly. We are assuming Claim will not cause any test failures.
@@ -30,7 +31,7 @@ public class ExpenseTest extends TestCase {
 		Expense testExpense = new Expense("Test Expense");
 		
 		UUID expenseUuid = testExpense.getUuid();
-		
+		context = getActivity();
 		claim.addExpense(testExpense); // Note: Might change to ExpenseList.add(Expense) instead
 		
 		try {

@@ -51,7 +51,8 @@ public class ClaimList extends TModel{
 	
 	public void saveData(Context context) {
 		try {
-			new FileCourrier<Map<UUID, Claim>>().saveFile(context, FILENAME, claims);
+			new FileCourrier<ClaimList>(this).saveFile(context, FILENAME, this);
+			//new FileCourrier<Map<UUID, Claim>>(this).saveFile(context, FILENAME, claims);
 		} catch (IOException e) {
 			System.err.println ("Could not save claims.");
 			throw new RuntimeException();
@@ -59,9 +60,17 @@ public class ClaimList extends TModel{
 	}
 
 	public void loadData(Context context) {
+		ClaimList claimList;
 		try {
-			this.claims = new FileCourrier<Map<UUID, Claim>>().loadFile(context, FILENAME);
-		} catch (IOException e) {
+			claimList = new FileCourrier<ClaimList>(this).loadFile(context, FILENAME);
+			if (claimList.claims == null) {
+				System.err.println ("ITS NULL ITS NULL");
+				this.claims = new HashMap<UUID, Claim>();
+			} else {
+				this.claims = claimList.claims;
+			}
+			//this.claims = new FileCourrier<Map<UUID, Claim>>((Map<UUID, Claim>) this).loadFile(context, FILENAME);
+		} catch (IOException e) { // This isn't being triggered
 			System.err.println ("Claims file not found, making a fresh claims list.");
 			this.claims = new HashMap<UUID, Claim>();
 		}

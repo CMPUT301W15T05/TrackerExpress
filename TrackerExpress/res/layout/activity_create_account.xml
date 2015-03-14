@@ -40,8 +40,19 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="top"
                 android:gravity="center"
-                android:paddingBottom="100dp"
+                android:paddingBottom="90dp"
                 android:text="Logo Placeholder" />
+
+            <EditText
+                android:id="@+id/createAccountNameText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="@string/prompt_create_account_name"
+                android:inputType="textPersonName" >
+
+                <requestFocus />
+            </EditText>
 
             <EditText
                 android:id="@+id/createAccountEmailText"

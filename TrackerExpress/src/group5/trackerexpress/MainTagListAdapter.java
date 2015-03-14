@@ -3,6 +3,7 @@ package group5.trackerexpress;
 import java.util.ArrayList;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,21 +12,23 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 
 // http://androidcocktail.blogspot.it/2012/04/adding-checkboxes-to-custom-listview-in.html
-public class TagListArrayAdapter extends ArrayAdapter<Tag> {
+public class MainTagListAdapter extends ArrayAdapter<Tag> {
 	
 	private ArrayList<Tag> tagList;
 	private Context context;
 	boolean[] checkBoxState;
 	
-	public TagListArrayAdapter(Context context, ArrayList<Tag> tags){
+	public MainTagListAdapter(Context context, ArrayList<Tag> tags){
 		super(context, R.layout.fragment_tags_list_item, tags);
 		this.tagList = tags;
 		this.context = context;
-		
+
 		checkBoxState = new boolean[tags.size()];
+
 		for ( int i = 0; i < tags.size(); i++ ){
 			checkBoxState[i] = tags.get(i).isSelected();
 		}
+		
 	}
 	
 	
