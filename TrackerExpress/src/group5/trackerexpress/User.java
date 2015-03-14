@@ -1,6 +1,8 @@
 package group5.trackerexpress;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
+
 import android.content.Context;
 
 public class User extends TModel{
@@ -35,8 +37,6 @@ public class User extends TModel{
 		notifyViews(context);
 	}
 	
-	
-	
 	public void saveData(Context context) {
 		try {
 			new FileCourrier<User>().saveFile(context, FILENAME, this);
@@ -53,6 +53,10 @@ public class User extends TModel{
 			this.email = user.getEmail();
 			this.password = user.getPassword();
 			this.name = user.getName();
+		} catch (FileNotFoundException e) {
+			System.err.println ("File doesnt exist.");
+		} catch (NullPointerException e) {
+			System.err.println ("Null pointer exception.");
 		} catch (IOException e) {
 			System.err.println ("No user data found.");
 		}

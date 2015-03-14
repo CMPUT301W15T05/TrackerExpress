@@ -7,9 +7,9 @@ public class UserController implements TController {
 
 	
 	private User user;
-	private static UserController instance;
+	private static UserController instance = null;
 	
-	private UserController(Context context){
+	private UserController(Context context) {
 		user = new User(context);
 	}
 
