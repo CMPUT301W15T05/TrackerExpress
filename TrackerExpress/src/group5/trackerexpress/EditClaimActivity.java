@@ -6,18 +6,18 @@ import java.util.UUID;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup.LayoutParams;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.PopupWindow;
+import android.widget.ListView;
 import android.widget.Toast;
 
 public class EditClaimActivity extends Activity {
@@ -35,13 +35,20 @@ public class EditClaimActivity extends Activity {
 	private EditText DesRea;
 
 	private ArrayList<String[]> Destination;
-	private ArrayAdapter<String[]>adapter;
+	private ArrayAdapter<String> adapter2;
+	
+	private final int newDestination = 1;
+	private final int editDestination = 2;
+	private final int doNothing = 5;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_edit_claim);
 		
+		Destination = new ArrayList<String[]>();
+		
+		final Claim newclaim = new Claim("");
 		
 		ClaimName = (EditText) findViewById(R.id.editClaimName);
 		ClaimTitle = (EditText) findViewById(R.id.editClaimTitle);
@@ -55,10 +62,15 @@ public class EditClaimActivity extends Activity {
 		EndDateDay = (EditText) findViewById(R.id.editClaimEndDateDay);
 		Description = (EditText) findViewById(R.id.editClaimDescription);
 		
+		ListView myListView = (ListView) findViewById(R.id.listViewDestinations);
+		
 		
 		final Intent intent = this.getIntent();
 	    final boolean isNewClaim = (boolean) intent.getBooleanExtra("isNewClaim", true);
+	    final ClaimList newclaimlist = ClaimController.getInstance(EditClaimActivity.this).getClaimList();
 	    
+	    UUID serialisedId = (UUID) intent.getSerializableExtra("claimUUID");
+	    final Claim claim = ClaimController.getInstance(EditClaimActivity.this).getClaimList().getClaim(serialisedId);
 	    
 	    Button addTagsButton= (Button) findViewById(R.id.buttonEditTags);
 		
@@ -90,11 +102,40 @@ public class EditClaimActivity extends Activity {
 			
 			@Override
 			public void onClick(View v) {
-				createDestinationButton();
+				if (isNewClaim == true){
+					createDestinationButton(isNewClaim,Destination,newDestination,doNothing);
+				} else {
+					Destination = claim.getDestination();
+					createDestinationButton(isNewClaim, Destination,editDestination,doNothing);
+				}
 				
 			}
 		});
 		
+		
+		
+	    if (isNewClaim == true){
+			    	
+			    	
+			    	DestinationListview(myListView,Destination);
+			    	
+			    	
+			    } else {
+				    
+				    ClaimName.setText(claim.getuserName());
+					ClaimTitle.setText(claim.getClaimName());
+					StartDateYear.setText(claim.getStartDate().getYYYY());
+					StartDateMonth.setText(claim.getStartDate().getMM());
+					StartDateDay.setText(claim.getStartDate().getDD());
+					EndDateYear.setText(claim.getEndDate().getYYYY());
+					EndDateYear.setText(claim.getEndDate().getMM());
+					EndDateYear.setText(claim.getEndDate().getDD());
+					Description.setText(claim.getDescription());
+					DestinationListview(myListView,Destination);
+				    
+			    }
+	    
+	    myListView.setOnItemClickListener(onListClick);
 	    
 	    
 	    Button done = (Button) findViewById(R.id.buttonCreateClaim);
@@ -102,14 +143,16 @@ public class EditClaimActivity extends Activity {
 			
 			@Override
 			public void onClick(View v) {
-			    if (isNewClaim == true){
-			    	Claim newclaim = new Claim("");
-			    	newClaimcreate(newclaim);
-			    } else {
-				    UUID serialisedId = (UUID) intent.getSerializableExtra("claimUUID");
-				    final Claim claim = ClaimController.getInstance(EditClaimActivity.this).getClaimList().getClaim(serialisedId);
-				    editExistingclaim(claim);
-			    }
+				
+				if (isNewClaim == true){
+					editclaim(newclaim);
+					newclaimlist.addClaim(EditClaimActivity.this, newclaim);
+					newclaim.setDestination(EditClaimActivity.this, Destination);
+				} else{
+					editclaim(claim);
+					claim.setDestination(EditClaimActivity.this, Destination);
+				}
+			    
 			    Toast.makeText(EditClaimActivity.this, "Updating", Toast.LENGTH_SHORT). show();
 				
 				// launch CreateNewClaimActivity.
@@ -130,30 +173,62 @@ public class EditClaimActivity extends Activity {
 		    	startActivity(intent);
 			}
 		});
-	    
-
-	    
-		
 	}
 	
+	@Override
+	public void onStop(){
+		super.onStop();
+		finish();
+	}
 	
-	private void editExistingclaim(final Claim claim) {
+	private AdapterView.OnItemClickListener onListClick = new AdapterView.OnItemClickListener() {
+
+		@Override
+		public void onItemClick(AdapterView<?> parent, View view, final int position,
+				long id) {
+			// TODO Auto-generated method stub
+			// http://www.androiddom.com/2011/06/displaying-android-pop-up-dialog_13.html 	2015-03-11
+			AlertDialog.Builder helperBuilder = new AlertDialog.Builder(EditClaimActivity.this);
+			
+			helperBuilder.setPositiveButton("Edit", new DialogInterface.OnClickListener(){
+				public void onClick(DialogInterface dialog, int which){
+					createDestinationButton(false, Destination,editDestination,position);
+				}
+			});
+			
+			helperBuilder.setNeutralButton("cancel", new DialogInterface.OnClickListener() {
+
+				  @Override
+				  public void onClick(DialogInterface dialog, int which) {
+				   // Do nothing
+				  }
+				 });
+			
+			helperBuilder.setNegativeButton("Delete", new DialogInterface.OnClickListener(){
+			
+				@Override
+				public void onClick(DialogInterface dialog, int which){
+					String toRemove = adapter2.getItem(position);
+					adapter2.remove(toRemove);
+					adapter2.notifyDataSetChanged();
+				}
+			});
+			AlertDialog helpDialog = helperBuilder.create();
+			helpDialog.show();
+		}
+	};
+	
+	private void editclaim(final Claim claim) {
 		// TODO Auto-generated method stub
 		
-		ClaimName.setText(claim.getuserName());
-		ClaimTitle.setText(claim.getClaimName());
-		StartDateYear.setText(claim.getStartDate().getYYYY());
-		StartDateMonth.setText(claim.getStartDate().getMM());
-		StartDateDay.setText(claim.getStartDate().getDD());
-		EndDateYear.setText(claim.getEndDate().getYYYY());
-		EndDateYear.setText(claim.getEndDate().getMM());
-		EndDateYear.setText(claim.getEndDate().getDD());
-		Description.setText(claim.getDescription());
 		
 		String claimUser = ClaimName.getText().toString();
 		String Claim_title = ClaimTitle.getText().toString();
 		
 		String SDateY = StartDateYear.getText().toString();
+		if (ParseHelper.isIntegerParsable(SDateY)){
+			
+		}
 		int mySDateY = Integer.parseInt(SDateY);
 		
 		String SDateM = StartDateMonth.getText().toString();
@@ -170,8 +245,8 @@ public class EditClaimActivity extends Activity {
 		
 		String EDateD = EndDateDay.getText().toString();
 		int myEDateD = Integer.parseInt(EDateD);
-		
 		String Descrip = Description.getText().toString();
+		
 		
 		
 		claim.setuserName(this, claimUser);
@@ -188,52 +263,9 @@ public class EditClaimActivity extends Activity {
 	}
 
 
-	private void newClaimcreate(Claim newclaim) {
-		// TODO Auto-generated method stub
-		/* create a new claim object and use the controller 
-		to get access to the claimList and add the new claim to claimList.*/
-		final ClaimList claimlist = ClaimController.getInstance(this).getClaimList();
-		
-		
-		String claimUser = ClaimName.getText().toString();
-		String Claim_title = ClaimTitle.getText().toString();
-		
-		String SDateY = StartDateYear.getText().toString();
-		int mySDateY = Integer.parseInt(SDateY);
-		
-		String SDateM = StartDateMonth.getText().toString();
-		int mySDateM = Integer.parseInt(SDateM);
-		
-		String SDateD = StartDateDay.getText().toString();
-		int mySDateD = Integer.parseInt(SDateD);
-		
-		String EDateY = EndDateYear.getText().toString();
-		int myEDateY = Integer.parseInt(EDateY);
-		
-		String EDateM = EndDateMonth.getText().toString();
-		int myEDateM = Integer.parseInt(EDateM);
-		
-		String EDateD = EndDateDay.getText().toString();
-		int myEDateD = Integer.parseInt(EDateD);
-		
-		String Descrip = Description.getText().toString();
-		
-		newclaim.setuserName(this, claimUser);
-		newclaim.setClaimName(this, Claim_title);
-		
-		Date d1 = new Date(mySDateY, mySDateM, mySDateD);
-		Date d2 = new Date(myEDateY, myEDateM, myEDateD);
-		
-		newclaim.setStartDate(this, d1);
-		newclaim.setEndDate(this, d2);
-		newclaim.setDescription(this, Descrip);
-		
-		
-		claimlist.addClaim(this, newclaim);
-	}
 
 
-	private void createDestinationButton() {
+	private void createDestinationButton( final boolean isNewClaim, final ArrayList<String[]> destination2, final int i,final int position) {
 		// TODO Auto-generated method stub
 		// http://www.androiddom.com/2011/06/displaying-android-pop-up-dialog_13.html 	2015-03-11
 		AlertDialog.Builder helperBuilder = new AlertDialog.Builder(this);
@@ -247,32 +279,92 @@ public class EditClaimActivity extends Activity {
         DesName = (EditText) popupview.findViewById(R.id.inputDestination);
         DesRea = (EditText) popupview.findViewById(R.id.inputDestinationReason);
         
-		helperBuilder.setPositiveButton("Done", new DialogInterface.OnClickListener() {
+				
+				
+		switch(i){
+				
+		case 1:
+			helperBuilder.setPositiveButton("Done", new DialogInterface.OnClickListener() {
+				
+				public void onClick(DialogInterface dialog, int which) {
 					
-			public void onClick(DialogInterface dialog, int which) {
+					String Des_Name = DesName.getText().toString();
+					String Des_Rea = DesRea.getText().toString();
+					addDummyDestination(EditClaimActivity.this, Des_Name, Des_Rea);
+				}
+			});
+			
+			helperBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
 				
-				String Des_Name = DesName.getText().toString();
-				String Des_Rea = DesRea.getText().toString();
-				//   claim.addDestination(EditClaimActivity.this, Des_Name, Des_Rea);
-				
-						
-			}
-		});
-				
-		helperBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int which) {
+						// TODO Auto-generated method stub
+							
+				}
+			});
 					
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-					// TODO Auto-generated method stub
-						
-			}
-		});
+			AlertDialog helperDialog = helperBuilder.create();
+			helperDialog.show();
+			break;
+					
+		case 2:
+			DesName.setText(destination2.get(position)[0]);
+			DesRea.setText(destination2.get(position)[1]);
+			
+			helperBuilder.setPositiveButton("Done", new DialogInterface.OnClickListener() {
 				
-		AlertDialog helpDialog = helperBuilder.create();
-		helpDialog.show();
+				public void onClick(DialogInterface dialog, int which) {
+					String Des_Name2 = DesName.getText().toString();
+					String Des_Rea2 = DesRea.getText().toString();
+					addDummyDestination(EditClaimActivity.this, Des_Name2, Des_Rea2);
+				}
+			});
+			
+			
+			helperBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+				
+				public void onClick(DialogInterface dialog, int which) {
+						// TODO Auto-generated method stub
+							
+				}
+			});
+					
+			AlertDialog helpDialog = helperBuilder.create();
+			helpDialog.show();
+			break;
+		}
 				
 				
 	}
-
-
+	
+	
+	public void addDummyDestination(Context context, String place, String Reason){
+		String[] travelInfo = new String[2];
+		travelInfo[0] = place;
+		travelInfo[1] = Reason;
+		adapter2.add(place + " - " + Reason);
+		
+		adapter2.notifyDataSetChanged();
+		
+		Destination.add(travelInfo);
+	}
+	
+	public void DestinationListview(ListView myListView, ArrayList<String[]> destination){
+		
+		ArrayList<String> destinationArray = destinationReason(destination);
+		adapter2 = new ArrayAdapter<String>(this,  
+		          R.layout.edit_claim_listview, 
+		          destinationArray);
+		myListView.setAdapter(adapter2);
+	}
+	
+	public ArrayList<String> destinationReason(ArrayList<String[]> destination2){
+		final ArrayList<String> destinationreason = new ArrayList<String>();
+		String destination_reason = "";
+		for (int i = 0; i< destination2.size(); i++){
+			destination_reason = destination2.get(i)[0]+ " - " + destination2.get(i)[1];
+			destinationreason.add(destination_reason);
+		}
+		return destinationreason;
+	}
+	
 }
