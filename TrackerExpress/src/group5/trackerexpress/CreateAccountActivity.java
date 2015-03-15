@@ -194,6 +194,8 @@ public class CreateAccountActivity extends AccountFormActivity {
 				System.err.println ("Creating intent good");
 		    	startActivity(intent);
 				System.err.println ("Starting intent good");
+				User user = UserController.getInstance(CreateAccountActivity.this).getUser();
+				user.setSignedIn(true);
 				finish();
 				System.err.println ("Exiting activity good");
 			} else if (success == EMAIL_TAKEN) {

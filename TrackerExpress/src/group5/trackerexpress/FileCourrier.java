@@ -6,10 +6,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.lang.reflect.Type;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 import android.content.Context;
 
@@ -35,30 +33,13 @@ public class FileCourrier<T> {
 		//From joshua2ua in lab 3:
 		System.out.println ("File Input Start");
 		FileInputStream fis = context.openFileInput(fileName);
-		
-		System.out.println ("G1");
 		Gson gson = new Gson();
-		
-		System.out.println ("G2");
-		//Type dataType = new TypeToken<T>() {}.getType();
-
-		//System.out.println ();
-		System.out.println (type.getClass().toString());
-		
-		System.out.println ("G3");
 		InputStreamReader isr = new InputStreamReader(fis);
-		
-		System.out.println ("G4");
 		T file = (T) gson.fromJson(isr, type.getClass());
-		
-		System.out.println ("G5");
 		fis.close();
 		
-
 		System.out.println (file.getClass().getName());
-		System.out.println (file.getClass().toString());
-
-		System.out.println ("- = - = - ULTIMATE GOAL - = - = -");
+		System.out.println ("File Input Done");
 		
 		return file;
 	}
