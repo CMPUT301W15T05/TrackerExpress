@@ -3,6 +3,7 @@ package group5.trackerexpress;
 import java.util.ArrayList;
 import java.util.Locale;
 
+import android.R.array;
 import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.FragmentTransaction;
@@ -261,16 +262,50 @@ public class MainActivity extends FragmentActivity implements
 
 				@Override
 				public void onItemClick(AdapterView<?> a, View v,
-						int position, long arg3) {
+						final int position, long arg3) {
 					// TODO Auto-generated method stub
 					
 					Claim c = (Claim) lv_claim_list.getAdapter().getItem(position);
 					
-					
+					PopupMenu popup = new PopupMenu(getActivity(), v);
+					popup.getMenuInflater().inflate(R.menu.tag_list_popup, popup.getMenu());
 					
 					if ( c.getStatus() == Claim.SUBMITTED || c.getStatus() == Claim.APPROVED ){
 						
 					}
+					
+					// Popup menu item click listener
+					popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+	                    public boolean onMenuItemClick(MenuItem item) {
+                        	Claim c = (Claim) lv_claim_list.getAdapter().getItem(position);
+                        	
+	                        switch(item.getItemId()){
+	                        case R.id.op_delete_claim: 
+	                        	// Delete tag off of Claim ArrayList for listview
+	                        	listOfClaims.deleteClaim(getActivity(), c.getUuid());
+	                        	Claim[] arrayClaims = listOfClaims.getAllClaims();
+	                        	MainClaimListAdapter a = new MainClaimListAdapter( getActivity().getBaseContext(), arrayClaims );
+	                			lv_claim_list.setAdapter(a);
+	                			// Delete it off the model
+	                        	listOfClaims.deleteClaim(getActivity(), c.getUuid());
+	                        	break;
+	                        case R.id.op_edit_claim:
+	                        	
+	                        	break;
+	                        case R.id.op_view_claim:
+	                        	
+	                        	break;
+	                        case R.id.op_submit_claim:
+	                        	
+	                        	break;
+	                        default: break;
+	                        }
+	                    	
+	                        return true;
+	                    }
+	                });
+					
+		            popup.show();					
 				}
 				
 			});
