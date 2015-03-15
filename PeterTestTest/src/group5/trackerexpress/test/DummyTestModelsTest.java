@@ -1,5 +1,6 @@
 package group5.trackerexpress.test;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 import group5.trackerexpress.Claim;
@@ -8,6 +9,7 @@ import group5.trackerexpress.Date;
 import group5.trackerexpress.DummyTestModels;
 import group5.trackerexpress.Expense;
 import group5.trackerexpress.ExpenseList;
+import group5.trackerexpress.ExpenseNotFoundException;
 import group5.trackerexpress.Receipt;
 import group5.trackerexpress.User;
 import android.content.Context;
@@ -33,6 +35,37 @@ public class DummyTestModelsTest extends
 		context = getActivity();
 	}
 
+	
+	/*
+	 * Claim tests
+	 */
+	
+	public void testDestinationReason(){
+		Claim testClaim = new Claim( "Claim1" );
+		ArrayList<String> shouldLookLike = new ArrayList<String>();
+		for( int i = 0; i < 5; i++ ){
+			testClaim.addDestination(context, Integer.toString(i), Integer.toString(i+1));
+			shouldLookLike.add( Integer.toString(i) + " - " + Integer.toString(i+1) );
+		}
+		
+		assertEquals( "Should be equal", shouldLookLike, testClaim.DestinationReason() );
+	}
+	
+	public void testToStringDestinations(){
+		Claim testClaim = new Claim( "Claim1" );
+		for ( int i = 0;  i < 6; i++ ){
+			testClaim.addDestination(context, Integer.toString(i), Integer.toString(i+1));
+		}
+		String shouldLookLike = "0, 1, 2, 3, 4, 5";
+		assertEquals( "Should be equal", shouldLookLike, testClaim.toStringDestinations() );
+		
+		testClaim = new Claim( "Claim1" );
+		testClaim.addDestination(context, "1", "Reason");
+		shouldLookLike = "1";
+		assertEquals( "Should be equal", shouldLookLike, testClaim.toStringDestinations() );
+	}
+	
+	
 	/* 
 	 * ClaimList tests 
 	 * */
@@ -111,5 +144,69 @@ public class DummyTestModelsTest extends
 		assertTrue("Claim '2' is not second", claimList.getAllClaims()[1].getClaimName().equals("2") );
 		assertTrue("Claim '3' is not last", claimList.getAllClaims()[2].getClaimName().equals("3") );
 		
+	}
+	
+	
+	/*
+	 * ExpenseList tests
+	 */
+
+	public void testAddExpenseList() throws ExpenseNotFoundException {
+		ExpenseList expList = new ExpenseList();
+		
+		Expense testExp = new Expense();
+		UUID testUuid = testExp.getUuid();
+		expList.addExpense(testExp);
+		
+		assertTrue("Empty expense list", expList.size()==1);
+		assertTrue("Test expense item not contained", 
+					testExp.equals(expList.getExpense(testUuid)));
+	}	
+	
+	
+	public void testRemoveExpenseList() throws ExpenseNotFoundException {
+		ExpenseList expList = new ExpenseList();
+		Expense testExp = new Expense();
+		UUID testUuid = testExp.getUuid();
+		
+		expList.addExpense(testExp);
+		assertTrue("List size isn't big enough", expList.size()==1);
+		assertTrue("Test expense item is not contained", 
+					testExp.equals(expList.getExpense(testUuid)) );
+		expList.deleteExpense(testExp.getUuid());
+		assertTrue("List size isn't small enough", expList.size()==0);
+		
+		try{
+			testExp.equals(expList.getExpense(testUuid));
+			assertTrue("This should not have happened", false);
+		} catch( IndexOutOfBoundsException e ){
+			assertTrue("This shoould happen", true);			
+		}
+	}
+	
+	// this is a model test for 05.01.01
+	public void testExpenseOrder() {
+		ExpenseList expenseList = new ExpenseList();
+		
+		// Named so they come out in this order
+		Expense e1 = new Expense();
+		e1.setTitle(context, "1");
+		Expense e2 = new Expense();
+		e2.setTitle(context, "2");
+		Expense e3 = new Expense();
+		e3.setTitle(context, "3");
+
+    	
+		expenseList.addExpense(e1);
+		expenseList.addExpense(e2);
+		expenseList.addExpense(e3);
+
+		assertTrue("Item '1' is not first",  
+					expenseList.getExpenseList().get(0).getTitle().equals(e1.getTitle()) );
+		assertTrue("Item '2' is not second", 
+					expenseList.getExpenseList().get(1).getTitle().equals(e2.getTitle()) );
+		assertTrue("Item '3' is not last", 
+					expenseList.getExpenseList().get(2).getTitle().equals(e3.getTitle()) );
+
 	}
 }

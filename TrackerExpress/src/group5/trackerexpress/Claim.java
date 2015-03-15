@@ -124,7 +124,6 @@ public class Claim extends TModel implements Comparable<Claim>{
 		for (int i = 0; i< destination.size(); i++){
 			destination_reason = destination.get(i)[0]+ " - " + destination.get(i)[1];
 			destinationreason.add(destination_reason);
-			destination_reason = "";
 		}
 		return destinationreason;
 	}
@@ -136,7 +135,7 @@ public class Claim extends TModel implements Comparable<Claim>{
 			str_destinations += destination.get(i)[0] + ", ";
 		}
 		
-		str_destinations += destination.get(destination.size() - 1);
+		str_destinations += destination.get(destination.size() - 1)[0];
 		return str_destinations;
 	}
 	
