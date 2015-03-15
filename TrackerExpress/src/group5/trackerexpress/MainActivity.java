@@ -3,7 +3,6 @@ package group5.trackerexpress;
 import java.util.ArrayList;
 import java.util.Locale;
 
-import android.R.array;
 import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.FragmentTransaction;
@@ -22,12 +21,10 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -183,33 +180,6 @@ public class MainActivity extends FragmentActivity implements
 		}
 	}
 
-	/**
-	 * A dummy fragment representing a section of the app, but that simply
-	 * displays dummy text.
-	 */
-	public static class DummySectionFragment extends Fragment {
-		/**
-		 * The fragment argument representing the section number for this
-		 * fragment.
-		 */
-		public static final String ARG_SECTION_NUMBER = "section_number";
-
-		public DummySectionFragment() {
-		}
-
-		@Override
-		public View onCreateView(LayoutInflater inflater, ViewGroup container,
-				Bundle savedInstanceState) {
-			View rootView = inflater.inflate(R.layout.fragment_main_dummy,
-					container, false);
-			TextView dummyTextView = (TextView) rootView
-					.findViewById(R.id.section_label);
-			dummyTextView.setText(Integer.toString(getArguments().getInt(
-					ARG_SECTION_NUMBER)));
-			return rootView;
-		}
-	}
-
 	public static class FragmentMyClaims extends Fragment {
 		/**
 		 * The fragment argument representing the section number for this
@@ -239,7 +209,6 @@ public class MainActivity extends FragmentActivity implements
 			lv_claim_list.setItemsCanFocus(true);
 			b_add_claim = (Button) rootView.findViewById(R.id.b_add_claim);
 			
-			
 			final ClaimList listOfClaims = ClaimController.getInstance(getActivity()).getClaimList();
 			final Claim[] arrayClaims = listOfClaims.getAllClaims();
 			
@@ -265,38 +234,45 @@ public class MainActivity extends FragmentActivity implements
 						final int position, long arg3) {
 					// TODO Auto-generated method stub
 					
-					Claim c = (Claim) lv_claim_list.getAdapter().getItem(position);
+					final Claim c = (Claim) lv_claim_list.getAdapter().getItem(position);
 					
 					PopupMenu popup = new PopupMenu(getActivity(), v);
 					popup.getMenuInflater().inflate(R.menu.tag_list_popup, popup.getMenu());
 					
-					if ( c.getStatus() == Claim.SUBMITTED || c.getStatus() == Claim.APPROVED ){
-						
-					}
+					onPrepareOptionsMenu(popup, c);
 					
 					// Popup menu item click listener
 					popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+						
+						@Override
 	                    public boolean onMenuItemClick(MenuItem item) {
-                        	Claim c = (Claim) lv_claim_list.getAdapter().getItem(position);
-                        	
+                        	Claim claimAnalyzed = (Claim) lv_claim_list.getAdapter().getItem(position);
+                        	Intent intent;
 	                        switch(item.getItemId()){
 	                        case R.id.op_delete_claim: 
 	                        	// Delete tag off of Claim ArrayList for listview
-	                        	listOfClaims.deleteClaim(getActivity(), c.getUuid());
+	                        	listOfClaims.deleteClaim(getActivity(), claimAnalyzed.getUuid());
 	                        	Claim[] arrayClaims = listOfClaims.getAllClaims();
 	                        	MainClaimListAdapter a = new MainClaimListAdapter( getActivity().getBaseContext(), arrayClaims );
 	                			lv_claim_list.setAdapter(a);
 	                			// Delete it off the model
-	                        	listOfClaims.deleteClaim(getActivity(), c.getUuid());
+	                        	listOfClaims.deleteClaim(getActivity(), claimAnalyzed.getUuid());
 	                        	break;
 	                        case R.id.op_edit_claim:
-	                        	
+	                        	intent = new Intent( getActivity(), EditClaimActivity.class );
+	                        	intent.putExtra( "isNewClaim", false );
+	                        	intent.putExtra("claimUUID", c.getUuid());
+	                        	startActivity(intent);
 	                        	break;
 	                        case R.id.op_view_claim:
-	                        	
+	                        	intent = new Intent( getActivity(), ViewClaimActivity.class );
+	                        	intent.putExtra( "claimUUID",  c.getUuid() );
+	                        	startActivity(intent);
 	                        	break;
 	                        case R.id.op_submit_claim:
-	                        	
+	                        	// TODO:
+	                        	// Submit the claim to server
+	                        	// using controller
 	                        	break;
 	                        default: break;
 	                        }
@@ -311,6 +287,19 @@ public class MainActivity extends FragmentActivity implements
 			});
 			
 			return rootView;
+		}
+		
+		public void onPrepareOptionsMenu( PopupMenu popup, Claim c ){
+			switch(c.getStatus()){
+			case Claim.APPROVED:
+			case Claim.SUBMITTED:
+				for( int id : submittedOrApprovedHiddenItems ){
+					popup.getMenu().findItem(id).setVisible(false);
+				}
+				break;
+			default:
+				break;
+			}
 		}
 	}
 
