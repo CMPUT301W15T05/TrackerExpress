@@ -44,6 +44,10 @@
             android:windowSoftInputMode="adjustResize|stateVisible" >
         </activity>
         
+        <activity
+            android:name=".DummyTestModels" >
+        </activity>
+        
     </application>
 
     <!-- To auto-complete the email text field in the login form with the user's emails -->
