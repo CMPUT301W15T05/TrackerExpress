@@ -32,7 +32,7 @@ public class TagMap extends TModel{
 		TagMap tagMap;
 		try {
 			tagMap = new FileCourrier<TagMap>(this).loadFile(context, FILENAME);
-			if (tagMap.tags == null) {
+			if (tagMap == null || tagMap.tags == null) {
 				System.err.println ("TAGMAP ALSO NULL ALSO NULL");
 				this.tags = new HashMap<UUID, Tag>();
 			} else {
