@@ -20,6 +20,14 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="@string/promote_claim_title" />
+
+    <EditText
+        android:id="@+id/editClaimDescription"
+        android:layout_width="match_parent"
+        android:layout_height="80sp"
+        android:ems="10"
+        android:hint="@string/promote_description"
+        android:inputType="textMultiLine" />
     
     <TextView
             android:id="@+id/textViewClaimStartDate"
@@ -126,15 +134,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="end"
         android:text="@string/action_select_tag" />
-
-    <EditText
-        android:id="@+id/editClaimDescription"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.04"
-        android:ems="10"
-        android:hint="@string/promote_description"
-        android:inputType="textMultiLine" />
 
     <LinearLayout
         android:layout_width="match_parent"
