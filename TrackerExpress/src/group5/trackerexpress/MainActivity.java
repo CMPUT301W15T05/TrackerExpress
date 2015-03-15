@@ -237,7 +237,7 @@ public class MainActivity extends FragmentActivity implements
 					final Claim c = (Claim) lv_claim_list.getAdapter().getItem(position);
 					
 					PopupMenu popup = new PopupMenu(getActivity(), v);
-					popup.getMenuInflater().inflate(R.menu.tag_list_popup, popup.getMenu());
+					popup.getMenuInflater().inflate(R.menu.my_claims_popup, popup.getMenu());
 					
 					onPrepareOptionsMenu(popup, c);
 					
@@ -262,6 +262,7 @@ public class MainActivity extends FragmentActivity implements
 	                        	intent = new Intent( getActivity(), EditClaimActivity.class );
 	                        	intent.putExtra( "isNewClaim", false );
 	                        	intent.putExtra("claimUUID", c.getUuid());
+	                        	Log.i("myMessage", "hi");
 	                        	startActivity(intent);
 	                        	break;
 	                        case R.id.op_view_claim:

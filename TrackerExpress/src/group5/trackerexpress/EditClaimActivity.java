@@ -121,16 +121,19 @@ public class EditClaimActivity extends Activity {
 			    	
 			    	
 			    } else {
-				    
+			    	Destination = claim.getDestination();
 				    ClaimName.setText(claim.getuserName());
 					ClaimTitle.setText(claim.getClaimName());
-					StartDateYear.setText(claim.getStartDate().getYYYY());
-					StartDateMonth.setText(claim.getStartDate().getMM());
-					StartDateDay.setText(claim.getStartDate().getDD());
-					EndDateYear.setText(claim.getEndDate().getYYYY());
-					EndDateYear.setText(claim.getEndDate().getMM());
-					EndDateYear.setText(claim.getEndDate().getDD());
-					Description.setText(claim.getDescription());
+					
+					StartDateYear.setText(String.valueOf(claim.getStartDate().getYYYY()));
+					StartDateMonth.setText(String.valueOf(claim.getStartDate().getMM()));
+					StartDateDay.setText(String.valueOf(claim.getStartDate().getDD()));
+					
+					EndDateYear.setText(String.valueOf(claim.getEndDate().getYYYY()));
+					EndDateMonth.setText(String.valueOf(claim.getEndDate().getMM()));
+					EndDateDay.setText(String.valueOf(claim.getEndDate().getDD()));
+					
+					Description.setText(String.valueOf(claim.getDescription()));
 					DestinationListview(myListView,Destination);
 				    
 			    }
@@ -283,14 +286,14 @@ public class EditClaimActivity extends Activity {
 				
 		switch(i){
 				
-		case 1:
+		case newDestination:
 			helperBuilder.setPositiveButton("Done", new DialogInterface.OnClickListener() {
 				
 				public void onClick(DialogInterface dialog, int which) {
 					
 					String Des_Name = DesName.getText().toString();
 					String Des_Rea = DesRea.getText().toString();
-					addDummyDestination(EditClaimActivity.this, Des_Name, Des_Rea);
+					editDummyDestination(EditClaimActivity.this, Des_Name, Des_Rea, doNothing, null, newDestination);
 				}
 			});
 			
@@ -306,16 +309,17 @@ public class EditClaimActivity extends Activity {
 			helperDialog.show();
 			break;
 					
-		case 2:
+		case editDestination:
 			DesName.setText(destination2.get(position)[0]);
 			DesRea.setText(destination2.get(position)[1]);
+			final String oldDestination = destination2.get(position)[0]+" - "+destination2.get(position)[1];
 			
 			helperBuilder.setPositiveButton("Done", new DialogInterface.OnClickListener() {
 				
 				public void onClick(DialogInterface dialog, int which) {
 					String Des_Name2 = DesName.getText().toString();
 					String Des_Rea2 = DesRea.getText().toString();
-					addDummyDestination(EditClaimActivity.this, Des_Name2, Des_Rea2);
+					editDummyDestination(EditClaimActivity.this, Des_Name2, Des_Rea2, position, oldDestination,editDestination);
 				}
 			});
 			
@@ -335,17 +339,22 @@ public class EditClaimActivity extends Activity {
 				
 				
 	}
-	
-	
-	public void addDummyDestination(Context context, String place, String Reason){
+	public void editDummyDestination(Context context, String place, String Reason, int position, String oldDestination, int i){
 		String[] travelInfo = new String[2];
 		travelInfo[0] = place;
-		travelInfo[1] = Reason;
-		adapter2.add(place + " - " + Reason);
-		
-		adapter2.notifyDataSetChanged();
-		
-		Destination.add(travelInfo);
+		travelInfo[1] = Reason; 
+		switch(i){
+		case newDestination:
+			adapter2.add(place + " - " + Reason);
+			adapter2.notifyDataSetChanged();
+			Destination.add(travelInfo);
+			break;
+		case editDestination:
+			adapter2.insert(place+ " - " + Reason, position);
+			adapter2.remove(oldDestination);
+			Destination.set(position,travelInfo);
+			adapter2.notifyDataSetChanged();
+		}	
 	}
 	
 	public void DestinationListview(ListView myListView, ArrayList<String[]> destination){
