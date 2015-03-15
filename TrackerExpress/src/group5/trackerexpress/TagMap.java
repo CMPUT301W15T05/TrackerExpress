@@ -4,7 +4,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.UUID;
 
 import android.content.Context;
@@ -63,6 +65,7 @@ public class TagMap extends TModel{
 
 	public void addTag(Context context, Tag tag) {
 		tags.put(tag.getUuid(), tag);
+		tag.addViews(this.views);
 		notifyViews(context);
 	}
 
@@ -78,5 +81,12 @@ public class TagMap extends TModel{
 	public ArrayList<Tag> getTags() {
 		return new ArrayList<Tag>(tags.values());
 	}
-
+	
+	@Override
+	public void addView(TView view){
+		Iterator<Entry<UUID, Tag>> it = tags.entrySet().iterator();
+		while (it.hasNext()) {
+			it.next().getValue().addView(view);
+		}
+	}
 }

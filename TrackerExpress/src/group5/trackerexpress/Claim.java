@@ -21,7 +21,6 @@ public class Claim extends TModel implements Comparable<Claim>{
 	public static final int RETURNED = 2;
 	public static final int APPROVED = 3;
 	
-	
 	private UUID uuid = UUID.randomUUID();
     
 	

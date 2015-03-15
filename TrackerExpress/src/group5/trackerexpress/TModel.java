@@ -6,7 +6,7 @@ import java.util.List;
 import android.content.Context;
 
 public class TModel {
-    private List<TView> views;
+    protected List<TView> views;
 
     public TModel() {
         views = new ArrayList<TView>();
@@ -17,11 +17,17 @@ public class TModel {
             views.add(view);
         }
     }
+    
+    public void addViews(List<TView> views){
+    	for (TView view : views){
+    		addView(view);
+    	}
+    }
 
     public void deleteView(TView view) {
         views.remove(view);
     }
-
+    
     public void notifyViews(Context context) {
 		System.out.println ("Notifying views within notifyViews");
 		System.out.println ("Starting view looping");

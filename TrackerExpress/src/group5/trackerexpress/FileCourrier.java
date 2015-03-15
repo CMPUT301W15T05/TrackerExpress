@@ -55,8 +55,8 @@ public class FileCourrier<T> {
 		fis.close();
 		
 
-		System.out.println (file.getClass().getName());
-		System.out.println (file.getClass().toString());
+		//System.out.println (file.getClass().getName());
+		//System.out.println (file.getClass().toString());
 
 		System.out.println ("- = - = - ULTIMATE GOAL - = - = -");
 		

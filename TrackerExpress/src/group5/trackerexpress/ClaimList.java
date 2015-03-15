@@ -31,6 +31,7 @@ public class ClaimList extends TModel{
 
 	public void addClaim(Context context, Claim claim) {
 		claims.put(claim.getUuid(), claim);
+		claim.addViews(this.views);
 		notifyViews(context);
 	}
 
