@@ -118,16 +118,7 @@ public class Claim extends TModel implements Comparable<Claim>{
 		notifyViews(context);
 	}
 	
-	public ArrayList<String> DestinationReason(){
-		final ArrayList<String> destinationreason = new ArrayList<String>();
-		String destination_reason = "";
-		for (int i = 0; i< destination.size(); i++){
-			destination_reason = destination.get(i)[0]+ " - " + destination.get(i)[1];
-			destinationreason.add(destination_reason);
-			destination_reason = "";
-		}
-		return destinationreason;
-	}
+	
 	
 	public String toStringDestinations(){
 		// Get the destinations in a list format
