@@ -1,6 +1,7 @@
 package group5.trackerexpress;
 
 import java.io.File;
+import java.util.UUID;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -28,6 +29,9 @@ public class EditExpenseActivity extends Activity {
 	private EditText description, amount;
 	private Uri receiptUri;
 	
+	final Intent intent = this.getIntent();
+	UUID serialisedId = (UUID) intent.getSerializableExtra("claimUUID");
+	final Claim claim = ClaimController.getInstance(EditExpenseActivity.this).getClaimList().getClaim(serialisedId);
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
