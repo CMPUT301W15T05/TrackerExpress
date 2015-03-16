@@ -29,7 +29,6 @@ import android.widget.PopupMenu;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemLongClickListener;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class EditClaimActivity.
  */
@@ -321,9 +320,14 @@ public class EditClaimActivity extends Activity {
 						editclaim(newclaim);
 						newclaimlist.addClaim(EditClaimActivity.this, newclaim);
 						newclaim.setDestination(EditClaimActivity.this, Destination);
+						checkCompleteness(newclaim);
+						
+						
 					} else{
 						editclaim(claim);
 						claim.setDestination(EditClaimActivity.this, Destination);
+						checkCompleteness(claim);
+						
 					}
 					
 					/**
@@ -376,6 +380,18 @@ public class EditClaimActivity extends Activity {
 	public void onStop(){
 		super.onStop();
 		finish();
+	}
+	
+	
+	/** check if the claim is completed*/
+	private void checkCompleteness(Claim claim){
+		if (ClaimName.getText().toString().length() > 0 && ClaimTitle.getText().toString().length() > 0 &&
+				Description.getText().toString().length() > 0 && claim.getStartDate() != null && claim.getEndDate() != null
+				&& claim.getDestination().size() >= 1){
+			claim.setIncomplete(this, false);
+		}else {
+			claim.setIncomplete(this, true);
+		}
 	}
 	
 	/**
