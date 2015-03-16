@@ -7,7 +7,7 @@
     <uses-sdk
         android:minSdkVersion="17"
         android:targetSdkVersion="17" />
-    
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
@@ -22,7 +22,6 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            
         </activity>
         
         <activity
@@ -36,8 +35,7 @@
             android:label="@string/title_activity_create_account" >
         </activity>
         
-        <activity
-            android:name=".EditClaimActivity" >
+        <activity android:name=".EditClaimActivity" >
         </activity>
         
         <activity
@@ -46,9 +44,9 @@
         </activity>
         
         <activity
-            android:name=".DummyTestModels" >
-        </activity>
-        
+            android:name=".ClaimInfoActivity"
+            android:label="@string/title_activity_claim_info" >
+        </activity>        
     </application>
 
     <!-- To auto-complete the email text field in the login form with the user's emails -->

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="title_activity_claim_info">Claim Info</string>
+	<string name="title_section1_claim_info">Claim</string>
+	<string name="title_section2_claim_expenses">Expenses</string>
+</resources>

@@ -9,6 +9,7 @@ public class User extends TModel{
 	private String email;
 	private String password;
 	private String name;
+	private boolean SIGNED_IN; // true if the user was signed in
 	
 	private static final String FILENAME = "user.sav";
 	
@@ -71,6 +72,14 @@ public class User extends TModel{
 		} catch (Exception e) {
 			System.out.println (e.getClass().toString());
 		}
+	}
+	
+	public void setSignedIn(boolean signedIn) {
+		this.SIGNED_IN = signedIn;
+	}
+	
+	public boolean isSignedIn() {
+		return SIGNED_IN;
 	}
 
 }

@@ -42,10 +42,10 @@ public class LoginActivity extends AccountFormActivity {//implements LoaderCallb
 	/**
 	 * Constants for sign-in result.
 	 */
-	public static final int NEEDS_ACCOUNT = 0;
-	public static final int SIGN_IN_SUCCESS = 1;
-	public static final int WRONG_PASSWORD = 2;
-	public static final int NETWORK_ERROR = 3;
+	private static final int NEEDS_ACCOUNT = 0;
+	private static final int SIGN_IN_SUCCESS = 1;
+	private static final int WRONG_PASSWORD = 2;
+	private static final int NETWORK_ERROR = 3;
 	
 	/**
 	 * Keep track of the login task to ensure we can cancel it if requested.
@@ -58,6 +58,13 @@ public class LoginActivity extends AccountFormActivity {//implements LoaderCallb
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		User user = UserController.getInstance(this).getUser();
+		if (user.isSignedIn()) {
+			Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+	    	startActivity(intent);
+			finish();
+		}
+		
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
 
@@ -249,6 +256,8 @@ public class LoginActivity extends AccountFormActivity {//implements LoaderCallb
 			if (success == SIGN_IN_SUCCESS) {
 				Intent intent = new Intent(LoginActivity.this, MainActivity.class);
 		    	startActivity(intent);
+				User user = UserController.getInstance(LoginActivity.this).getUser();
+				user.setSignedIn(true);
 				finish();
 			} else if (success == WRONG_PASSWORD) {
 				showProgress(false);
