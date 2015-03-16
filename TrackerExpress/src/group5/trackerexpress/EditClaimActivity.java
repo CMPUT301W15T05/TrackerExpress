@@ -33,6 +33,7 @@ public class EditClaimActivity extends Activity {
 	private EditText Description; 
 	private EditText DesName;
 	private EditText DesRea;
+	private EditText TagName;
 	
 	private Boolean CheckCorrectness;
 
@@ -81,12 +82,14 @@ public class EditClaimActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				
-				// display message "Creating new claim".
-				Toast.makeText(EditClaimActivity.this, "Loading", Toast.LENGTH_SHORT). show();
 				
-				// launch CreateNewClaimActivity.
-				Intent intent = new Intent(EditClaimActivity.this, SelectTag_claim_Activity.class);
-		    	startActivity(intent);
+				if (isNewClaim == true){
+					//createTagButton(isNewClaim,Destination,newDestination,doNothing);
+				} else {
+					Destination = claim.getDestination();
+					//createTagButton(isNewClaim, Destination,newDestination,doNothing);
+				}
+				
 			}
 		});
 	    
@@ -216,7 +219,7 @@ public class EditClaimActivity extends Activity {
 				}
 			});
 			
-			helperBuilder.setNeutralButton("cancel", new DialogInterface.OnClickListener() {
+			helperBuilder.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
 
 				  @Override
 				  public void onClick(DialogInterface dialog, int which) {
@@ -230,6 +233,7 @@ public class EditClaimActivity extends Activity {
 				public void onClick(DialogInterface dialog, int which){
 					String toRemove = adapter2.getItem(position);
 					adapter2.remove(toRemove);
+					Destination.remove(position);
 					adapter2.notifyDataSetChanged();
 				}
 			});
@@ -403,13 +407,71 @@ public class EditClaimActivity extends Activity {
 	}
 	
 	
-	public void usercorrectness(String string){
+/*	public void createTagButton(boolean isNewClaim, ArrayList<Tag> destination2, int newDestination2,int doNothing2){
+		AlertDialog.Builder helperBuilder = new AlertDialog.Builder(this);
+		helperBuilder.setCancelable(false);
+		helperBuilder.setTitle("Tags");
 		
-		if (string == null){
+		LayoutInflater inflater = getLayoutInflater();
+        View popupview = inflater.inflate(R.layout.activity_popup_select_tags, null);
+        helperBuilder.setView(popupview);
+        
+        TagName = (EditText) popupview.findViewById(R.id.EditTextAddTags);
+        
+		switch(i){
+				
+		case newDestination:
+			helperBuilder.setPositiveButton("Done", new DialogInterface.OnClickListener() {
+				
+				public void onClick(DialogInterface dialog, int which) {
+					
+					String Des_Name = DesName.getText().toString();
+					String Des_Rea = DesRea.getText().toString();
+					editDummyDestination(EditClaimActivity.this, Des_Name, Des_Rea, doNothing, null, newDestination);
+				}
+			});
 			
+			helperBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+				
+				public void onClick(DialogInterface dialog, int which) {
+						// TODO Auto-generated method stub
+							
+				}
+			});
+					
+			AlertDialog helperDialog = helperBuilder.create();
+			helperDialog.show();
+			break;
+					
+		case editDestination:
+			DesName.setText(destination2.get(position)[0]);
+			DesRea.setText(destination2.get(position)[1]);
+			final String oldDestination = destination2.get(position)[0]+" - "+destination2.get(position)[1];
+			
+			helperBuilder.setPositiveButton("Done", new DialogInterface.OnClickListener() {
+				
+				public void onClick(DialogInterface dialog, int which) {
+					String Des_Name2 = DesName.getText().toString();
+					String Des_Rea2 = DesRea.getText().toString();
+					editDummyDestination(EditClaimActivity.this, Des_Name2, Des_Rea2, position, oldDestination,editDestination);
+				}
+			});
+			
+			
+			helperBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+				
+				public void onClick(DialogInterface dialog, int which) {
+						// TODO Auto-generated method stub
+							
+				}
+			});
+					
+			AlertDialog helpDialog = helperBuilder.create();
+			helpDialog.show();
+			break;
 		}
 		
 	}
-	
+	*/
 	
 }
