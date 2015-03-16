@@ -38,6 +38,9 @@
         <activity android:name=".EditClaimActivity" >
         </activity>
         
+        <activity android:name=".EditExpenseActivity" >
+        </activity>
+        
         <activity
             android:name=".SelectTagEditClaimActivity"
             android:windowSoftInputMode="adjustResize|stateVisible" >

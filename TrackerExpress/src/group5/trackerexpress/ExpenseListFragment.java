@@ -1,11 +1,21 @@
 package group5.trackerexpress;
 
+import java.util.ArrayList;
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ListView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Button;
+import android.widget.AdapterView.OnItemClickListener;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -15,6 +25,12 @@ public class ExpenseListFragment extends Fragment implements TView {
 
 	/** The claim. */
 	private Claim claim;
+
+	private ListView lv_expense_list;
+	
+	private ExpenseListAdapter adapter;
+	
+	private Button b_add_expense;
 	
 	/**
 	 * Instantiates a new expense list fragment.
@@ -37,7 +53,32 @@ public class ExpenseListFragment extends Fragment implements TView {
 		
 		TextView title = (TextView) rootView.findViewById(R.id.tv_expense_list_title);
 		
+		// Fragment's views
+		lv_expense_list = (ListView) rootView.findViewById(R.id.lv_my_expenses);
+		lv_expense_list.setItemsCanFocus(true);
+		
+		b_add_expense = (Button) rootView.findViewById(R.id.b_add_expense);
+		
+		final ExpenseList listOfExpenses = claim.getExpenseList();
+		ArrayList<Expense> arrayListExpense = listOfExpenses.getExpenseList();
+		
+		adapter = new ExpenseListAdapter(getActivity(), arrayListExpense);
+		lv_expense_list.setAdapter(adapter);
+		
+		b_add_expense.setOnClickListener(new Button.OnClickListener(){
 
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				//Expense exp = new Expense();
+				//listOfExpenses.addExpense(exp);
+				//claim.setExpenseList(getActivity(), listOfExpenses);
+				//Intent intent = new Intent( getActivity(), EditExpenseActivity.class );
+				//intent.putExtra("claimUUID", claim.getUuid());
+				//startActivity(intent);
+			}
+			
+		});
 		
 		return rootView;
 	}
