@@ -446,17 +446,20 @@ public class EditClaimActivity extends Activity {
 		    	}
 		    	
 		    	
-		    	if (input.getText() == null){
-//		    		.setError( "Name is required!" );
+/*		    	if (input.getText() == null){
+		    		.setError( "Name is required!" );
 		    	}
+		    	
+*/
 		    	value = null;
 	        }
 	    }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-	        /* (non-Javadoc)
+	    	
+	        /** 
 	         * @see android.content.DialogInterface.OnClickListener#onClick(android.content.DialogInterface, int)
 	         */
 	        public void onClick(DialogInterface dialog, int whichButton) {
-	            // Do nothing.
+	            /** Do nothing */
 	        }
 	    }).show();
 		
@@ -478,7 +481,7 @@ public class EditClaimActivity extends Activity {
 			AlertDialog.Builder helperBuilder = new AlertDialog.Builder(EditClaimActivity.this);
 			
 			helperBuilder.setPositiveButton("Edit", new DialogInterface.OnClickListener(){
-				/**
+				/** When edit button is pressed, opens the destination popup
 				 * @see android.content.DialogInterface.OnClickListener#onClick(android.content.DialogInterface, int)
 				 */
 				public void onClick(DialogInterface dialog, int which){
@@ -499,7 +502,7 @@ public class EditClaimActivity extends Activity {
 			
 			helperBuilder.setNegativeButton("Delete", new DialogInterface.OnClickListener(){
 			
-				/**
+				/** When the delete button is pressed, the item in the dummy listview will be deleted and adapter updated
 				 * @see android.content.DialogInterface.OnClickListener#onClick(android.content.DialogInterface, int)
 				 */
 				@Override
@@ -539,7 +542,7 @@ public class EditClaimActivity extends Activity {
 		
 		String Descrip = Description.getText().toString();
 		
-		// A check if date is parseable (preventing app from crashing)
+		/** A check if date is parseable (preventing app from crashing) */
 		if (ParseHelper.isIntegerParsable(EDateD) && 
 			ParseHelper.isIntegerParsable(EDateM) && 
 			ParseHelper.isIntegerParsable(EDateY)){
@@ -587,8 +590,10 @@ public class EditClaimActivity extends Activity {
 	 * 2d destination array.
 	 */
 	private void createDestinationButton( final boolean isNewClaim, final ArrayList<String[]> destination2, final int i,final int position) {
-		// TODO Auto-generated method stub
-		// http://www.androiddom.com/2011/06/displaying-android-pop-up-dialog_13.html 	2015-03-11
+
+		/**
+		 *  http://www.androiddom.com/2011/06/displaying-android-pop-up-dialog_13.html 	2015-03-11
+		 */
 		AlertDialog.Builder helperBuilder = new AlertDialog.Builder(this);
 		helperBuilder.setCancelable(false);
 		helperBuilder.setTitle("Destinations");
@@ -600,11 +605,11 @@ public class EditClaimActivity extends Activity {
         DesRea = (EditText) popupview.findViewById(R.id.inputDestinationReason);
         		
 		switch(i){	
-		// for creating new destination
+		/** for creating new destination */
 		case newDestination:
 			helperBuilder.setPositiveButton("Done", new DialogInterface.OnClickListener() {
 				
-				/* (non-Javadoc)
+				/** Once done, add destination into dummy destination
 				 * @see android.content.DialogInterface.OnClickListener#onClick(android.content.DialogInterface, int)
 				 */
 				public void onClick(DialogInterface dialog, int which) {
@@ -617,11 +622,10 @@ public class EditClaimActivity extends Activity {
 			
 			helperBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
 				
-				/* (non-Javadoc)
+				/** Return to EditClaimActivity doing nothing
 				 * @see android.content.DialogInterface.OnClickListener#onClick(android.content.DialogInterface, int)
 				 */
 				public void onClick(DialogInterface dialog, int which) {
-						// TODO Auto-generated method stub
 							
 				}
 			});
@@ -630,7 +634,7 @@ public class EditClaimActivity extends Activity {
 			helperDialog.show();
 			break;
 			
-		// for editing a existing destination
+		/** for editing a existing destination */ 
 		case editDestination:
 			DesName.setText(destination2.get(position)[0]);
 			DesRea.setText(destination2.get(position)[1]);
@@ -638,7 +642,7 @@ public class EditClaimActivity extends Activity {
 			
 			helperBuilder.setPositiveButton("Done", new DialogInterface.OnClickListener() {
 				
-				/* (non-Javadoc)
+				/** update destination dummy list
 				 * @see android.content.DialogInterface.OnClickListener#onClick(android.content.DialogInterface, int)
 				 */
 				public void onClick(DialogInterface dialog, int which) {
@@ -651,11 +655,10 @@ public class EditClaimActivity extends Activity {
 			
 			helperBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
 				
-				/* (non-Javadoc)
+				/** Do nothing and return
 				 * @see android.content.DialogInterface.OnClickListener#onClick(android.content.DialogInterface, int)
 				 */
 				public void onClick(DialogInterface dialog, int which) {
-						// TODO Auto-generated method stub
 							
 				}
 			});
@@ -753,21 +756,21 @@ public class EditClaimActivity extends Activity {
 		helperBuilder.setMessage("Are you sure you want to exit before saving?");
 		helperBuilder.setPositiveButton("Proceed", new DialogInterface.OnClickListener(){
 			
-			/* (non-Javadoc)
+			/** make Cancel button clickable
 			 * @see android.content.DialogInterface.OnClickListener#onClick(android.content.DialogInterface, int)
 			 */
 			public void onClick(DialogInterface dialog, int which){
 								
 				Toast.makeText(EditClaimActivity.this, "Canceling", Toast.LENGTH_SHORT). show();
 								
-				// launch CreateNewClaimActivity.
+				/** launch MainActivity */
 				onStop();
 				}
 			});
 						
 		helperBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener(){
 						
-			/* (non-Javadoc)
+			/** Do Nothing, return to EditClaimActivity
 			 * @see android.content.DialogInterface.OnClickListener#onClick(android.content.DialogInterface, int)
 			 */
 			@Override
