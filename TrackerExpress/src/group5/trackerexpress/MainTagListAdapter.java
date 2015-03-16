@@ -32,7 +32,7 @@ public class MainTagListAdapter extends ArrayAdapter<Tag> {
 	/**
 	 * Instantiates a new main tag list adapter.
 	 *
-	 * @param context the context
+	 * @param context Needed for file IO
 	 * @param tags the tags
 	 */
 	public MainTagListAdapter(Context context, ArrayList<Tag> tags){

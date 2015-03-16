@@ -66,7 +66,7 @@ public class Expense extends TModel{
 	/**
 	 * Sets the status.
 	 *
-	 * @param context the context
+	 * @param context Needed for file IO
 	 * @param status the status
 	 */
 	public void setStatus(Context context, int status) {
@@ -86,7 +86,7 @@ public class Expense extends TModel{
 	/**
 	 * Sets the title.
 	 *
-	 * @param context the context
+	 * @param context Needed for file IO
 	 * @param title the title
 	 */
 	public void setTitle(Context context, String title) {
@@ -107,7 +107,7 @@ public class Expense extends TModel{
 	/**
 	 * Sets the date.
 	 *
-	 * @param context the context
+	 * @param context Needed for file IO
 	 * @param d1 the Date
 	 */
 	public void setDate(Context context, Date d1) {
@@ -137,7 +137,7 @@ public class Expense extends TModel{
 	/**
 	 * Sets the currency.
 	 *
-	 * @param context the context
+	 * @param context Needed for file IO
 	 * @param currency the currency
 	 */
 	public void setCurrency(Context context, String currency) {
@@ -157,7 +157,7 @@ public class Expense extends TModel{
 	/**
 	 * Sets the amount.
 	 *
-	 * @param context the context
+	 * @param context Needed for file IO
 	 * @param amount the amount
 	 */
 	public void setAmount(Context context, Double amount) {

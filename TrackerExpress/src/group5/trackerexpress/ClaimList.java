@@ -26,7 +26,7 @@ public class ClaimList extends TModel{
 	/**
 	 * Instantiates a new claim list.
 	 *
-	 * @param context the context
+	 * @param context Needed for file IO
 	 */
 	public ClaimList(Context context) {
 		claims = new HashMap<UUID, Claim>();
@@ -46,7 +46,7 @@ public class ClaimList extends TModel{
 	/**
 	 * Clears the map between claims and id
 	 *
-	 * @param context the context
+	 * @param context Needed for file IO
 	 */
 	public void clear(Context context){
 		claims.clear();
@@ -65,7 +65,7 @@ public class ClaimList extends TModel{
 	/**
 	 * Adds the claim to the claims map.
 	 *
-	 * @param context the context
+	 * @param context Needed for file IO
 	 * @param claim the claim to be added
 	 */
 	public void addClaim(Context context, Claim claim) {
@@ -78,7 +78,7 @@ public class ClaimList extends TModel{
 	/**
 	 * Delete claim from claims map.
 	 *
-	 * @param context the context
+	 * @param context Needed for file IO
 	 * @param id the id of the claim to be deleted
 	 */
 	public void deleteClaim(Context context, UUID id) {
@@ -109,7 +109,7 @@ public class ClaimList extends TModel{
 	/**
 	 * Save data in FILENAME using FileCourrier.
 	 *
-	 * @param context the context
+	 * @param context Needed for file IO
 	 */
 	public void saveData(Context context) {
 		try {
@@ -123,7 +123,7 @@ public class ClaimList extends TModel{
 	/**
 	 * Load data from FILENAME using FileCourrier into claims.
 	 *
-	 * @param context the context
+	 * @param context Needed for file IO
 	 */
 	public void loadData(Context context) {
 		try {

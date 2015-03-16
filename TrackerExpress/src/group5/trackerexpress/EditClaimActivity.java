@@ -687,7 +687,7 @@ public class EditClaimActivity extends Activity {
 	/**
 	 * Edits the dummy destination.
 	 *
-	 * @param context the context
+	 * @param context Needed for file IO
 	 * @param place the place
 	 * @param Reason the reason
 	 * @param position the position

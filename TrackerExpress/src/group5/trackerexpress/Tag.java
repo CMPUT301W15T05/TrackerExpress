@@ -45,7 +45,7 @@ public class Tag extends TModel {
 	/**
 	 * Rename.
 	 *
-	 * @param context the context
+	 * @param context Needed for file IO
 	 * @param newName the new name
 	 */
 	public void rename(Context context, String newName) {
@@ -73,7 +73,7 @@ public class Tag extends TModel {
 	/**
 	 * Sets the selected.
 	 *
-	 * @param context the context
+	 * @param context Needed for file IO
 	 * @param selected the selected
 	 */
 	public void setSelected(Context context, boolean selected) {

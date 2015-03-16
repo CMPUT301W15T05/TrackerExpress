@@ -29,7 +29,7 @@ public class MainClaimListAdapter extends ArrayAdapter<Claim> {
 	/**
 	 * Instantiates a new main claim list adapter.
 	 *
-	 * @param context the context
+	 * @param context Needed for file IO
 	 * @param claims the claims
 	 */
 	public MainClaimListAdapter(Context context, Claim[] claims){

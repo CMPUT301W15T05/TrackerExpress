@@ -3,11 +3,11 @@ package group5.trackerexpress;
 
 import android.content.Context;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class TagController.
+ * Singleton that provides access to Tags.
  * @author Peter Crinklaw, Randy Hu, Parash Rahman, Jesse Emery, Sean Baergen, Rishi Barnwal
  * @version Part 4
+ * @see Tag
  */
 public class TagController implements TController {
 
@@ -21,7 +21,7 @@ public class TagController implements TController {
 	/**
 	 * Instantiates a new tag controller.
 	 *
-	 * @param context the context
+	 * @param context Needed for file IO
 	 */
 	private TagController(Context context){
 		tags = new TagMap(context);
@@ -31,7 +31,7 @@ public class TagController implements TController {
 	/**
 	 * Gets the single instance of TagController.
 	 *
-	 * @param context the context
+	 * @param context Needed for file IO
 	 * @return single instance of TagController
 	 */
 	public static TagController getInstance(Context context){

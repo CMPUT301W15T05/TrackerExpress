@@ -13,7 +13,8 @@ import android.content.Context;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Class TagMap.
+ * The Class TagMap. Holds all the tags of the system, and handles file IO,
+ * loading the TagMap upon construction.
  * @author Peter Crinklaw, Randy Hu, Parash Rahman, Jesse Emery, Sean Baergen, Rishi Barnwal
  * @version Part 4
  */
@@ -24,16 +25,11 @@ public class TagMap extends TModel{
 	
 	/** The tags. */
 	private Map<UUID, Tag> tags;
-	
-	/*
-	 * Constructor.
-	 * 
-	 * 
-	 */
+
 	/**
 	 * Instantiates a new tag map.
 	 *
-	 * @param context the context
+	 * @param context Needed for file IO
 	 */
 	public TagMap(Context context){
 		super();
@@ -44,7 +40,7 @@ public class TagMap extends TModel{
 	/**
 	 * Save data.
 	 *
-	 * @param context the context
+	 * @param context Needed for file IO
 	 */
 	public void saveData(Context context) {
 		try {
@@ -58,7 +54,7 @@ public class TagMap extends TModel{
 	/**
 	 * Load data.
 	 *
-	 * @param context the context
+	 * @param context Needed for file IO
 	 */
 	public void loadData(Context context) {
 		try {
@@ -88,7 +84,7 @@ public class TagMap extends TModel{
 	/**
 	 * Clear.
 	 *
-	 * @param context the context
+	 * @param context Needed for file IO
 	 */
 	public void clear(Context context){
 		tags.clear();
@@ -107,7 +103,7 @@ public class TagMap extends TModel{
 	/**
 	 * Adds the tag.
 	 *
-	 * @param context the context
+	 * @param context Needed for file IO
 	 * @param tag the tag
 	 */
 	public void addTag(Context context, Tag tag) {
@@ -120,7 +116,7 @@ public class TagMap extends TModel{
 	/**
 	 * Delete tag.
 	 *
-	 * @param context the context
+	 * @param context Needed for file IO
 	 * @param id the id
 	 */
 	public void deleteTag(Context context, UUID id) {

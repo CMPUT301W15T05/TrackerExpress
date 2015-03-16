@@ -2,9 +2,9 @@ package group5.trackerexpress;
 
 import android.content.Context;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class ClaimController.
+ * Singleton that manages the ClaimList
+ * 
  * @author Peter Crinklaw, Randy Hu, Parash Rahman, Jesse Emery, Sean Baergen, Rishi Barnwal
  * @version Part 4
  */
@@ -19,7 +19,7 @@ public class ClaimController implements TController {
 	/**
 	 * Instantiates a new claim controller.
 	 *
-	 * @param context the context
+	 * @param context Needed for file IO
 	 */
 	private ClaimController(Context context){
 		this.claims = new ClaimList(context);
@@ -28,7 +28,7 @@ public class ClaimController implements TController {
 	/**
 	 * Gets the single instance of ClaimController.
 	 *
-	 * @param context the context
+	 * @param context Needed for file IO
 	 * @return single instance of ClaimController
 	 */
 	public static ClaimController getInstance(Context context){

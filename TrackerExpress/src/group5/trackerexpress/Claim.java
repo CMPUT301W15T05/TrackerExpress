@@ -87,7 +87,7 @@ public class Claim extends TModel implements Comparable<Claim>{
 	/**
 	 * Sets the incomplete.
 	 *
-	 * @param context the context
+	 * @param context Needed for file IO
 	 * @param incomplete the incompleteness indicator
 	 */
 	public void setIncomplete(Context context, boolean incomplete) {
@@ -107,7 +107,7 @@ public class Claim extends TModel implements Comparable<Claim>{
 	/**
 	 * Sets the uuid.
 	 *
-	 * @param context the context
+	 * @param context Needed for file IO
 	 * @param uuid the uuid
 	 */
 	public void setUuid(Context context, UUID uuid) {
@@ -127,7 +127,7 @@ public class Claim extends TModel implements Comparable<Claim>{
 	/**
 	 * Set User name.
 	 *
-	 * @param context the context
+	 * @param context Needed for file IO
 	 * @param userName the user name
 	 */
 	public void setuserName(Context context, String userName){
@@ -147,7 +147,7 @@ public class Claim extends TModel implements Comparable<Claim>{
 	/**
 	 * Sets the claim name.
 	 *
-	 * @param context the context
+	 * @param context Needed for file IO
 	 * @param claimName the claim name
 	 */
 	public void setClaimName(Context context, String claimName) {
@@ -159,7 +159,7 @@ public class Claim extends TModel implements Comparable<Claim>{
 	/**
 	 * Adds the expense to the expenseList.
 	 *
-	 * @param context the context
+	 * @param context Needed for file IO
 	 * @param expense the expense
 	 */
 	public void addExpense(Context context, Expense expense) {
@@ -181,7 +181,7 @@ public class Claim extends TModel implements Comparable<Claim>{
 	/**
 	 * Sets the expense list.
 	 *
-	 * @param context the context
+	 * @param context Needed for file IO
 	 * @param expenseList the expense list
 	 */
 	public void setExpenseList(Context context, ExpenseList expenseList) {
@@ -193,7 +193,7 @@ public class Claim extends TModel implements Comparable<Claim>{
 	/**
 	 * Removes the expense from the expenseList.
 	 *
-	 * @param context the context
+	 * @param context Needed for file IO
 	 * @param expenseUuid the expense uuid
 	 */
 	public void removeExpense(Context context, UUID expenseUuid) {
@@ -207,7 +207,7 @@ public class Claim extends TModel implements Comparable<Claim>{
 	/**
 	 * Sets the start date.
 	 *
-	 * @param context the context
+	 * @param context Needed for file IO
 	 * @param d1 the date to use as the start date
 	 */
 	public void setStartDate(Context context, Date d1) {
@@ -228,7 +228,7 @@ public class Claim extends TModel implements Comparable<Claim>{
 	/**
 	 * Sets the end date.
 	 *
-	 * @param context the context
+	 * @param context Needed for file IO
 	 * @param d2 the date to use as the end date
 	 */
 	public void setEndDate(Context context, Date d2){
@@ -248,7 +248,7 @@ public class Claim extends TModel implements Comparable<Claim>{
 	/**
 	 * Adds the destination.
 	 *
-	 * @param context the context
+	 * @param context Needed for file IO
 	 * @param place the location of destination
 	 * @param Reason the reason for travel to destination
 	 */
@@ -264,7 +264,7 @@ public class Claim extends TModel implements Comparable<Claim>{
 	/**
 	 * Sets the destination.
 	 *
-	 * @param context the context
+	 * @param context Needed for file IO
 	 * @param destination the destination
 	 */
 	public void setDestination(Context context, ArrayList<String[]> destination) {
@@ -300,7 +300,7 @@ public class Claim extends TModel implements Comparable<Claim>{
 	/**
 	 * Sets the description.
 	 *
-	 * @param context the context
+	 * @param context Needed for file IO
 	 * @param Description the description
 	 */
 	public void setDescription(Context context, String Description){
@@ -321,7 +321,7 @@ public class Claim extends TModel implements Comparable<Claim>{
 	/**
 	 * Sets the status.
 	 *
-	 * @param context the context
+	 * @param context Needed for file IO
 	 * @param status the status
 	 */
 	public void setStatus(Context context, int status) {

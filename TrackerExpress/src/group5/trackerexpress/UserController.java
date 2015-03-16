@@ -3,11 +3,11 @@ package group5.trackerexpress;
 
 import android.content.Context;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class UserController.
+ * Singleton that provides access to User model.
  * @author Peter Crinklaw, Randy Hu, Parash Rahman, Jesse Emery, Sean Baergen, Rishi Barnwal
  * @version Part 4
+ * @see User
  */
 public class UserController implements TController {
 
@@ -21,7 +21,7 @@ public class UserController implements TController {
 	/**
 	 * Instantiates a new user controller.
 	 *
-	 * @param context the context
+	 * @param context Needed for file IO
 	 */
 	private UserController(Context context) {
 		System.out.println ("Making user");
@@ -33,7 +33,7 @@ public class UserController implements TController {
 	/**
 	 * Gets the single instance of UserController.
 	 *
-	 * @param context the context
+	 * @param context Needed for file IO
 	 * @return single instance of UserController
 	 */
 	public static UserController getInstance(Context context){
