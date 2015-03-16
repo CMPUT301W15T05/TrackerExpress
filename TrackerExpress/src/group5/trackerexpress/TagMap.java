@@ -155,4 +155,19 @@ public class TagMap extends TModel{
 			it.next().getValue().addView(view);
 		}
 	}
+
+	/**
+	 * @param string
+	 * @return
+	 * @throws IllegalAccessException 
+	 */
+	public Tag searchForTagByString(String string) throws IllegalAccessException {
+		Iterator<Entry<UUID, Tag>> it = tags.entrySet().iterator();
+		while (it.hasNext()){
+			Tag tag = it.next().getValue();
+			if (tag.toString().equals(string))
+				return tag;
+		}
+		throw new IllegalAccessException("Tried to search for a tag that does not exist.");
+	}
 }

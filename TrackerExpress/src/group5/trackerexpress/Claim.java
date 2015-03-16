@@ -38,8 +38,10 @@ public class Claim extends TModel implements Comparable<Claim>{
 	/** The incomplete indicator. */
 	private boolean incomplete;
 	
+
 	/** The ArrayList of tagIds.*/
-	private ArrayList<UUID> tagsIds;
+	private ArrayList<UUID> tagIds;
+
     
 	/** The Constant IN_PROGRESS. */
 	public static final int IN_PROGRESS = 0;
@@ -67,6 +69,7 @@ public class Claim extends TModel implements Comparable<Claim>{
 		this.claimName = claimName;
 		this.expenseList = new ExpenseList();
 		this.status = IN_PROGRESS;
+		this.tagIds = new ArrayList<UUID>();
 	}
 	
 	/**
@@ -352,7 +355,7 @@ public class Claim extends TModel implements Comparable<Claim>{
 	 */
 	
 	public ArrayList<UUID> getTagsIds() {
-		return tagsIds;
+		return tagIds;
 	}
 
 	/**
@@ -361,7 +364,7 @@ public class Claim extends TModel implements Comparable<Claim>{
 	 * @param tagsIds the list of tagIds
 	 */
 	public void setTagsIds(ArrayList<UUID> tagsIds) {
-		this.tagsIds = tagsIds;
+		this.tagIds = tagsIds;
 	}
 	
 }

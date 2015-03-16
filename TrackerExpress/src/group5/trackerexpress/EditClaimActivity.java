@@ -417,7 +417,18 @@ public class EditClaimActivity extends Activity {
 	        public void onClick(DialogInterface dialog, int whichButton) {       		
 	        	value = input.getText();
 		    	if ( input.getText() != null ){
-		    		Tag newTag = new Tag(input.getText().toString());
+		    		//Tag newTag = new Tag(input.getText().toString());
+		    		Tag newTag;
+					try {
+						newTag = TagController.getInstance(getBaseContext()).getTagMap().
+								searchForTagByString(input.getText().toString());
+						tagsOfClaim.add(newTag);
+			    		updateTagListView(new ArrayList<Tag>(tagsOfClaim));
+					} catch (IllegalAccessException e) {
+			    		Toast.makeText(getApplicationContext(), "Tag does not exist.", Toast.LENGTH_SHORT).show();
+			    		value = null;
+			    		return;
+					}
 		    		boolean notInSet = true;
 		    		for ( Tag t : tagsOfClaim ){
 		    			if ( t.toString().equals(newTag.toString()) ){
@@ -427,7 +438,6 @@ public class EditClaimActivity extends Activity {
 		    		if ( notInSet ){
 		    			tagsOfClaim.add(newTag);
 		    		}
-		    		
 		    		updateTagListView(new ArrayList<Tag>(tagsOfClaim));
 		    	}
 		    	
@@ -551,6 +561,10 @@ public class EditClaimActivity extends Activity {
 		claim.setStartDate(this, d1);
 		claim.setEndDate(this, d2);
 		claim.setDescription(this, Descrip);
+		
+		for (Tag tag: tagsOfClaim)
+			claim.getTagsIds().add(tag.getUuid());
+
 		
 		ClaimController.getInstance(this).getClaimList().addClaim(this, claim);		
 	}
