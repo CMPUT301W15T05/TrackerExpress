@@ -36,8 +36,9 @@ public class Claim extends TModel implements Comparable<Claim>{
 		return incomplete;
 	}
 
-	public void setIncomplete(boolean incomplete) {
+	public void setIncomplete(Context context, boolean incomplete) {
 		this.incomplete = incomplete;
+		notifyViews(context);
 	}
 
 	public UUID getUuid() {

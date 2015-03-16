@@ -6,6 +6,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.lang.reflect.Type;
+import java.util.Map;
+import java.util.UUID;
 
 import com.google.gson.Gson;
 
@@ -18,7 +21,7 @@ public class FileCourrier<T> {
 		this.type = type;
 	}
 	
-	public void saveFile(Context context, String fileName, T file) throws IOException, NullPointerException {
+	public void saveFile(Context context, String fileName, T file) throws IOException {
 
 		FileOutputStream fos = context.openFileOutput(fileName, 0);
 		Gson gson = new Gson();
@@ -28,24 +31,19 @@ public class FileCourrier<T> {
 		fos.close();
 	}
 	
-	public T loadFile(Context context, String fileName) throws IOException, FileNotFoundException, NullPointerException {		
+	public T loadFile(Context context, String fileName) throws IOException, FileNotFoundException {		
 
 		//From joshua2ua in lab 3:
-		System.out.println ("File Input Start");
 		FileInputStream fis = context.openFileInput(fileName);
 		Gson gson = new Gson();
 		InputStreamReader isr = new InputStreamReader(fis);
-		T file = (T) gson.fromJson(isr, type.getClass());
+		
+		Object fileUncasted = gson.fromJson(isr, type.getClass());
 		fis.close();
 		
-		System.out.println (file.getClass().getName());
-		System.out.println ("File Input Done");
-
-		//System.out.println (file.getClass().getName());
-		//System.out.println (file.getClass().toString());
-
-		System.out.println ("- = - = - ULTIMATE GOAL - = - = -");
-		
-		return file;
+		if (fileUncasted == null || !fileUncasted.getClass().equals(type.getClass()))
+			throw new FileNotFoundException();
+				
+		return (T) fileUncasted;
 	}
 }
