@@ -15,10 +15,10 @@ import android.content.Context;
  */
 public class ClaimList extends TModel{
 	
-	/** The claims. */
+	/** Map between a claim and its id. */
 	private Map<UUID, Claim> claims;
 	
-	/** The Constant FILENAME. */
+	/** The Constant FILENAME for saving locally. */
 	private static final String FILENAME = "claims.sav";
 	
 	/**
@@ -34,7 +34,7 @@ public class ClaimList extends TModel{
 	/**
 	 * Gets the claim.
 	 *
-	 * @param id the id
+	 * @param id the claim id
 	 * @return the claim
 	 */
 	public Claim getClaim(UUID id){
@@ -42,7 +42,7 @@ public class ClaimList extends TModel{
 	}
 
 	/**
-	 * Clear.
+	 * Clears the map between claims and id
 	 *
 	 * @param context the context
 	 */
@@ -52,19 +52,19 @@ public class ClaimList extends TModel{
 	}
 
 	/**
-	 * Checks if is empty.
+	 * Checks if the claim map is empty.
 	 *
-	 * @return true, if is empty
+	 * @return true, if it is empty
 	 */
 	public boolean isEmpty() {
 		return claims.isEmpty();
 	}
 
 	/**
-	 * Adds the claim.
+	 * Adds the claim to the claims map.
 	 *
 	 * @param context the context
-	 * @param claim the claim
+	 * @param claim the claim to be added
 	 */
 	public void addClaim(Context context, Claim claim) {
 		claims.put(claim.getUuid(), claim);
@@ -74,10 +74,10 @@ public class ClaimList extends TModel{
 	}
 
 	/**
-	 * Delete claim.
+	 * Delete claim from claims map.
 	 *
 	 * @param context the context
-	 * @param id the id
+	 * @param id the id of the claim to be deleted
 	 */
 	public void deleteClaim(Context context, UUID id) {
 		claims.remove(id);
@@ -85,18 +85,18 @@ public class ClaimList extends TModel{
 	}
 
 	/**
-	 * Size.
+	 * Gets size of claim map.
 	 *
-	 * @return the int
+	 * @return the size of the claim map
 	 */
 	public int size() {
 		return claims.size();
 	}
 
 	/**
-	 * Gets the all claims.
+	 * Gets all claims in an array of Claims.
 	 *
-	 * @return the all claims
+	 * @return claimArray an array of Claims
 	 */
 	public Claim[] getAllClaims() {
 		Claim[] claimArray = claims.values().toArray(new Claim[0]);
@@ -105,7 +105,7 @@ public class ClaimList extends TModel{
 	}
 	
 	/**
-	 * Save data.
+	 * Save data in FILENAME using FileCourrier.
 	 *
 	 * @param context the context
 	 */
@@ -119,7 +119,7 @@ public class ClaimList extends TModel{
 	}
 
 	/**
-	 * Load data.
+	 * Load data from FILENAME using FileCourrier into claims.
 	 *
 	 * @param context the context
 	 */
