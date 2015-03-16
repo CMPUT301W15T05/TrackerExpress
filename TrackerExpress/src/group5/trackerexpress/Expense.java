@@ -3,6 +3,7 @@ package group5.trackerexpress;
 import java.util.UUID;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -13,9 +14,6 @@ public class Expense extends TModel{
 	/** The title. */
 	private String title;
 	
-	/** The status. */
-	private int status; 
-	
 	/** The date. */
 	private Date date;
 	
@@ -25,8 +23,17 @@ public class Expense extends TModel{
 	/** The currency. */
 	private String currency;
 	
+	/** The category. */
+	private String category;
+	
 	/** The amount. */
 	private Double amount;
+	
+	/** The image. */
+	private Bitmap bitmap;
+
+	/** The status. */
+	private int status; 
 	
 	/**
 	 * Instantiates a new expense.
@@ -153,6 +160,26 @@ public class Expense extends TModel{
 	 */
 	public void setAmount(Context context, Double amount) {
 		this.amount = amount;
+		notifyViews(context);
+	}
+	
+	public String getCategory() {
+		return category;
+	}
+
+	public void setCategory(Context context, String category){
+		// TODO Auto-generated method stub
+		this.category = category;
+		notifyViews(context);
+		
+	}
+	
+	public Bitmap getBitmap(){
+		return bitmap;
+	}
+	
+	public void setBitmap(Context context, Bitmap bitmap){
+		this.bitmap = bitmap;
 		notifyViews(context);
 	}
 	

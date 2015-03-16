@@ -33,6 +33,10 @@ import android.widget.AdapterView.OnItemLongClickListener;
 /**
  * The Class EditClaimActivity.
  */
+/**
+ * @author RandyHu
+ *
+ */
 public class EditClaimActivity extends Activity {
 	
 
@@ -146,6 +150,9 @@ public class EditClaimActivity extends Activity {
 		Button b_add_tag = (Button) findViewById(R.id.buttonEditTags);
 		
 		b_add_tag.setOnClickListener(new Button.OnClickListener(){
+		    /* (non-Javadoc)
+		     * @see android.view.View.OnClickListener#onClick(android.view.View)
+		     */
 		    public void onClick(View v) {
 		    	
 		    	getAndSetTag();
@@ -154,6 +161,9 @@ public class EditClaimActivity extends Activity {
 		
 		// Tag List Item click listener
 		tagListView.setOnItemClickListener( new OnItemClickListener() {
+        	/* (non-Javadoc)
+        	 * @see android.widget.AdapterView.OnItemClickListener#onItemClick(android.widget.AdapterView, android.view.View, int, long)
+        	 */
         	@Override
 			public void onItemClick(AdapterView<?> parent,
 					View view, final int position, long id) {
@@ -163,6 +173,7 @@ public class EditClaimActivity extends Activity {
 				
 				// Popup menu item click listener
 				popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+					
                     public boolean onMenuItemClick(MenuItem item) {
                     	Tag t = (Tag) tagListView.getAdapter().getItem(position);
                     	
@@ -204,6 +215,9 @@ public class EditClaimActivity extends Activity {
 		Button editDestinationButton = (Button) findViewById(R.id.buttonAddDestination);
 		
 		editDestinationButton.setOnClickListener(new View.OnClickListener() {	
+			/* (non-Javadoc)
+			 * @see android.view.View.OnClickListener#onClick(android.view.View)
+			 */
 			@Override
 			public void onClick(View v) {
 				/* check if the user pressed create new claim or edit existing claim button from MainActivity.*/
@@ -264,6 +278,9 @@ public class EditClaimActivity extends Activity {
 		 * edit claim/create claim button is pressed. 
 		 */
 	    done.setOnClickListener(new View.OnClickListener() {	
+			/** (non-Javadoc)
+			 * @see android.view.View.OnClickListener#onClick(android.view.View)
+			 */
 			@Override
 			public void onClick(View v) {
 				
@@ -277,7 +294,7 @@ public class EditClaimActivity extends Activity {
 					}
 				}
 				
-				/* this statement checks if the text fields are valid or not.*/
+				/** this statement checks if the text fields are valid or not and display error message.*/
 				if( ClaimName.getText().toString().length() == 0 || ClaimTitle.getText().toString().length() == 0 ){
 				    if ( ClaimName.getText().toString().length() == 0 ){
 				    	ClaimName.setError( "Name is required!" );
@@ -291,7 +308,8 @@ public class EditClaimActivity extends Activity {
 					ClaimTitle.setError( "Repeated claim name!" );
 			    	ClaimTitle.requestFocus();
 				} else {
-				
+					
+				// Saves user input into claim class.(calling each method)
 					Toast.makeText(EditClaimActivity.this, "Updating", Toast.LENGTH_SHORT). show();
 					
 					if (isNewClaim == true){
@@ -310,13 +328,16 @@ public class EditClaimActivity extends Activity {
 			}
 		});
 	    
-	    /*
+	    /**
 	     * On click for Cancel button. Calls "safe guard" method if user accidently 
 	     * pressed cancel.
 	     */
 	    Button cancel = (Button) findViewById(R.id.button_cancel_edit_claim);
 	    cancel.setOnClickListener(new View.OnClickListener() {
 			
+			/* (non-Javadoc)
+			 * @see android.view.View.OnClickListener#onClick(android.view.View)
+			 */
 			@Override
 			public void onClick(View v) {
 				cancelcheck();
@@ -331,6 +352,9 @@ public class EditClaimActivity extends Activity {
      * On click listener for the back button(soft key). Calls "safe guard" method if user accidently 
      * pressed back button.
      */
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onKeyDown(int, android.view.KeyEvent)
+	 */
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 	    if (keyCode == KeyEvent.KEYCODE_BACK) {
@@ -341,18 +365,19 @@ public class EditClaimActivity extends Activity {
 	}
 	
 	// Destroy this activity when done. 
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onStop()
+	 */
 	@Override
 	public void onStop(){
 		super.onStop();
 		finish();
 	}
 	
-	/* displays a popup autocomplete text view so the user can enter
-	 * a tag name, and then updates the list view
-	 */
 	/**
 	 * Gets the and set tag.
-	 *
+	 * displays a popup autocomplete text view so the user can enter
+	 * a tag name, and then updates the list view
 	 * @return the and set tag
 	 */
 	private void getAndSetTag(){
@@ -370,7 +395,10 @@ public class EditClaimActivity extends Activity {
 		input.setAdapter(adapter);
 		input.setThreshold(1);
 		input.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-			  @Override
+			  /* (non-Javadoc)
+			 * @see android.view.View.OnFocusChangeListener#onFocusChange(android.view.View, boolean)
+			 */
+			@Override
 			  public void onFocusChange(View view, boolean hasFocus) {
 				  if(hasFocus){
 					  input.showDropDown();
@@ -383,6 +411,9 @@ public class EditClaimActivity extends Activity {
 	    .setMessage(message)
 	    .setView(input)
 	    .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+	        /* (non-Javadoc)
+	         * @see android.content.DialogInterface.OnClickListener#onClick(android.content.DialogInterface, int)
+	         */
 	        public void onClick(DialogInterface dialog, int whichButton) {       		
 	        	value = input.getText();
 		    	if ( input.getText() != null ){
@@ -417,6 +448,9 @@ public class EditClaimActivity extends Activity {
 		    	value = null;
 	        }
 	    }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+	        /* (non-Javadoc)
+	         * @see android.content.DialogInterface.OnClickListener#onClick(android.content.DialogInterface, int)
+	         */
 	        public void onClick(DialogInterface dialog, int whichButton) {
 	            // Do nothing.
 	        }
@@ -425,7 +459,7 @@ public class EditClaimActivity extends Activity {
 	}
 
 
-	/*
+	/**
 	 * Make the items in destination ListView clickable and generate 
 	 * a popup box asking user what to do.
 	 */
@@ -439,6 +473,9 @@ public class EditClaimActivity extends Activity {
 			AlertDialog.Builder helperBuilder = new AlertDialog.Builder(EditClaimActivity.this);
 			
 			helperBuilder.setPositiveButton("Edit", new DialogInterface.OnClickListener(){
+				/* (non-Javadoc)
+				 * @see android.content.DialogInterface.OnClickListener#onClick(android.content.DialogInterface, int)
+				 */
 				public void onClick(DialogInterface dialog, int which){
 					createDestinationButton(false, Destination,editDestination,position);
 				}
@@ -446,7 +483,10 @@ public class EditClaimActivity extends Activity {
 			
 			helperBuilder.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
 
-				  @Override
+				  /* (non-Javadoc)
+				 * @see android.content.DialogInterface.OnClickListener#onClick(android.content.DialogInterface, int)
+				 */
+				@Override
 				  public void onClick(DialogInterface dialog, int which) {
 				   // Do nothing
 				  }
@@ -454,6 +494,9 @@ public class EditClaimActivity extends Activity {
 			
 			helperBuilder.setNegativeButton("Delete", new DialogInterface.OnClickListener(){
 			
+				/* (non-Javadoc)
+				 * @see android.content.DialogInterface.OnClickListener#onClick(android.content.DialogInterface, int)
+				 */
 				@Override
 				public void onClick(DialogInterface dialog, int which){
 					String toRemove = adapter2.getItem(position);
@@ -556,6 +599,9 @@ public class EditClaimActivity extends Activity {
 		case newDestination:
 			helperBuilder.setPositiveButton("Done", new DialogInterface.OnClickListener() {
 				
+				/* (non-Javadoc)
+				 * @see android.content.DialogInterface.OnClickListener#onClick(android.content.DialogInterface, int)
+				 */
 				public void onClick(DialogInterface dialog, int which) {
 					
 					String Des_Name = DesName.getText().toString();
@@ -566,6 +612,9 @@ public class EditClaimActivity extends Activity {
 			
 			helperBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
 				
+				/* (non-Javadoc)
+				 * @see android.content.DialogInterface.OnClickListener#onClick(android.content.DialogInterface, int)
+				 */
 				public void onClick(DialogInterface dialog, int which) {
 						// TODO Auto-generated method stub
 							
@@ -584,6 +633,9 @@ public class EditClaimActivity extends Activity {
 			
 			helperBuilder.setPositiveButton("Done", new DialogInterface.OnClickListener() {
 				
+				/* (non-Javadoc)
+				 * @see android.content.DialogInterface.OnClickListener#onClick(android.content.DialogInterface, int)
+				 */
 				public void onClick(DialogInterface dialog, int which) {
 					String Des_Name2 = DesName.getText().toString();
 					String Des_Rea2 = DesRea.getText().toString();
@@ -594,6 +646,9 @@ public class EditClaimActivity extends Activity {
 			
 			helperBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
 				
+				/* (non-Javadoc)
+				 * @see android.content.DialogInterface.OnClickListener#onClick(android.content.DialogInterface, int)
+				 */
 				public void onClick(DialogInterface dialog, int which) {
 						// TODO Auto-generated method stub
 							
@@ -693,6 +748,9 @@ public class EditClaimActivity extends Activity {
 		helperBuilder.setMessage("Are you sure you want to exit before saving?");
 		helperBuilder.setPositiveButton("Proceed", new DialogInterface.OnClickListener(){
 			
+			/* (non-Javadoc)
+			 * @see android.content.DialogInterface.OnClickListener#onClick(android.content.DialogInterface, int)
+			 */
 			public void onClick(DialogInterface dialog, int which){
 								
 				Toast.makeText(EditClaimActivity.this, "Canceling", Toast.LENGTH_SHORT). show();
@@ -704,6 +762,9 @@ public class EditClaimActivity extends Activity {
 						
 		helperBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener(){
 						
+			/* (non-Javadoc)
+			 * @see android.content.DialogInterface.OnClickListener#onClick(android.content.DialogInterface, int)
+			 */
 			@Override
 			public void onClick(DialogInterface dialog, int which){
 								

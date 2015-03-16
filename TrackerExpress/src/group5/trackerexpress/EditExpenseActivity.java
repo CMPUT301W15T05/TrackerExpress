@@ -5,11 +5,13 @@ import java.util.UUID;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.text.Editable;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -38,8 +40,8 @@ public class EditExpenseActivity extends Activity {
 	/** The flag check box. */
 	private CheckBox flagCheckBox;
 	
-	/** The amount. */
-	private EditText description, amount;
+	/** The description, amount and date. */
+	private EditText description, amount, date;
 	
 	/** The receipt uri. */
 	private Uri receiptUri;
@@ -62,6 +64,8 @@ public class EditExpenseActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_edit_expense);
 		
+		final Expense newExpense = new Expense("");
+		
 		OnClickListener picListener = new OnClickListener() {
 			public void onClick(View v) {
 				takeAPhoto();
@@ -72,7 +76,7 @@ public class EditExpenseActivity extends Activity {
 		
 		OnClickListener createListener = new OnClickListener() {
 			public void onClick(View v) {
-	
+				editExpense(newExpense);
 			}
 		};
 		createExpenseButton.setOnClickListener(createListener);
@@ -130,6 +134,7 @@ public class EditExpenseActivity extends Activity {
 		description = (EditText) findViewById(R.id.editDescription);
 		amount = (EditText) findViewById(R.id.editAmount);
 		imgButton = (ImageButton) findViewById(R.id.TakeAPhoto);
+		date = (EditText) findViewById(R.id.editDate);
 		
 		category = (Spinner) findViewById(R.id.categorySpinner);
 		ArrayAdapter<CharSequence> categoryAdapter = ArrayAdapter.createFromResource 
@@ -145,6 +150,27 @@ public class EditExpenseActivity extends Activity {
 		
 		createExpenseButton = (Button) findViewById(R.id.createExpenseButton);
 		flagCheckBox = (CheckBox) findViewById(R.id.incompleteCheckBox);
+		
+		
+	}
+	
+	private void editExpense(final Expense expense) {
+		Date d1 = null;
+		
+		String title = description.getText().toString();
+		expense.setTitle(this, title);
+		
+		Double money = Double.parseDouble(amount.getText().toString());
+		expense.setAmount(this, money);
+		
+		String categorySelection = category.getSelectedItem().toString();
+		expense.setCategory(this, categorySelection);
+		
+		String currencySelection = currency.getSelectedItem().toString();
+		expense.setCurrency(this, currencySelection);
+		
+		String expenseDate = date.getText().toString();
+		expense.setDate(this, d1);
 		
 		
 	}

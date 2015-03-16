@@ -99,6 +99,10 @@ public class Date implements Comparable<Date>{
 		return yyyy;
 	}
 	
+	public String getString() {
+		return dd.toString() + "/" + mm.toString() + "/" + yyyy.toString();
+	}
+	
 	/* (non-Javadoc)
 	 * @see java.lang.Comparable#compareTo(java.lang.Object)
 	 */

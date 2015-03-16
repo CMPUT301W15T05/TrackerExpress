@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- strings for view claim fragment -->
+    <string name="view_claim_name">Name: </string>
+    <string name="view_claim_duration"><b>Duration: </b></string>
+    <string name="view_claim_start_date"><b>Start Date: </b></string>
+    <string name="view_claim_end_date"><b>End Date: </b></string>
+    <string name="view_claim_description"><b>Description:</b></string>
+    <string name="view_claim_destinations"><b>Destinations:</b></string>
+    <string name="view_claim_ammount_spent"><b>Amount Spent:</b></string>
+    <string name="view_claim_tags"><b>Tags:</b></string>
+    	
+</resources>

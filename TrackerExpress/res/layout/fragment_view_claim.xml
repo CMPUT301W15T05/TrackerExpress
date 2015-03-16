@@ -3,13 +3,98 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="132dp"
-        android:text="Test" />
+	<TextView
+	    android:id="@+id/viewClaimTitle"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentEnd="true"
+	    android:layout_alignParentStart="true"
+	    android:layout_alignParentTop="true"
+	    android:layout_marginTop="10dp"
+	    android:gravity="center"
+	    android:textAlignment="center"
+	    android:textAppearance="?android:attr/textAppearanceLarge"
+	    android:textSize="25sp" />
 
+	<View
+	    android:id="@+id/viewClaimFancyLine"
+	    android:layout_width="fill_parent"
+	    android:layout_height="1dp"
+	    android:layout_alignStart="@+id/viewClaimTitle"
+	    android:layout_below="@+id/viewClaimTitle"
+	    android:layout_centerHorizontal="true"
+	    android:layout_marginTop="2dp"
+	    android:layout_marginEnd="20dp"
+	    android:layout_marginStart="20dp"
+	    android:background="@android:color/darker_gray" />
+
+	<ScrollView
+	    android:id="@+id/viewClaimScrollView"
+	    android:layout_width="fill_parent"
+	    android:layout_height="fill_parent"
+	    android:layout_alignStart="@+id/viewClaimFancyLine"
+	    android:layout_below="@+id/viewClaimTitle"
+	    android:layout_marginTop="12dp" >
+
+		<TableLayout
+		    android:id="@+id/viewClaimTableLayout"
+		    android:layout_width="fill_parent"
+		    android:layout_height="wrap_content"
+		    android:stretchColumns="1" >
+
+			<TableRow android:id="@+id/viewClaimNameTable" >
+
+			    <TextView
+			        android:id="@+id/viewClaimNameText"
+			        android:layout_width="wrap_content"
+			        android:layout_height="wrap_content"
+			        android:text="@string/view_claim_name"
+			        android:textSize="20sp" />
+
+			    <TextView
+			        android:id="@+id/viewClaimNameInfo"
+			        android:layout_width="wrap_content"
+			        android:layout_height="wrap_content"
+			        android:gravity="start"
+			        android:textSize="16sp" />
+
+			</TableRow>
+
+			<TableLayout 
+			    android:id="@+id/viewClaimDateTable"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content" >
+
+			</TableLayout>
+
+			<TableLayout
+			    android:id="@+id/viewClaimDescriptionTable"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content" >
+			</TableLayout>
+
+			<TableLayout
+			    android:id="@+id/viewClaimDestinationTable"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content" >
+
+			</TableLayout>
+
+			<TableLayout
+			    android:id="@+id/viewClaimAmountSpentTable"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content" >
+
+			</TableLayout>
+
+			<TableLayout
+			    android:id="@+id/viewClaimTagsTable"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content" >
+
+			</TableLayout>
+
+		</TableLayout>
+	</ScrollView>
+    
 </RelativeLayout>
