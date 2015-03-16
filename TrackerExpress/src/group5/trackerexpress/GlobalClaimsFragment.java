@@ -6,11 +6,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class GlobalClaimsFragment.
+ */
 public class GlobalClaimsFragment extends Fragment implements TView {
 
+	/**
+	 * Instantiates a new global claims fragment.
+	 */
 	public GlobalClaimsFragment() {
 	}
 
+	/* (non-Javadoc)
+	 * @see android.support.v4.app.Fragment#onCreateView(android.view.LayoutInflater, android.view.ViewGroup, android.os.Bundle)
+	 */
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -19,6 +29,9 @@ public class GlobalClaimsFragment extends Fragment implements TView {
 		return rootView;
 	}
 
+	/* (non-Javadoc)
+	 * @see group5.trackerexpress.TView#update(group5.trackerexpress.TModel)
+	 */
 	@Override
 	public void update(TModel model) {
 		// TODO Auto-generated method stub

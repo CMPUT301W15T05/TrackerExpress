@@ -3,30 +3,63 @@ package group5.trackerexpress;
 import java.util.ArrayList;
 import java.util.UUID;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class ExpenseList.
+ */
 public class ExpenseList {
+	
+	/** The expense list. */
 	private ArrayList<Expense> expenseList;
+	
+	/** The expense ids. */
 	private ArrayList<UUID> expenseIds;
 	
+	/**
+	 * Instantiates a new expense list.
+	 */
 	public ExpenseList() {
 		expenseList = new ArrayList<Expense>();
 		expenseIds = new ArrayList<UUID>();
 	}
 	
+	/**
+	 * Gets the expense list.
+	 *
+	 * @return the expense list
+	 */
 	public ArrayList<Expense> getExpenseList() {
 		return expenseList;
 	}
 
+	/**
+	 * Adds the expense.
+	 *
+	 * @param expense the expense
+	 */
 	public void addExpense(Expense expense) {
 		expenseList.add(expense);
 		expenseIds.add(expense.getUuid());
 	}
 	
+	/**
+	 * Gets the expense.
+	 *
+	 * @param expenseId the expense id
+	 * @return the expense
+	 * @throws ExpenseNotFoundException the expense not found exception
+	 */
 	public Expense getExpense(UUID expenseId) throws ExpenseNotFoundException {
 		int index = expenseIds.indexOf(expenseId);
 		
 		return expenseList.get(index);
 	}
 
+	/**
+	 * Delete expense.
+	 *
+	 * @param expenseId the expense id
+	 */
 	public void deleteExpense(UUID expenseId) {
 		int index = expenseIds.indexOf(expenseId);
 		try{
@@ -37,10 +70,20 @@ public class ExpenseList {
 		}
 	}
 
+	/**
+	 * Size.
+	 *
+	 * @return the int
+	 */
 	public int size() {
 		return expenseList.size();
 	}
 	
+	/**
+	 * To string total currencies.
+	 *
+	 * @return the string
+	 */
 	public String toStringTotalCurrencies(){
 		String ret = "";
 		ArrayList<String> currencies = new ArrayList<String>();

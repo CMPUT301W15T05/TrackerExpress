@@ -9,28 +9,62 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class AccountFormActivity.
+ */
 public class AccountFormActivity extends Activity {
 
+	/** The m progress view. */
 	private View mProgressView;
+	
+	/** The m form view. */
 	private View mFormView;
 	
+	/**
+	 * Gets the progress view.
+	 *
+	 * @return the progress view
+	 */
 	protected View getProgressView() {
 		return mProgressView;
 	}
 
+	/**
+	 * Sets the progress view.
+	 *
+	 * @param mProgressView the new progress view
+	 */
 	protected void setProgressView(View mProgressView) {
 		this.mProgressView = mProgressView;
 	}
 
+	/**
+	 * Gets the form view.
+	 *
+	 * @return the form view
+	 */
 	protected View getFormView() {
 		return mFormView;
 	}
 
+	/**
+	 * Sets the form view.
+	 *
+	 * @param mFormView the new form view
+	 */
 	protected void setFormView(View mFormView) {
 		this.mFormView = mFormView;
 	}
 
 	// Check for a valid email address.
+	/**
+	 * Email errors.
+	 *
+	 * @param email the email
+	 * @param mEmailView the m email view
+	 * @return true, if successful
+	 */
 	protected boolean emailErrors(String email, TextView mEmailView) {
 		
 		if (TextUtils.isEmpty(email)) {
@@ -44,6 +78,13 @@ public class AccountFormActivity extends Activity {
 	}
 	
 	// Check for a valid password.
+	/**
+	 * Password errors.
+	 *
+	 * @param password the password
+	 * @param mPasswordView the m password view
+	 * @return true, if successful
+	 */
 	protected boolean passwordErrors(String password, TextView mPasswordView) {
 		
 		if (TextUtils.isEmpty(password)) {
@@ -56,6 +97,12 @@ public class AccountFormActivity extends Activity {
 		return false;
 	}
 	
+	/**
+	 * Checks if is email valid.
+	 *
+	 * @param email the email
+	 * @return true, if is email valid
+	 */
 	protected boolean isEmailValid(String email) {
 		// TODO: Replace this with your own logic
 		boolean valid = true;
@@ -70,11 +117,23 @@ public class AccountFormActivity extends Activity {
 		return valid;
 	}
 
+	/**
+	 * Checks if is password valid.
+	 *
+	 * @param password the password
+	 * @return true, if is password valid
+	 */
 	protected boolean isPasswordValid(String password) {
 		// TODO: Replace this with your own logic
 		return password.length() > 4;
 	}
 	
+	/**
+	 * Sets the error.
+	 *
+	 * @param view the view
+	 * @param errorID the error id
+	 */
 	protected void setError(TextView view, int errorID) {
 		view.setError(getString(errorID));
 		view.requestFocus();
@@ -82,6 +141,8 @@ public class AccountFormActivity extends Activity {
 	
 	/**
 	 * Shows the progress UI and hides the form.
+	 *
+	 * @param show the show
 	 */
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
 	protected void showProgress(final boolean show) {

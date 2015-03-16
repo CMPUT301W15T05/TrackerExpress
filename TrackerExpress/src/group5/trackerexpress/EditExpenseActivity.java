@@ -20,19 +20,42 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class EditExpenseActivity.
+ */
 public class EditExpenseActivity extends Activity {
 	
+	/** The currency. */
 	private Spinner category, currency;
+	
+	/** The img button. */
 	private ImageButton imgButton;
+	
+	/** The create expense button. */
 	private Button createExpenseButton;
+	
+	/** The flag check box. */
 	private CheckBox flagCheckBox;
+	
+	/** The amount. */
 	private EditText description, amount;
+	
+	/** The receipt uri. */
 	private Uri receiptUri;
 	
+	/** The intent. */
 	final Intent intent = this.getIntent();
+	
+	/** The serialised id. */
 	UUID serialisedId = (UUID) intent.getSerializableExtra("claimUUID");
+	
+	/** The claim. */
 	final Claim claim = ClaimController.getInstance(EditExpenseActivity.this).getClaimList().getClaim(serialisedId);
 	
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onCreate(android.os.Bundle)
+	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
@@ -55,8 +78,12 @@ public class EditExpenseActivity extends Activity {
 		createExpenseButton.setOnClickListener(createListener);
 	}
 
+	/** The Constant CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE. */
 	private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
 
+	/**
+	 * Take a photo.
+	 */
 	public void takeAPhoto() {
 		// TODO: Create an intent with the action
 		// MediaStore.ACTION_IMAGE_CAPTURE
@@ -95,6 +122,9 @@ public class EditExpenseActivity extends Activity {
 
 	}
 
+	/**
+	 * Initialize vars.
+	 */
 	private void initializeVars() {
 		// TODO Auto-generated method stub
 		description = (EditText) findViewById(R.id.editDescription);
@@ -119,12 +149,25 @@ public class EditExpenseActivity extends Activity {
 		
 	}
 	
+	/**
+	 * On item selected.
+	 *
+	 * @param parent the parent
+	 * @param view the view
+	 * @param position the position
+	 * @param id the id
+	 */
 	public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         // An item was selected. You can retrieve the selected item using
         // parent.getItemAtPosition(pos)
 		parent.getItemAtPosition(position);
     }
 
+    /**
+     * On nothing selected.
+     *
+     * @param parent the parent
+     */
     public void onNothingSelected(AdapterView<?> parent) {
         // Another interface callback
     }

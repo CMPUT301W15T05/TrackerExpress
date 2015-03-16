@@ -10,12 +10,24 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.util.Log;
 import android.view.Menu;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class MainActivity.
+ */
 public class MainActivity extends ActionBarActivity {
 
+	/** The Constant INDEX_OF_MY_CLAIMS_TAB. */
 	private static final int INDEX_OF_MY_CLAIMS_TAB = 0;
+	
+	/** The Constant INDEX_OF_TAGS_TAB. */
 	private static final int INDEX_OF_TAGS_TAB = 1;
+	
+	/** The Constant INDEX_OF_GLOBAL_CLAIMS_TAB. */
 	private static final int INDEX_OF_GLOBAL_CLAIMS_TAB = 2;
 
+	/* (non-Javadoc)
+	 * @see group5.trackerexpress.ActionBarActivity#onCreate(android.os.Bundle)
+	 */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -29,6 +41,9 @@ public class MainActivity extends ActionBarActivity {
 		setUpActionBar(mSectionsPagerAdapter, R.id.pager_activity_main);
 	}
 
+	/* (non-Javadoc)
+	 * @see group5.trackerexpress.ActionBarActivity#onCreateOptionsMenu(android.view.Menu)
+	 */
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
@@ -43,10 +58,18 @@ public class MainActivity extends ActionBarActivity {
 	 */
 	private class MainPagerAdapter extends SectionsPagerAdapter {
 
+		/**
+		 * Instantiates a new main pager adapter.
+		 *
+		 * @param fm the fm
+		 */
 		public MainPagerAdapter(FragmentManager fm) {
 			super(fm);
 		}
 
+		/* (non-Javadoc)
+		 * @see group5.trackerexpress.SectionsPagerAdapter#getItem(int)
+		 */
 		@Override
 		public Fragment getItem(int position) {
 			// getItem is called to instantiate the fragment for the given page.
@@ -73,12 +96,18 @@ public class MainActivity extends ActionBarActivity {
 			return fragment;
 		}
 
+		/* (non-Javadoc)
+		 * @see group5.trackerexpress.SectionsPagerAdapter#getCount()
+		 */
 		@Override
 		public int getCount() {
 			// Show 3 total pages.
 			return 3;
 		}
 
+		/* (non-Javadoc)
+		 * @see android.support.v4.view.PagerAdapter#getPageTitle(int)
+		 */
 		@Override
 		public CharSequence getPageTitle(int position) {
 			Locale l = Locale.getDefault();
@@ -94,6 +123,11 @@ public class MainActivity extends ActionBarActivity {
 		}
 	}
 
+	/**
+	 * Gets the this.
+	 *
+	 * @return the this
+	 */
 	public Context getThis() {
 		return this;
 	}

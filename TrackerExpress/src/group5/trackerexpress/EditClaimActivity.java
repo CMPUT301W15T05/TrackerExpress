@@ -29,37 +29,81 @@ import android.widget.PopupMenu;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemLongClickListener;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class EditClaimActivity.
+ */
 public class EditClaimActivity extends Activity {
 	
+	/** The Claim name. */
 	private EditText ClaimName;
+	
+	/** The Claim title. */
 	private EditText ClaimTitle;
+	
+	/** The Start date year. */
 	private EditText StartDateYear;
+	
+	/** The Start date month. */
 	private EditText StartDateMonth;
+	
+	/** The Start date day. */
 	private EditText StartDateDay;
+	
+	/** The End date year. */
 	private EditText EndDateYear;
+	
+	/** The End date month. */
 	private EditText EndDateMonth;
+	
+	/** The End date day. */
 	private EditText EndDateDay;
+	
+	/** The Description. */
 	private EditText Description; 
+	
+	/** The Des name. */
 	private EditText DesName;
+	
+	/** The Des rea. */
 	private EditText DesRea;
+	
+	/** The Tag name. */
 	private EditText TagName;
 	
+	/** The des list view. */
 	private ListView desListView;
+	
+	/** The tag list view. */
 	private ListView tagListView;
 	
+	/** The value. */
 	private Editable value;
 	
+	/** The tags of claim. */
 	private final HashSet<Tag> tagsOfClaim = new HashSet<Tag>();
 	
+	/** The check correctness. */
 	private Boolean checkCorrectness;
 
+	/** The Destination. */
 	private ArrayList<String[]> Destination;
+	
+	/** The adapter2. */
 	private ArrayAdapter<String> adapter2;
 	
+	/** The new destination. */
 	private final int newDestination = 1;
+	
+	/** The edit destination. */
 	private final int editDestination = 2;
+	
+	/** The do nothing. */
 	private final int doNothing = 5;
 	
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onCreate(android.os.Bundle)
+	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -253,6 +297,9 @@ public class EditClaimActivity extends Activity {
 	
 
 	
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onKeyDown(int, android.view.KeyEvent)
+	 */
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 	    if (keyCode == KeyEvent.KEYCODE_BACK) {
@@ -262,6 +309,9 @@ public class EditClaimActivity extends Activity {
 	    return super.onKeyDown(keyCode, event);
 	}
 	
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onStop()
+	 */
 	@Override
 	public void onStop(){
 		super.onStop();
@@ -270,6 +320,11 @@ public class EditClaimActivity extends Activity {
 	
 	/* displays a popup autocomplete text view so the user can enter
 	 * a tag name, and then updates the list view
+	 */
+	/**
+	 * Gets the and set tag.
+	 *
+	 * @return the and set tag
 	 */
 	private void getAndSetTag(){
 		String message = "Enter a new name";
@@ -327,6 +382,7 @@ public class EditClaimActivity extends Activity {
 	}
 
 	
+	/** The on list click. */
 	private AdapterView.OnItemClickListener onListClick = new AdapterView.OnItemClickListener() {
 
 		@Override
@@ -365,6 +421,11 @@ public class EditClaimActivity extends Activity {
 		}
 	};
 	
+	/**
+	 * Editclaim.
+	 *
+	 * @param claim the claim
+	 */
 	private void editclaim(final Claim claim) {
 		// TODO Auto-generated method stub
 		int mySDateY, mySDateM, mySDateD,myEDateY, myEDateM, myEDateD;
@@ -416,6 +477,14 @@ public class EditClaimActivity extends Activity {
 
 
 
+	/**
+	 * Creates the destination button.
+	 *
+	 * @param isNewClaim the is new claim
+	 * @param destination2 the destination2
+	 * @param i the i
+	 * @param position the position
+	 */
 	private void createDestinationButton( final boolean isNewClaim, final ArrayList<String[]> destination2, final int i,final int position) {
 		// TODO Auto-generated method stub
 		// http://www.androiddom.com/2011/06/displaying-android-pop-up-dialog_13.html 	2015-03-11
@@ -483,6 +552,11 @@ public class EditClaimActivity extends Activity {
 	}
 	
 	/* updates tag list view */
+	/**
+	 * Update tag list view.
+	 *
+	 * @param tagList the tag list
+	 */
 	private void updateTagListView( ArrayList<Tag> tagList ){
 		if ( tagList == null ){
 			tagList = TagController.getInstance(this).getTagMap().getTags();
@@ -491,6 +565,16 @@ public class EditClaimActivity extends Activity {
 		tagListView.setAdapter(adapter);
 	}
 	
+	/**
+	 * Edits the dummy destination.
+	 *
+	 * @param context the context
+	 * @param place the place
+	 * @param Reason the reason
+	 * @param position the position
+	 * @param oldDestination the old destination
+	 * @param i the i
+	 */
 	public void editDummyDestination(Context context, String place, String Reason, int position, String oldDestination, int i){
 		String[] travelInfo = new String[2];
 		travelInfo[0] = place;
@@ -509,6 +593,12 @@ public class EditClaimActivity extends Activity {
 		}	
 	}
 	
+	/**
+	 * Destination listview.
+	 *
+	 * @param myListView the my list view
+	 * @param destination the destination
+	 */
 	public void DestinationListview(ListView myListView, ArrayList<String[]> destination){
 		
 		ArrayList<String> destinationArray = destinationReason(destination);
@@ -518,6 +608,12 @@ public class EditClaimActivity extends Activity {
 		myListView.setAdapter(adapter2);
 	}
 	
+	/**
+	 * Destination reason.
+	 *
+	 * @param destination2 the destination2
+	 * @return the array list
+	 */
 	public ArrayList<String> destinationReason(ArrayList<String[]> destination2){
 		final ArrayList<String> destinationreason = new ArrayList<String>();
 		String destination_reason = "";
@@ -528,6 +624,9 @@ public class EditClaimActivity extends Activity {
 		return destinationreason;
 	}
 	
+	/**
+	 * Cancelcheck.
+	 */
 	public void cancelcheck(){
 		AlertDialog.Builder helperBuilder = new AlertDialog.Builder(EditClaimActivity.this);
 		helperBuilder.setCancelable(false);

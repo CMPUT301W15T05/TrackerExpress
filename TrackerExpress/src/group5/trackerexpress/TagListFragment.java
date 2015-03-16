@@ -23,6 +23,10 @@ import android.widget.MultiAutoCompleteTextView;
 import android.widget.PopupMenu;
 import android.widget.AdapterView.OnItemLongClickListener;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class TagListFragment.
+ */
 public class TagListFragment extends Fragment implements TView {
 	/**
 	 * The fragment argument representing the section number for this
@@ -30,13 +34,24 @@ public class TagListFragment extends Fragment implements TView {
 	 */
 	public static final String ARG_SECTION_NUMBER = "section_number";
 
+	/** The lv_tag_list. */
 	private ListView lv_tag_list;
+	
+	/** The value. */
 	private Editable value = null;
+	
+	/** The b_add_tag. */
 	private Button b_add_tag;
 	
+	/**
+	 * Instantiates a new tag list fragment.
+	 */
 	public TagListFragment() {
 	}
 
+	/* (non-Javadoc)
+	 * @see android.support.v4.app.Fragment#onCreateView(android.view.LayoutInflater, android.view.ViewGroup, android.os.Bundle)
+	 */
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -122,10 +137,22 @@ public class TagListFragment extends Fragment implements TView {
 
 		return rootView;
 	}
+	
+	/**
+	 * Gets the tag map.
+	 *
+	 * @param context the context
+	 * @return the tag map
+	 */
 	private TagMap getTagMap(Context context) {
 		return TagController.getInstance(context).getTagMap();
 	}
 
+	/**
+	 * Gets the name.
+	 *
+	 * @return the name
+	 */
 	private void getName(){
 		String message = "Enter a new name";
 		final AutoCompleteTextView input = new AutoCompleteTextView(getActivity());
@@ -156,6 +183,9 @@ public class TagListFragment extends Fragment implements TView {
 		
 	}
 
+	/* (non-Javadoc)
+	 * @see group5.trackerexpress.TView#update(group5.trackerexpress.TModel)
+	 */
 	@Override
 	public void update(TModel model) {
 		ArrayList<Tag> listOfTags = getTagMap(getActivity()).getTags();			

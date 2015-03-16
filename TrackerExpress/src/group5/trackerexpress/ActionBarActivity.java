@@ -8,6 +8,10 @@ import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class ActionBarActivity.
+ */
 public abstract class ActionBarActivity extends FragmentActivity implements
 ActionBar.TabListener{
 
@@ -19,11 +23,20 @@ ActionBar.TabListener{
 	//private ArrayList<Tag> tagList;
 	//private Context mainContext;
 	
+	/* (non-Javadoc)
+	 * @see android.support.v4.app.FragmentActivity#onCreate(android.os.Bundle)
+	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 	}
 
+	/**
+	 * Sets the up action bar.
+	 *
+	 * @param spa the spa
+	 * @param pagerID the pager id
+	 */
 	protected void setUpActionBar(SectionsPagerAdapter spa, int pagerID) {
 		
 		// Set up the action bar.
@@ -58,9 +71,15 @@ ActionBar.TabListener{
 	}
 	
 	// Inflate the menu; this adds items to the action bar if it is present.
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onCreateOptionsMenu(android.view.Menu)
+	 */
 	@Override
 	public abstract boolean onCreateOptionsMenu(Menu menu);
 
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onOptionsItemSelected(android.view.MenuItem)
+	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// Handle action bar item clicks here. The action bar will
@@ -73,6 +92,9 @@ ActionBar.TabListener{
 		return super.onOptionsItemSelected(item);
 	}
 	
+	/* (non-Javadoc)
+	 * @see android.app.ActionBar.TabListener#onTabSelected(android.app.ActionBar.Tab, android.app.FragmentTransaction)
+	 */
 	@Override
 	public void onTabSelected(ActionBar.Tab tab,
 			FragmentTransaction fragmentTransaction) {
@@ -81,11 +103,17 @@ ActionBar.TabListener{
 		mViewPager.setCurrentItem(tab.getPosition());
 	}
 
+	/* (non-Javadoc)
+	 * @see android.app.ActionBar.TabListener#onTabUnselected(android.app.ActionBar.Tab, android.app.FragmentTransaction)
+	 */
 	@Override
 	public void onTabUnselected(ActionBar.Tab tab,
 			FragmentTransaction fragmentTransaction) {
 	}
 
+	/* (non-Javadoc)
+	 * @see android.app.ActionBar.TabListener#onTabReselected(android.app.ActionBar.Tab, android.app.FragmentTransaction)
+	 */
 	@Override
 	public void onTabReselected(ActionBar.Tab tab,
 			FragmentTransaction fragmentTransaction) {

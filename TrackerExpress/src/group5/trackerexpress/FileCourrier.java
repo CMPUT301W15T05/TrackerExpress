@@ -14,13 +14,34 @@ import com.google.gson.Gson;
 
 import android.content.Context;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class FileCourrier.
+ *
+ * @param <T> the generic type
+ */
 public class FileCourrier<T> {
+	
+	/** The type. */
 	private T type;
 	
+	/**
+	 * Instantiates a new file courrier.
+	 *
+	 * @param type the type
+	 */
 	public FileCourrier(T type) {
 		this.type = type;
 	}
 	
+	/**
+	 * Save file.
+	 *
+	 * @param context the context
+	 * @param fileName the file name
+	 * @param file the file
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
 	public void saveFile(Context context, String fileName, T file) throws IOException {
 
 		FileOutputStream fos = context.openFileOutput(fileName, 0);
@@ -31,6 +52,15 @@ public class FileCourrier<T> {
 		fos.close();
 	}
 	
+	/**
+	 * Load file.
+	 *
+	 * @param context the context
+	 * @param fileName the file name
+	 * @return the t
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 * @throws FileNotFoundException the file not found exception
+	 */
 	public T loadFile(Context context, String fileName) throws IOException, FileNotFoundException {		
 
 		//From joshua2ua in lab 3:
