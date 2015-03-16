@@ -38,6 +38,11 @@ public class MainActivity extends FragmentActivity implements
 	public static final int INDEX_OF_TAGS_TAB = 1;
 	public static final int INDEX_OF_APPROVE_CLAIMS_TAB = 1;
 
+	//gets tagmap. For convenice's sake.
+	protected static TagMap getTagMap(Context context) {
+		return TagController.getInstance(context).getTagMap();
+	}
+
 	/**
 	 * The {@link android.support.v4.view.PagerAdapter} that will provide
 	 * fragments for each of the sections. We use a
@@ -311,7 +316,6 @@ public class MainActivity extends FragmentActivity implements
 		public static final String ARG_SECTION_NUMBER = "section_number";
 
 		private ListView lv_tag_list;
-		private MainTagListAdapter adapter;
 		private Editable value = null;
 		private Button b_add_tag;
 		
@@ -327,25 +331,31 @@ public class MainActivity extends FragmentActivity implements
 			lv_tag_list = (ListView) rootView.findViewById(R.id.lv_tags);
 			lv_tag_list.setItemsCanFocus(true);
 			
-			final TagMap mapOfTags = TagController.getInstance(getActivity()).getTagMap();
-			final ArrayList<Tag> listOfTags = mapOfTags.getTags();
-			final Context myContext = getActivity().getApplicationContext();
+			this.update(null);
+			
+			final TagMap mapOfTags = getTagMap(getActivity());
+			ArrayList<Tag> listOfTags = mapOfTags.getTags();
+			
+			mapOfTags.addView(this);
+			getTagMap(getActivity()).addView(this);
 			
 			b_add_tag = (Button) rootView.findViewById(R.id.b_add_tag);
 			
 			b_add_tag.setOnClickListener(new Button.OnClickListener(){
 			    public void onClick(View v) {
 			    	getName();
+			    	/*
 			    	if ( value != null ){
 			    		String name = value.toString();
 			    		Tag newTag = new Tag(name);
 			    		mapOfTags.addTag(getActivity(), newTag);
-			    		listOfTags.add(newTag);
-			    		MainTagListAdapter a = new MainTagListAdapter( myContext, listOfTags );
+			    		//listOfTags.add(newTag);
+			    		//MainTagListAdapter a = new MainTagListAdapter( myContext, listOfTags );
             			lv_tag_list.setAdapter(a);
 			    	}
 			    	
 			    	value = null;
+			    	*/
 			    }
 			});
 			
@@ -366,9 +376,9 @@ public class MainActivity extends FragmentActivity implements
 	                        switch(item.getItemId()){
 	                        case R.id.op_delete_tag: 
 	                        	// Delete tag off of Tag ArrayList for listview
-	                        	listOfTags.remove(t);
-	                        	MainTagListAdapter a = new MainTagListAdapter( getActivity().getBaseContext(), listOfTags );
-	                			lv_tag_list.setAdapter(a);
+	                        	//listOfTags.remove(t);
+	                        	//MainTagListAdapter a = new MainTagListAdapter( getActivity().getBaseContext(), listOfTags );
+	                			//lv_tag_list.setAdapter(a);
 	                			// Delete it off the model
 	                        	mapOfTags.deleteTag(getActivity(), t.getUuid());
 	                        	break;
@@ -400,7 +410,7 @@ public class MainActivity extends FragmentActivity implements
 	        listOfTags.get(0); <- Something is up with get()
 			adapter = new MainTagListAdapter( myContext, listOfTags );
 			*/
-			lv_tag_list.setAdapter(adapter);
+			//lv_tag_list.setAdapter(adapter);
 
 			return rootView;
 		}
@@ -409,12 +419,20 @@ public class MainActivity extends FragmentActivity implements
 			final EditText input = new EditText(getActivity());
 			
 			new AlertDialog.Builder(getActivity())
-		    .setTitle("Rename Tag")
+		    .setTitle("Create Tag")
 		    .setMessage(message)
 		    .setView(input)
 		    .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
 		        public void onClick(DialogInterface dialog, int whichButton) {       		
 		        	value = input.getText();
+			    	if ( input.getText() != null ){
+			    		Tag newTag = new Tag(input.getText().toString());
+			    		getTagMap(getActivity()).addTag(getActivity(), newTag);
+			    		//listOfTags.add(newTag);
+
+			    	}
+			    	
+			    	value = null;
 		        }
 		    }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
 		        public void onClick(DialogInterface dialog, int whichButton) {
@@ -426,8 +444,9 @@ public class MainActivity extends FragmentActivity implements
 
 		@Override
 		public void update(TModel model) {
-			// TODO Auto-generated method stub
-			
+			ArrayList<Tag> listOfTags = getTagMap(getActivity()).getTags();			
+    		MainTagListAdapter a = new MainTagListAdapter( getActivity(), listOfTags );
+			lv_tag_list.setAdapter(a);
 		}
 	}
 
