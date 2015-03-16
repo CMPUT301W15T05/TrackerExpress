@@ -37,6 +37,8 @@ public class Claim extends TModel implements Comparable<Claim>{
 	
 	/** The incomplete. */
 	private boolean incomplete;
+	
+	private ArrayList<UUID> tagsIds;
     
 	/** The Constant IN_PROGRESS. */
 	public static final int IN_PROGRESS = 0;
@@ -52,7 +54,7 @@ public class Claim extends TModel implements Comparable<Claim>{
 	
 	/** The uuid. */
 	private UUID uuid = UUID.randomUUID();
-    
+	
 	
 	/**
 	 * Instantiates a new claim.
@@ -340,4 +342,12 @@ public class Claim extends TModel implements Comparable<Claim>{
 		return startDate.compareTo(arg0.getStartDate());
 	}
 
+	public ArrayList<UUID> getTagsIds() {
+		return tagsIds;
+	}
+
+	public void setTagsIds(ArrayList<UUID> tagsIds) {
+		this.tagsIds = tagsIds;
+	}
+	
 }
