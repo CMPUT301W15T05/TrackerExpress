@@ -13,6 +13,21 @@
 		android:clickable="false"
 		android:focusable="false" />
     <TextView
+        android:id="@+id/tv_main_claim_list_isIncomplete"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/error_color"
+        android:focusableInTouchMode="false"
+		android:clickable="false"
+		android:focusable="false" />
+    <TextView 
+        android:id="@+id/tv_main_claim_list_status"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:focusableInTouchMode="false"
+		android:clickable="false"
+		android:focusable="false" />
+    <TextView
         android:id="@+id/tv_main_claim_list_destinations"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"

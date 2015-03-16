@@ -11,34 +11,37 @@ import android.content.Context;
  */
 public class Claim extends TModel implements Comparable<Claim>{
 	
-	/** The user name. */
+	/** The name of the claim creator*/
 	private String userName;
 	
 	/** The claim name. */
 	private String claimName;
 	
-	/** The Description. */
+	/** The Description of the claim. */
 	private String Description;
 	
-	/** The expense list. */
+	/** The list of expenses for the claim. */
 	private ExpenseList expenseList;
 	
-	/** The destination. */
+	/** The destinations visited in claim. */
 	private ArrayList<String[]> destination = new ArrayList<String[]>();
 	
-	/** The status. */
+	/** The status of the claim (in_progress, submitted, returned, or approved. */
 	private int status; 
 	
-	/** The start date. */
+	/** The start date of the claim. */
 	private Date startDate;
 	
-	/** The end date. */
+	/** The end date of the claim. */
 	private Date endDate;
 	
-	/** The incomplete. */
+	/** The incomplete indicator. */
 	private boolean incomplete;
 	
+
+	/** The ArrayList of tagIds.*/
 	private ArrayList<UUID> tagIds;
+
     
 	/** The Constant IN_PROGRESS. */
 	public static final int IN_PROGRESS = 0;
@@ -52,7 +55,7 @@ public class Claim extends TModel implements Comparable<Claim>{
 	/** The Constant APPROVED. */
 	public static final int APPROVED = 3;
 	
-	/** The uuid. */
+	/** Creates a random id for the claim */
 	private UUID uuid = UUID.randomUUID();
 	
 	
@@ -66,6 +69,7 @@ public class Claim extends TModel implements Comparable<Claim>{
 		this.claimName = claimName;
 		this.expenseList = new ExpenseList();
 		this.status = IN_PROGRESS;
+		this.incomplete = true;
 		this.tagIds = new ArrayList<UUID>();
 	}
 	
@@ -82,7 +86,7 @@ public class Claim extends TModel implements Comparable<Claim>{
 	 * Sets the incomplete.
 	 *
 	 * @param context the context
-	 * @param incomplete the incomplete
+	 * @param incomplete the incompleteness indicator
 	 */
 	public void setIncomplete(Context context, boolean incomplete) {
 		this.incomplete = incomplete;
@@ -119,7 +123,7 @@ public class Claim extends TModel implements Comparable<Claim>{
 	}
 	
 	/**
-	 * Setuser name.
+	 * Set User name.
 	 *
 	 * @param context the context
 	 * @param userName the user name
@@ -151,7 +155,7 @@ public class Claim extends TModel implements Comparable<Claim>{
 	
 
 	/**
-	 * Adds the expense.
+	 * Adds the expense to the expenseList.
 	 *
 	 * @param context the context
 	 * @param expense the expense
@@ -185,7 +189,7 @@ public class Claim extends TModel implements Comparable<Claim>{
 	
 
 	/**
-	 * Removes the expense.
+	 * Removes the expense from the expenseList.
 	 *
 	 * @param context the context
 	 * @param expenseUuid the expense uuid
@@ -202,7 +206,7 @@ public class Claim extends TModel implements Comparable<Claim>{
 	 * Sets the start date.
 	 *
 	 * @param context the context
-	 * @param d1 the d1
+	 * @param d1 the date to use as the start date
 	 */
 	public void setStartDate(Context context, Date d1) {
 		// TODO Auto-generated method stub
@@ -223,7 +227,7 @@ public class Claim extends TModel implements Comparable<Claim>{
 	 * Sets the end date.
 	 *
 	 * @param context the context
-	 * @param d2 the d2
+	 * @param d2 the date to use as the end date
 	 */
 	public void setEndDate(Context context, Date d2){
 		this.endDate = d2;
@@ -243,8 +247,8 @@ public class Claim extends TModel implements Comparable<Claim>{
 	 * Adds the destination.
 	 *
 	 * @param context the context
-	 * @param place the place
-	 * @param Reason the reason
+	 * @param place the location of destination
+	 * @param Reason the reason for travel to destination
 	 */
 	public void addDestination(Context context, String place, String Reason){
 		String[] travelInfo = new String[2];
@@ -267,7 +271,7 @@ public class Claim extends TModel implements Comparable<Claim>{
 	}
 	
 	/**
-	 * To string destinations.
+	 * Creates string of all destinations.
 	 *
 	 * @return the string
 	 */
@@ -332,8 +336,10 @@ public class Claim extends TModel implements Comparable<Claim>{
 		return status;
 	}
 
-	/* (non-Javadoc)
-	 * @see java.lang.Comparable#compareTo(java.lang.Object)
+	/** 
+	 * compares the claim start date with the instance's start date
+	 * @param arg0 The Claim to be compared
+	 * @return the result of the comparison as an int
 	 */
 	@Override
 	public int compareTo(Claim arg0) {
@@ -343,10 +349,21 @@ public class Claim extends TModel implements Comparable<Claim>{
 		return startDate.compareTo(arg0.getStartDate());
 	}
 
+	/**
+	 * Gets the list of TagIds.
+	 * 
+	 * @return the list of tag Ids
+	 */
+	
 	public ArrayList<UUID> getTagsIds() {
 		return tagIds;
 	}
 
+	/**
+	 * Sets the list of tagIds.
+	 * 
+	 * @param tagsIds the list of tagIds
+	 */
 	public void setTagsIds(ArrayList<UUID> tagsIds) {
 		this.tagIds = tagsIds;
 	}

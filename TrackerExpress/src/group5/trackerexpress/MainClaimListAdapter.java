@@ -12,6 +12,11 @@ import android.widget.TextView;
  * The Class MainClaimListAdapter.
  */
 public class MainClaimListAdapter extends ArrayAdapter<Claim> {
+	public static final String incompleteString = "INCOMPLETE";
+	public static final String approvedStatus = "APPROVED";
+	public static final String inProgressStatus = "IN PROGRESS";
+	public static final String returnedStatus = "RETURNED";
+	public static final String submittedStatus = "SUBMITTED";
 	
 	/** The claim list. */
 	private Claim[] claimList;
@@ -47,6 +52,12 @@ public class MainClaimListAdapter extends ArrayAdapter<Claim> {
 		
 		/** The tags. */
 		public TextView tags;
+		
+		/** incompleteness of claim **/
+		public TextView isIncompleteStatus;
+		
+		/** official status of claim **/
+		public TextView status;
 	}
 	
 	/* (non-Javadoc)
@@ -65,7 +76,9 @@ public class MainClaimListAdapter extends ArrayAdapter<Claim> {
 			holder.destinations = (TextView) v.findViewById(R.id.tv_main_claim_list_destinations);
 			holder.amounts = (TextView) v.findViewById(R.id.tv_main_claim_list_amounts);
 			holder.tags = (TextView) v.findViewById(R.id.tv_main_claim_list_tags);
-
+			holder.isIncompleteStatus = (TextView ) v.findViewById(R.id.tv_main_claim_list_isIncomplete);
+			holder.status = (TextView) v.findViewById(R.id.tv_main_claim_list_status);
+			
 			v.setTag(holder);
 		} else {
 			holder = (ClaimHolder) v.getTag();
@@ -73,8 +86,27 @@ public class MainClaimListAdapter extends ArrayAdapter<Claim> {
 		
 		Claim c = claimList[position];
 		holder.claimName.setText(c.getClaimName());
-		holder.destinations.setText(c.toStringDestinations());
-		holder.amounts.setText(c.getExpenseList().toStringTotalCurrencies());
+		holder.destinations.setText("Destinations: " + c.toStringDestinations());
+		holder.amounts.setText("Currency Totals: " + c.getExpenseList().toStringTotalCurrencies());
+		if ( c.isIncomplete() ){
+			holder.isIncompleteStatus.setText(incompleteString);
+		} else {
+			holder.isIncompleteStatus.setText("");
+		}
+		switch(c.getStatus()){
+		case Claim.APPROVED:
+			holder.status.setText(approvedStatus);
+			break;
+		case Claim.IN_PROGRESS:
+			holder.status.setText(inProgressStatus);
+			break;
+		case Claim.RETURNED:
+			holder.status.setText(returnedStatus);
+			break;
+		case Claim.SUBMITTED:
+			holder.status.setText(submittedStatus);
+			break;
+		}
 		//holder.tags.setText(text);
 		
 		return v;
