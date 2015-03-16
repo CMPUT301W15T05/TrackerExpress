@@ -11,6 +11,8 @@ import android.view.MenuItem;
 // TODO: Auto-generated Javadoc
 /**
  * The Class ActionBarActivity.
+ * @author Peter Crinklaw, Randy Hu, Parash Rahman, Jesse Emery, Sean Baergen, Rishi Barnwal
+ * @version Part 4
  */
 public abstract class ActionBarActivity extends FragmentActivity implements
 ActionBar.TabListener{

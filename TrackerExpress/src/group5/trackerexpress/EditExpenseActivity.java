@@ -25,6 +25,8 @@ import android.widget.Spinner;
 // TODO: Auto-generated Javadoc
 /**
  * The Class EditExpenseActivity.
+ * @author Peter Crinklaw, Randy Hu, Parash Rahman, Jesse Emery, Sean Baergen, Rishi Barnwal
+ * @version Part 4
  */
 public class EditExpenseActivity extends Activity {
 	

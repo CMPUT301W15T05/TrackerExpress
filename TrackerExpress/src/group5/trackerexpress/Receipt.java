@@ -5,6 +5,8 @@ import android.app.Activity;
 // TODO: Auto-generated Javadoc
 /**
  * The Class Receipt.
+ * @author Peter Crinklaw, Randy Hu, Parash Rahman, Jesse Emery, Sean Baergen, Rishi Barnwal
+ * @version Part 4
  */
 public class Receipt extends Activity{
 	

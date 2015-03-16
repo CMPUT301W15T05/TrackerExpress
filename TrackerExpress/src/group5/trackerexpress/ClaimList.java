@@ -12,6 +12,8 @@ import android.content.Context;
 
 /**
  * The Class ClaimList.
+ * @author Peter Crinklaw, Randy Hu, Parash Rahman, Jesse Emery, Sean Baergen, Rishi Barnwal
+ * @version Part 4
  */
 public class ClaimList extends TModel{
 	

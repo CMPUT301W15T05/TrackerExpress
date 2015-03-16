@@ -8,6 +8,8 @@ import android.content.Context;
 
 /**
  * The Class Claim.
+ * @author Peter Crinklaw, Randy Hu, Parash Rahman, Jesse Emery, Sean Baergen, Rishi Barnwal
+ * @version Part 4
  */
 public class Claim extends TModel implements Comparable<Claim>{
 	

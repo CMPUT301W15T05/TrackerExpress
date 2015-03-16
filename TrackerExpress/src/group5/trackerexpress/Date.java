@@ -4,8 +4,13 @@ package group5.trackerexpress;
 // Simple date object that consists of an integer
 // in the form of DDMMYYYY
 /**
+ * The Class Date.
+ * 
  * The Date object that consists of an integer
  * in the form of DDMMYYYY.
+ * 
+ * @author Peter Crinklaw, Randy Hu, Parash Rahman, Jesse Emery, Sean Baergen, Rishi Barnwal
+ * @version Part 4
  */
 public class Date implements Comparable<Date>{
 	

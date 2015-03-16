@@ -8,6 +8,8 @@ import android.content.Context;
 // TODO: Auto-generated Javadoc
 /**
  * The Class User.
+ * @author Peter Crinklaw, Randy Hu, Parash Rahman, Jesse Emery, Sean Baergen, Rishi Barnwal
+ * @version Part 4
  */
 public class User extends TModel{
 	

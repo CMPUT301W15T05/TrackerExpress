@@ -12,6 +12,8 @@ import android.widget.TextView;
 // TODO: Auto-generated Javadoc
 /**
  * The Class AccountFormActivity.
+ * @author Peter Crinklaw, Randy Hu, Parash Rahman, Jesse Emery, Sean Baergen, Rishi Barnwal
+ * @version Part 4
  */
 public class AccountFormActivity extends Activity {
 
@@ -77,9 +79,8 @@ public class AccountFormActivity extends Activity {
 		return false;
 	}
 	
-	// Check for a valid password.
 	/**
-	 * Password errors.
+	 * Check for a valid password.
 	 *
 	 * @param password the password
 	 * @param mPasswordView the m password view

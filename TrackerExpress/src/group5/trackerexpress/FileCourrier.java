@@ -19,6 +19,8 @@ import android.content.Context;
  * The Class FileCourrier.
  *
  * @param <T> the generic type
+ * @author Peter Crinklaw, Randy Hu, Parash Rahman, Jesse Emery, Sean Baergen, Rishi Barnwal
+ * @version Part 4
  */
 public class FileCourrier<T> {
 	
