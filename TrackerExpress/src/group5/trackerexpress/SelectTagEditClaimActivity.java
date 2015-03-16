@@ -6,6 +6,8 @@ import android.os.Bundle;
 // TODO: Auto-generated Javadoc
 /**
  * The Class SelectTagEditClaimActivity.
+ * @author Peter Crinklaw, Randy Hu, Parash Rahman, Jesse Emery, Sean Baergen, Rishi Barnwal
+ * @version Part 4
  */
 public class SelectTagEditClaimActivity extends Activity {
 	

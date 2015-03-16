@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 // TODO: Auto-generated Javadoc
 /**
  * The Class GlobalClaimsFragment.
+ * @author Peter Crinklaw, Randy Hu, Parash Rahman, Jesse Emery, Sean Baergen, Rishi Barnwal
+ * @version Part 4
  */
 public class GlobalClaimsFragment extends Fragment implements TView {
 

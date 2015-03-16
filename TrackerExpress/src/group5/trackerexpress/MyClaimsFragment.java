@@ -18,6 +18,8 @@ import android.widget.AdapterView.OnItemClickListener;
 // TODO: Auto-generated Javadoc
 /**
  * The Class MyClaimsFragment.
+ * @author Peter Crinklaw, Randy Hu, Parash Rahman, Jesse Emery, Sean Baergen, Rishi Barnwal
+ * @version Part 4
  */
 public class MyClaimsFragment extends Fragment implements TView {
 

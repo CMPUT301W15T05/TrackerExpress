@@ -8,31 +8,33 @@ import android.graphics.Bitmap;
 // TODO: Auto-generated Javadoc
 /**
  * The Class Expense.
+ * @author Peter Crinklaw, Randy Hu, Parash Rahman, Jesse Emery, Sean Baergen, Rishi Barnwal
+ * @version Part 4
  */
 public class Expense extends TModel{
 	
-	/** The title. */
+	/** The title of the expense. */
 	private String title;
 	
-	/** The date. */
+	/** The date of the expense. */
 	private Date date;
 	
-	/** The uuid. */
+	/** The id of the expense. */
 	private UUID uuid;
 	
-	/** The currency. */
+	/** The currency of the expense. */
 	private String currency;
 	
-	/** The category. */
+	/** The category of the expense. */
 	private String category;
 	
-	/** The amount. */
+	/** The amount of the expense. */
 	private Double amount;
 	
-	/** The image. */
+	/** The image of the receipt for the expense. */
 	private Bitmap bitmap;
 
-	/** The status. */
+	/** The status of the expense (incompleteness). */
 	private int status; 
 	
 	/**
@@ -106,7 +108,7 @@ public class Expense extends TModel{
 	 * Sets the date.
 	 *
 	 * @param context the context
-	 * @param d1 the d1
+	 * @param d1 the Date
 	 */
 	public void setDate(Context context, Date d1) {
 		this.date = d1;
@@ -163,10 +165,21 @@ public class Expense extends TModel{
 		notifyViews(context);
 	}
 	
+	/**
+	 * Gets the Category
+	 * 
+	 * @return the category
+	 */
 	public String getCategory() {
 		return category;
 	}
 
+	/**
+	 * Sets the category
+	 * 
+	 * @param context
+	 * @param category
+	 */
 	public void setCategory(Context context, String category){
 		// TODO Auto-generated method stub
 		this.category = category;
@@ -174,10 +187,19 @@ public class Expense extends TModel{
 		
 	}
 	
+	/**
+	 * Gets the receipt image
+	 * @return bitmap the receipt image
+	 */
 	public Bitmap getBitmap(){
 		return bitmap;
 	}
 	
+	/**
+	 * Sets the receipt image
+	 * @param context
+	 * @param bitmap
+	 */
 	public void setBitmap(Context context, Bitmap bitmap){
 		this.bitmap = bitmap;
 		notifyViews(context);

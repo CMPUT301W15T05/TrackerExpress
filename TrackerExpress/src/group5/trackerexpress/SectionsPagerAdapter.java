@@ -7,6 +7,8 @@ import android.support.v4.app.FragmentPagerAdapter;
 // TODO: Auto-generated Javadoc
 /**
  * The Class SectionsPagerAdapter.
+ * @author Peter Crinklaw, Randy Hu, Parash Rahman, Jesse Emery, Sean Baergen, Rishi Barnwal
+ * @version Part 4
  */
 public abstract class SectionsPagerAdapter extends FragmentPagerAdapter {
 

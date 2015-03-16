@@ -26,6 +26,8 @@ import android.widget.AdapterView.OnItemLongClickListener;
 // TODO: Auto-generated Javadoc
 /**
  * The Class TagListFragment.
+ * @author Peter Crinklaw, Randy Hu, Parash Rahman, Jesse Emery, Sean Baergen, Rishi Barnwal
+ * @version Part 4
  */
 public class TagListFragment extends Fragment implements TView {
 	/**
