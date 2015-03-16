@@ -1,5 +1,6 @@
 package group5.trackerexpress;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -10,7 +11,10 @@ import android.widget.TextView;
 // TODO: Auto-generated Javadoc
 /**
  * The Class ExpenseListFragment.
+ * @author Peter Crinklaw, Randy Hu, Parash Rahman, Jesse Emery, Sean Baergen, Rishi Barnwal
+ * @version Part 4
  */
+@SuppressLint("ValidFragment")
 public class ExpenseListFragment extends Fragment implements TView {
 
 	/** The claim. */
@@ -21,6 +25,7 @@ public class ExpenseListFragment extends Fragment implements TView {
 	 *
 	 * @param claim the claim
 	 */
+	@SuppressLint("ValidFragment")
 	public ExpenseListFragment(Claim claim) {
 		this.claim = claim;
 	}

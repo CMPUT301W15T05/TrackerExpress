@@ -3,6 +3,8 @@ package group5.trackerexpress;
 // TODO: Auto-generated Javadoc
 /**
  * The Class ParseHelper.
+ * @author Peter Crinklaw, Randy Hu, Parash Rahman, Jesse Emery, Sean Baergen, Rishi Barnwal
+ * @version Part 4
  */
 public class ParseHelper {
 	
