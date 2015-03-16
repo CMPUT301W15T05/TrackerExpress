@@ -8,7 +8,7 @@ import android.app.Activity;
  */
 public class Receipt extends Activity{
 	
-	/** The path. */
+	/** The path of the image. */
 	String path;
 
 	/**
