@@ -5,7 +5,7 @@ import java.util.UUID;
 
 import android.content.Context;
 
-// TODO: Auto-generated Javadoc
+
 /**
  * The Class Claim.
  * @author Peter Crinklaw, Randy Hu, Parash Rahman, Jesse Emery, Sean Baergen, Rishi Barnwal

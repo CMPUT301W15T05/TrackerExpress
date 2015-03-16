@@ -5,18 +5,22 @@ package group5.trackerexpress;
 // in the form of DDMMYYYY
 /**
  * The Class Date.
+ * 
+ * The Date object that consists of an integer
+ * in the form of DDMMYYYY.
+ * 
  * @author Peter Crinklaw, Randy Hu, Parash Rahman, Jesse Emery, Sean Baergen, Rishi Barnwal
  * @version Part 4
  */
 public class Date implements Comparable<Date>{
 	
-	/** The dd. */
+	/** The day of the Date. */
 	private Integer dd;
 	
-	/** The mm. */
+	/** The month of the Date. */
 	private Integer mm;
 	
-	/** The yyyy. */
+	/** The year of the Date. */
 	private Integer yyyy;
 	
 	/**
@@ -39,7 +43,7 @@ public class Date implements Comparable<Date>{
 	}
 
 	/**
-	 * Gets the date.
+	 * Gets the date in a single integer.
 	 *
 	 * @return the date
 	 */
@@ -48,65 +52,72 @@ public class Date implements Comparable<Date>{
 	}
 	
 	/**
-	 * Sets the dd.
+	 * Sets the day.
 	 *
-	 * @param dd the new dd
+	 * @param dd the new day
 	 */
 	public void setDD( int dd ){
 		this.dd = dd;
 	}
 	
 	/**
-	 * Gets the dd.
+	 * Gets the day.
 	 *
-	 * @return the dd
+	 * @return the day
 	 */
 	public int getDD(){
 		return dd;
 	}
 	
 	/**
-	 * Sets the mm.
+	 * Sets the month.
 	 *
-	 * @param mm the new mm
+	 * @param mm the new month
 	 */
 	public void setMM( int mm ){
 		this.mm = mm;
 	}
 	
 	/**
-	 * Gets the mm.
+	 * Gets the month.
 	 *
-	 * @return the mm
+	 * @return the month
 	 */
 	public int getMM(){
 		return mm;
 	}
 	
 	/**
-	 * Sets the yyyy.
+	 * Sets the year.
 	 *
-	 * @param yyyy the new yyyy
+	 * @param yyyy the new year
 	 */
 	public void setYYYY( int yyyy ){
 		this.yyyy = yyyy;
 	}
 	
 	/**
-	 * Gets the yyyy.
+	 * Gets the year.
 	 *
-	 * @return the yyyy
+	 * @return the year
 	 */
 	public int getYYYY(){
 		return yyyy;
 	}
 	
+	/**
+	 * Gets the date as a string in the form DD/MM/YYYY
+	 * @return the date as a string
+	 */
+	
 	public String getString() {
 		return dd.toString() + "/" + mm.toString() + "/" + yyyy.toString();
 	}
 	
-	/* (non-Javadoc)
-	 * @see java.lang.Comparable#compareTo(java.lang.Object)
+	/**
+	 * compares the date of the instance to the date passed int
+	 * @param d the Date to be compared with
+	 * @return result of comparison as an integer
 	 */
 	@Override
 	public int compareTo(Date d) {
@@ -125,21 +136,23 @@ public class Date implements Comparable<Date>{
 	}
 	
 	/**
-	 * Before after check.
+	 * Checks if the after date occurs after the before date.
 	 *
 	 * @param before the before
 	 * @param after the after
-	 * @return true, if successful
+	 * @return true, if after date is after before date
 	 */
 	public boolean beforeAfterCheck(Date before, Date after){
 		return (after.getDate() > before.getDate());
 	}
 	
 	/**
-	 * Valid date.
+	 * Checks if date is valid 
+	 * including if day exists in given month 
+	 * and leap year check
 	 *
-	 * @param d the d
-	 * @return true, if successful
+	 * @param d the Date to check
+	 * @return true, if valid Date
 	 */
 	public boolean validDate(Date d){
 		boolean valid = true;
