@@ -1,67 +1,146 @@
 package group5.trackerexpress;
 
-import android.app.Activity;
+import java.util.ArrayList;
+
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.ScrollView;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 
 public class ViewClaimFragment extends Fragment implements TView {
 
+	private TableRow.LayoutParams trlp = 
+			new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, 
+					TableRow.LayoutParams.WRAP_CONTENT);
+	
+	private View rootView;
 	private Claim claim;
+
 	
 	public ViewClaimFragment(Claim claim) {
 		this.claim = claim;
 	}
 
-	public ViewClaimFragment() {
-		// TODO Auto-generated constructor stub
-	}
-
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		
-		ScrollView sv = new ScrollView(ClaimInfoActivity.getThis());
-		LinearLayout ll = new LinearLayout(ClaimInfoActivity.getThis());
-		ll.setOrientation(LinearLayout.VERTICAL);
-		sv.addView(ll);
-		
-		TextView tv = new TextView(ClaimInfoActivity.getThis());
-		tv.setText("Dynamic layouts ftw!");
-		ll.addView(tv);
-		
-		EditText et = new EditText(ClaimInfoActivity.getThis());
-		et.setText("weeeeeeeeeee~!");
-		ll.addView(et);
-		
-		Button b = new Button(ClaimInfoActivity.getThis());
-		b.setText("I don't do anything, but I was added dynamically. :)");
-		ll.addView(b);
-		
-		for(int i = 0; i < 20; i++) {
-			CheckBox cb = new CheckBox(ClaimInfoActivity.getThis());
-			cb.setText("I'm dynamic!");
-			ll.addView(cb);
-		}
-		((Activity) ClaimInfoActivity.getThis()).setContentView(sv);
-		
-		View rootView = inflater.inflate(R.layout.fragment_view_claim,
+		rootView = inflater.inflate(R.layout.fragment_view_claim,
 				container, false);
+
+		// Claim title
+		TextView title = (TextView) rootView.findViewById(R.id.viewClaimTitle);
+		title.setText(claim.getClaimName());
+		
+		// User name
+		TextView nameInfo = (TextView) rootView.findViewById(R.id.viewClaimNameInfo);
+		nameInfo.setText(" " + claim.getuserName());
+		
+		// Inserting duration row
+		String datePrefix = null;
+		String duration = null;
+		Date startDate = claim.getStartDate();
+		Date endDate = claim.getEndDate();
+		
+		if (startDate != null && endDate != null) {
+			datePrefix = getString(R.string.view_claim_duration);
+			duration = startDate.getString() + " - " + endDate.getString();
+		} else if (startDate != null) {
+			datePrefix = getString(R.string.view_claim_start_date);
+			duration = startDate.getString();
+		} else if (endDate != null ) {
+			datePrefix = getString(R.string.view_claim_end_date);
+			duration = " - " + endDate.getString();
+		}
+		
+		if (datePrefix != null) {
+			insertRow(R.id.viewClaimDateTable, datePrefix + duration, true);
+		}
+		
+		// Inserting description
+		String claimDescription = claim.getDescription();
+		
+		if (claimDescription != null) {
+			insertRow(R.id.viewClaimDescriptionTable, getString(R.string.view_claim_description), true);
+			insertRow(R.id.viewClaimDescriptionTable, claimDescription, false);
+		}
+		
+		// Inserting destinations
+		ArrayList<String[]> destinations = claim.getDestination();
+		
+		if (destinations.size() > 0) {
+			String destination;
+			
+			insertRow(R.id.viewClaimDestinationTable, getString(R.string.view_claim_destinations), true);
+			
+			for (int i = 0; i < destinations.size(); i++){
+				destination = destinations.get(i)[0] + " - " + destinations.get(i)[1];
+				insertRow(R.id.viewClaimDestinationTable, destination, false);
+			}
+		}
+		
+		// Inserting amounts
+		ExpenseList expenseList = claim.getExpenseList();
+		
+		if (expenseList.getExpenseList().size() > 0) {
+			String[] expenses = expenseList.toStringTotalCurrencies().split(", ");
+
+			insertRow(R.id.viewClaimAmountSpentTable, getString(R.string.view_claim_ammount_spent), true);
+			
+			for (int i = 0; i < expenses.length; i++) {
+				insertRow(R.id.viewClaimAmountSpentTable, expenses[i], false);
+			}
+			
+		}
+		
+		// TODO: Inserting tags
+		
+		
+		for (int i = 0; i < 20; i ++) {
+			insertRow(R.id.viewClaimTagsTable, "Tag", false);
+		}
+		
 		
 		return rootView;
+	}
+	
+	private void insertRow(int viewID, String text, boolean newSection) {
+		// Create a new row to be added
+		TableLayout tl = (TableLayout) rootView.findViewById(viewID);
+		TableRow tr = new TableRow(getActivity());
+		tr.setLayoutParams(trlp);
+		
+		int padding = 0;
+		if (newSection) {
+			padding = 12;
+		} else {
+			padding = 2;
+		}
+
+		tr.setPadding(0, padding, 0, 0);
+		
+		// Create the TextView to be added to the row content
+		TextView tv = new TextView(getActivity());
+		if (newSection) {
+			tv.setTextSize(20);
+		} else {
+			tv.setTextSize(16);
+		}
+		tv.setText(text);
+		tv.setLayoutParams(trlp);
+		
+		// Add TextView to row
+		tr.addView(tv);
+		
+		tl.addView(tr, new TableLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT, TableLayout.LayoutParams.WRAP_CONTENT));
 	}
 
 	@Override
 	public void update(TModel model) {
 		// TODO Auto-generated method stub
 		
-	}
+	}	
 }

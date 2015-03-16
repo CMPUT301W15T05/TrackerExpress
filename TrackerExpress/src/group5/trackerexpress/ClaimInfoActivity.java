@@ -18,6 +18,7 @@ public class ClaimInfoActivity extends ActionBarActivity {
 	private static final int INDEX_OF_EXPENSE_LIST_TAB = 1;
 
 	private static Context instance;
+	private Claim claim;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -29,7 +30,7 @@ public class ClaimInfoActivity extends ActionBarActivity {
 		final Intent intent = this.getIntent();
     	UUID serialisedId = (UUID) intent.getSerializableExtra("claimUUID");
 
-	    final Claim claim = ClaimController.getInstance(ClaimInfoActivity.this)
+	    claim = ClaimController.getInstance(ClaimInfoActivity.this)
 	    						.getClaimList().getClaim(serialisedId);
 	    
 	    
@@ -69,7 +70,7 @@ public class ClaimInfoActivity extends ActionBarActivity {
 			
 			switch( position ){
 				case INDEX_OF_VIEW_CLAIM_TAB: 
-					fragment = new ViewClaimFragment();
+					fragment = new ViewClaimFragment(claim);
 					break;
 				case INDEX_OF_EXPENSE_LIST_TAB:
 					fragment = new ExpenseListFragment();

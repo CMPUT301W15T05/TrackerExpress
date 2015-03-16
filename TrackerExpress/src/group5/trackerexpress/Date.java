@@ -44,6 +44,10 @@ public class Date implements Comparable<Date>{
 		return yyyy;
 	}
 	
+	public String getString() {
+		return dd.toString() + "/" + mm.toString() + "/" + yyyy.toString();
+	}
+	
 	@Override
 	public int compareTo(Date d) {
 		// TODO Auto-generated method stub

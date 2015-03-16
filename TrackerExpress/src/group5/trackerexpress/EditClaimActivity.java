@@ -74,7 +74,9 @@ public class EditClaimActivity extends Activity {
 	    
 	    UUID serialisedId = (UUID) intent.getSerializableExtra("claimUUID");
 	    final Claim claim = ClaimController.getInstance(EditClaimActivity.this).getClaimList().getClaim(serialisedId);
-	    
+	    // TODO: newclaimlist should be used instead
+	    // TODO:
+	    // TODO
 	    Button addTagsButton= (Button) findViewById(R.id.buttonEditTags);
 		
 		addTagsButton.setOnClickListener(new View.OnClickListener() {
