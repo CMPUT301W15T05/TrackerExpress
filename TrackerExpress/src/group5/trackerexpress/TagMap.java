@@ -16,6 +16,11 @@ public class TagMap extends TModel{
 	private static final String FILENAME = "tags.sav";
 	private Map<UUID, Tag> tags;
 	
+	/*
+	 * Constructor.
+	 * 
+	 * 
+	 */
 	public TagMap(Context context){
 		super();
 		tags = new HashMap<UUID, Tag>();
@@ -33,7 +38,10 @@ public class TagMap extends TModel{
 
 	public void loadData(Context context) {
 		try {
-			this.tags = new FileCourrier<TagMap>(this).loadFile(context, FILENAME).tags;
+			TagMap savedTagMap = new FileCourrier<TagMap>(this).loadFile(context, FILENAME);
+			if (savedTagMap.tags == null)
+				throw new FileNotFoundException();
+			this.tags = savedTagMap.tags;
 		} catch (FileNotFoundException e) {
 			System.err.println ("Tags file not found, making a fresh tags list.");
 			this.tags = new HashMap<UUID, Tag>();
