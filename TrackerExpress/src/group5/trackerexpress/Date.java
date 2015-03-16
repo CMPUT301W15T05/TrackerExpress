@@ -60,4 +60,8 @@ public class Date implements Comparable<Date>{
 		return int1.compareTo(int2);
 	}
 	
+	public boolean beforeAfterCheck(Date before, Date after){
+		return (after.getDate() > before.getDate());
+	}
+	
 }
