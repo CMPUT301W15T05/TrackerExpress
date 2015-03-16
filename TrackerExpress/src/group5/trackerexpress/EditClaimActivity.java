@@ -33,6 +33,9 @@ public class EditClaimActivity extends Activity {
 	private EditText Description; 
 	private EditText DesName;
 	private EditText DesRea;
+	private EditText TagName;
+	
+	private Boolean CheckCorrectness;
 
 	private ArrayList<String[]> Destination;
 	private ArrayAdapter<String> adapter2;
@@ -79,12 +82,14 @@ public class EditClaimActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				
-				// display message "Creating new claim".
-				Toast.makeText(EditClaimActivity.this, "Loading", Toast.LENGTH_SHORT). show();
 				
-				// launch CreateNewClaimActivity.
-				Intent intent = new Intent(EditClaimActivity.this, SelectTag_claim_Activity.class);
-		    	startActivity(intent);
+				if (isNewClaim == true){
+					//createTagButton(isNewClaim,Destination,newDestination,doNothing);
+				} else {
+					Destination = claim.getDestination();
+					//createTagButton(isNewClaim, Destination,newDestination,doNothing);
+				}
+				
 			}
 		});
 	    
@@ -106,32 +111,38 @@ public class EditClaimActivity extends Activity {
 					createDestinationButton(isNewClaim,Destination,newDestination,doNothing);
 				} else {
 					Destination = claim.getDestination();
-					createDestinationButton(isNewClaim, Destination,editDestination,doNothing);
+					createDestinationButton(isNewClaim, Destination,newDestination,doNothing);
 				}
 				
 			}
 		});
 		
-		
+		Button done = (Button) findViewById(R.id.buttonCreateClaim);
 		
 	    if (isNewClaim == true){
-			    	
+			    	done.setText("Create Claim");
 			    	
 			    	DestinationListview(myListView,Destination);
 			    	
 			    	
 			    } else {
+			    	
+			    	done.setText("Edit Claim");
 			    	Destination = claim.getDestination();
 				    ClaimName.setText(claim.getuserName());
 					ClaimTitle.setText(claim.getClaimName());
 					
-					StartDateYear.setText(String.valueOf(claim.getStartDate().getYYYY()));
-					StartDateMonth.setText(String.valueOf(claim.getStartDate().getMM()));
-					StartDateDay.setText(String.valueOf(claim.getStartDate().getDD()));
+					if ( claim.getStartDate() != null ){
+						StartDateYear.setText(String.valueOf(claim.getStartDate().getYYYY()));
+						StartDateMonth.setText(String.valueOf(claim.getStartDate().getMM()));
+						StartDateDay.setText(String.valueOf(claim.getStartDate().getDD()));
+					}
 					
-					EndDateYear.setText(String.valueOf(claim.getEndDate().getYYYY()));
-					EndDateMonth.setText(String.valueOf(claim.getEndDate().getMM()));
-					EndDateDay.setText(String.valueOf(claim.getEndDate().getDD()));
+					if ( claim.getStartDate() != null ){
+						EndDateYear.setText(String.valueOf(claim.getEndDate().getYYYY()));
+						EndDateMonth.setText(String.valueOf(claim.getEndDate().getMM()));
+						EndDateDay.setText(String.valueOf(claim.getEndDate().getDD()));
+					}
 					
 					Description.setText(String.valueOf(claim.getDescription()));
 					DestinationListview(myListView,Destination);
@@ -141,7 +152,7 @@ public class EditClaimActivity extends Activity {
 	    myListView.setOnItemClickListener(onListClick);
 	    
 	    
-	    Button done = (Button) findViewById(R.id.buttonCreateClaim);
+	    
 	    done.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
@@ -151,16 +162,25 @@ public class EditClaimActivity extends Activity {
 					editclaim(newclaim);
 					newclaimlist.addClaim(EditClaimActivity.this, newclaim);
 					newclaim.setDestination(EditClaimActivity.this, Destination);
+					
 				} else{
 					editclaim(claim);
 					claim.setDestination(EditClaimActivity.this, Destination);
 				}
-			    
+				
+				
+				/* this statement checks if the text field is valid or not.*/
+				
+				if( ClaimName.getText().toString().length() == 0 ){
+				    ClaimName.setError( "Name is required!" );
+				}else {
+				
 			    Toast.makeText(EditClaimActivity.this, "Updating", Toast.LENGTH_SHORT). show();
 				
 				// launch CreateNewClaimActivity.
 				Intent intent = new Intent(EditClaimActivity.this, MainActivity.class);
 		    	startActivity(intent);
+				}
 			}
 		});
 	    
@@ -199,7 +219,7 @@ public class EditClaimActivity extends Activity {
 				}
 			});
 			
-			helperBuilder.setNeutralButton("cancel", new DialogInterface.OnClickListener() {
+			helperBuilder.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
 
 				  @Override
 				  public void onClick(DialogInterface dialog, int which) {
@@ -213,6 +233,7 @@ public class EditClaimActivity extends Activity {
 				public void onClick(DialogInterface dialog, int which){
 					String toRemove = adapter2.getItem(position);
 					adapter2.remove(toRemove);
+					Destination.remove(position);
 					adapter2.notifyDataSetChanged();
 				}
 			});
@@ -223,41 +244,50 @@ public class EditClaimActivity extends Activity {
 	
 	private void editclaim(final Claim claim) {
 		// TODO Auto-generated method stub
-		
-		
+		int mySDateY, mySDateM, mySDateD,myEDateY, myEDateM, myEDateD;
+		Date d2 = null;
+		Date d1 = null;
 		String claimUser = ClaimName.getText().toString();
 		String Claim_title = ClaimTitle.getText().toString();
 		
 		String SDateY = StartDateYear.getText().toString();
-		if (ParseHelper.isIntegerParsable(SDateY)){
-			
-		}
-		int mySDateY = Integer.parseInt(SDateY);
-		
 		String SDateM = StartDateMonth.getText().toString();
-		int mySDateM = Integer.parseInt(SDateM);
-		
 		String SDateD = StartDateDay.getText().toString();
-		int mySDateD = Integer.parseInt(SDateD);
 		
 		String EDateY = EndDateYear.getText().toString();
-		int myEDateY = Integer.parseInt(EDateY);
-		
 		String EDateM = EndDateMonth.getText().toString();
-		int myEDateM = Integer.parseInt(EDateM);
-		
 		String EDateD = EndDateDay.getText().toString();
-		int myEDateD = Integer.parseInt(EDateD);
+		
 		String Descrip = Description.getText().toString();
+		
+
+		
+		if (ParseHelper.isIntegerParsable(EDateD) && 
+			ParseHelper.isIntegerParsable(EDateM) && 
+			ParseHelper.isIntegerParsable(EDateY)){
+			
+			myEDateD = Integer.parseInt(EDateD);
+			myEDateM = Integer.parseInt(EDateM);
+			myEDateY = Integer.parseInt(EDateY);
+			d2 = new Date(myEDateY, myEDateM, myEDateD);
+		}
+		
+		if (ParseHelper.isIntegerParsable(SDateD) &&
+			ParseHelper.isIntegerParsable(SDateM) &&
+			ParseHelper.isIntegerParsable(SDateY)){
+			
+			mySDateD = Integer.parseInt(SDateD);
+			mySDateM = Integer.parseInt(SDateM);
+			mySDateY = Integer.parseInt(SDateY);
+			d1 = new Date(mySDateY, mySDateM, mySDateD);
+		}
 		
 		
 		
 		claim.setuserName(this, claimUser);
 		claim.setClaimName(this, Claim_title);
 		
-		Date d1 = new Date(mySDateY, mySDateM, mySDateD);
-		Date d2 = new Date(myEDateY, myEDateM, myEDateD);
-		
+
 		claim.setStartDate(this, d1);
 		claim.setEndDate(this, d2);
 		claim.setDescription(this, Descrip);
@@ -375,5 +405,73 @@ public class EditClaimActivity extends Activity {
 		}
 		return destinationreason;
 	}
+	
+	
+/*	public void createTagButton(boolean isNewClaim, ArrayList<Tag> destination2, int newDestination2,int doNothing2){
+		AlertDialog.Builder helperBuilder = new AlertDialog.Builder(this);
+		helperBuilder.setCancelable(false);
+		helperBuilder.setTitle("Tags");
+		
+		LayoutInflater inflater = getLayoutInflater();
+        View popupview = inflater.inflate(R.layout.activity_popup_select_tags, null);
+        helperBuilder.setView(popupview);
+        
+        TagName = (EditText) popupview.findViewById(R.id.EditTextAddTags);
+        
+		switch(i){
+				
+		case newDestination:
+			helperBuilder.setPositiveButton("Done", new DialogInterface.OnClickListener() {
+				
+				public void onClick(DialogInterface dialog, int which) {
+					
+					String Des_Name = DesName.getText().toString();
+					String Des_Rea = DesRea.getText().toString();
+					editDummyDestination(EditClaimActivity.this, Des_Name, Des_Rea, doNothing, null, newDestination);
+				}
+			});
+			
+			helperBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+				
+				public void onClick(DialogInterface dialog, int which) {
+						// TODO Auto-generated method stub
+							
+				}
+			});
+					
+			AlertDialog helperDialog = helperBuilder.create();
+			helperDialog.show();
+			break;
+					
+		case editDestination:
+			DesName.setText(destination2.get(position)[0]);
+			DesRea.setText(destination2.get(position)[1]);
+			final String oldDestination = destination2.get(position)[0]+" - "+destination2.get(position)[1];
+			
+			helperBuilder.setPositiveButton("Done", new DialogInterface.OnClickListener() {
+				
+				public void onClick(DialogInterface dialog, int which) {
+					String Des_Name2 = DesName.getText().toString();
+					String Des_Rea2 = DesRea.getText().toString();
+					editDummyDestination(EditClaimActivity.this, Des_Name2, Des_Rea2, position, oldDestination,editDestination);
+				}
+			});
+			
+			
+			helperBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+				
+				public void onClick(DialogInterface dialog, int which) {
+						// TODO Auto-generated method stub
+							
+				}
+			});
+					
+			AlertDialog helpDialog = helperBuilder.create();
+			helpDialog.show();
+			break;
+		}
+		
+	}
+	*/
 	
 }

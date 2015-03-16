@@ -39,7 +39,7 @@
         </activity>
         
         <activity
-            android:name=".SelectTag_claim_Activity"
+            android:name=".SelectTagEditClaimActivity"
             android:windowSoftInputMode="adjustResize|stateVisible" >
         </activity>
         
@@ -55,7 +55,7 @@
         <activity
             android:name=".DummyTestModels" >
         </activity>
-        
+              
     </application>
 
     <!-- To auto-complete the email text field in the login form with the user's emails -->
