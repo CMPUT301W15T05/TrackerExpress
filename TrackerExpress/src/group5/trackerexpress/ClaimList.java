@@ -9,7 +9,7 @@ import java.util.UUID;
 
 import android.content.Context;
 
-// TODO: Auto-generated Javadoc
+
 /**
  * The Class ClaimList.
  */
