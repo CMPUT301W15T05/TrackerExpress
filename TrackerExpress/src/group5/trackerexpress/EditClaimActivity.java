@@ -278,7 +278,7 @@ public class EditClaimActivity extends Activity {
 		 * edit claim/create claim button is pressed. 
 		 */
 	    done.setOnClickListener(new View.OnClickListener() {	
-			/* (non-Javadoc)
+			/** (non-Javadoc)
 			 * @see android.view.View.OnClickListener#onClick(android.view.View)
 			 */
 			@Override
@@ -294,7 +294,7 @@ public class EditClaimActivity extends Activity {
 					}
 				}
 				
-				/* this statement checks if the text fields are valid or not and display error message.*/
+				/** this statement checks if the text fields are valid or not and display error message.*/
 				if( ClaimName.getText().toString().length() == 0 || ClaimTitle.getText().toString().length() == 0 ){
 				    if ( ClaimName.getText().toString().length() == 0 ){
 				    	ClaimName.setError( "Name is required!" );
@@ -328,7 +328,7 @@ public class EditClaimActivity extends Activity {
 			}
 		});
 	    
-	    /*
+	    /**
 	     * On click for Cancel button. Calls "safe guard" method if user accidently 
 	     * pressed cancel.
 	     */

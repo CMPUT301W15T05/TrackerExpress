@@ -94,7 +94,7 @@ public class ClaimInfoActivity extends ActionBarActivity {
 					fragment = new ViewClaimFragment(claim);
 					break;
 				case INDEX_OF_EXPENSE_LIST_TAB:
-					fragment = new ExpenseListFragment();
+					fragment = new ExpenseListFragment(claim);
 					break;
 				default: Log.i("myMessage", "This should never happen");
 			}
