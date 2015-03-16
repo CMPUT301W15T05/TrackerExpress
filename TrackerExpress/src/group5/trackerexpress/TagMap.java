@@ -82,7 +82,7 @@ public class TagMap extends TModel{
 	}
 
 	/**
-	 * Clear.
+	 * Clears tags map.
 	 *
 	 * @param context Needed for file IO
 	 */
@@ -92,7 +92,7 @@ public class TagMap extends TModel{
 	}
 
 	/**
-	 * Checks if is empty.
+	 * Checks if tag map is empty.
 	 *
 	 * @return true, if is empty
 	 */
@@ -101,7 +101,7 @@ public class TagMap extends TModel{
 	}
 
 	/**
-	 * Adds the tag.
+	 * Adds the tag to the map.
 	 *
 	 * @param context Needed for file IO
 	 * @param tag the tag
@@ -114,7 +114,7 @@ public class TagMap extends TModel{
 	}
 
 	/**
-	 * Delete tag.
+	 * Delete tag from map.
 	 *
 	 * @param context Needed for file IO
 	 * @param id the id
@@ -125,25 +125,25 @@ public class TagMap extends TModel{
 	}
 
 	/**
-	 * Size.
+	 * Return the size of the tags map
 	 *
-	 * @return the int
+	 * @return size the size of the tags map
 	 */
 	public int size() {
 		return tags.size();
 	}
 
 	/**
-	 * Gets the tags.
+	 * Gets the tags in an arraylist.
 	 *
-	 * @return the tags
+	 * @return the tags as an array list
 	 */
 	public ArrayList<Tag> getTags() {
 		return new ArrayList<Tag>(tags.values());
 	}
-	
-	/* (non-Javadoc)
-	 * @see group5.trackerexpress.TModel#addView(group5.trackerexpress.TView)
+	/**
+	 * adds view to be updated
+	 * @param view TView to be updated
 	 */
 	@Override
 	public void addView(TView view){
@@ -155,6 +155,8 @@ public class TagMap extends TModel{
 	}
 
 	/**
+	 * Searches for a tag by string value
+	 * 
 	 * @param string
 	 * @return
 	 * @throws IllegalAccessException 

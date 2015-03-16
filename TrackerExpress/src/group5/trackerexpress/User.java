@@ -13,19 +13,19 @@ import android.content.Context;
  */
 public class User extends TModel{
 	
-	/** The email. */
+	/** The email of the user. */
 	private String email;
 	
-	/** The password. */
+	/** The password of the user. */
 	private String password;
 	
-	/** The name. */
+	/** The name of the user. */
 	private String name;
 	
-	/** The signed in. */
+	/** The SIGNED_IN boolean to check if user is signed in. */
 	private boolean SIGNED_IN; // true if the user was signed in
 	
-	/** The Constant FILENAME. */
+	/** The Constant FILENAME for saving. */
 	private static final String FILENAME = "user.sav";
 	
 	/**
@@ -144,7 +144,7 @@ public class User extends TModel{
 	}
 	
 	/**
-	 * Sets the signed in.
+	 * Sets the signed in boolean.
 	 *
 	 * @param signedIn the new signed in
 	 */
@@ -153,7 +153,7 @@ public class User extends TModel{
 	}
 	
 	/**
-	 * Checks if is signed in.
+	 * Checks if user is signed in.
 	 *
 	 * @return true, if is signed in
 	 */
