@@ -1,4 +1,4 @@
-
+/*
 package group5.trackerexpress.test;
 
 import group5.trackerexpress.Claim;
@@ -248,18 +248,18 @@ public class MainActivityTest extends
 		deleteTag(businessTag);
 	}
 	
-
+/*
 	/*
 	 * Takes the id of a text view and sets the text to a string.
 	 */ 
-	private void setText(int id, String text) {
+/*	private void setText(int id, String text) {
 		((EditText) getActivity().findViewById(id)).setText(text);
 	}
 	
 	/*
 	 * Takes the id of a button view and clicks on it.
 	 */ 
-	private void clickButton(int buttonId) {
+/*	private void clickButton(int buttonId) {
 		getActivity().findViewById(buttonId).performClick();
 	}
 	
@@ -295,4 +295,4 @@ public class MainActivityTest extends
 	private void clickTab(int index){
 		getActivity().getActionBar().getTabAt(index).select();
 	}
-}
+}*/
