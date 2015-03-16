@@ -38,7 +38,7 @@ public class Claim extends TModel implements Comparable<Claim>{
 	/** The incomplete. */
 	private boolean incomplete;
 	
-	private ArrayList<UUID> tagsIds;
+	private ArrayList<UUID> tagIds;
     
 	/** The Constant IN_PROGRESS. */
 	public static final int IN_PROGRESS = 0;
@@ -67,6 +67,7 @@ public class Claim extends TModel implements Comparable<Claim>{
 		this.expenseList = new ExpenseList();
 		this.status = IN_PROGRESS;
 		this.incomplete = true;
+		this.tagIds = new ArrayList<UUID>();
 	}
 	
 	/**
@@ -344,11 +345,11 @@ public class Claim extends TModel implements Comparable<Claim>{
 	}
 
 	public ArrayList<UUID> getTagsIds() {
-		return tagsIds;
+		return tagIds;
 	}
 
 	public void setTagsIds(ArrayList<UUID> tagsIds) {
-		this.tagsIds = tagsIds;
+		this.tagIds = tagsIds;
 	}
 	
 }

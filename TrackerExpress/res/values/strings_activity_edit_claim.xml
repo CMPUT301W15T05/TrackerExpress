@@ -21,5 +21,6 @@
     <string name="promote_day">DD (01-31)</string>
     <string name="action_calcel_edit_claim">Cancel</string>
 	<string name="edit_claim_delete_tag"> Delete </string>
+	<string name="action_add_expense">Add Expense</string>
     
 </resources>

@@ -1,7 +1,10 @@
 package group5.trackerexpress;
 
 import java.util.Locale;
+import java.util.UUID;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -21,6 +24,9 @@ public class ClaimInfoActivity extends ActionBarActivity {
 	/** The Constant INDEX_OF_EXPENSE_LIST_TAB. */
 	private static final int INDEX_OF_EXPENSE_LIST_TAB = 1;
 
+	private static Context instance;
+	private Claim claim;
+	
 	/* (non-Javadoc)
 	 * @see group5.trackerexpress.ActionBarActivity#onCreate(android.os.Bundle)
 	 */
@@ -29,6 +35,16 @@ public class ClaimInfoActivity extends ActionBarActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_claim_info);
 
+		instance = this;
+
+		final Intent intent = this.getIntent();
+    	UUID serialisedId = (UUID) intent.getSerializableExtra("claimUUID");
+
+	    claim = ClaimController.getInstance(ClaimInfoActivity.this)
+	    						.getClaimList().getClaim(serialisedId);
+	    
+	    
+		
 		// Create the adapter that will return a fragment for each of the three
 		// primary sections of the activity.
 		SectionsPagerAdapter mSectionsPagerAdapter = new ClaimInfoPagerAdapter(
@@ -75,10 +91,10 @@ public class ClaimInfoActivity extends ActionBarActivity {
 			
 			switch( position ){
 				case INDEX_OF_VIEW_CLAIM_TAB: 
-					fragment = new ViewClaimFragment();
+					fragment = new ViewClaimFragment(claim);
 					break;
 				case INDEX_OF_EXPENSE_LIST_TAB:
-					fragment = new ExpenseListFragment();
+					fragment = new ExpenseListFragment(claim);
 					break;
 				default: Log.i("myMessage", "This should never happen");
 			}
@@ -111,6 +127,11 @@ public class ClaimInfoActivity extends ActionBarActivity {
 			}
 			return null;
 		}
+	}
+	
+
+	public static Context getThis() {
+		return instance;
 	}
 
 }

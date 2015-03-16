@@ -1,4 +1,4 @@
-
+/*
 package group5.trackerexpress.test;
 import java.util.ArrayList;
 
@@ -159,4 +159,4 @@ public class ViewClaimActivityTest extends
 		
 		
 	}
-}
+}*/
