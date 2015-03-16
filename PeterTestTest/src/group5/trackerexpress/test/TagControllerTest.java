@@ -3,6 +3,7 @@ package group5.trackerexpress.test;
 
 import java.util.UUID;
 
+import group5.trackerexpress.EditClaimActivity;
 import group5.trackerexpress.MainActivity;
 import group5.trackerexpress.Tag;
 import group5.trackerexpress.TagController;
@@ -13,14 +14,14 @@ import android.content.Context;
 import android.test.ActivityInstrumentationTestCase2;
 
 public class TagControllerTest extends
-ActivityInstrumentationTestCase2<MainActivity> {
+ActivityInstrumentationTestCase2<EditClaimActivity> {
 
 	Instrumentation instrumentation;
 	Context context;
 	TagMap tags;
 
 	public TagControllerTest() {
-		super(MainActivity.class);
+		super(EditClaimActivity.class);
 	}
 
 	protected void setUp() throws Exception {

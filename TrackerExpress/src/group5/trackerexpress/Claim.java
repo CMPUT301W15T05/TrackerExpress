@@ -69,6 +69,7 @@ public class Claim extends TModel implements Comparable<Claim>{
 		this.claimName = claimName;
 		this.expenseList = new ExpenseList();
 		this.status = IN_PROGRESS;
+		this.incomplete = true;
 		this.tagIds = new ArrayList<UUID>();
 	}
 	
