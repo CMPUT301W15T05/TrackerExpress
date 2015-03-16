@@ -45,6 +45,14 @@ public class EditExpenseActivity extends Activity {
 			}
 		};
 		imgButton.setOnClickListener(picListener);
+			
+		
+		OnClickListener createListener = new OnClickListener() {
+			public void onClick(View v) {
+	
+			}
+		};
+		createExpenseButton.setOnClickListener(createListener);
 	}
 
 	private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
