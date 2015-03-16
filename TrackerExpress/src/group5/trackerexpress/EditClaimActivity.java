@@ -181,31 +181,11 @@ public class EditClaimActivity extends Activity {
 			
 			@Override
 			public void onClick(View v) {
+				Toast.makeText(EditClaimActivity.this, "Canceling", Toast.LENGTH_SHORT). show();
 				
-				AlertDialog.Builder helperBuilder = new AlertDialog.Builder(EditClaimActivity.this);
-				helperBuilder.setCancelable(false);
-				helperBuilder.setTitle("Warning");
-				helperBuilder.setMessage("Are you sure you want to exit before saving?");
-				helperBuilder.setPositiveButton("Proceed", new DialogInterface.OnClickListener(){
-					public void onClick(DialogInterface dialog, int which){
-						
-						Toast.makeText(EditClaimActivity.this, "Canceling", Toast.LENGTH_SHORT). show();
-						
-						// launch CreateNewClaimActivity.
-						Intent intent = new Intent(EditClaimActivity.this, MainActivity.class);
-				    	startActivity(intent);
-					}
-				});
-				
-				helperBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener(){
-				
-					@Override
-					public void onClick(DialogInterface dialog, int which){
-						
-					}
-				});
-				AlertDialog helpDialog = helperBuilder.create();
-				helpDialog.show();
+				// launch CreateNewClaimActivity.
+				Intent intent = new Intent(EditClaimActivity.this, MainActivity.class);
+		    	startActivity(intent);
 			}
 		});
 	}
