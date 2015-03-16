@@ -35,6 +35,7 @@ import android.widget.AdapterView.OnItemLongClickListener;
  */
 public class EditClaimActivity extends Activity {
 	
+
 	/** The Claim name. */
 	private EditText ClaimName;
 	
@@ -109,9 +110,14 @@ public class EditClaimActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_edit_claim);
 		
+		/*Initialize the dummy destination 2d array which will 
+		be used to store destination and reason of travel for both edit claim and create new claim.*/
+		
 		Destination = new ArrayList<String[]>();
 		
 		final Claim newclaim = new Claim("");
+		
+		//set each EditTexts
 		
 		ClaimName = (EditText) findViewById(R.id.editClaimName);
 		ClaimTitle = (EditText) findViewById(R.id.editClaimTitle);
@@ -132,11 +138,16 @@ public class EditClaimActivity extends Activity {
 		/*****************************
 		 * ADDED CODE START
 		 *****************************/
+		
+		/*
+		 * On click for add tags button
+		 */
 				
 		Button b_add_tag = (Button) findViewById(R.id.buttonEditTags);
 		
 		b_add_tag.setOnClickListener(new Button.OnClickListener(){
 		    public void onClick(View v) {
+		    	
 		    	getAndSetTag();
 		    }
 		});
@@ -176,6 +187,10 @@ public class EditClaimActivity extends Activity {
 		 * ADDED CODE END
 		 *****************************/
 		
+		/* Get date from Main activity through the controller.
+		 * Get claim id (UUID) if edit claim is selected from Main activity.
+		 */
+		
 		final Intent intent = this.getIntent();
 	    final boolean isNewClaim = (boolean) intent.getBooleanExtra("isNewClaim", true);
 	    final ClaimList newclaimlist = ClaimController.getInstance(EditClaimActivity.this).getClaimList();
@@ -183,16 +198,15 @@ public class EditClaimActivity extends Activity {
 	    UUID serialisedId = (UUID) intent.getSerializableExtra("claimUUID");
 	    final Claim claim = ClaimController.getInstance(EditClaimActivity.this).getClaimList().getClaim(serialisedId);
 	    
-	    Button addTagsButton= (Button) findViewById(R.id.buttonEditTags);
-		
-		/* create a dummy 2d destination array once the create_claim_button is clicked, 
-		 * it will save this array into the claim.(use getDestination(this, ArrayList<String[]> yourDestination*/		
-	    
+	    /*
+	     * On click listener for add destination button in EditClaimActivity.
+	     */
 		Button editDestinationButton = (Button) findViewById(R.id.buttonAddDestination);
 		
 		editDestinationButton.setOnClickListener(new View.OnClickListener() {	
 			@Override
 			public void onClick(View v) {
+				/* check if the user pressed create new claim or edit existing claim button from MainActivity.*/
 				if (isNewClaim == true){
 					createDestinationButton(isNewClaim,Destination,newDestination,doNothing);
 				} else {
@@ -204,6 +218,10 @@ public class EditClaimActivity extends Activity {
 		
 		Button done = (Button) findViewById(R.id.buttonCreateClaim);
 		
+		/*
+		 * Checks if the user wants to edit an existing claim or create a new claim.
+		 * If existing claim, set text to the completed ListViews and ExitTexts.
+		 */
 	    if (isNewClaim == true){
 		    done.setText("Create Claim");
 		    DestinationListview(desListView,Destination);
@@ -237,8 +255,14 @@ public class EditClaimActivity extends Activity {
 			}
 	    }
 	    
+	    // On item click for the destination and reason ListView.
 	    desListView.setOnItemClickListener(onListClick);
 	    
+	    /*
+		 * On click listener for edit claim/create claim button (button name will change depending on what button
+		 * was pressed from the previous activity). Saving the edited/new claim will be triggered only when the 
+		 * edit claim/create claim button is pressed. 
+		 */
 	    done.setOnClickListener(new View.OnClickListener() {	
 			@Override
 			public void onClick(View v) {
@@ -283,6 +307,10 @@ public class EditClaimActivity extends Activity {
 			}
 		});
 	    
+	    /*
+	     * On click for Cancel button. Calls "safe guard" method if user accidently 
+	     * pressed cancel.
+	     */
 	    Button cancel = (Button) findViewById(R.id.button_cancel_edit_claim);
 	    cancel.setOnClickListener(new View.OnClickListener() {
 			
@@ -296,10 +324,10 @@ public class EditClaimActivity extends Activity {
 	}
 	
 
-	
-	/* (non-Javadoc)
-	 * @see android.app.Activity#onKeyDown(int, android.view.KeyEvent)
-	 */
+	/*
+     * On click listener for the back button(soft key). Calls "safe guard" method if user accidently 
+     * pressed back button.
+     */
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 	    if (keyCode == KeyEvent.KEYCODE_BACK) {
@@ -309,9 +337,7 @@ public class EditClaimActivity extends Activity {
 	    return super.onKeyDown(keyCode, event);
 	}
 	
-	/* (non-Javadoc)
-	 * @see android.app.Activity#onStop()
-	 */
+	// Destroy this activity when done. 
 	@Override
 	public void onStop(){
 		super.onStop();
@@ -371,6 +397,10 @@ public class EditClaimActivity extends Activity {
 		    		updateTagListView(new ArrayList<Tag>(tagsOfClaim));
 		    	}
 		    	
+		    	
+		    	if (input.getText() == null){
+//		    		.setError( "Name is required!" );
+		    	}
 		    	value = null;
 	        }
 	    }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -381,8 +411,11 @@ public class EditClaimActivity extends Activity {
 		
 	}
 
-	
-	/** The on list click. */
+
+	/*
+	 * Make the items in destination ListView clickable and generate 
+	 * a popup box asking user what to do.
+	 */
 	private AdapterView.OnItemClickListener onListClick = new AdapterView.OnItemClickListener() {
 
 		@Override
@@ -425,6 +458,7 @@ public class EditClaimActivity extends Activity {
 	 * Editclaim.
 	 *
 	 * @param claim the claim
+	 * Get info from user and add it to claim.
 	 */
 	private void editclaim(final Claim claim) {
 		// TODO Auto-generated method stub
@@ -444,6 +478,7 @@ public class EditClaimActivity extends Activity {
 		
 		String Descrip = Description.getText().toString();
 		
+		// A check if date is parseable (preventing app from crashing)
 		if (ParseHelper.isIntegerParsable(EDateD) && 
 			ParseHelper.isIntegerParsable(EDateM) && 
 			ParseHelper.isIntegerParsable(EDateY)){
@@ -476,7 +511,6 @@ public class EditClaimActivity extends Activity {
 
 
 
-
 	/**
 	 * Creates the destination button.
 	 *
@@ -484,6 +518,8 @@ public class EditClaimActivity extends Activity {
 	 * @param destination2 the destination2
 	 * @param i the i
 	 * @param position the position
+	 * Create a popup window for entering and editing destination/reason then call save it into the dummy
+	 * 2d destination array.
 	 */
 	private void createDestinationButton( final boolean isNewClaim, final ArrayList<String[]> destination2, final int i,final int position) {
 		// TODO Auto-generated method stub
@@ -498,7 +534,8 @@ public class EditClaimActivity extends Activity {
         DesName = (EditText) popupview.findViewById(R.id.inputDestination);
         DesRea = (EditText) popupview.findViewById(R.id.inputDestinationReason);
         		
-		switch(i){		
+		switch(i){	
+		// for creating new destination
 		case newDestination:
 			helperBuilder.setPositiveButton("Done", new DialogInterface.OnClickListener() {
 				
@@ -521,6 +558,8 @@ public class EditClaimActivity extends Activity {
 			AlertDialog helperDialog = helperBuilder.create();
 			helperDialog.show();
 			break;
+			
+		// for editing a existing destination
 		case editDestination:
 			DesName.setText(destination2.get(position)[0]);
 			DesRea.setText(destination2.get(position)[1]);
@@ -551,7 +590,6 @@ public class EditClaimActivity extends Activity {
 				
 	}
 	
-	/* updates tag list view */
 	/**
 	 * Update tag list view.
 	 *
@@ -574,6 +612,8 @@ public class EditClaimActivity extends Activity {
 	 * @param position the position
 	 * @param oldDestination the old destination
 	 * @param i the i
+
+	// Update the adapter and dummy destination arrayList.
 	 */
 	public void editDummyDestination(Context context, String place, String Reason, int position, String oldDestination, int i){
 		String[] travelInfo = new String[2];
@@ -598,7 +638,8 @@ public class EditClaimActivity extends Activity {
 	 *
 	 * @param myListView the my list view
 	 * @param destination the destination
-	 */
+	// set adapter for destination
+	*/
 	public void DestinationListview(ListView myListView, ArrayList<String[]> destination){
 		
 		ArrayList<String> destinationArray = destinationReason(destination);
@@ -613,6 +654,7 @@ public class EditClaimActivity extends Activity {
 	 *
 	 * @param destination2 the destination2
 	 * @return the array list
+	// Concatenate destination into one string to display it on simple ListView adapter
 	 */
 	public ArrayList<String> destinationReason(ArrayList<String[]> destination2){
 		final ArrayList<String> destinationreason = new ArrayList<String>();
