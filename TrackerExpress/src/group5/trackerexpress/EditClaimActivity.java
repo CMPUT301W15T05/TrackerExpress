@@ -2,6 +2,8 @@ package group5.trackerexpress;
 
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -11,14 +13,21 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
+import android.text.Editable;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.PopupMenu;
 import android.widget.Toast;
+import android.widget.AdapterView.OnItemLongClickListener;
 
 public class EditClaimActivity extends Activity {
 	
@@ -35,7 +44,14 @@ public class EditClaimActivity extends Activity {
 	private EditText DesRea;
 	private EditText TagName;
 	
-	private Boolean CheckCorrectness;
+	private ListView desListView;
+	private ListView tagListView;
+	
+	private Editable value;
+	
+	private final HashSet<Tag> tagsOfClaim = new HashSet<Tag>();
+	
+	private Boolean checkCorrectness;
 
 	private ArrayList<String[]> Destination;
 	private ArrayAdapter<String> adapter2;
@@ -65,8 +81,56 @@ public class EditClaimActivity extends Activity {
 		EndDateDay = (EditText) findViewById(R.id.editClaimEndDateDay);
 		Description = (EditText) findViewById(R.id.editClaimDescription);
 		
-		ListView myListView = (ListView) findViewById(R.id.listViewDestinations);
+		desListView = (ListView) findViewById(R.id.listViewDestinations);
+		tagListView = (ListView) findViewById(R.id.listViewTagsEditClaim);
+		tagListView.setItemsCanFocus(true);
 		
+		/*****************************
+		 * ADDED CODE START
+		 *****************************/
+				
+		Button b_add_tag = (Button) findViewById(R.id.buttonEditTags);
+		
+		b_add_tag.setOnClickListener(new Button.OnClickListener(){
+		    public void onClick(View v) {
+		    	getAndSetTag();
+		    }
+		});
+		
+		// Tag List Item click listener
+		tagListView.setOnItemClickListener( new OnItemClickListener() {
+        	@Override
+			public void onItemClick(AdapterView<?> parent,
+					View view, final int position, long id) {
+				
+				PopupMenu popup = new PopupMenu(EditClaimActivity.this, view);
+				popup.getMenuInflater().inflate(R.menu.edit_claim_tag_list_popup, popup.getMenu());
+				
+				// Popup menu item click listener
+				popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    public boolean onMenuItemClick(MenuItem item) {
+                    	Tag t = (Tag) tagListView.getAdapter().getItem(position);
+                    	
+                        switch(item.getItemId()){
+                        case R.id.op_edit_claim_delete_tag: 
+                        	tagsOfClaim.remove(t);
+                        	updateTagListView(new ArrayList<Tag>(tagsOfClaim));
+                        	break;
+                        	default: break;
+                        }
+                    	
+                        return true;
+                    }
+                });
+				
+	            popup.show();
+			}
+        });
+		
+		
+		/*****************************
+		 * ADDED CODE END
+		 *****************************/
 		
 		final Intent intent = this.getIntent();
 	    final boolean isNewClaim = (boolean) intent.getBooleanExtra("isNewClaim", true);
@@ -77,34 +141,12 @@ public class EditClaimActivity extends Activity {
 	    
 	    Button addTagsButton= (Button) findViewById(R.id.buttonEditTags);
 		
-		addTagsButton.setOnClickListener(new View.OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				
-				
-				if (isNewClaim == true){
-					//createTagButton(isNewClaim,Destination,newDestination,doNothing);
-				} else {
-					Destination = claim.getDestination();
-					//createTagButton(isNewClaim, Destination,newDestination,doNothing);
-				}
-				
-			}
-		});
-	    
-		
-		
 		/* create a dummy 2d destination array once the create_claim_button is clicked, 
-		 * it will save this array into the claim.(use getDestination(this, ArrayList<String[]> yourDestination*/
+		 * it will save this array into the claim.(use getDestination(this, ArrayList<String[]> yourDestination*/		
+	    
+		Button editDestinationButton = (Button) findViewById(R.id.buttonAddDestination);
 		
-		
-		
-		
-	    Button editDestinationButton = (Button) findViewById(R.id.buttonAddDestination);
-		
-		editDestinationButton.setOnClickListener(new View.OnClickListener() {
-			
+		editDestinationButton.setOnClickListener(new View.OnClickListener() {	
 			@Override
 			public void onClick(View v) {
 				if (isNewClaim == true){
@@ -113,73 +155,86 @@ public class EditClaimActivity extends Activity {
 					Destination = claim.getDestination();
 					createDestinationButton(isNewClaim, Destination,newDestination,doNothing);
 				}
-				
 			}
 		});
 		
 		Button done = (Button) findViewById(R.id.buttonCreateClaim);
 		
 	    if (isNewClaim == true){
-			    	done.setText("Create Claim");
-			    	
-			    	DestinationListview(myListView,Destination);
-			    	
-			    	
-			    } else {
-			    	
-			    	done.setText("Edit Claim");
-			    	Destination = claim.getDestination();
-				    ClaimName.setText(claim.getuserName());
-					ClaimTitle.setText(claim.getClaimName());
+		    done.setText("Create Claim");
+		    DestinationListview(desListView,Destination);
+		   		
+	    } else {
+		   	done.setText("Edit Claim");
+		   	Destination = claim.getDestination();
+		    ClaimName.setText(claim.getuserName());
+			ClaimTitle.setText(claim.getClaimName());
 					
-					if ( claim.getStartDate() != null ){
-						StartDateYear.setText(String.valueOf(claim.getStartDate().getYYYY()));
-						StartDateMonth.setText(String.valueOf(claim.getStartDate().getMM()));
-						StartDateDay.setText(String.valueOf(claim.getStartDate().getDD()));
-					}
+			if ( claim.getStartDate() != null ){
+				StartDateYear.setText(String.valueOf(claim.getStartDate().getYYYY()));
+				StartDateMonth.setText(String.valueOf(claim.getStartDate().getMM()));
+				StartDateDay.setText(String.valueOf(claim.getStartDate().getDD()));
+			}
 					
-					if ( claim.getStartDate() != null ){
-						EndDateYear.setText(String.valueOf(claim.getEndDate().getYYYY()));
-						EndDateMonth.setText(String.valueOf(claim.getEndDate().getMM()));
-						EndDateDay.setText(String.valueOf(claim.getEndDate().getDD()));
-					}
-					
-					Description.setText(String.valueOf(claim.getDescription()));
-					DestinationListview(myListView,Destination);
-				    
-			    }
-	    
-	    myListView.setOnItemClickListener(onListClick);
-	    
-	    
-	    
-	    done.setOnClickListener(new View.OnClickListener() {
+			if ( claim.getStartDate() != null ){
+				EndDateYear.setText(String.valueOf(claim.getEndDate().getYYYY()));
+				EndDateMonth.setText(String.valueOf(claim.getEndDate().getMM()));
+				EndDateDay.setText(String.valueOf(claim.getEndDate().getDD()));
+			}
+			Description.setText(String.valueOf(claim.getDescription()));
+			DestinationListview(desListView,Destination);
 			
+			/* Saving new tags */
+			ArrayList<Tag> current = TagController.getInstance(this).getTagMap().getTags();
+			for ( Tag t : tagsOfClaim ){
+				if ( ! current.contains(t) ){
+					TagController.getInstance(this).getTagMap().addTag(this, t);
+				}
+			}
+	    }
+	    
+	    desListView.setOnItemClickListener(onListClick);
+	    
+	    done.setOnClickListener(new View.OnClickListener() {	
 			@Override
 			public void onClick(View v) {
 				
-				if (isNewClaim == true){
-					editclaim(newclaim);
-					newclaimlist.addClaim(EditClaimActivity.this, newclaim);
-					newclaim.setDestination(EditClaimActivity.this, Destination);
-					
-				} else{
-					editclaim(claim);
-					claim.setDestination(EditClaimActivity.this, Destination);
+				/* this procedure will check if the claim name is repeated */
+				boolean repeatedClaimName = false;
+				Claim[] claims = ClaimController.getInstance(EditClaimActivity.this).getClaimList().getAllClaims();
+				for ( Claim c : claims ){
+						if ( c.getClaimName().equals( ClaimTitle.getText().toString() )
+							&& ( isNewClaim || ! c.getUuid().equals(claim.getUuid())) ){
+						repeatedClaimName = true;
+					}
 				}
 				
+				/* this statement checks if the text fields are valid or not.*/
+				if( ClaimName.getText().toString().length() == 0 || ClaimTitle.getText().toString().length() == 0 ){
+				    if ( ClaimName.getText().toString().length() == 0 ){
+				    	ClaimName.setError( "Name is required!" );
+				    }
+				    if ( ClaimTitle.getText().toString().length() == 0 ){
+				    	ClaimTitle.setError( "Title is required!" );
+				    }
+				} else if (repeatedClaimName) {
+					ClaimTitle.setError( "Repeated claim name!" );
+				} else {
 				
-				/* this statement checks if the text field is valid or not.*/
-				
-				if( ClaimName.getText().toString().length() == 0 ){
-				    ClaimName.setError( "Name is required!" );
-				}else {
-				
-			    Toast.makeText(EditClaimActivity.this, "Updating", Toast.LENGTH_SHORT). show();
-				
-				// launch CreateNewClaimActivity.
-			    Intent intent = new Intent(EditClaimActivity.this, MainActivity.class);
-		    	startActivity(intent);
+					Toast.makeText(EditClaimActivity.this, "Updating", Toast.LENGTH_SHORT). show();
+					
+					if (isNewClaim == true){
+						editclaim(newclaim);
+						newclaimlist.addClaim(EditClaimActivity.this, newclaim);
+						newclaim.setDestination(EditClaimActivity.this, Destination);
+					} else{
+						editclaim(claim);
+						claim.setDestination(EditClaimActivity.this, Destination);
+					}
+					
+					// launch CreateNewClaimActivity.
+					Intent intent = new Intent(EditClaimActivity.this, MainActivity.class);
+					startActivity(intent);
 				}
 			}
 		});
@@ -193,6 +248,7 @@ public class EditClaimActivity extends Activity {
 				
 			}
 		});
+	    
 	}
 	
 
@@ -211,6 +267,65 @@ public class EditClaimActivity extends Activity {
 		super.onStop();
 		finish();
 	}
+	
+	/* displays a popup autocomplete text view so the user can enter
+	 * a tag name, and then updates the list view
+	 */
+	private void getAndSetTag(){
+		String message = "Enter a new name";
+		final AutoCompleteTextView input = new AutoCompleteTextView(EditClaimActivity.this);
+
+		ArrayList<Tag> tagList = TagController.getInstance(EditClaimActivity.this).getTagMap().getTags();
+		ArrayList<String> tags = new ArrayList<String>();
+		
+		for ( int i = 0; i < tagList.size(); i++ ){
+			tags.add(tagList.get(i).toString());
+		}
+		
+		ArrayAdapter<String> adapter = new ArrayAdapter<String>(EditClaimActivity.this, R.layout.edit_claim_drop_down_item, tags);
+		input.setAdapter(adapter);
+		input.setThreshold(1);
+		input.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+			  @Override
+			  public void onFocusChange(View view, boolean hasFocus) {
+				  if(hasFocus){
+					  input.showDropDown();
+				  }
+			  }
+		});
+		
+		new AlertDialog.Builder(this)
+	    .setTitle("Create Tag")
+	    .setMessage(message)
+	    .setView(input)
+	    .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+	        public void onClick(DialogInterface dialog, int whichButton) {       		
+	        	value = input.getText();
+		    	if ( input.getText() != null ){
+		    		Tag newTag = new Tag(input.getText().toString());
+		    		boolean notInSet = true;
+		    		for ( Tag t : tagsOfClaim ){
+		    			if ( t.toString().equals(newTag.toString()) ){
+		    				notInSet = false;
+		    			}
+		    		}
+		    		if ( notInSet ){
+		    			tagsOfClaim.add(newTag);
+		    		}
+		    		
+		    		updateTagListView(new ArrayList<Tag>(tagsOfClaim));
+		    	}
+		    	
+		    	value = null;
+	        }
+	    }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+	        public void onClick(DialogInterface dialog, int whichButton) {
+	            // Do nothing.
+	        }
+	    }).show();
+		
+	}
+
 	
 	private AdapterView.OnItemClickListener onListClick = new AdapterView.OnItemClickListener() {
 
@@ -233,7 +348,7 @@ public class EditClaimActivity extends Activity {
 				  public void onClick(DialogInterface dialog, int which) {
 				   // Do nothing
 				  }
-				 });
+			});
 			
 			helperBuilder.setNegativeButton("Delete", new DialogInterface.OnClickListener(){
 			
@@ -268,8 +383,6 @@ public class EditClaimActivity extends Activity {
 		
 		String Descrip = Description.getText().toString();
 		
-
-		
 		if (ParseHelper.isIntegerParsable(EDateD) && 
 			ParseHelper.isIntegerParsable(EDateM) && 
 			ParseHelper.isIntegerParsable(EDateY)){
@@ -290,17 +403,14 @@ public class EditClaimActivity extends Activity {
 			d1 = new Date(mySDateY, mySDateM, mySDateD);
 		}
 		
-		
-		
 		claim.setuserName(this, claimUser);
 		claim.setClaimName(this, Claim_title);
-		
 
 		claim.setStartDate(this, d1);
 		claim.setEndDate(this, d2);
 		claim.setDescription(this, Descrip);
 		
-		
+		ClaimController.getInstance(this).getClaimList().addClaim(this, claim);		
 	}
 
 
@@ -316,14 +426,10 @@ public class EditClaimActivity extends Activity {
 		LayoutInflater inflater = getLayoutInflater();
         View popupview = inflater.inflate(R.layout.activity_popup_destination, null);
         helperBuilder.setView(popupview);
-        
         DesName = (EditText) popupview.findViewById(R.id.inputDestination);
         DesRea = (EditText) popupview.findViewById(R.id.inputDestinationReason);
-        
-				
-				
-		switch(i){
-				
+        		
+		switch(i){		
 		case newDestination:
 			helperBuilder.setPositiveButton("Done", new DialogInterface.OnClickListener() {
 				
@@ -346,7 +452,6 @@ public class EditClaimActivity extends Activity {
 			AlertDialog helperDialog = helperBuilder.create();
 			helperDialog.show();
 			break;
-					
 		case editDestination:
 			DesName.setText(destination2.get(position)[0]);
 			DesRea.setText(destination2.get(position)[1]);
@@ -375,8 +480,17 @@ public class EditClaimActivity extends Activity {
 			break;
 		}
 				
-				
 	}
+	
+	/* updates tag list view */
+	private void updateTagListView( ArrayList<Tag> tagList ){
+		if ( tagList == null ){
+			tagList = TagController.getInstance(this).getTagMap().getTags();
+		}
+		MainTagListAdapter adapter = new MainTagListAdapter(this, tagList);
+		tagListView.setAdapter(adapter);
+	}
+	
 	public void editDummyDestination(Context context, String place, String Reason, int position, String oldDestination, int i){
 		String[] travelInfo = new String[2];
 		travelInfo[0] = place;
@@ -440,73 +554,5 @@ public class EditClaimActivity extends Activity {
 		AlertDialog helpDialog = helperBuilder.create();
 		helpDialog.show();
 	}
-	
-	
-/*	public void createTagButton(boolean isNewClaim, ArrayList<Tag> destination2, int newDestination2,int doNothing2){
-		AlertDialog.Builder helperBuilder = new AlertDialog.Builder(this);
-		helperBuilder.setCancelable(false);
-		helperBuilder.setTitle("Tags");
-		
-		LayoutInflater inflater = getLayoutInflater();
-        View popupview = inflater.inflate(R.layout.activity_popup_select_tags, null);
-        helperBuilder.setView(popupview);
-        
-        TagName = (EditText) popupview.findViewById(R.id.EditTextAddTags);
-        
-		switch(i){
-				
-		case newDestination:
-			helperBuilder.setPositiveButton("Done", new DialogInterface.OnClickListener() {
-				
-				public void onClick(DialogInterface dialog, int which) {
-					
-					String Des_Name = DesName.getText().toString();
-					String Des_Rea = DesRea.getText().toString();
-					editDummyDestination(EditClaimActivity.this, Des_Name, Des_Rea, doNothing, null, newDestination);
-				}
-			});
-			
-			helperBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-				
-				public void onClick(DialogInterface dialog, int which) {
-						// TODO Auto-generated method stub
-							
-				}
-			});
-					
-			AlertDialog helperDialog = helperBuilder.create();
-			helperDialog.show();
-			break;
-					
-		case editDestination:
-			DesName.setText(destination2.get(position)[0]);
-			DesRea.setText(destination2.get(position)[1]);
-			final String oldDestination = destination2.get(position)[0]+" - "+destination2.get(position)[1];
-			
-			helperBuilder.setPositiveButton("Done", new DialogInterface.OnClickListener() {
-				
-				public void onClick(DialogInterface dialog, int which) {
-					String Des_Name2 = DesName.getText().toString();
-					String Des_Rea2 = DesRea.getText().toString();
-					editDummyDestination(EditClaimActivity.this, Des_Name2, Des_Rea2, position, oldDestination,editDestination);
-				}
-			});
-			
-			
-			helperBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-				
-				public void onClick(DialogInterface dialog, int which) {
-						// TODO Auto-generated method stub
-							
-				}
-			});
-					
-			AlertDialog helpDialog = helperBuilder.create();
-			helpDialog.show();
-			break;
-		}
-		
-	}
-	*/
-	
+
 }

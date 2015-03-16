@@ -15,9 +15,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.MultiAutoCompleteTextView;
 import android.widget.PopupMenu;
 import android.widget.AdapterView.OnItemLongClickListener;
 
@@ -117,13 +119,6 @@ public class TagListFragment extends Fragment implements TView {
 			}
         });
         Log.i("myMessage", Integer.toString(listOfTags.size()));
-        /*
-         * Causes error since TagListArrayAdapter uses listOfTags.get() which apparently is 
-         * an Hashmap cast as an ArrayList<Tag> 
-        listOfTags.get(0); <- Something is up with get()
-		adapter = new MainTagListAdapter( myContext, listOfTags );
-		*/
-		//lv_tag_list.setAdapter(adapter);
 
 		return rootView;
 	}
@@ -133,7 +128,9 @@ public class TagListFragment extends Fragment implements TView {
 
 	private void getName(){
 		String message = "Enter a new name";
-		final EditText input = new EditText(getActivity());
+		final AutoCompleteTextView input = new AutoCompleteTextView(getActivity());
+
+		ArrayList<String> tags = new ArrayList<String>();
 		
 		new AlertDialog.Builder(getActivity())
 	    .setTitle("Create Tag")
