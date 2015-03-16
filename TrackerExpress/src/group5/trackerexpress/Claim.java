@@ -14,7 +14,8 @@ public class Claim extends TModel implements Comparable<Claim>{
 	private ArrayList<String[]> destination = new ArrayList<String[]>();
 	private int status; 
 	private Date startDate;
-	private Date endDate; 
+	private Date endDate;
+	private boolean incomplete;
     
 	public static final int IN_PROGRESS = 0;
 	public static final int SUBMITTED = 1;
@@ -28,9 +29,18 @@ public class Claim extends TModel implements Comparable<Claim>{
 		// TODO Auto-generated constructor stub
 		this.claimName = claimName;
 		this.expenseList = new ExpenseList();
-		
+		this.status = IN_PROGRESS;
 	}
 	
+	public boolean isIncomplete() {
+		return incomplete;
+	}
+
+	public void setIncomplete(Context context, boolean incomplete) {
+		this.incomplete = incomplete;
+		notifyViews(context);
+	}
+
 	public UUID getUuid() {
 		return uuid;
 	}
@@ -123,8 +133,8 @@ public class Claim extends TModel implements Comparable<Claim>{
 		for ( int i = 0; i < destination.size() - 1; i++ ){
 			str_destinations += destination.get(i)[0] + ", ";
 		}
-		
-		str_destinations += destination.get(destination.size() - 1)[0];
+		if (destination.size()>0)
+			str_destinations += destination.get(destination.size() - 1)[0];
 		return str_destinations;
 	}
 	

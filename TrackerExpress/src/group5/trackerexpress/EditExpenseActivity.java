@@ -1,6 +1,7 @@
 package group5.trackerexpress;
 
 import java.io.File;
+import java.util.UUID;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -11,7 +12,10 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
@@ -19,23 +23,28 @@ import android.widget.Spinner;
 public class EditExpenseActivity extends Activity {
 	
 	private Spinner category, currency;
-	private ImageButton button;
+	private ImageButton imgButton;
+	private Button createExpenseButton;
+	private CheckBox flagCheckBox;
 	private EditText description, amount;
-	Uri receiptUri;
-
+	private Uri receiptUri;
+	
+	final Intent intent = this.getIntent();
+	UUID serialisedId = (UUID) intent.getSerializableExtra("claimUUID");
+	final Claim claim = ClaimController.getInstance(EditExpenseActivity.this).getClaimList().getClaim(serialisedId);
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_edit_expense);
-
 		
-		OnClickListener listener = new OnClickListener() {
+		OnClickListener picListener = new OnClickListener() {
 			public void onClick(View v) {
 				takeAPhoto();
 			}
 		};
-		button.setOnClickListener(listener);
+		imgButton.setOnClickListener(picListener);
 	}
 
 	private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
@@ -82,9 +91,35 @@ public class EditExpenseActivity extends Activity {
 		// TODO Auto-generated method stub
 		description = (EditText) findViewById(R.id.editDescription);
 		amount = (EditText) findViewById(R.id.editAmount);
-		button = (ImageButton) findViewById(R.id.TakeAPhoto);
+		imgButton = (ImageButton) findViewById(R.id.TakeAPhoto);
+		
 		category = (Spinner) findViewById(R.id.categorySpinner);
+		ArrayAdapter<CharSequence> categoryAdapter = ArrayAdapter.createFromResource 
+				(this,  R.array.category_array,  android.R.layout.simple_spinner_item); //create array adapter using string array and default spinner layout
+		categoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); //specify layout to use when list of choices appears
+		category.setAdapter(categoryAdapter);
+		
 		currency = (Spinner) findViewById(R.id.currencySpinner);
+		ArrayAdapter<CharSequence> currencyAdapter = ArrayAdapter.createFromResource
+				(this,  R.array.currency_array,  android.R.layout.simple_spinner_item); //create array adapter using string array and default spinner layout
+		currencyAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); //specify layout to use when list of choices appears
+		category.setAdapter(currencyAdapter);
+		
+		createExpenseButton = (Button) findViewById(R.id.createExpenseButton);
+		flagCheckBox = (CheckBox) findViewById(R.id.incompleteCheckBox);
+		
+		
 	}
+	
+	public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        // An item was selected. You can retrieve the selected item using
+        // parent.getItemAtPosition(pos)
+		parent.getItemAtPosition(position);
+    }
+
+    public void onNothingSelected(AdapterView<?> parent) {
+        // Another interface callback
+    }
+
 
 }
