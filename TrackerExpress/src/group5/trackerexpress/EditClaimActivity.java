@@ -106,7 +106,7 @@ public class EditClaimActivity extends Activity {
 	/** The do nothing. */
 	private final int doNothing = 5;
 	
-	/* (non-Javadoc)
+	/**
 	 * @see android.app.Activity#onCreate(android.os.Bundle)
 	 */
 	@Override
@@ -114,14 +114,16 @@ public class EditClaimActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_edit_claim);
 		
-		/*Initialize the dummy destination 2d array which will 
+		/**Initialize the dummy destination 2d array which will 
 		be used to store destination and reason of travel for both edit claim and create new claim.*/
 		
 		Destination = new ArrayList<String[]>();
 		
 		final Claim newclaim = new Claim("");
 		
-		//set each EditTexts
+		/**
+		 *  Assign each EditText to a variable.
+		 */
 		
 		ClaimName = (EditText) findViewById(R.id.editClaimName);
 		ClaimTitle = (EditText) findViewById(R.id.editClaimTitle);
@@ -139,18 +141,15 @@ public class EditClaimActivity extends Activity {
 		tagListView = (ListView) findViewById(R.id.listViewTagsEditClaim);
 		tagListView.setItemsCanFocus(true);
 		
-		/*****************************
-		 * ADDED CODE START
-		 *****************************/
 		
-		/*
+		/**
 		 * On click for add tags button
 		 */
 				
 		Button b_add_tag = (Button) findViewById(R.id.buttonEditTags);
 		
 		b_add_tag.setOnClickListener(new Button.OnClickListener(){
-		    /* (non-Javadoc)
+		    /**
 		     * @see android.view.View.OnClickListener#onClick(android.view.View)
 		     */
 		    public void onClick(View v) {
@@ -159,9 +158,12 @@ public class EditClaimActivity extends Activity {
 		    }
 		});
 		
-		// Tag List Item click listener
+		/**
+		 * Tag List Item click listener
+		 */
 		tagListView.setOnItemClickListener( new OnItemClickListener() {
-        	/* (non-Javadoc)
+			
+        	/** Make the items in the tag list clickable
         	 * @see android.widget.AdapterView.OnItemClickListener#onItemClick(android.widget.AdapterView, android.view.View, int, long)
         	 */
         	@Override
@@ -171,7 +173,9 @@ public class EditClaimActivity extends Activity {
 				PopupMenu popup = new PopupMenu(EditClaimActivity.this, view);
 				popup.getMenuInflater().inflate(R.menu.edit_claim_tag_list_popup, popup.getMenu());
 				
-				// Popup menu item click listener
+				/**
+				 *  Popup menu item click listener
+				 */
 				popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
 					
                     public boolean onMenuItemClick(MenuItem item) {
@@ -194,11 +198,8 @@ public class EditClaimActivity extends Activity {
         });
 		
 		
-		/*****************************
-		 * ADDED CODE END
-		 *****************************/
-		
-		/* Get date from Main activity through the controller.
+		/**
+		 * Get date from Main activity through the controller.
 		 * Get claim id (UUID) if edit claim is selected from Main activity.
 		 */
 		
@@ -209,18 +210,18 @@ public class EditClaimActivity extends Activity {
 	    UUID serialisedId = (UUID) intent.getSerializableExtra("claimUUID");
 	    final Claim claim = ClaimController.getInstance(EditClaimActivity.this).getClaimList().getClaim(serialisedId);
 	    
-	    /*
+	    /**
 	     * On click listener for add destination button in EditClaimActivity.
 	     */
 		Button editDestinationButton = (Button) findViewById(R.id.buttonAddDestination);
 		
 		editDestinationButton.setOnClickListener(new View.OnClickListener() {	
-			/* (non-Javadoc)
+			/** Make add destination button clickable
 			 * @see android.view.View.OnClickListener#onClick(android.view.View)
 			 */
 			@Override
 			public void onClick(View v) {
-				/* check if the user pressed create new claim or edit existing claim button from MainActivity.*/
+				/** check if the user pressed create new claim or edit existing claim button from MainActivity.*/
 				if (isNewClaim == true){
 					createDestinationButton(isNewClaim,Destination,newDestination,doNothing);
 				} else {
@@ -232,7 +233,7 @@ public class EditClaimActivity extends Activity {
 		
 		Button done = (Button) findViewById(R.id.buttonCreateClaim);
 		
-		/*
+		/**
 		 * Checks if the user wants to edit an existing claim or create a new claim.
 		 * If existing claim, set text to the completed ListViews and ExitTexts.
 		 */
@@ -260,7 +261,7 @@ public class EditClaimActivity extends Activity {
 			Description.setText(String.valueOf(claim.getDescription()));
 			DestinationListview(desListView,Destination);
 			
-			/* Saving new tags */
+			/** Saving new tags */
 			ArrayList<Tag> current = TagController.getInstance(this).getTagMap().getTags();
 			for ( Tag t : tagsOfClaim ){
 				if ( ! current.contains(t) ){
@@ -269,22 +270,24 @@ public class EditClaimActivity extends Activity {
 			}
 	    }
 	    
-	    // On item click for the destination and reason ListView.
+	    /**
+	     *  On item click for the destination and reason ListView.
+	     */
 	    desListView.setOnItemClickListener(onListClick);
 	    
-	    /*
+	    /**
 		 * On click listener for edit claim/create claim button (button name will change depending on what button
 		 * was pressed from the previous activity). Saving the edited/new claim will be triggered only when the 
 		 * edit claim/create claim button is pressed. 
 		 */
 	    done.setOnClickListener(new View.OnClickListener() {	
-			/** (non-Javadoc)
+			/** make edit/create claim button clickable
 			 * @see android.view.View.OnClickListener#onClick(android.view.View)
 			 */
 			@Override
 			public void onClick(View v) {
 				
-				/* this procedure will check if the claim name is repeated */
+				/** this procedure will check if the claim name is repeated */
 				boolean repeatedClaimName = false;
 				Claim[] claims = ClaimController.getInstance(EditClaimActivity.this).getClaimList().getAllClaims();
 				for ( Claim c : claims ){
@@ -309,7 +312,9 @@ public class EditClaimActivity extends Activity {
 			    	ClaimTitle.requestFocus();
 				} else {
 					
-				// Saves user input into claim class.(calling each method)
+				/**
+				 *  Saves user input into claim class.(calling each method)
+				 */
 					Toast.makeText(EditClaimActivity.this, "Updating", Toast.LENGTH_SHORT). show();
 					
 					if (isNewClaim == true){
@@ -321,7 +326,9 @@ public class EditClaimActivity extends Activity {
 						claim.setDestination(EditClaimActivity.this, Destination);
 					}
 					
-					// launch CreateNewClaimActivity.
+					/**
+					 *  launch MainClaimActivity.
+					 */
 					Intent intent = new Intent(EditClaimActivity.this, MainActivity.class);
 					startActivity(intent);
 				}
@@ -335,7 +342,7 @@ public class EditClaimActivity extends Activity {
 	    Button cancel = (Button) findViewById(R.id.button_cancel_edit_claim);
 	    cancel.setOnClickListener(new View.OnClickListener() {
 			
-			/* (non-Javadoc)
+			/** Make cancel button clickable
 			 * @see android.view.View.OnClickListener#onClick(android.view.View)
 			 */
 			@Override
@@ -348,11 +355,9 @@ public class EditClaimActivity extends Activity {
 	}
 	
 
-	/*
+	/**
      * On click listener for the back button(soft key). Calls "safe guard" method if user accidently 
      * pressed back button.
-     */
-	/* (non-Javadoc)
 	 * @see android.app.Activity#onKeyDown(int, android.view.KeyEvent)
 	 */
 	@Override
@@ -364,8 +369,7 @@ public class EditClaimActivity extends Activity {
 	    return super.onKeyDown(keyCode, event);
 	}
 	
-	// Destroy this activity when done. 
-	/* (non-Javadoc)
+	/** Destroy this activity when done. 
 	 * @see android.app.Activity#onStop()
 	 */
 	@Override
@@ -395,7 +399,7 @@ public class EditClaimActivity extends Activity {
 		input.setAdapter(adapter);
 		input.setThreshold(1);
 		input.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-			  /* (non-Javadoc)
+			/**
 			 * @see android.view.View.OnFocusChangeListener#onFocusChange(android.view.View, boolean)
 			 */
 			@Override
@@ -411,7 +415,7 @@ public class EditClaimActivity extends Activity {
 	    .setMessage(message)
 	    .setView(input)
 	    .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-	        /* (non-Javadoc)
+	        /**
 	         * @see android.content.DialogInterface.OnClickListener#onClick(android.content.DialogInterface, int)
 	         */
 	        public void onClick(DialogInterface dialog, int whichButton) {       		
@@ -458,12 +462,13 @@ public class EditClaimActivity extends Activity {
 		@Override
 		public void onItemClick(AdapterView<?> parent, View view, final int position,
 				long id) {
-			// TODO Auto-generated method stub
-			// http://www.androiddom.com/2011/06/displaying-android-pop-up-dialog_13.html 	2015-03-11
+			/**
+			 *  http://www.androiddom.com/2011/06/displaying-android-pop-up-dialog_13.html 	2015-03-11
+			 */
 			AlertDialog.Builder helperBuilder = new AlertDialog.Builder(EditClaimActivity.this);
 			
 			helperBuilder.setPositiveButton("Edit", new DialogInterface.OnClickListener(){
-				/* (non-Javadoc)
+				/**
 				 * @see android.content.DialogInterface.OnClickListener#onClick(android.content.DialogInterface, int)
 				 */
 				public void onClick(DialogInterface dialog, int which){
@@ -473,18 +478,18 @@ public class EditClaimActivity extends Activity {
 			
 			helperBuilder.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
 
-				  /* (non-Javadoc)
+				/** Back out the activity without doing anything
 				 * @see android.content.DialogInterface.OnClickListener#onClick(android.content.DialogInterface, int)
 				 */
 				@Override
 				  public void onClick(DialogInterface dialog, int which) {
-				   // Do nothing
+				   /** Do nothing */
 				  }
 			});
 			
 			helperBuilder.setNegativeButton("Delete", new DialogInterface.OnClickListener(){
 			
-				/* (non-Javadoc)
+				/**
 				 * @see android.content.DialogInterface.OnClickListener#onClick(android.content.DialogInterface, int)
 				 */
 				@Override
