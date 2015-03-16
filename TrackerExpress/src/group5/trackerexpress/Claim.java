@@ -163,6 +163,9 @@ public class Claim extends TModel implements Comparable<Claim>{
 
 	@Override
 	public int compareTo(Claim arg0) {
+		if (startDate == null){
+			return -1;
+		}
 		return startDate.compareTo(arg0.getStartDate());
 	}
 

@@ -129,13 +129,17 @@ public class EditClaimActivity extends Activity {
 				    ClaimName.setText(claim.getuserName());
 					ClaimTitle.setText(claim.getClaimName());
 					
-					StartDateYear.setText(String.valueOf(claim.getStartDate().getYYYY()));
-					StartDateMonth.setText(String.valueOf(claim.getStartDate().getMM()));
-					StartDateDay.setText(String.valueOf(claim.getStartDate().getDD()));
+					if ( claim.getStartDate() != null ){
+						StartDateYear.setText(String.valueOf(claim.getStartDate().getYYYY()));
+						StartDateMonth.setText(String.valueOf(claim.getStartDate().getMM()));
+						StartDateDay.setText(String.valueOf(claim.getStartDate().getDD()));
+					}
 					
-					EndDateYear.setText(String.valueOf(claim.getEndDate().getYYYY()));
-					EndDateMonth.setText(String.valueOf(claim.getEndDate().getMM()));
-					EndDateDay.setText(String.valueOf(claim.getEndDate().getDD()));
+					if ( claim.getStartDate() != null ){
+						EndDateYear.setText(String.valueOf(claim.getEndDate().getYYYY()));
+						EndDateMonth.setText(String.valueOf(claim.getEndDate().getMM()));
+						EndDateDay.setText(String.valueOf(claim.getEndDate().getDD()));
+					}
 					
 					Description.setText(String.valueOf(claim.getDescription()));
 					DestinationListview(myListView,Destination);
@@ -166,13 +170,14 @@ public class EditClaimActivity extends Activity {
 				
 				if( ClaimName.getText().toString().length() == 0 ){
 				    ClaimName.setError( "Name is required!" );
-				}
+				}else {
 				
 			    Toast.makeText(EditClaimActivity.this, "Updating", Toast.LENGTH_SHORT). show();
 				
 				// launch CreateNewClaimActivity.
 				Intent intent = new Intent(EditClaimActivity.this, MainActivity.class);
 		    	startActivity(intent);
+				}
 			}
 		});
 	    
@@ -255,41 +260,50 @@ public class EditClaimActivity extends Activity {
 	
 	private void editclaim(final Claim claim) {
 		// TODO Auto-generated method stub
-		
-		
+		int mySDateY, mySDateM, mySDateD,myEDateY, myEDateM, myEDateD;
+		Date d2 = null;
+		Date d1 = null;
 		String claimUser = ClaimName.getText().toString();
 		String Claim_title = ClaimTitle.getText().toString();
 		
 		String SDateY = StartDateYear.getText().toString();
-		if (ParseHelper.isIntegerParsable(SDateY)){
-			
-		}
-		int mySDateY = Integer.parseInt(SDateY);
-		
 		String SDateM = StartDateMonth.getText().toString();
-		int mySDateM = Integer.parseInt(SDateM);
-		
 		String SDateD = StartDateDay.getText().toString();
-		int mySDateD = Integer.parseInt(SDateD);
 		
 		String EDateY = EndDateYear.getText().toString();
-		int myEDateY = Integer.parseInt(EDateY);
-		
 		String EDateM = EndDateMonth.getText().toString();
-		int myEDateM = Integer.parseInt(EDateM);
-		
 		String EDateD = EndDateDay.getText().toString();
-		int myEDateD = Integer.parseInt(EDateD);
+		
 		String Descrip = Description.getText().toString();
+		
+
+		
+		if (ParseHelper.isIntegerParsable(EDateD) && 
+			ParseHelper.isIntegerParsable(EDateM) && 
+			ParseHelper.isIntegerParsable(EDateY)){
+			
+			myEDateD = Integer.parseInt(EDateD);
+			myEDateM = Integer.parseInt(EDateM);
+			myEDateY = Integer.parseInt(EDateY);
+			d2 = new Date(myEDateY, myEDateM, myEDateD);
+		}
+		
+		if (ParseHelper.isIntegerParsable(SDateD) &&
+			ParseHelper.isIntegerParsable(SDateM) &&
+			ParseHelper.isIntegerParsable(SDateY)){
+			
+			mySDateD = Integer.parseInt(SDateD);
+			mySDateM = Integer.parseInt(SDateM);
+			mySDateY = Integer.parseInt(SDateY);
+			d1 = new Date(mySDateY, mySDateM, mySDateD);
+		}
 		
 		
 		
 		claim.setuserName(this, claimUser);
 		claim.setClaimName(this, Claim_title);
 		
-		Date d1 = new Date(mySDateY, mySDateM, mySDateD);
-		Date d2 = new Date(myEDateY, myEDateM, myEDateD);
-		
+
 		claim.setStartDate(this, d1);
 		claim.setEndDate(this, d2);
 		claim.setDescription(this, Descrip);
