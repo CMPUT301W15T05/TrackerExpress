@@ -33,6 +33,8 @@ public class EditClaimActivity extends Activity {
 	private EditText Description; 
 	private EditText DesName;
 	private EditText DesRea;
+	
+	private Boolean CheckCorrectness;
 
 	private ArrayList<String[]> Destination;
 	private ArrayAdapter<String> adapter2;
@@ -106,21 +108,23 @@ public class EditClaimActivity extends Activity {
 					createDestinationButton(isNewClaim,Destination,newDestination,doNothing);
 				} else {
 					Destination = claim.getDestination();
-					createDestinationButton(isNewClaim, Destination,editDestination,doNothing);
+					createDestinationButton(isNewClaim, Destination,newDestination,doNothing);
 				}
 				
 			}
 		});
 		
-		
+		Button done = (Button) findViewById(R.id.buttonCreateClaim);
 		
 	    if (isNewClaim == true){
-			    	
+			    	done.setText("Create Claim");
 			    	
 			    	DestinationListview(myListView,Destination);
 			    	
 			    	
 			    } else {
+			    	
+			    	done.setText("Edit Claim");
 			    	Destination = claim.getDestination();
 				    ClaimName.setText(claim.getuserName());
 					ClaimTitle.setText(claim.getClaimName());
@@ -141,7 +145,7 @@ public class EditClaimActivity extends Activity {
 	    myListView.setOnItemClickListener(onListClick);
 	    
 	    
-	    Button done = (Button) findViewById(R.id.buttonCreateClaim);
+	    
 	    done.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
@@ -151,11 +155,19 @@ public class EditClaimActivity extends Activity {
 					editclaim(newclaim);
 					newclaimlist.addClaim(EditClaimActivity.this, newclaim);
 					newclaim.setDestination(EditClaimActivity.this, Destination);
+					
 				} else{
 					editclaim(claim);
 					claim.setDestination(EditClaimActivity.this, Destination);
 				}
-			    
+				
+				
+				/* this statement checks if the text field is valid or not.*/
+				
+				if( ClaimName.getText().toString().length() == 0 ){
+				    ClaimName.setError( "Name is required!" );
+				}
+				
 			    Toast.makeText(EditClaimActivity.this, "Updating", Toast.LENGTH_SHORT). show();
 				
 				// launch CreateNewClaimActivity.
@@ -375,5 +387,15 @@ public class EditClaimActivity extends Activity {
 		}
 		return destinationreason;
 	}
+	
+	
+	public void usercorrectness(String string){
+		
+		if (string == null){
+			
+		}
+		
+	}
+	
 	
 }
