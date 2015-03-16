@@ -281,12 +281,15 @@ public class EditClaimActivity extends Activity {
 				if( ClaimName.getText().toString().length() == 0 || ClaimTitle.getText().toString().length() == 0 ){
 				    if ( ClaimName.getText().toString().length() == 0 ){
 				    	ClaimName.setError( "Name is required!" );
+				    	ClaimName.requestFocus();
 				    }
-				    if ( ClaimTitle.getText().toString().length() == 0 ){
+				    else if ( ClaimTitle.getText().toString().length() == 0 ){
 				    	ClaimTitle.setError( "Title is required!" );
+				    	ClaimTitle.requestFocus();
 				    }
 				} else if (repeatedClaimName) {
 					ClaimTitle.setError( "Repeated claim name!" );
+			    	ClaimTitle.requestFocus();
 				} else {
 				
 					Toast.makeText(EditClaimActivity.this, "Updating", Toast.LENGTH_SHORT). show();
