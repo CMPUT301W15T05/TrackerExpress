@@ -22,11 +22,11 @@ import android.content.Context;
  */
 public class FileCourrier<T> {
 	
-	/** The type. */
+	/** The type of the file. */
 	private T type;
 	
 	/**
-	 * Instantiates a new file courrier.
+	 * Instantiates a new file courier.
 	 *
 	 * @param type the type
 	 */
@@ -35,7 +35,7 @@ public class FileCourrier<T> {
 	}
 	
 	/**
-	 * Save file.
+	 * Save file using gson.
 	 *
 	 * @param context the context
 	 * @param fileName the file name
@@ -53,7 +53,7 @@ public class FileCourrier<T> {
 	}
 	
 	/**
-	 * Load file.
+	 * Load file using gson.
 	 *
 	 * @param context the context
 	 * @param fileName the file name
