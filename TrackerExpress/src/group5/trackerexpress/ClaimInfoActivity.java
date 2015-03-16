@@ -15,6 +15,8 @@ import android.view.Menu;
 // TODO: Auto-generated Javadoc
 /**
  * The Class ClaimInfoActivity.
+ * @author Peter Crinklaw, Randy Hu, Parash Rahman, Jesse Emery, Sean Baergen, Rishi Barnwal
+ * @version Part 4
  */
 public class ClaimInfoActivity extends ActionBarActivity {
 

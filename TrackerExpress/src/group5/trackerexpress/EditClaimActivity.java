@@ -34,7 +34,8 @@ import android.widget.AdapterView.OnItemLongClickListener;
  * The Class EditClaimActivity.
  */
 /**
- * @author RandyHu
+ * @author Peter Crinklaw, Randy Hu, Parash Rahman, Jesse Emery, Sean Baergen, Rishi Barnwal
+ * @version Part 4
  *
  */
 public class EditClaimActivity extends Activity {

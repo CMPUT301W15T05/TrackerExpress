@@ -8,6 +8,8 @@ import android.graphics.Bitmap;
 // TODO: Auto-generated Javadoc
 /**
  * The Class Expense.
+ * @author Peter Crinklaw, Randy Hu, Parash Rahman, Jesse Emery, Sean Baergen, Rishi Barnwal
+ * @version Part 4
  */
 public class Expense extends TModel{
 	

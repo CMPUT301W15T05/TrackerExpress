@@ -5,6 +5,8 @@ package group5.trackerexpress;
 // in the form of DDMMYYYY
 /**
  * The Class Date.
+ * @author Peter Crinklaw, Randy Hu, Parash Rahman, Jesse Emery, Sean Baergen, Rishi Barnwal
+ * @version Part 4
  */
 public class Date implements Comparable<Date>{
 	

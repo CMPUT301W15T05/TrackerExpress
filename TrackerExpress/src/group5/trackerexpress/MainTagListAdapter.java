@@ -15,6 +15,8 @@ import android.widget.TextView;
 // http://androidcocktail.blogspot.it/2012/04/adding-checkboxes-to-custom-listview-in.html
 /**
  * The Class MainTagListAdapter.
+ * @author Peter Crinklaw, Randy Hu, Parash Rahman, Jesse Emery, Sean Baergen, Rishi Barnwal
+ * @version Part 4
  */
 public class MainTagListAdapter extends ArrayAdapter<Tag> {
 	

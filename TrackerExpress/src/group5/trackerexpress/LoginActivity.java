@@ -30,6 +30,9 @@ import java.util.List;
 // TODO: Auto-generated Javadoc
 /**
  * A login screen that offers login via email/password.
+ * @author Peter Crinklaw, Randy Hu, Parash Rahman, Jesse Emery, Sean Baergen, Rishi Barnwal
+ * @version Part 4
+ * 
  */
 public class LoginActivity extends AccountFormActivity {//implements LoaderCallbacks<Cursor> {
 

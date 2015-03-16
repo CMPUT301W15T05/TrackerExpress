@@ -10,6 +10,8 @@ import android.widget.TextView;
 // TODO: Auto-generated Javadoc
 /**
  * The Class MainClaimListAdapter.
+ * @author Peter Crinklaw, Randy Hu, Parash Rahman, Jesse Emery, Sean Baergen, Rishi Barnwal
+ * @version Part 4
  */
 public class MainClaimListAdapter extends ArrayAdapter<Claim> {
 	public static final String incompleteString = "INCOMPLETE";
