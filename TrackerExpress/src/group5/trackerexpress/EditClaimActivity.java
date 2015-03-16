@@ -3,7 +3,6 @@ package group5.trackerexpress;
 
 import java.util.ArrayList;
 import java.util.UUID;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
@@ -11,6 +10,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -178,7 +178,7 @@ public class EditClaimActivity extends Activity {
 			    Toast.makeText(EditClaimActivity.this, "Updating", Toast.LENGTH_SHORT). show();
 				
 				// launch CreateNewClaimActivity.
-				Intent intent = new Intent(EditClaimActivity.this, MainActivity.class);
+			    Intent intent = new Intent(EditClaimActivity.this, MainActivity.class);
 		    	startActivity(intent);
 				}
 			}
@@ -189,13 +189,21 @@ public class EditClaimActivity extends Activity {
 			
 			@Override
 			public void onClick(View v) {
-				Toast.makeText(EditClaimActivity.this, "Canceling", Toast.LENGTH_SHORT). show();
+				cancelcheck();
 				
-				// launch CreateNewClaimActivity.
-				Intent intent = new Intent(EditClaimActivity.this, MainActivity.class);
-		    	startActivity(intent);
 			}
 		});
+	}
+	
+
+	
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+	    if (keyCode == KeyEvent.KEYCODE_BACK) {
+	        //do your stuff
+	    	cancelcheck();
+	    }
+	    return super.onKeyDown(keyCode, event);
 	}
 	
 	@Override
@@ -404,6 +412,33 @@ public class EditClaimActivity extends Activity {
 			destinationreason.add(destination_reason);
 		}
 		return destinationreason;
+	}
+	
+	public void cancelcheck(){
+		AlertDialog.Builder helperBuilder = new AlertDialog.Builder(EditClaimActivity.this);
+		helperBuilder.setCancelable(false);
+		helperBuilder.setTitle("Warning");
+		helperBuilder.setMessage("Are you sure you want to exit before saving?");
+		helperBuilder.setPositiveButton("Proceed", new DialogInterface.OnClickListener(){
+			
+			public void onClick(DialogInterface dialog, int which){
+								
+				Toast.makeText(EditClaimActivity.this, "Canceling", Toast.LENGTH_SHORT). show();
+								
+				// launch CreateNewClaimActivity.
+				onStop();
+				}
+			});
+						
+		helperBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener(){
+						
+			@Override
+			public void onClick(DialogInterface dialog, int which){
+								
+				}
+			});
+		AlertDialog helpDialog = helperBuilder.create();
+		helpDialog.show();
 	}
 	
 	
