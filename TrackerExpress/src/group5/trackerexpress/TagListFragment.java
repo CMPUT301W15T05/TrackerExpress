@@ -188,7 +188,10 @@ public class TagListFragment extends Fragment implements TView {
 	 */
 	@Override
 	public void update(TModel model) {
-		ArrayList<Tag> listOfTags = getTagMap(getActivity()).getTags();			
+		ArrayList<Tag> listOfTags = getTagMap(getActivity()).getTags();	
+		if ( listOfTags == null ){
+			listOfTags = new ArrayList<Tag>();
+		}
 		MainTagListAdapter a = new MainTagListAdapter( getActivity(), listOfTags );
 		lv_tag_list.setAdapter(a);
 	}
