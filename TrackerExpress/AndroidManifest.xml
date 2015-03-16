@@ -49,6 +49,10 @@
         </activity>
         
         <activity
+            android:name=".TestLayout" >
+        </activity>
+        
+        <activity
             android:name=".DummyTestModels" >
         </activity>
         

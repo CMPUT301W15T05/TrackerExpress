@@ -1,7 +1,10 @@
 package group5.trackerexpress;
 
 import java.util.Locale;
+import java.util.UUID;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -14,11 +17,23 @@ public class ClaimInfoActivity extends ActionBarActivity {
 	private static final int INDEX_OF_VIEW_CLAIM_TAB = 0;
 	private static final int INDEX_OF_EXPENSE_LIST_TAB = 1;
 
+	private static Context instance;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_claim_info);
 
+		instance = this;
+
+		final Intent intent = this.getIntent();
+    	UUID serialisedId = (UUID) intent.getSerializableExtra("claimUUID");
+
+	    final Claim claim = ClaimController.getInstance(ClaimInfoActivity.this)
+	    						.getClaimList().getClaim(serialisedId);
+	    
+	    
+		
 		// Create the adapter that will return a fragment for each of the three
 		// primary sections of the activity.
 		SectionsPagerAdapter mSectionsPagerAdapter = new ClaimInfoPagerAdapter(
@@ -84,6 +99,11 @@ public class ClaimInfoActivity extends ActionBarActivity {
 			}
 			return null;
 		}
+	}
+	
+
+	public static Context getThis() {
+		return instance;
 	}
 
 }
