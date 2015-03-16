@@ -2,6 +2,7 @@ package group5.trackerexpress;
 
 import java.util.Locale;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -92,5 +93,9 @@ public class MainActivity extends ActionBarActivity {
 			return null;
 		}
 	}
-	
+
+	public Context getThis() {
+		return this;
+	}
+
 }

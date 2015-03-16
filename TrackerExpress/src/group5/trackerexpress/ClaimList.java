@@ -31,6 +31,7 @@ public class ClaimList extends TModel{
 
 	public void addClaim(Context context, Claim claim) {
 		claims.put(claim.getUuid(), claim);
+		claim.addViews(this.views);
 		notifyViews(context);
 	}
 
@@ -62,7 +63,9 @@ public class ClaimList extends TModel{
 		ClaimList claimList;
 		try {
 			claimList = new FileCourrier<ClaimList>(this).loadFile(context, FILENAME);
-			if (claimList.claims == null) {
+
+			if (claimList == null || claimList.claims == null) {
+				System.err.println ("ITS NULL");
 				this.claims = new HashMap<UUID, Claim>();
 			} else {
 				this.claims = claimList.claims;

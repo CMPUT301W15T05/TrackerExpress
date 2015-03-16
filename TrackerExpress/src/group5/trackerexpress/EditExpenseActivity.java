@@ -1,6 +1,7 @@
 package group5.trackerexpress;
 
 import java.io.File;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
@@ -13,10 +14,13 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Spinner;
 
 public class EditExpenseActivity extends Activity {
-
-	EditText description, amount;
+	
+	private Spinner category, currency;
+	private ImageButton button;
+	private EditText description, amount;
 	Uri receiptUri;
 
 	@Override
@@ -25,7 +29,7 @@ public class EditExpenseActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_edit_expense);
 
-		ImageButton button = (ImageButton) findViewById(R.id.TakeAPhoto);
+		
 		OnClickListener listener = new OnClickListener() {
 			public void onClick(View v) {
 				takeAPhoto();
@@ -47,8 +51,7 @@ public class EditExpenseActivity extends Activity {
 		// intent.setComponent(cn);
 
 		// Create a folder to store pictures
-		String folder = Environment.getExternalStorageDirectory()
-				.getAbsolutePath() + "/tmp";
+		String folder = Environment.getExternalStorageDirectory().getAbsolutePath() + "/tmp";
 		File folderF = new File(folder);
 		if (!folderF.exists()) {
 			folderF.mkdir();
@@ -79,6 +82,9 @@ public class EditExpenseActivity extends Activity {
 		// TODO Auto-generated method stub
 		description = (EditText) findViewById(R.id.editDescription);
 		amount = (EditText) findViewById(R.id.editAmount);
+		button = (ImageButton) findViewById(R.id.TakeAPhoto);
+		category = (Spinner) findViewById(R.id.categorySpinner);
+		currency = (Spinner) findViewById(R.id.currencySpinner);
 	}
 
 }

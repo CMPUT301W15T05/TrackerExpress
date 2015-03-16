@@ -40,6 +40,11 @@ public class FileCourrier<T> {
 		
 		System.out.println (file.getClass().getName());
 		System.out.println ("File Input Done");
+
+		//System.out.println (file.getClass().getName());
+		//System.out.println (file.getClass().toString());
+
+		System.out.println ("- = - = - ULTIMATE GOAL - = - = -");
 		
 		return file;
 	}

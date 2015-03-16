@@ -3,12 +3,15 @@ package group5.trackerexpress;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.PopupMenu;
 import android.widget.AdapterView.OnItemClickListener;
 
 public class MyClaimsFragment extends Fragment implements TView {
@@ -35,7 +38,6 @@ public class MyClaimsFragment extends Fragment implements TView {
 		lv_claim_list.setItemsCanFocus(true);
 		b_add_claim = (Button) rootView.findViewById(R.id.b_add_claim);
 		
-		
 		final ClaimList listOfClaims = ClaimController.getInstance(getActivity()).getClaimList();
 		final Claim[] arrayClaims = listOfClaims.getAllClaims();
 		
@@ -58,21 +60,76 @@ public class MyClaimsFragment extends Fragment implements TView {
 
 			@Override
 			public void onItemClick(AdapterView<?> a, View v,
-					int position, long arg3) {
+					final int position, long arg3) {
 				// TODO Auto-generated method stub
 				
-				Claim c = (Claim) lv_claim_list.getAdapter().getItem(position);
+				final Claim c = (Claim) lv_claim_list.getAdapter().getItem(position);
 				
+				PopupMenu popup = new PopupMenu(getActivity(), v);
+				popup.getMenuInflater().inflate(R.menu.my_claims_popup, popup.getMenu());
 				
+				onPrepareOptionsMenu(popup, c);
 				
-				if ( c.getStatus() == Claim.SUBMITTED || c.getStatus() == Claim.APPROVED ){
+				// Popup menu item click listener
+				popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
 					
-				}
+					@Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                    	Claim claimAnalyzed = (Claim) lv_claim_list.getAdapter().getItem(position);
+                    	Intent intent;
+                        switch(item.getItemId()){
+                        case R.id.op_delete_claim: 
+                        	// Delete tag off of Claim ArrayList for listview
+                        	listOfClaims.deleteClaim(getActivity(), claimAnalyzed.getUuid());
+                        	Claim[] arrayClaims = listOfClaims.getAllClaims();
+                        	MainClaimListAdapter a = new MainClaimListAdapter( getActivity().getBaseContext(), arrayClaims );
+                			lv_claim_list.setAdapter(a);
+                			// Delete it off the model
+                        	listOfClaims.deleteClaim(getActivity(), claimAnalyzed.getUuid());
+                        	break;
+                        case R.id.op_edit_claim:
+                        	intent = new Intent( getActivity(), EditClaimActivity.class );
+                        	intent.putExtra( "isNewClaim", false );
+                        	intent.putExtra("claimUUID", c.getUuid());
+                        	Log.i("myMessage", "hi");
+                        	startActivity(intent);
+                        	break;
+                        case R.id.op_view_claim:
+                        	intent = new Intent( getActivity(), ClaimInfoActivity.class );
+                        	intent.putExtra( "claimUUID",  c.getUuid() );
+                        	startActivity(intent);
+                        	break;
+                        case R.id.op_submit_claim:
+                        	// TODO:
+                        	// Submit the claim to server
+                        	// using controller
+                        	break;
+                        default: break;
+                        }
+                    	
+                        return true;
+                    }
+                });
+				
+	            popup.show();					
 			}
 			
 		});
 		
 		return rootView;
+	}
+	
+	public void onPrepareOptionsMenu( PopupMenu popup, Claim c ){
+		switch(c.getStatus()){
+		case Claim.APPROVED:
+		case Claim.SUBMITTED:
+			for( int id : submittedOrApprovedHiddenItems ){
+				popup.getMenu().findItem(id).setVisible(false);
+			}
+			break;
+		default:
+			break;
+		}
 	}
 
 	@Override
@@ -81,3 +138,74 @@ public class MyClaimsFragment extends Fragment implements TView {
 		
 	}
 }
+
+/*public class MyClaimsFragment extends Fragment implements TView {
+
+private ListView lv_claim_list;
+private MainClaimListAdapter adapter;
+private Button b_add_claim;
+
+// Menu items to hide when selecting an option on a claim
+private static final int[] submittedOrApprovedHiddenItems = {R.id.op_edit_claim, R.id.op_submit_claim};
+
+public MyClaimsFragment() {
+}
+
+@Override
+public View onCreateView(LayoutInflater inflater, ViewGroup container,
+		Bundle savedInstanceState) {
+	
+	View rootView = inflater.inflate(R.layout.fragment_my_claims,
+			container, false);
+	
+	// Fragment's views
+	lv_claim_list = (ListView) rootView.findViewById(R.id.lv_my_claims);
+	lv_claim_list.setItemsCanFocus(true);
+	b_add_claim = (Button) rootView.findViewById(R.id.b_add_claim);
+	
+	
+	final ClaimList listOfClaims = ClaimController.getInstance(getActivity()).getClaimList();
+	final Claim[] arrayClaims = listOfClaims.getAllClaims();
+	
+	adapter = new MainClaimListAdapter(getActivity(), arrayClaims);
+	lv_claim_list.setAdapter(adapter);
+	
+	b_add_claim.setOnClickListener(new Button.OnClickListener(){
+
+		@Override
+		public void onClick(View v) {
+			// TODO Auto-generated method stub
+			Intent intent = new Intent( getActivity(), EditClaimActivity.class );
+			intent.putExtra("isNewClaim", true);
+			startActivity(intent);
+		}
+		
+	});
+	
+	lv_claim_list.setOnItemClickListener(new OnItemClickListener(){
+
+		@Override
+		public void onItemClick(AdapterView<?> a, View v,
+				int position, long arg3) {
+			// TODO Auto-generated method stub
+			
+			Claim c = (Claim) lv_claim_list.getAdapter().getItem(position);
+			
+			
+			
+			if ( c.getStatus() == Claim.SUBMITTED || c.getStatus() == Claim.APPROVED ){
+				
+			}
+		}
+		
+	});
+	
+	return rootView;
+}
+
+@Override
+public void update(TModel model) {
+	// TODO Auto-generated method stub
+	
+}
+}*/

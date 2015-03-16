@@ -51,7 +51,7 @@ public class Date implements Comparable<Date>{
 			// Just return they are not equal. 
 			// Should not be used in practice.
 			// This is just a safeguard.
-			return -1;
+			return 1;
 		}
 		
 		Integer int1 = (Integer) this.getDate();
