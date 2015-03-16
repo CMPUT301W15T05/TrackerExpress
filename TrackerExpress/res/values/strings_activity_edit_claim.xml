@@ -6,7 +6,7 @@
     <string name="promote_description">Description</string>
     <string name="action_destination">Add Destination</string>
     <string name="promote_claim_tags">Tag</string>
-    <string name="action_select_tag">Select Tags</string>
+    <string name="action_select_tag">Add Tag</string>
     <string name="action_create_claim">Create/Edit Claim</string>
     <string name="action_add_tag">Add Tag</string>
     <string name="action_done_selecting_tag">Done</string>
@@ -20,7 +20,6 @@
     <string name="promote_month">MM (01-12)</string>
     <string name="promote_day">DD (01-31)</string>
     <string name="action_calcel_edit_claim">Cancel</string>
-
-    
+	<string name="edit_claim_delete_tag"> Delete </string>
     
 </resources>

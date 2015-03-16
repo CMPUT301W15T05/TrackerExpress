@@ -5,35 +5,92 @@ import java.io.IOException;
 
 import android.content.Context;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class User.
+ */
 public class User extends TModel{
+	
+	/** The email. */
 	private String email;
+	
+	/** The password. */
 	private String password;
+	
+	/** The name. */
 	private String name;
+	
+	/** The signed in. */
 	private boolean SIGNED_IN; // true if the user was signed in
 	
+	/** The Constant FILENAME. */
 	private static final String FILENAME = "user.sav";
 	
+	/**
+	 * Instantiates a new user.
+	 *
+	 * @param context the context
+	 */
 	public User(Context context) {
 		System.out.println ("New User Start GOOD");
 		loadData(context);
 	}
+	
+	/**
+	 * Gets the email.
+	 *
+	 * @return the email
+	 */
 	public String getEmail() {
 		return email;
 	}
+	
+	/**
+	 * Sets the email.
+	 *
+	 * @param context the context
+	 * @param email the email
+	 */
 	public void setEmail(Context context, String email) {
 		this.email = email;
 		notifyViews(context);
 	}
+	
+	/**
+	 * Gets the password.
+	 *
+	 * @return the password
+	 */
 	public String getPassword() {
 		return password;
 	}
+	
+	/**
+	 * Sets the password.
+	 *
+	 * @param context the context
+	 * @param password the password
+	 */
 	public void setPassword(Context context, String password) {
 		this.password = password;
 		notifyViews(context);
 	}
+	
+	/**
+	 * Gets the name.
+	 *
+	 * @return the name
+	 */
 	public String getName() {
 		return name;
 	}
+	
+	/**
+	 * Sets the name.
+	 *
+	 * @param context the context
+	 * @param name the name
+	 */
 	public void setName(Context context, String name) {
 		System.out.println ("Setting name");
 		this.name = name;
@@ -42,6 +99,11 @@ public class User extends TModel{
 		System.out.println ("Views notified about name");
 	}
 	
+	/**
+	 * Save data.
+	 *
+	 * @param context the context
+	 */
 	public void saveData(Context context) {
 		try {
 			new FileCourrier<User>(this).saveFile(context, FILENAME, this);
@@ -51,6 +113,11 @@ public class User extends TModel{
 		}
 	}
 
+	/**
+	 * Load data.
+	 *
+	 * @param context the context
+	 */
 	public void loadData(Context context) {
 		User user;
 		try {
@@ -74,10 +141,20 @@ public class User extends TModel{
 		}
 	}
 	
+	/**
+	 * Sets the signed in.
+	 *
+	 * @param signedIn the new signed in
+	 */
 	public void setSignedIn(boolean signedIn) {
 		this.SIGNED_IN = signedIn;
 	}
 	
+	/**
+	 * Checks if is signed in.
+	 *
+	 * @return true, if is signed in
+	 */
 	public boolean isSignedIn() {
 		return SIGNED_IN;
 	}

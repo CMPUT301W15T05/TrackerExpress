@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+// TODO: Auto-generated Javadoc
 /**
  * A login screen that offers login via email/password.
  */
@@ -43,8 +44,14 @@ public class LoginActivity extends AccountFormActivity {//implements LoaderCallb
 	 * Constants for sign-in result.
 	 */
 	private static final int NEEDS_ACCOUNT = 0;
+	
+	/** The Constant SIGN_IN_SUCCESS. */
 	private static final int SIGN_IN_SUCCESS = 1;
+	
+	/** The Constant WRONG_PASSWORD. */
 	private static final int WRONG_PASSWORD = 2;
+	
+	/** The Constant NETWORK_ERROR. */
 	private static final int NETWORK_ERROR = 3;
 	
 	/**
@@ -53,9 +60,15 @@ public class LoginActivity extends AccountFormActivity {//implements LoaderCallb
 	private UserLoginTask mAuthTask = null;
 	
 	// UI references.
+	/** The m email view. */
 	private AutoCompleteTextView mEmailView;
+	
+	/** The m password view. */
 	private EditText mPasswordView;
 
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onCreate(android.os.Bundle)
+	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		User user = UserController.getInstance(this).getUser();
@@ -207,14 +220,26 @@ public class LoginActivity extends AccountFormActivity {//implements LoaderCallb
 	 */
 	public class UserLoginTask extends AsyncTask<Void, Void, Integer> {
 
+		/** The m email. */
 		private final String mEmail;
+		
+		/** The m password. */
 		private final String mPassword;
 
+		/**
+		 * Instantiates a new user login task.
+		 *
+		 * @param email the email
+		 * @param password the password
+		 */
 		UserLoginTask(String email, String password) {
 			mEmail = email;
 			mPassword = password;
 		}
 
+		/* (non-Javadoc)
+		 * @see android.os.AsyncTask#doInBackground(Params[])
+		 */
 		@Override
 		protected Integer doInBackground(Void... params) {
 			// TODO: attempt authentication against a network service.
@@ -247,6 +272,9 @@ public class LoginActivity extends AccountFormActivity {//implements LoaderCallb
 			return NEEDS_ACCOUNT;
 		}
 
+		/* (non-Javadoc)
+		 * @see android.os.AsyncTask#onPostExecute(java.lang.Object)
+		 */
 		@Override
 		protected void onPostExecute(final Integer success) {
 			mAuthTask = null;
@@ -275,6 +303,9 @@ public class LoginActivity extends AccountFormActivity {//implements LoaderCallb
 			}
 		}
 
+		/* (non-Javadoc)
+		 * @see android.os.AsyncTask#onCancelled()
+		 */
 		@Override
 		protected void onCancelled() {
 			mAuthTask = null;
@@ -283,6 +314,9 @@ public class LoginActivity extends AccountFormActivity {//implements LoaderCallb
 	}
 
 	// http://www.androiddom.com/2011/06/displaying-android-pop-up-dialog_13.html 11/03/15
+	/**
+	 * Show pop up.
+	 */
 	private void showPopUp() {
 
 		AlertDialog.Builder helpBuilder = new AlertDialog.Builder(this);

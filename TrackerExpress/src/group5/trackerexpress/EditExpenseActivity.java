@@ -5,11 +5,13 @@ import java.util.UUID;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.text.Editable;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -20,24 +22,49 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class EditExpenseActivity.
+ */
 public class EditExpenseActivity extends Activity {
 	
+	/** The currency. */
 	private Spinner category, currency;
+	
+	/** The img button. */
 	private ImageButton imgButton;
+	
+	/** The create expense button. */
 	private Button createExpenseButton;
+	
+	/** The flag check box. */
 	private CheckBox flagCheckBox;
-	private EditText description, amount;
+	
+	/** The description, amount and date. */
+	private EditText description, amount, date;
+	
+	/** The receipt uri. */
 	private Uri receiptUri;
 	
+	/** The intent. */
 	final Intent intent = this.getIntent();
+	
+	/** The serialised id. */
 	UUID serialisedId = (UUID) intent.getSerializableExtra("claimUUID");
+	
+	/** The claim. */
 	final Claim claim = ClaimController.getInstance(EditExpenseActivity.this).getClaimList().getClaim(serialisedId);
 	
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onCreate(android.os.Bundle)
+	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_edit_expense);
+		
+		final Expense newExpense = new Expense("");
 		
 		OnClickListener picListener = new OnClickListener() {
 			public void onClick(View v) {
@@ -49,14 +76,18 @@ public class EditExpenseActivity extends Activity {
 		
 		OnClickListener createListener = new OnClickListener() {
 			public void onClick(View v) {
-	
+				editExpense(newExpense);
 			}
 		};
 		createExpenseButton.setOnClickListener(createListener);
 	}
 
+	/** The Constant CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE. */
 	private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
 
+	/**
+	 * Take a photo.
+	 */
 	public void takeAPhoto() {
 		// TODO: Create an intent with the action
 		// MediaStore.ACTION_IMAGE_CAPTURE
@@ -95,11 +126,15 @@ public class EditExpenseActivity extends Activity {
 
 	}
 
+	/**
+	 * Initialize vars.
+	 */
 	private void initializeVars() {
 		// TODO Auto-generated method stub
 		description = (EditText) findViewById(R.id.editDescription);
 		amount = (EditText) findViewById(R.id.editAmount);
 		imgButton = (ImageButton) findViewById(R.id.TakeAPhoto);
+		date = (EditText) findViewById(R.id.editDate);
 		
 		category = (Spinner) findViewById(R.id.categorySpinner);
 		ArrayAdapter<CharSequence> categoryAdapter = ArrayAdapter.createFromResource 
@@ -119,12 +154,46 @@ public class EditExpenseActivity extends Activity {
 		
 	}
 	
+	private void editExpense(final Expense expense) {
+		Date d1 = null;
+		
+		String title = description.getText().toString();
+		expense.setTitle(this, title);
+		
+		Double money = Double.parseDouble(amount.getText().toString());
+		expense.setAmount(this, money);
+		
+		String categorySelection = category.getSelectedItem().toString();
+		expense.setCategory(this, categorySelection);
+		
+		String currencySelection = currency.getSelectedItem().toString();
+		expense.setCurrency(this, currencySelection);
+		
+		String expenseDate = date.getText().toString();
+		expense.setDate(this, d1);
+		
+		
+	}
+	
+	/**
+	 * On item selected.
+	 *
+	 * @param parent the parent
+	 * @param view the view
+	 * @param position the position
+	 * @param id the id
+	 */
 	public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         // An item was selected. You can retrieve the selected item using
         // parent.getItemAtPosition(pos)
 		parent.getItemAtPosition(position);
     }
 
+    /**
+     * On nothing selected.
+     *
+     * @param parent the parent
+     */
     public void onNothingSelected(AdapterView<?> parent) {
         // Another interface callback
     }

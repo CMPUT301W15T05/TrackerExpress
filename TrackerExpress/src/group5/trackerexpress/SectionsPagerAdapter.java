@@ -4,13 +4,28 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class SectionsPagerAdapter.
+ */
 public abstract class SectionsPagerAdapter extends FragmentPagerAdapter {
 
+	/**
+	 * Instantiates a new sections pager adapter.
+	 *
+	 * @param fm the fm
+	 */
 	public SectionsPagerAdapter(FragmentManager fm) {
 		super(fm);
 	}
 	
+	/* (non-Javadoc)
+	 * @see android.support.v4.app.FragmentPagerAdapter#getItem(int)
+	 */
 	public abstract Fragment getItem(int arg0);
 
+	/* (non-Javadoc)
+	 * @see android.support.v4.view.PagerAdapter#getCount()
+	 */
 	public abstract int getCount();
 }

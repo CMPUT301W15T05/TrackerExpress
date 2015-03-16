@@ -12,14 +12,24 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.util.Log;
 import android.view.Menu;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class ClaimInfoActivity.
+ */
 public class ClaimInfoActivity extends ActionBarActivity {
 
+	/** The Constant INDEX_OF_VIEW_CLAIM_TAB. */
 	private static final int INDEX_OF_VIEW_CLAIM_TAB = 0;
+	
+	/** The Constant INDEX_OF_EXPENSE_LIST_TAB. */
 	private static final int INDEX_OF_EXPENSE_LIST_TAB = 1;
 
 	private static Context instance;
 	private Claim claim;
 	
+	/* (non-Javadoc)
+	 * @see group5.trackerexpress.ActionBarActivity#onCreate(android.os.Bundle)
+	 */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -43,6 +53,9 @@ public class ClaimInfoActivity extends ActionBarActivity {
 		setUpActionBar(mSectionsPagerAdapter, R.id.pager_activity_claim_info);
 	}
 
+	/* (non-Javadoc)
+	 * @see group5.trackerexpress.ActionBarActivity#onCreateOptionsMenu(android.view.Menu)
+	 */
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
@@ -56,10 +69,18 @@ public class ClaimInfoActivity extends ActionBarActivity {
 	 */
 	private class ClaimInfoPagerAdapter extends SectionsPagerAdapter {
 
+		/**
+		 * Instantiates a new claim info pager adapter.
+		 *
+		 * @param fm the fm
+		 */
 		public ClaimInfoPagerAdapter(FragmentManager fm) {
 			super(fm);
 		}
 
+		/* (non-Javadoc)
+		 * @see group5.trackerexpress.SectionsPagerAdapter#getItem(int)
+		 */
 		@Override
 		public Fragment getItem(int position) {
 			// getItem is called to instantiate the fragment for the given page.
@@ -83,12 +104,18 @@ public class ClaimInfoActivity extends ActionBarActivity {
 			return fragment;//PlaceholderFragment.newInstance(position + 1);
 		}
 
+		/* (non-Javadoc)
+		 * @see group5.trackerexpress.SectionsPagerAdapter#getCount()
+		 */
 		@Override
 		public int getCount() {
 			// Show 2 total pages.
 			return 2;
 		}
 
+		/* (non-Javadoc)
+		 * @see android.support.v4.view.PagerAdapter#getPageTitle(int)
+		 */
 		@Override
 		public CharSequence getPageTitle(int position) {
 			Locale l = Locale.getDefault();

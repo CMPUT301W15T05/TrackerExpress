@@ -11,13 +11,28 @@ import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
+// TODO: Auto-generated Javadoc
 // http://androidcocktail.blogspot.it/2012/04/adding-checkboxes-to-custom-listview-in.html
+/**
+ * The Class MainTagListAdapter.
+ */
 public class MainTagListAdapter extends ArrayAdapter<Tag> {
 	
+	/** The tag list. */
 	private ArrayList<Tag> tagList;
+	
+	/** The context. */
 	private Context context;
+	
+	/** The check box state. */
 	boolean[] checkBoxState;
 	
+	/**
+	 * Instantiates a new main tag list adapter.
+	 *
+	 * @param context the context
+	 * @param tags the tags
+	 */
 	public MainTagListAdapter(Context context, ArrayList<Tag> tags){
 		super(context, R.layout.fragment_tags_list_item, tags);
 		this.tagList = tags;
@@ -32,11 +47,21 @@ public class MainTagListAdapter extends ArrayAdapter<Tag> {
 	}
 	
 	
+	/**
+	 * The Class TagHolder.
+	 */
 	private static class TagHolder{
+		
+		/** The tag name. */
 		public TextView tagName;
+		
+		/** The chk box. */
 		public CheckBox chkBox;
 	}
 	
+	/* (non-Javadoc)
+	 * @see android.widget.ArrayAdapter#getView(int, android.view.View, android.view.ViewGroup)
+	 */
 	@Override
 	public View getView(final int position, View convertView, ViewGroup parent){
 		View v = convertView;

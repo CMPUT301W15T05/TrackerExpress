@@ -14,18 +14,34 @@ import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.AdapterView.OnItemClickListener;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class MyClaimsFragment.
+ */
 public class MyClaimsFragment extends Fragment implements TView {
 
+	/** The lv_claim_list. */
 	private ListView lv_claim_list;
+	
+	/** The adapter. */
 	private MainClaimListAdapter adapter;
+	
+	/** The b_add_claim. */
 	private Button b_add_claim;
 
 	// Menu items to hide when selecting an option on a claim
+	/** The Constant submittedOrApprovedHiddenItems. */
 	private static final int[] submittedOrApprovedHiddenItems = {R.id.op_edit_claim, R.id.op_submit_claim};
 	
+	/**
+	 * Instantiates a new my claims fragment.
+	 */
 	public MyClaimsFragment() {
 	}
 
+	/* (non-Javadoc)
+	 * @see android.support.v4.app.Fragment#onCreateView(android.view.LayoutInflater, android.view.ViewGroup, android.os.Bundle)
+	 */
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -119,6 +135,12 @@ public class MyClaimsFragment extends Fragment implements TView {
 		return rootView;
 	}
 	
+	/**
+	 * On prepare options menu.
+	 *
+	 * @param popup the popup
+	 * @param c the c
+	 */
 	public void onPrepareOptionsMenu( PopupMenu popup, Claim c ){
 		switch(c.getStatus()){
 		case Claim.APPROVED:
@@ -132,6 +154,9 @@ public class MyClaimsFragment extends Fragment implements TView {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see group5.trackerexpress.TView#update(group5.trackerexpress.TModel)
+	 */
 	@Override
 	public void update(TModel model) {
 		// TODO Auto-generated method stub

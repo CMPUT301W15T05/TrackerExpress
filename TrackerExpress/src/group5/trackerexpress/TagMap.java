@@ -11,9 +11,16 @@ import java.util.UUID;
 
 import android.content.Context;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class TagMap.
+ */
 public class TagMap extends TModel{
 	
+	/** The Constant FILENAME. */
 	private static final String FILENAME = "tags.sav";
+	
+	/** The tags. */
 	private Map<UUID, Tag> tags;
 	
 	/*
@@ -21,12 +28,22 @@ public class TagMap extends TModel{
 	 * 
 	 * 
 	 */
+	/**
+	 * Instantiates a new tag map.
+	 *
+	 * @param context the context
+	 */
 	public TagMap(Context context){
 		super();
 		tags = new HashMap<UUID, Tag>();
 		loadData(context);
 	}
 
+	/**
+	 * Save data.
+	 *
+	 * @param context the context
+	 */
 	public void saveData(Context context) {
 		try {
 			new FileCourrier<TagMap>(this).saveFile(context, FILENAME, this);
@@ -36,6 +53,11 @@ public class TagMap extends TModel{
 		}
 	}
 
+	/**
+	 * Load data.
+	 *
+	 * @param context the context
+	 */
 	public void loadData(Context context) {
 		try {
 			TagMap savedTagMap = new FileCourrier<TagMap>(this).loadFile(context, FILENAME);
@@ -51,19 +73,41 @@ public class TagMap extends TModel{
 	}
 	
 	
+	/**
+	 * Gets the tag.
+	 *
+	 * @param id the id
+	 * @return the tag
+	 */
 	public Tag getTag(UUID id){
 		return tags.get(id);
 	}
 
+	/**
+	 * Clear.
+	 *
+	 * @param context the context
+	 */
 	public void clear(Context context){
 		tags.clear();
 		notifyViews(context);
 	}
 
+	/**
+	 * Checks if is empty.
+	 *
+	 * @return true, if is empty
+	 */
 	public boolean isEmpty() {
 		return tags.isEmpty();
 	}
 
+	/**
+	 * Adds the tag.
+	 *
+	 * @param context the context
+	 * @param tag the tag
+	 */
 	public void addTag(Context context, Tag tag) {
 		tags.put(tag.getUuid(), tag);
 		makeSureViewsIsntNull();
@@ -71,19 +115,38 @@ public class TagMap extends TModel{
 		notifyViews(context);
 	}
 
+	/**
+	 * Delete tag.
+	 *
+	 * @param context the context
+	 * @param id the id
+	 */
 	public void deleteTag(Context context, UUID id) {
 		tags.remove(id);
 		notifyViews(context);
 	}
 
+	/**
+	 * Size.
+	 *
+	 * @return the int
+	 */
 	public int size() {
 		return tags.size();
 	}
 
+	/**
+	 * Gets the tags.
+	 *
+	 * @return the tags
+	 */
 	public ArrayList<Tag> getTags() {
 		return new ArrayList<Tag>(tags.values());
 	}
 	
+	/* (non-Javadoc)
+	 * @see group5.trackerexpress.TModel#addView(group5.trackerexpress.TView)
+	 */
 	@Override
 	public void addView(TView view){
 		super.addView(view);

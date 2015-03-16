@@ -11,6 +11,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class CreateAccountActivity.
+ */
 public class CreateAccountActivity extends AccountFormActivity {
 	
 	/**
@@ -25,16 +29,31 @@ public class CreateAccountActivity extends AccountFormActivity {
 	 * Constants for create account result.
 	 */
 	public static final int ACCOUNT_SUCCESS = 0;
+	
+	/** The Constant EMAIL_TAKEN. */
 	public static final int EMAIL_TAKEN = 1;
+	
+	/** The Constant NETWORK_ERROR. */
 	public static final int NETWORK_ERROR = 2;
 	
+	/** The m auth task. */
 	private UserAccountTask mAuthTask = null;
 	// UI references.
+	/** The m email view. */
 	private EditText mEmailView;
+	
+	/** The m password view. */
 	private EditText mPasswordView;
+	
+	/** The m confirm password view. */
 	private EditText mConfirmPasswordView;
+	
+	/** The m name view. */
 	private EditText mNameView;
 	
+	/* (non-Javadoc)
+	 * @see android.app.Activity#onCreate(android.os.Bundle)
+	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -131,16 +150,31 @@ public class CreateAccountActivity extends AccountFormActivity {
 	 */
 	public class UserAccountTask extends AsyncTask<Void, Void, Integer> {
 
+		/** The m email. */
 		private final String mEmail;
+		
+		/** The m password. */
 		private final String mPassword;
+		
+		/** The m name. */
 		private final String mName;
 
+		/**
+		 * Instantiates a new user account task.
+		 *
+		 * @param email the email
+		 * @param password the password
+		 * @param name the name
+		 */
 		UserAccountTask(String email, String password, String name) {
 			mEmail = email;
 			mPassword = password;
 			mName = name;
 		}
 
+		/* (non-Javadoc)
+		 * @see android.os.AsyncTask#doInBackground(Params[])
+		 */
 		@Override
 		protected Integer doInBackground(Void... params) {
 			// TODO: attempt authentication against a network service.
@@ -183,6 +217,9 @@ public class CreateAccountActivity extends AccountFormActivity {
 			return ACCOUNT_SUCCESS;
 		}
 
+		/* (non-Javadoc)
+		 * @see android.os.AsyncTask#onPostExecute(java.lang.Object)
+		 */
 		@Override
 		protected void onPostExecute(final Integer success) {
 			mAuthTask = null;
@@ -211,6 +248,9 @@ public class CreateAccountActivity extends AccountFormActivity {
 			}
 		}
 
+		/* (non-Javadoc)
+		 * @see android.os.AsyncTask#onCancelled()
+		 */
 		@Override
 		protected void onCancelled() {
 			mAuthTask = null;

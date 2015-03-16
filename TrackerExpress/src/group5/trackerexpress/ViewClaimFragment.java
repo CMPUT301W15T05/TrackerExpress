@@ -11,6 +11,10 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class ViewClaimFragment.
+ */
 public class ViewClaimFragment extends Fragment implements TView {
 
 	private TableRow.LayoutParams trlp = 
@@ -138,6 +142,9 @@ public class ViewClaimFragment extends Fragment implements TView {
 		tl.addView(tr, new TableLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT, TableLayout.LayoutParams.WRAP_CONTENT));
 	}
 
+	/* (non-Javadoc)
+	 * @see group5.trackerexpress.TView#update(group5.trackerexpress.TModel)
+	 */
 	@Override
 	public void update(TModel model) {
 		// TODO Auto-generated method stub
