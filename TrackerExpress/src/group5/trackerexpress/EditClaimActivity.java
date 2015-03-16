@@ -425,7 +425,7 @@ public class EditClaimActivity extends Activity {
 						tagsOfClaim.add(newTag);
 			    		updateTagListView(new ArrayList<Tag>(tagsOfClaim));
 					} catch (IllegalAccessException e) {
-			    		Toast.makeText(getApplicationContext(), "msg msg", Toast.LENGTH_SHORT).show();
+			    		Toast.makeText(getApplicationContext(), "Tag does not exist.", Toast.LENGTH_SHORT).show();
 			    		value = null;
 			    		return;
 					}
