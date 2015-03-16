@@ -60,4 +60,34 @@ public class Date implements Comparable<Date>{
 		return int1.compareTo(int2);
 	}
 	
+	public boolean beforeAfterCheck(Date before, Date after){
+		return (after.getDate() > before.getDate());
+	}
+	
+	public boolean validDate(Date d){
+		boolean valid = true;
+		if (d.yyyy > 9999 || d.yyyy < 0)
+			return false;
+		if (d.mm > 12 || d.mm < 1)
+			return false;
+		if (d.dd > 31 || d.dd < 1)
+			return false;
+		if ((d.mm < 8 && d.mm%2 == 0) || (d.mm > 7 && d.mm%2 == 1)){
+			//February
+			if (d.mm == 2){
+				//Leap Years
+				if (d.yyyy%4 == 0){
+					if (d.yyyy%100 != 0 || d.yyyy%400 == 0){
+						if (d.dd > 29)
+							return false;
+					}
+				}
+				if (d.dd > 28)
+					return false;
+			}
+			if (d.dd > 30)
+				return false;
+		}
+		return valid;
+	}
 }

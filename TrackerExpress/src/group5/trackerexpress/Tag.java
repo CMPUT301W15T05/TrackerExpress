@@ -13,6 +13,7 @@ public class Tag extends TModel {
 	private boolean selected;
 
 	public Tag(String tagString) {
+		super();
 		this.tagString = tagString;
 		this.uuid = UUID.randomUUID();
 		selected = true;

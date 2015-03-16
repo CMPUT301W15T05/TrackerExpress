@@ -1,5 +1,6 @@
 package group5.trackerexpress;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -13,6 +14,7 @@ public class ClaimList extends TModel{
 	private static final String FILENAME = "claims.sav";
 	
 	public ClaimList(Context context) {
+		claims = new HashMap<UUID, Claim>();
 		loadData(context);
 	}
 
@@ -31,6 +33,7 @@ public class ClaimList extends TModel{
 
 	public void addClaim(Context context, Claim claim) {
 		claims.put(claim.getUuid(), claim);
+		makeSureViewsIsntNull();
 		claim.addViews(this.views);
 		notifyViews(context);
 	}
@@ -60,19 +63,13 @@ public class ClaimList extends TModel{
 	}
 
 	public void loadData(Context context) {
-		ClaimList claimList;
 		try {
-			claimList = new FileCourrier<ClaimList>(this).loadFile(context, FILENAME);
-
-			if (claimList == null || claimList.claims == null) {
-				System.err.println ("ITS NULL");
-				this.claims = new HashMap<UUID, Claim>();
-			} else {
-				this.claims = claimList.claims;
-			}
-		} catch (IOException e) {
+			this.claims = new FileCourrier<ClaimList>(this).loadFile(context, FILENAME).claims;
+		} catch (FileNotFoundException e) { 
 			System.err.println ("Claims file not found, making a fresh claims list.");
 			this.claims = new HashMap<UUID, Claim>();
+		} catch (IOException e) {
+			throw new RuntimeException();
 		}
 	}
 }
