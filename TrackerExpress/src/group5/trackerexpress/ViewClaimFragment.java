@@ -1,6 +1,7 @@
 package group5.trackerexpress;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -101,10 +102,18 @@ public class ViewClaimFragment extends Fragment implements TView {
 		}
 		
 		// TODO: Inserting tags
+		ArrayList<UUID> tagList = claim.getTagsIds();
 		
 		
-		for (int i = 0; i < 20; i ++) {
-			insertRow(R.id.viewClaimTagsTable, "Tag", false);
+		if (tagList != null && tagList.size() > 0) {
+			insertRow(R.id.viewClaimTagsTable, getString(R.string.view_claim_tags), true);
+			TagMap tagMap = TagController.getInstance(getActivity()).getTagMap();
+			
+			for (int i = 0; i < tagList.size(); i++) {
+				Tag tag = tagMap.getTag(tagList.get(i));
+				insertRow(R.id.viewClaimTagsTable, tag.toString(), false);
+			}
+			
 		}
 		
 		
