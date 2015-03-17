@@ -57,7 +57,7 @@ public class MyClaimsFragment extends Fragment implements TView {
 		lv_claim_list.setItemsCanFocus(true);
 		b_add_claim = (Button) rootView.findViewById(R.id.b_add_claim);
 		
-		final ClaimList listOfClaims = ClaimController.getInstance(getActivity()).getClaimList();
+		final ClaimList listOfClaims = Controller.getClaimList(getActivity());
 		final Claim[] arrayClaims = listOfClaims.getAllClaims();
 		
 		adapter = new MainClaimListAdapter(getActivity(), arrayClaims);

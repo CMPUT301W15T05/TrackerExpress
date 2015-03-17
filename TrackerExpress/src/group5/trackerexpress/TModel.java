@@ -1,7 +1,5 @@
 package group5.trackerexpress;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -85,9 +83,9 @@ public class TModel implements Serializable{
         }
 
         System.out.println ("Saving...");
-        TagController.getInstance(context).getTagMap().saveData(context);
-        ClaimController.getInstance(context).getClaimList().saveData(context);	
-        UserController.getInstance(context).getUser().saveData(context);	
+        Controller.getTagMap(context).saveData(context);
+        Controller.getClaimList(context).saveData(context);	
+        Controller.getUser(context).saveData(context);	
         System.out.println ("Saved.");
 
     }

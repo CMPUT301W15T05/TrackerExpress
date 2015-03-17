@@ -17,6 +17,11 @@ import android.content.Context;
  */
 public class ClaimList extends TModel{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	/** Map between a claim and its id. */
 	private Map<UUID, Claim> claims;
 	

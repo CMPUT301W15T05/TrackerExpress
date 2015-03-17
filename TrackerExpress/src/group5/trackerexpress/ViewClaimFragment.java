@@ -3,6 +3,7 @@ package group5.trackerexpress;
 import java.util.ArrayList;
 import java.util.UUID;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -18,6 +19,7 @@ import android.widget.TextView;
  * @author Peter Crinklaw, Randy Hu, Parash Rahman, Jesse Emery, Sean Baergen, Rishi Barnwal
  * @version Part 4
  */
+@SuppressLint("ValidFragment")
 public class ViewClaimFragment extends Fragment implements TView {
 
 	private TableRow.LayoutParams trlp = 
@@ -109,7 +111,7 @@ public class ViewClaimFragment extends Fragment implements TView {
 		
 		if (tagList != null && tagList.size() > 0) {
 			insertRow(R.id.viewClaimTagsTable, getString(R.string.view_claim_tags), true);
-			TagMap tagMap = TagController.getInstance(getActivity()).getTagMap();
+			TagMap tagMap = Controller.getTagMap(getActivity());
 			
 			for (int i = 0; i < tagList.size(); i++) {
 				Tag tag = tagMap.getTag(tagList.get(i));

@@ -201,9 +201,7 @@ public class CreateAccountActivity extends AccountFormActivity {
 
 			// Update User object
 			System.out.println ("Updating user start");
-			UserController usercontroller = UserController.getInstance(CreateAccountActivity.this);
-			System.out.println ("User controller good");
-			User user = usercontroller.getUser();
+			User user = Controller.getUser(CreateAccountActivity.this);
 			System.out.println ("User instance good");
 			user.setName(CreateAccountActivity.this, mName);
 			System.out.println ("User set name good");
@@ -233,7 +231,7 @@ public class CreateAccountActivity extends AccountFormActivity {
 				System.err.println ("Creating intent good");
 		    	startActivity(intent);
 				System.err.println ("Starting intent good");
-				User user = UserController.getInstance(CreateAccountActivity.this).getUser();
+				User user = Controller.getUser(CreateAccountActivity.this);
 				user.setSignedIn(true);
 				finish();
 				System.err.println ("Exiting activity good");

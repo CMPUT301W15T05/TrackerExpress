@@ -3,18 +3,15 @@ package group5.trackerexpress;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Set;
 import java.util.UUID;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.text.Editable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,7 +24,6 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.Toast;
-import android.widget.AdapterView.OnItemLongClickListener;
 
 /**
  * The Class EditClaimActivity.
@@ -205,10 +201,10 @@ public class EditClaimActivity extends Activity {
 		
 		final Intent intent = this.getIntent();
 	    final boolean isNewClaim = (boolean) intent.getBooleanExtra("isNewClaim", true);
-	    final ClaimList newclaimlist = ClaimController.getInstance(EditClaimActivity.this).getClaimList();
+	    final ClaimList newclaimlist = Controller.getClaimList(EditClaimActivity.this);
 	    
 	    UUID serialisedId = (UUID) intent.getSerializableExtra("claimUUID");
-	    final Claim claim = ClaimController.getInstance(EditClaimActivity.this).getClaimList().getClaim(serialisedId);
+	    final Claim claim = Controller.getClaimList(EditClaimActivity.this).getClaim(serialisedId);
 	    
 	    /**
 	     * On click listener for add destination button in EditClaimActivity.
@@ -262,10 +258,10 @@ public class EditClaimActivity extends Activity {
 			DestinationListview(desListView,Destination);
 			
 			/** Saving new tags */
-			ArrayList<Tag> current = TagController.getInstance(this).getTagMap().getTags();
+			ArrayList<Tag> current = Controller.getTagMap(this).getTags();
 			for ( Tag t : tagsOfClaim ){
 				if ( ! current.contains(t) ){
-					TagController.getInstance(this).getTagMap().addTag(this, t);
+					Controller.getTagMap(this).addTag(this, t);
 				}
 			}
 	    }
@@ -289,7 +285,7 @@ public class EditClaimActivity extends Activity {
 				
 				/** this procedure will check if the claim name is repeated */
 				boolean repeatedClaimName = false;
-				Claim[] claims = ClaimController.getInstance(EditClaimActivity.this).getClaimList().getAllClaims();
+				Claim[] claims = Controller.getClaimList(EditClaimActivity.this).getAllClaims();
 				for ( Claim c : claims ){
 						if ( c.getClaimName().equals( ClaimTitle.getText().toString() )
 							&& ( isNewClaim || ! c.getUuid().equals(claim.getUuid())) ){
@@ -405,7 +401,7 @@ public class EditClaimActivity extends Activity {
 		String message = "Enter a new name";
 		final AutoCompleteTextView input = new AutoCompleteTextView(EditClaimActivity.this);
 
-		ArrayList<Tag> tagList = TagController.getInstance(EditClaimActivity.this).getTagMap().getTags();
+		ArrayList<Tag> tagList = Controller.getTagMap(EditClaimActivity.this).getTags();
 		ArrayList<String> tags = new ArrayList<String>();
 		
 		for ( int i = 0; i < tagList.size(); i++ ){
@@ -441,7 +437,7 @@ public class EditClaimActivity extends Activity {
 		    		//Tag newTag = new Tag(input.getText().toString());
 		    		Tag newTag;
 					try {
-						newTag = TagController.getInstance(getBaseContext()).getTagMap().
+						newTag = Controller.getTagMap(getBaseContext()).
 								searchForTagByString(input.getText().toString());
 						tagsOfClaim.add(newTag);
 			    		updateTagListView(new ArrayList<Tag>(tagsOfClaim));
@@ -591,7 +587,7 @@ public class EditClaimActivity extends Activity {
 			claim.getTagsIds().add(tag.getUuid());
 
 		
-		ClaimController.getInstance(this).getClaimList().addClaim(this, claim);		
+		Controller.getClaimList(this).addClaim(this, claim);		
 	}
 
 
@@ -694,7 +690,7 @@ public class EditClaimActivity extends Activity {
 	 */
 	private void updateTagListView( ArrayList<Tag> tagList ){
 		if ( tagList == null ){
-			tagList = TagController.getInstance(this).getTagMap().getTags();
+			tagList = Controller.getTagMap(this).getTags();
 		}
 		MainTagListAdapter adapter = new MainTagListAdapter(this, tagList);
 		tagListView.setAdapter(adapter);

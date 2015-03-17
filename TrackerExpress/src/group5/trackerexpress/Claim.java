@@ -13,6 +13,11 @@ import android.content.Context;
  */
 public class Claim extends TModel implements Comparable<Claim>{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	/** The name of the claim creator*/
 	private String userName;
 	

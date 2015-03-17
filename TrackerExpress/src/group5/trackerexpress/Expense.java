@@ -13,6 +13,11 @@ import android.graphics.Bitmap;
  */
 public class Expense extends TModel{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	/** The title of the expense. */
 	private String title;
 	
