@@ -40,10 +40,9 @@ public class ClaimInfoActivity extends ActionBarActivity {
 		instance = this;
 
 		final Intent intent = this.getIntent();
-    	UUID serialisedId = (UUID) intent.getSerializableExtra("claimUUID");
+    	UUID serializedId = (UUID) intent.getSerializableExtra("claimUUID");
 
-	    claim = ClaimController.getInstance(ClaimInfoActivity.this)
-	    						.getClaimList().getClaim(serialisedId);
+	    claim = Controller.getClaimList(this).getClaim(serializedId);
 	    
 	    
 		

@@ -1,16 +1,15 @@
 package group5.trackerexpress;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class TModel.
+ * TModel is the parent of all models in our app. It allows models to
+ * have a list of views and notify them.
+ * 
  * @author Peter Crinklaw, Randy Hu, Parash Rahman, Jesse Emery, Sean Baergen, Rishi Barnwal
  * @version Part 4
  */
@@ -19,7 +18,7 @@ public class TModel implements Serializable{
     /** The Constant serialVersionUID. */
 	private static final long serialVersionUID = 1L;
 	
-	/** The views. */
+	/** The views. Transient because these are not be saved when models are serialized.*/
 	protected transient List<TView> views;
 
     /**
@@ -74,7 +73,7 @@ public class TModel implements Serializable{
     /**
      * Notify views.
      *
-     * @param context the context
+     * @param context Needed for file IO
      */
     public void notifyViews(Context context) {
     	makeSureViewsIsntNull();
@@ -84,9 +83,9 @@ public class TModel implements Serializable{
         }
 
         System.out.println ("Saving...");
-        TagController.getInstance(context).getTagMap().saveData(context);
-        ClaimController.getInstance(context).getClaimList().saveData(context);	
-        UserController.getInstance(context).getUser().saveData(context);	
+        Controller.getTagMap(context).saveData(context);
+        Controller.getClaimList(context).saveData(context);	
+        Controller.getUser(context).saveData(context);	
         System.out.println ("Saved.");
 
     }

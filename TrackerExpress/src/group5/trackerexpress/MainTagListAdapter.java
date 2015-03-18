@@ -3,7 +3,6 @@ package group5.trackerexpress;
 import java.util.ArrayList;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,7 +31,7 @@ public class MainTagListAdapter extends ArrayAdapter<Tag> {
 	/**
 	 * Instantiates a new main tag list adapter.
 	 *
-	 * @param context the context
+	 * @param context Needed for file IO
 	 * @param tags the tags
 	 */
 	public MainTagListAdapter(Context context, ArrayList<Tag> tags){

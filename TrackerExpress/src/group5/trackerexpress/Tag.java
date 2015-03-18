@@ -15,7 +15,7 @@ public class Tag extends TModel {
 	/** The tag string. */
 	private String tagString;
 	
-	/** The uuid. */
+	/** The tag id */
 	private UUID uuid;
 
 	/** The selected. */
@@ -34,7 +34,7 @@ public class Tag extends TModel {
 	}
 	
 	/**
-	 * Gets the uuid.
+	 * Gets the tag id.
 	 *
 	 * @return the uuid
 	 */
@@ -43,9 +43,9 @@ public class Tag extends TModel {
 	}
 
 	/**
-	 * Rename.
+	 * Rename the tag.
 	 *
-	 * @param context the context
+	 * @param context Needed for file IO
 	 * @param newName the new name
 	 */
 	public void rename(Context context, String newName) {
@@ -53,8 +53,10 @@ public class Tag extends TModel {
 		notifyViews(context);
 	}
 	
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
+	/**
+	 * Gets name of tag
+	 * 
+	 * @return tagString name of tag
 	 */
 	@Override
 	public String toString(){
@@ -71,9 +73,9 @@ public class Tag extends TModel {
 	}
 
 	/**
-	 * Sets the selected.
+	 * Sets the selected tag.
 	 *
-	 * @param context the context
+	 * @param context Needed for file IO
 	 * @param selected the selected
 	 */
 	public void setSelected(Context context, boolean selected) {

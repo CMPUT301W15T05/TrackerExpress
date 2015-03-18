@@ -12,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.PopupMenu;
+import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
 // TODO: Auto-generated Javadoc
@@ -56,7 +57,7 @@ public class MyClaimsFragment extends Fragment implements TView {
 		lv_claim_list.setItemsCanFocus(true);
 		b_add_claim = (Button) rootView.findViewById(R.id.b_add_claim);
 		
-		final ClaimList listOfClaims = ClaimController.getInstance(getActivity()).getClaimList();
+		final ClaimList listOfClaims = Controller.getClaimList(getActivity());
 		final Claim[] arrayClaims = listOfClaims.getAllClaims();
 		
 		adapter = new MainClaimListAdapter(getActivity(), arrayClaims);
@@ -121,11 +122,17 @@ public class MyClaimsFragment extends Fragment implements TView {
                         	// TODO:
                         	// Submit the claim to server
                         	// using controller
-                        	
+                        	if ( c.isIncomplete() ){
+            					Toast.makeText(getActivity(), "Updating", Toast.LENGTH_SHORT). show();
+                        	} else {
+                        		c.setStatus(getActivity(), Claim.SUBMITTED);
+                        	}
                         	break;
                         default: break;
                         }
-                    	
+
+                        update(null);
+                        
                         return true;
                     }
                 });

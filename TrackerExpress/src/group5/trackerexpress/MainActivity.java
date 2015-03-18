@@ -10,9 +10,11 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.util.Log;
 import android.view.Menu;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class MainActivity.
+ * The Class MainActivity. Has three tabs: A list of all claims made by user, a list of 
+ * all Tags, and a list of other people's claims for approval.
+ * 
+ * 
  * @author Peter Crinklaw, Randy Hu, Parash Rahman, Jesse Emery, Sean Baergen, Rishi Barnwal
  * @version Part 4
  */

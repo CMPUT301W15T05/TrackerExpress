@@ -13,7 +13,8 @@ import android.content.Context;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Class TagMap.
+ * The Class TagMap. Holds all the tags of the system, and handles file IO,
+ * loading the TagMap upon construction.
  * @author Peter Crinklaw, Randy Hu, Parash Rahman, Jesse Emery, Sean Baergen, Rishi Barnwal
  * @version Part 4
  */
@@ -24,16 +25,11 @@ public class TagMap extends TModel{
 	
 	/** The tags. */
 	private Map<UUID, Tag> tags;
-	
-	/*
-	 * Constructor.
-	 * 
-	 * 
-	 */
+
 	/**
 	 * Instantiates a new tag map.
 	 *
-	 * @param context the context
+	 * @param context Needed for file IO
 	 */
 	public TagMap(Context context){
 		super();
@@ -44,7 +40,7 @@ public class TagMap extends TModel{
 	/**
 	 * Save data.
 	 *
-	 * @param context the context
+	 * @param context Needed for file IO
 	 */
 	public void saveData(Context context) {
 		try {
@@ -58,7 +54,7 @@ public class TagMap extends TModel{
 	/**
 	 * Load data.
 	 *
-	 * @param context the context
+	 * @param context Needed for file IO
 	 */
 	public void loadData(Context context) {
 		try {
@@ -86,9 +82,9 @@ public class TagMap extends TModel{
 	}
 
 	/**
-	 * Clear.
+	 * Clears tags map.
 	 *
-	 * @param context the context
+	 * @param context Needed for file IO
 	 */
 	public void clear(Context context){
 		tags.clear();
@@ -96,7 +92,7 @@ public class TagMap extends TModel{
 	}
 
 	/**
-	 * Checks if is empty.
+	 * Checks if tag map is empty.
 	 *
 	 * @return true, if is empty
 	 */
@@ -105,9 +101,9 @@ public class TagMap extends TModel{
 	}
 
 	/**
-	 * Adds the tag.
+	 * Adds the tag to the map.
 	 *
-	 * @param context the context
+	 * @param context Needed for file IO
 	 * @param tag the tag
 	 */
 	public void addTag(Context context, Tag tag) {
@@ -118,9 +114,9 @@ public class TagMap extends TModel{
 	}
 
 	/**
-	 * Delete tag.
+	 * Delete tag from map.
 	 *
-	 * @param context the context
+	 * @param context Needed for file IO
 	 * @param id the id
 	 */
 	public void deleteTag(Context context, UUID id) {
@@ -129,25 +125,25 @@ public class TagMap extends TModel{
 	}
 
 	/**
-	 * Size.
+	 * Return the size of the tags map
 	 *
-	 * @return the int
+	 * @return size the size of the tags map
 	 */
 	public int size() {
 		return tags.size();
 	}
 
 	/**
-	 * Gets the tags.
+	 * Gets the tags in an arraylist.
 	 *
-	 * @return the tags
+	 * @return the tags as an array list
 	 */
 	public ArrayList<Tag> getTags() {
 		return new ArrayList<Tag>(tags.values());
 	}
-	
-	/* (non-Javadoc)
-	 * @see group5.trackerexpress.TModel#addView(group5.trackerexpress.TView)
+	/**
+	 * adds view to be updated
+	 * @param view TView to be updated
 	 */
 	@Override
 	public void addView(TView view){
@@ -159,6 +155,8 @@ public class TagMap extends TModel{
 	}
 
 	/**
+	 * Searches for a tag by string value
+	 * 
 	 * @param string
 	 * @return
 	 * @throws IllegalAccessException 
