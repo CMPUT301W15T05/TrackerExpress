@@ -17,6 +17,8 @@ import android.widget.AdapterView.OnItemClickListener;
 // TODO: Auto-generated Javadoc
 /**
  * The Class MyClaimsFragment.
+ * @author Peter Crinklaw, Randy Hu, Parash Rahman, Jesse Emery, Sean Baergen, Rishi Barnwal
+ * @version Part 4
  */
 public class MyClaimsFragment extends Fragment implements TView {
 
@@ -39,9 +41,9 @@ public class MyClaimsFragment extends Fragment implements TView {
 	public MyClaimsFragment() {
 	}
 
-	/* (non-Javadoc)
-	 * @see android.support.v4.app.Fragment#onCreateView(android.view.LayoutInflater, android.view.ViewGroup, android.os.Bundle)
-	 */
+	/** onCreateView
+	 ** @see android.support.v4.app.Fragment#onCreateView(android.view.LayoutInflater, android.view.ViewGroup, android.os.Bundle)
+	 **/
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -119,6 +121,7 @@ public class MyClaimsFragment extends Fragment implements TView {
                         	// TODO:
                         	// Submit the claim to server
                         	// using controller
+                        	
                         	break;
                         default: break;
                         }

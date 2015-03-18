@@ -3,6 +3,7 @@ package group5.trackerexpress;
 import java.util.ArrayList;
 
 import android.content.Intent;
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -20,7 +21,10 @@ import android.widget.AdapterView.OnItemClickListener;
 // TODO: Auto-generated Javadoc
 /**
  * The Class ExpenseListFragment.
+ * @author Peter Crinklaw, Randy Hu, Parash Rahman, Jesse Emery, Sean Baergen, Rishi Barnwal
+ * @version Part 4
  */
+@SuppressLint("ValidFragment")
 public class ExpenseListFragment extends Fragment implements TView {
 
 	/** The claim. */
@@ -37,6 +41,7 @@ public class ExpenseListFragment extends Fragment implements TView {
 	 *
 	 * @param claim the claim
 	 */
+	@SuppressLint("ValidFragment")
 	public ExpenseListFragment(Claim claim) {
 		this.claim = claim;
 	}

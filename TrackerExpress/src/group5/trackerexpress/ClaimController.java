@@ -5,6 +5,8 @@ import android.content.Context;
 // TODO: Auto-generated Javadoc
 /**
  * The Class ClaimController.
+ * @author Peter Crinklaw, Randy Hu, Parash Rahman, Jesse Emery, Sean Baergen, Rishi Barnwal
+ * @version Part 4
  */
 public class ClaimController implements TController {
 
