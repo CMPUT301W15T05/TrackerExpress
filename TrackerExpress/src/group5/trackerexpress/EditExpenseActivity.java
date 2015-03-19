@@ -1,9 +1,12 @@
 package group5.trackerexpress;
 
 import java.io.File;
+import java.util.Calendar;
 import java.util.UUID;
 
 import android.app.Activity;
+import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -16,6 +19,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
@@ -27,6 +31,10 @@ import android.widget.Spinner;
  * @version Part 4
  */
 public class EditExpenseActivity extends Activity {
+	
+	static final int dialogId = 1;
+	
+	int y, d, m;
 	
 	/** The currency. */
 	private Spinner category, currency;
@@ -41,7 +49,7 @@ public class EditExpenseActivity extends Activity {
 	private CheckBox flagCheckBox;
 	
 	/** The description, amount and date. */
-	private EditText description, amount, date;
+	private EditText description, amount;
 	
 	/** The receipt uri. */
 	private Uri receiptUri;
@@ -55,16 +63,20 @@ public class EditExpenseActivity extends Activity {
 	/** The claim. */
 	final Claim claim = Controller.getClaimList(EditExpenseActivity.this).getClaim(serialisedId);
 	
-	/* (non-Javadoc)
-	 * @see android.app.Activity#onCreate(android.os.Bundle)
-	 */
-	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_edit_expense);
 		
+		Calendar today = Calendar.getInstance();
+		y = today.get(Calendar.YEAR);
+		d = today.get(Calendar.DAY_OF_MONTH);
+		m = today.get(Calendar.MONTH);
+		showDialog(dialogId);
+		
 		final Expense newExpense = new Expense("");
+		
+		initializeVars();
 		
 		OnClickListener picListener = new OnClickListener() {
 			public void onClick(View v) {
@@ -81,9 +93,30 @@ public class EditExpenseActivity extends Activity {
 		};
 		createExpenseButton.setOnClickListener(createListener);
 	}
+	
+	protected Dialog onCreateDialog(int id){
+		switch(id){
+			case dialogId:
+				return new DatePickerDialog(this, mDateSetListener, y, m, d);
+		}
+		return null;
+	}
+	
+	private DatePickerDialog.OnDateSetListener mDateSetListener = new DatePickerDialog.OnDateSetListener(){
+		public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth){
+			y = year;
+			m = monthOfYear;
+			d = dayOfMonth;
+		}
+		
+	};
+	
+	
+	
 
 	/** The Constant CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE. */
 	private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
+
 
 	/**
 	 * Take a photo.
@@ -127,14 +160,14 @@ public class EditExpenseActivity extends Activity {
 	}
 
 	/**
-	 * Initialize vars.
+	 * Initialize variables.
 	 */
 	private void initializeVars() {
 		// TODO Auto-generated method stub
 		description = (EditText) findViewById(R.id.editDescription);
 		amount = (EditText) findViewById(R.id.editAmount);
 		imgButton = (ImageButton) findViewById(R.id.TakeAPhoto);
-		date = (EditText) findViewById(R.id.editDate);
+		
 		
 		category = (Spinner) findViewById(R.id.categorySpinner);
 		ArrayAdapter<CharSequence> categoryAdapter = ArrayAdapter.createFromResource 
@@ -151,11 +184,9 @@ public class EditExpenseActivity extends Activity {
 		createExpenseButton = (Button) findViewById(R.id.createExpenseButton);
 		flagCheckBox = (CheckBox) findViewById(R.id.incompleteCheckBox);
 		
-		
 	}
 	
 	private void editExpense(final Expense expense) {
-		Date d1 = null;
 		
 		String title = description.getText().toString();
 		expense.setTitle(this, title);
@@ -169,9 +200,7 @@ public class EditExpenseActivity extends Activity {
 		String currencySelection = currency.getSelectedItem().toString();
 		expense.setCurrency(this, currencySelection);
 		
-		String expenseDate = date.getText().toString();
-		expense.setDate(this, d1);
-		
+		expense.setDate(this, y, m, d);
 		
 	}
 	
