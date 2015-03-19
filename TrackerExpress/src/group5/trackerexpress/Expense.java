@@ -22,7 +22,7 @@ public class Expense extends TModel{
 	private String title;
 	
 	/** The date of the expense. */
-	private int year, month, day;
+	private Date date;
 	
 	/** The id of the expense. */
 	private UUID uuid;
@@ -115,10 +115,8 @@ public class Expense extends TModel{
 	 * @param context Needed for file IO
 	 * @param d1 the Date
 	 */
-	public void setDate(Context context, int y, int m, int d) {
-		this.year = y;
-		this.month = m;
-		this.day = d;
+	public void setDate(Context context, Date date) {
+		this.date = date;
 		notifyViews(context);
 	}
 
@@ -127,30 +125,11 @@ public class Expense extends TModel{
 	 *
 	 * @return the year
 	 */
-	public int getYear() {
+	public Date getDate() {
 		// TODO Auto-generated method stub
-		return year;
+		return date;
 	}
-	
-	/**
-	 * Gets the month.
-	 *
-	 * @return the month
-	 */
-	public int getMonth() {
-		// TODO Auto-generated method stub
-		return month;
-	}
-	
-	/**
-	 * Gets the day.
-	 *
-	 * @return the day
-	 */
-	public int getDay() {
-		// TODO Auto-generated method stub
-		return day;
-	}
+
 
 	/**
 	 * Gets the currency.
