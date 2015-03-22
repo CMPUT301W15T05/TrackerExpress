@@ -75,12 +75,15 @@ public class ExpenseListFragment extends Fragment implements TView {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
+				System.out.println("STARTING EXPENSE STUFF");
 				Expense exp = new Expense();
 				listOfExpenses.addExpense(exp);
 				claim.setExpenseList(getActivity(), listOfExpenses);
 				Intent intent = new Intent( getActivity(), EditExpenseActivity.class );
 				intent.putExtra("claimUUID", claim.getUuid());
+				System.out.println("INITS GOOD");
 				startActivity(intent);
+				System.out.println("ACTIVITY START GOOD");
 			}
 			
 		});

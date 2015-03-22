@@ -60,20 +60,23 @@ public class EditExpenseActivity extends Activity {
 	private Uri receiptUri;
 	
 	/** The intent. */
-	final Intent intent = this.getIntent();
+	private Intent intent;
 	
 	/** The serialised id. */
-	UUID serialisedId = (UUID) intent.getSerializableExtra("claimUUID");
+	UUID serialisedId;// = (UUID) intent.getSerializableExtra("claimUUID");
 	
 	/** The claim. */
-	final Claim claim = Controller.getClaimList(EditExpenseActivity.this).getClaim(serialisedId);
+	Claim claim;// = Controller.getClaimList(EditExpenseActivity.this).getClaim(serialisedId);
 	
+	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_edit_expense);
 		
 		final Expense newExpense = new Expense("");
+		System.out.println("STARTING INIT VARS");
+		initializeVars();
+		System.out.println("FINISHED INIT VARS");
 		
 		OnClickListener dateListener = new OnClickListener(){
 			public void onClick(View v){
@@ -81,6 +84,7 @@ public class EditExpenseActivity extends Activity {
 				expenseDialog.show();
 			}
 		};
+		
 		dateEditText.setOnClickListener(dateListener);
 		
 		OnClickListener picListener = new OnClickListener() {
@@ -90,7 +94,6 @@ public class EditExpenseActivity extends Activity {
 		};
 		imgButton.setOnClickListener(picListener);
 		
-		initializeVars();
 		OnClickListener statusListener = new OnClickListener(){
 			public void onClick(View v){
 				
@@ -129,7 +132,7 @@ public class EditExpenseActivity extends Activity {
 		if (!folderF.exists()) {
 			folderF.mkdir();
 
-		ImageButton button = (ImageButton) findViewById(R.id.TakeAPhoto);
+		ImageButton button = (ImageButton) findViewById(R.id.editExpenseTakeAPhoto);
 		Drawable photo = Drawable.createFromPath(receiptUri.getPath());
 		button.setImageDrawable(photo);
 		}
@@ -155,27 +158,30 @@ public class EditExpenseActivity extends Activity {
 	 * Initialize variables.
 	 */
 	private void initializeVars() {
-		// TODO Auto-generated method stub
-		description = (EditText) findViewById(R.id.editDescription);
-		amount = (EditText) findViewById(R.id.editAmount);
-		imgButton = (ImageButton) findViewById(R.id.TakeAPhoto);
-		dateEditText = (EditText) findViewById(R.id.editDate);
+		intent = this.getIntent();
+		serialisedId = (UUID) intent.getSerializableExtra("claimUUID");
+		claim = Controller.getClaimList(EditExpenseActivity.this).getClaim(serialisedId);
+		
+		description = (EditText) findViewById(R.id.editExpenseDescription);
+		amount = (EditText) findViewById(R.id.editExpenseAmount);
+		imgButton = (ImageButton) findViewById(R.id.editExpenseTakeAPhoto);
+		dateEditText = (EditText) findViewById(R.id.editExpenseDate);
 		dateFormatter = new SimpleDateFormat("MM-dd-yyyy");
 		
-		category = (Spinner) findViewById(R.id.categorySpinner);
+		category = (Spinner) findViewById(R.id.editExpenseCategorySpinner);
 		ArrayAdapter<CharSequence> categoryAdapter = ArrayAdapter.createFromResource 
 				(this,  R.array.category_array,  android.R.layout.simple_spinner_item); //create array adapter using string array and default spinner layout
 		categoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); //specify layout to use when list of choices appears
 		category.setAdapter(categoryAdapter);
 		
-		currency = (Spinner) findViewById(R.id.currencySpinner);
+		currency = (Spinner) findViewById(R.id.editExpenseCurrencySpinner);
 		ArrayAdapter<CharSequence> currencyAdapter = ArrayAdapter.createFromResource
 				(this,  R.array.currency_array,  android.R.layout.simple_spinner_item); //create array adapter using string array and default spinner layout
 		currencyAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); //specify layout to use when list of choices appears
 		category.setAdapter(currencyAdapter);
 		
-		createExpenseButton = (Button) findViewById(R.id.createExpenseButton);
-		flagCheckBox = (CheckBox) findViewById(R.id.incompleteCheckBox);
+		createExpenseButton = (Button) findViewById(R.id.editExpenseCreateExpenseButton);
+		flagCheckBox = (CheckBox) findViewById(R.id.editExpenseIncompleteCheckBox);
 		
 	}
 
