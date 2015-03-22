@@ -4,22 +4,23 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.UUID;
+import java.util.Map.Entry;
 
 import android.content.Context;
 
 
 /**
- * The Class ClaimList.
+ * Holds all of the apps claims. Provides functions for saving them, and loads them upon construction.  
+ * 
  * @author Peter Crinklaw, Randy Hu, Parash Rahman, Jesse Emery, Sean Baergen, Rishi Barnwal
  * @version Part 4
+ * @see Claim
  */
 public class ClaimList extends TModel{
 	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	/** Map between a claim and its id. */
@@ -29,7 +30,7 @@ public class ClaimList extends TModel{
 	private static final String FILENAME = "claims.sav";
 	
 	/**
-	 * Instantiates a new claim list.
+	 * Instantiates a new claim list. Loads data from save file.
 	 *
 	 * @param context Needed for file IO
 	 */
@@ -109,6 +110,20 @@ public class ClaimList extends TModel{
 		Claim[] claimArray = claims.values().toArray(new Claim[0]);
 		Arrays.sort(claimArray);
 		return claimArray;
+	}
+	
+	
+	/**
+	 * adds view to be updated
+	 * @param view TView to be updated
+	 */
+	@Override
+	public void addView(TView view){
+		super.addView(view);
+		Iterator<Entry<UUID, Claim>> it = claims.entrySet().iterator();
+		while (it.hasNext()) {
+			it.next().getValue().addView(view);
+		}
 	}
 	
 	/**

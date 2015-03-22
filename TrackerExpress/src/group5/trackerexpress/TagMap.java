@@ -11,12 +11,12 @@ import java.util.UUID;
 
 import android.content.Context;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class TagMap. Holds all the tags of the system, and handles file IO,
+ * Holds all the tags of the system, and handles file IO,
  * loading the TagMap upon construction.
  * @author Peter Crinklaw, Randy Hu, Parash Rahman, Jesse Emery, Sean Baergen, Rishi Barnwal
  * @version Part 4
+ * @see Tag
  */
 public class TagMap extends TModel{
 	

@@ -3,7 +3,7 @@ package group5.trackerexpress;
 import android.content.Context;
 
 /**
- * Singleton that manages the ClaimList
+ * Holds all the static data members of the app.
  * 
  * @author Peter Crinklaw, Randy Hu, Parash Rahman, Jesse Emery, Sean Baergen, Rishi Barnwal
  * @version Part 4
@@ -16,7 +16,7 @@ public class Controller {
 	private static User user;
 	
 	/**
-	 * Gets the claim list.
+	 * Gets the static claim list, newing it if necessary
 	 *
 	 * @return the claim list
 	 */
@@ -26,12 +26,25 @@ public class Controller {
 		return claimList;
 	}
 	
+	/**
+	 * Gets the static tag map, newing it if necessary
+	 * 
+	 * @param context
+	 * @return
+	 */
+
 	public static TagMap getTagMap(Context context){
 		if (tagMap == null)
 			tagMap = new TagMap(context);
 		return tagMap;
 	}
 	
+	/**
+	 * Gets the User data object. Right now there is but one user per phone
+	 * 
+	 * @param context
+	 * @return
+	 */
 	public static User getUser(Context context){
 		if (user == null)
 			user = new User(context);
