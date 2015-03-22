@@ -8,11 +8,9 @@
         android:id="@+id/editClaimName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:inputType="textCapWords"
         android:ems="10"
-        android:hint="@string/promote_claim_name" >
-
-        <requestFocus />
-    </EditText>
+        android:hint="@string/promote_claim_name" />
 
     <EditText
         android:id="@+id/editClaimTitle"

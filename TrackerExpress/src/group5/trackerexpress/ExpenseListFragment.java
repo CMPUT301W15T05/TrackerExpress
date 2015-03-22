@@ -21,7 +21,7 @@ import android.widget.AdapterView.OnItemClickListener;
 // TODO: Auto-generated Javadoc
 /**
  * The Class ExpenseListFragment.
- * @author Peter Crinklaw, Randy Hu, Parash Rahman, Jesse Emery, Sean Baergen, Rishi Barnwal
+ * @authors Peter Crinklaw, Randy Hu, Parash Rahman, Jesse Emery, Sean Baergen, Rishi Barnwal
  * @version Part 4
  */
 @SuppressLint("ValidFragment")
@@ -75,12 +75,12 @@ public class ExpenseListFragment extends Fragment implements TView {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				//Expense exp = new Expense();
-				//listOfExpenses.addExpense(exp);
-				//claim.setExpenseList(getActivity(), listOfExpenses);
-				//Intent intent = new Intent( getActivity(), EditExpenseActivity.class );
-				//intent.putExtra("claimUUID", claim.getUuid());
-				//startActivity(intent);
+				Expense exp = new Expense();
+				listOfExpenses.addExpense(exp);
+				claim.setExpenseList(getActivity(), listOfExpenses);
+				Intent intent = new Intent( getActivity(), EditExpenseActivity.class );
+				intent.putExtra("claimUUID", claim.getUuid());
+				startActivity(intent);
 			}
 			
 		});

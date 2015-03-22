@@ -1,10 +1,9 @@
 package group5.trackerexpress;
 
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.UUID;
-import android.app.Activity;
+
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -33,7 +32,7 @@ import android.widget.Toast;
  * @version Part 4
  *
  */
-public class EditClaimActivity extends Activity {
+public class EditClaimActivity extends EditableActivity {
 	
 
 	/** The Claim name. */
@@ -121,8 +120,12 @@ public class EditClaimActivity extends Activity {
 		 *  Assign each EditText to a variable.
 		 */
 		
-		ClaimName = (EditText) findViewById(R.id.editClaimName);
+		ClaimName = (EditText) findViewById(R.id.editClaimName);	
+		limitLength(ClaimName, 20);
+		ClaimName.requestFocus();
+		
 		ClaimTitle = (EditText) findViewById(R.id.editClaimTitle);
+		limitLength(ClaimTitle, 20);
 		
 		StartDateYear = (EditText) findViewById(R.id.editClaimStartDateYear);
 		StartDateMonth = (EditText) findViewById(R.id.editClaimStartDateMonth);
@@ -775,9 +778,7 @@ public class EditClaimActivity extends Activity {
 			public void onClick(DialogInterface dialog, int which){
 								
 				Toast.makeText(EditClaimActivity.this, "Canceling", Toast.LENGTH_SHORT). show();
-								
-				/** launch MainActivity */
-				onStop();
+				finish();
 				}
 			});
 						
