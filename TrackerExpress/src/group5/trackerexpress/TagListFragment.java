@@ -66,7 +66,7 @@ public class TagListFragment extends Fragment implements TView {
 		this.update(null);
 
 		final TagMap mapOfTags = getTagMap(getActivity());
-		ArrayList<Tag> listOfTags = mapOfTags.getTags();
+		ArrayList<Tag> listOfTags = mapOfTags.toList();
 
 		mapOfTags.addView(this);
 		getTagMap(getActivity()).addView(this);
@@ -198,7 +198,7 @@ public class TagListFragment extends Fragment implements TView {
 	 */
 	@Override
 	public void update(TModel model) {
-		ArrayList<Tag> listOfTags = getTagMap(getActivity()).getTags();
+		ArrayList<Tag> listOfTags = getTagMap(getActivity()).toList();
 		if (listOfTags == null) {
 			listOfTags = new ArrayList<Tag>();
 		}

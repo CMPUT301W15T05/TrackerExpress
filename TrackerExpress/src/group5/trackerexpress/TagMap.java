@@ -138,7 +138,7 @@ public class TagMap extends TModel{
 	 *
 	 * @return the tags as an array list
 	 */
-	public ArrayList<Tag> getTags() {
+	public ArrayList<Tag> toList() {
 		return new ArrayList<Tag>(tags.values());
 	}
 	/**

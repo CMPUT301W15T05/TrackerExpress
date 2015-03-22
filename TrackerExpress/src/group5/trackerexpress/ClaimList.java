@@ -105,7 +105,7 @@ public class ClaimList extends TModel{
 	 *
 	 * @return claimArray an array of Claims
 	 */
-	public Claim[] getAllClaims() {
+	public Claim[] toList() {
 		Claim[] claimArray = claims.values().toArray(new Claim[0]);
 		Arrays.sort(claimArray);
 		return claimArray;

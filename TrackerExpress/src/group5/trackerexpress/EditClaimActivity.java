@@ -258,7 +258,7 @@ public class EditClaimActivity extends Activity {
 			DestinationListview(desListView,Destination);
 			
 			/** Saving new tags */
-			ArrayList<Tag> current = Controller.getTagMap(this).getTags();
+			ArrayList<Tag> current = Controller.getTagMap(this).toList();
 			for ( Tag t : tagsOfClaim ){
 				if ( ! current.contains(t) ){
 					Controller.getTagMap(this).addTag(this, t);
@@ -285,7 +285,7 @@ public class EditClaimActivity extends Activity {
 				
 				/** this procedure will check if the claim name is repeated */
 				boolean repeatedClaimName = false;
-				Claim[] claims = Controller.getClaimList(EditClaimActivity.this).getAllClaims();
+				Claim[] claims = Controller.getClaimList(EditClaimActivity.this).toList();
 				for ( Claim c : claims ){
 						if ( c.getClaimName().equals( ClaimTitle.getText().toString() )
 							&& ( isNewClaim || ! c.getUuid().equals(claim.getUuid())) ){
@@ -401,7 +401,7 @@ public class EditClaimActivity extends Activity {
 		String message = "Enter a new name";
 		final AutoCompleteTextView input = new AutoCompleteTextView(EditClaimActivity.this);
 
-		ArrayList<Tag> tagList = Controller.getTagMap(EditClaimActivity.this).getTags();
+		ArrayList<Tag> tagList = Controller.getTagMap(EditClaimActivity.this).toList();
 		ArrayList<String> tags = new ArrayList<String>();
 		
 		for ( int i = 0; i < tagList.size(); i++ ){
@@ -690,7 +690,7 @@ public class EditClaimActivity extends Activity {
 	 */
 	private void updateTagListView( ArrayList<Tag> tagList ){
 		if ( tagList == null ){
-			tagList = Controller.getTagMap(this).getTags();
+			tagList = Controller.getTagMap(this).toList();
 		}
 		MainTagListAdapter adapter = new MainTagListAdapter(this, tagList);
 		tagListView.setAdapter(adapter);
