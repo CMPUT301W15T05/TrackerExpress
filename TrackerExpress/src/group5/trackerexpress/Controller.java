@@ -1,5 +1,7 @@
 package group5.trackerexpress;
 
+import java.util.UUID;
+
 import android.content.Context;
 
 /**
@@ -49,6 +51,18 @@ public class Controller {
 		if (user == null)
 			user = new User(context);
 		return user;
+	}
+	
+	public static Claim getClaim(Context context, UUID claimID){
+		return getClaimList(context).getClaim(claimID);
+	}
+	
+	public static Expense getExpense(Context context, UUID claimID, UUID expenseId){
+		try {
+			return getClaimList(context).getClaim(claimID).getExpenseList().getExpense(expenseId);
+		} catch (ExpenseNotFoundException e) {
+			throw new RuntimeException("Expense not found");
+		}
 	}
 	
 
