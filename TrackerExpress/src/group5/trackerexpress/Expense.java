@@ -115,20 +115,21 @@ public class Expense extends TModel{
 	 * @param context Needed for file IO
 	 * @param d1 the Date
 	 */
-	public void setDate(Context context, Date d1) {
-		this.date = d1;
+	public void setDate(Context context, Date date) {
+		this.date = date;
 		notifyViews(context);
 	}
 
 	/**
-	 * Gets the date.
+	 * Gets the year.
 	 *
-	 * @return the date
+	 * @return the year
 	 */
 	public Date getDate() {
 		// TODO Auto-generated method stub
 		return date;
 	}
+
 
 	/**
 	 * Gets the currency.

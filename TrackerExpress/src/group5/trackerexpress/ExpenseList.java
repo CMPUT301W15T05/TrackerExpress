@@ -9,8 +9,11 @@ import java.util.UUID;
  * @author Peter Crinklaw, Randy Hu, Parash Rahman, Jesse Emery, Sean Baergen, Rishi Barnwal
  * @version Part 4
  */
-public class ExpenseList {
+public class ExpenseList extends TModel{
 	
+	
+	private static final long serialVersionUID = 1L;
+
 	/** The expense list. */
 	private ArrayList<Expense> expenseList;
 	
@@ -110,4 +113,18 @@ public class ExpenseList {
 		
 		return ret;
 	}
+	
+	
+	
+	/**
+	 * adds view to be updated
+	 * @param view TView to be updated
+	 */
+	@Override
+	public void addView(TView view){
+		super.addView(view);
+		for (Expense expense : expenseList)
+			expense.addView(view);
+	}
+	
 }

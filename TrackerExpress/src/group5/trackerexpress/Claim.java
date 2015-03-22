@@ -1,7 +1,9 @@
 package group5.trackerexpress;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.UUID;
+import java.util.Map.Entry;
 
 import android.content.Context;
 
@@ -373,6 +375,16 @@ public class Claim extends TModel implements Comparable<Claim>{
 	 */
 	public void setTagsIds(ArrayList<UUID> tagsIds) {
 		this.tagIds = tagsIds;
+	}
+	
+	/**
+	 * adds view to be updated
+	 * @param view TView to be updated
+	 */
+	@Override
+	public void addView(TView view){
+		super.addView(view);
+		expenseList.addView(view);
 	}
 	
 }

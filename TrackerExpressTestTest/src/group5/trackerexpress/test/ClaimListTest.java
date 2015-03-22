@@ -91,9 +91,9 @@ public class ClaimListTest extends ActivityInstrumentationTestCase2<MainActivity
 		claimList.addClaim(context, c3);
 		
 		assertTrue("List size isn't correct", claimList.size()==3);
-		assertTrue("Claim '1' is not first", claimList.getAllClaims()[0].getClaimName().equals("1") );
-		assertTrue("Claim '2' is not second", claimList.getAllClaims()[1].getClaimName().equals("2") );
-		assertTrue("Claim '3' is not last", claimList.getAllClaims()[2].getClaimName().equals("3") );
+		assertTrue("Claim '1' is not first", claimList.toList()[0].getClaimName().equals("1") );
+		assertTrue("Claim '2' is not second", claimList.toList()[1].getClaimName().equals("2") );
+		assertTrue("Claim '3' is not last", claimList.toList()[2].getClaimName().equals("3") );
 		
 	}
 }

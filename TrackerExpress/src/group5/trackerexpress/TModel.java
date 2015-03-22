@@ -61,14 +61,19 @@ public class TModel implements Serializable{
     }
 
     /**
-     * Delete view.
+     * Delete view. 
+     * 
+     * NOTE: Not implemented correctly, doing so would mean many child classes would have to override
+     * this function. Since we have not done that, I'm commenting this out - Peter
      *
      * @param view the view
      */
+    /*
     public void deleteView(TView view) {
     	makeSureViewsIsntNull();
         views.remove(view);
     }
+    */
     
     /**
      * Notify views.

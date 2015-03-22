@@ -58,7 +58,7 @@ public class MyClaimsFragment extends Fragment implements TView {
 		b_add_claim = (Button) rootView.findViewById(R.id.b_add_claim);
 		
 		final ClaimList listOfClaims = Controller.getClaimList(getActivity());
-		final Claim[] arrayClaims = listOfClaims.getAllClaims();
+		final Claim[] arrayClaims = listOfClaims.toList();
 		
 		adapter = new MainClaimListAdapter(getActivity(), arrayClaims);
 		lv_claim_list.setAdapter(adapter);
@@ -100,7 +100,7 @@ public class MyClaimsFragment extends Fragment implements TView {
                         case R.id.op_delete_claim: 
                         	// Delete tag off of Claim ArrayList for listview
                         	listOfClaims.deleteClaim(getActivity(), claimAnalyzed.getUuid());
-                        	Claim[] arrayClaims = listOfClaims.getAllClaims();
+                        	Claim[] arrayClaims = listOfClaims.toList();
                         	MainClaimListAdapter a = new MainClaimListAdapter( getActivity().getBaseContext(), arrayClaims );
                 			lv_claim_list.setAdapter(a);
                 			// Delete it off the model
