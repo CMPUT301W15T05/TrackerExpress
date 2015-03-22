@@ -1,8 +1,8 @@
 package group5.trackerexpress.test;
 
 import group5.trackerexpress.Claim;
-import group5.trackerexpress.ClaimController;
 import group5.trackerexpress.ClaimList;
+import group5.trackerexpress.Controller;
 import group5.trackerexpress.Expense;
 import group5.trackerexpress.ExpenseNotFoundException;
 import group5.trackerexpress.MainActivity;
@@ -24,7 +24,7 @@ public class ClaimControllerTest extends ActivityInstrumentationTestCase2<MainAc
 		super.setUp();
 		instrumentation = getInstrumentation();
 		context = getActivity();
-		claims = ClaimController.getInstance(context).getClaimList();
+		claims = Controller.getClaimList(context);
 	}
 	
 	public void testAddExpense() throws ExpenseNotFoundException{

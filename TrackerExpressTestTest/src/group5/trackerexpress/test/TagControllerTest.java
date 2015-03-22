@@ -3,9 +3,9 @@ package group5.trackerexpress.test;
 
 import java.util.UUID;
 
+import group5.trackerexpress.Controller;
 import group5.trackerexpress.MainActivity;
 import group5.trackerexpress.Tag;
-import group5.trackerexpress.TagController;
 import group5.trackerexpress.TagMap;
 import android.app.Activity;
 import android.app.Instrumentation;
@@ -27,7 +27,7 @@ ActivityInstrumentationTestCase2<MainActivity> {
 		super.setUp();
 		instrumentation = getInstrumentation();
 		context = getActivity();
-		tags = TagController.getInstance(context).getTagMap();
+		tags = Controller.getTagMap(context);
 	}
 	
 
