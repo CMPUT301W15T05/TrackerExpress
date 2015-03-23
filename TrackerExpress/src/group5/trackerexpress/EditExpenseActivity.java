@@ -8,7 +8,9 @@ import java.util.UUID;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.DialogFragment;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -26,6 +28,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -36,13 +39,10 @@ import android.widget.Spinner;
 public class EditExpenseActivity extends Activity {
 	
 	/** The date. */
-	private Date expenseDate;
-	private DatePickerDialog expenseDialog;
-	private SimpleDateFormat dateFormatter;
-	
+	private Date expenseDate;	
 
 	/** The currency. */
-	private Spinner category, currency;
+	private Spinner categorySpinner, currencySpinner;
 	
 	/** The img button. */
 	private ImageButton imgButton;
@@ -55,6 +55,9 @@ public class EditExpenseActivity extends Activity {
 	
 	/** The description, amount and date. */
 	private EditText description, amount, dateEditText;
+	
+	/**Receipt Bitmap. */
+	private Bitmap receiptBitmap;
 	
 	/** The receipt uri. */
 	private Uri receiptUri;
@@ -73,19 +76,14 @@ public class EditExpenseActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_edit_expense);
 		
+		
 		final Expense newExpense = new Expense("");
 		System.out.println("STARTING INIT VARS");
 		initializeVars();
 		System.out.println("FINISHED INIT VARS");
 		
-		OnClickListener dateListener = new OnClickListener(){
-			public void onClick(View v){
-				setExpenseDate();
-				expenseDialog.show();
-			}
-		};
 		
-		dateEditText.setOnClickListener(dateListener);
+		
 		
 		OnClickListener picListener = new OnClickListener() {
 			public void onClick(View v) {
@@ -101,59 +99,14 @@ public class EditExpenseActivity extends Activity {
 		};
 		flagCheckBox.setOnClickListener(statusListener);
 			
-		OnClickListener createListener = new OnClickListener() {
+		OnClickListener finishListener = new OnClickListener() {
 			public void onClick(View v) {
 				editExpense(newExpense);
 			}
 		};
-		createExpenseButton.setOnClickListener(createListener);
+		createExpenseButton.setOnClickListener(finishListener);
 	}
 	
-	/** The Constant CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE. */
-	private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
-
-
-	/**
-	 * Take a photo.
-	 */
-	public void takeAPhoto() {
-		// TODO: Create an intent with the action
-		// MediaStore.ACTION_IMAGE_CAPTURE
-
-		// ComponentName cn = new ComponentName("es.softwareprocess.bogopicgen",
-		// "es.softwareprocess.bogopicgen.BogoPicGenActivity");
-		// ComponentName cn = new ComponentName("com.android.camera",
-		// "com.android.camera.Camera");
-		// intent.setComponent(cn);
-
-		// Create a folder to store pictures
-		String folder = Environment.getExternalStorageDirectory().getAbsolutePath() + "/tmp";
-		File folderF = new File(folder);
-		if (!folderF.exists()) {
-			folderF.mkdir();
-
-		ImageButton button = (ImageButton) findViewById(R.id.editExpenseTakeAPhoto);
-		Drawable photo = Drawable.createFromPath(receiptUri.getPath());
-		button.setImageDrawable(photo);
-		}
-
-		// Create an URI for the picture file
-		String imageFilePath = folder + "/"
-				+ String.valueOf(System.currentTimeMillis()) + ".jpg";
-		File imageFile = new File(imageFilePath);
-		receiptUri = Uri.fromFile(imageFile);
-
-		Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-		intent.putExtra(MediaStore.EXTRA_OUTPUT, receiptUri);
-
-		startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
-		// TODO: Put in the intent in the tag MediaStore.EXTRA_OUTPUT the URI
-
-		// TODO: Start the activity (expecting a result), with the code
-		// CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE
-
-	}
-
 	/**
 	 * Initialize variables.
 	 */
@@ -166,40 +119,79 @@ public class EditExpenseActivity extends Activity {
 		amount = (EditText) findViewById(R.id.editExpenseAmount);
 		imgButton = (ImageButton) findViewById(R.id.editExpenseTakeAPhoto);
 		dateEditText = (EditText) findViewById(R.id.editExpenseDate);
-		dateFormatter = new SimpleDateFormat("MM-dd-yyyy");
 		
-		category = (Spinner) findViewById(R.id.editExpenseCategorySpinner);
+		categorySpinner = (Spinner) findViewById(R.id.editExpenseCategorySpinner);
 		ArrayAdapter<CharSequence> categoryAdapter = ArrayAdapter.createFromResource 
 				(this,  R.array.category_array,  android.R.layout.simple_spinner_item); //create array adapter using string array and default spinner layout
 		categoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); //specify layout to use when list of choices appears
-		category.setAdapter(categoryAdapter);
+		categorySpinner.setAdapter(categoryAdapter);
 		
-		currency = (Spinner) findViewById(R.id.editExpenseCurrencySpinner);
+		currencySpinner = (Spinner) findViewById(R.id.editExpenseCurrencySpinner);
 		ArrayAdapter<CharSequence> currencyAdapter = ArrayAdapter.createFromResource
 				(this,  R.array.currency_array,  android.R.layout.simple_spinner_item); //create array adapter using string array and default spinner layout
 		currencyAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); //specify layout to use when list of choices appears
-		category.setAdapter(currencyAdapter);
+		currencySpinner.setAdapter(currencyAdapter);
 		
 		createExpenseButton = (Button) findViewById(R.id.editExpenseCreateExpenseButton);
 		flagCheckBox = (CheckBox) findViewById(R.id.editExpenseIncompleteCheckBox);
 		
 	}
-
-	private void setExpenseDate() {
-		Calendar date = Calendar.getInstance();
-		expenseDialog = new DatePickerDialog(this, new OnDateSetListener() {
-			 
-            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                Calendar date = Calendar.getInstance();
-                date.set(year, monthOfYear, dayOfMonth);
-                dateEditText.setText(dateFormatter.format(date.getTime()));
-            }
-        },date.get(Calendar.YEAR), date.get(Calendar.MONTH), date.get(Calendar.DAY_OF_MONTH));
-		
-		expenseDate.setMM(date.get(Calendar.MONTH));
-		expenseDate.setDD(date.get(Calendar.DAY_OF_MONTH));
-		expenseDate.setYYYY(date.get(Calendar.YEAR));
+	
+	public void showDatePickerDialog(View v) {
+	    DialogFragment newFragment = new DatePickerFragment();
+	    newFragment.show(getFragmentManager(), "datePicker");
 	}
+	
+	/** The Constant CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE. */
+	private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
+
+
+	/**
+	 * Take a photo.
+	 */
+	public void takeAPhoto() {
+		String folder = Environment.getExternalStorageDirectory().getAbsolutePath() + "/tmp";
+		File folderF = new File(folder);
+		if (!folderF.exists()) {
+			folderF.mkdir();
+
+		ImageButton button = (ImageButton) findViewById(R.id.editExpenseTakeAPhoto);
+		Drawable photo = Drawable.createFromPath(receiptUri.getPath());
+		button.setImageDrawable(photo);
+		}
+
+		// Create a URI for the picture file
+		String imageFilePath = folder + "/"
+				+ String.valueOf(System.currentTimeMillis()) + ".jpg";
+		File imageFile = new File(imageFilePath);
+		receiptUri = Uri.fromFile(imageFile);
+
+		Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+		intent.putExtra(MediaStore.EXTRA_OUTPUT, receiptUri);
+
+		startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);	
+	}
+
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		// TODO Auto-generated method stub
+		if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE){
+			if (resultCode == RESULT_OK){
+				Toast.makeText(EditExpenseActivity.this, "Photo Set", Toast.LENGTH_SHORT).show();
+				Drawable photo = Drawable.createFromPath(receiptUri.getPath());
+				imgButton.setImageDrawable(photo);
+				//imgButton.setImageURI(receiptUri);
+			} else if (resultCode == RESULT_CANCELED){
+				Toast.makeText(EditExpenseActivity.this, "Canceled", Toast.LENGTH_SHORT).show();
+			} else{
+				Toast.makeText(EditExpenseActivity.this, "Error", Toast.LENGTH_SHORT).show();
+			}
+		}
+	}
+	
+	
+
+
+
     
 	private void editExpense(final Expense expense) {
 		
@@ -209,10 +201,10 @@ public class EditExpenseActivity extends Activity {
 		Double money = Double.parseDouble(amount.getText().toString());
 		expense.setAmount(this, money);
 		
-		String categorySelection = category.getSelectedItem().toString();
+		String categorySelection = categorySpinner.getSelectedItem().toString();
 		expense.setCategory(this, categorySelection);
 		
-		String currencySelection = currency.getSelectedItem().toString();
+		String currencySelection = currencySpinner.getSelectedItem().toString();
 		expense.setCurrency(this, currencySelection);
 		
 		expense.setDate(this, expenseDate);
