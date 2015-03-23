@@ -36,12 +36,12 @@ import android.widget.Toast;
  * @author Peter Crinklaw, Randy Hu, Parash Rahman, Jesse Emery, Sean Baergen, Rishi Barnwal
  * @version Part 4
  */
-public class EditExpenseActivity extends Activity {
+public class EditExpenseActivity extends Activity implements DatePickerFragment.TheListener{
 	
 	/** The date. */
-	private Date expenseDate;	
-
-	/** The currency. */
+	private Date expenseDate;
+	
+	/** The category and currency. */
 	private Spinner categorySpinner, currencySpinner;
 	
 	/** The img button. */
@@ -81,9 +81,6 @@ public class EditExpenseActivity extends Activity {
 		System.out.println("STARTING INIT VARS");
 		initializeVars();
 		System.out.println("FINISHED INIT VARS");
-		
-		
-		
 		
 		OnClickListener picListener = new OnClickListener() {
 			public void onClick(View v) {
@@ -138,9 +135,16 @@ public class EditExpenseActivity extends Activity {
 	}
 	
 	public void showDatePickerDialog(View v) {
-	    DialogFragment newFragment = new DatePickerFragment();
-	    newFragment.show(getFragmentManager(), "datePicker");
+	    DialogFragment dateFragment = new DatePickerFragment();
+	    dateFragment.show(getFragmentManager(), "datePicker");
 	}
+	
+	public void returnDate(String date) {
+        // TODO Auto-generated method stub
+		dateEditText.setText(date);
+    }
+	
+	    
 	
 	/** The Constant CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE. */
 	private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;

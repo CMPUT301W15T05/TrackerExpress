@@ -17,7 +17,7 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:inputType="date"
-        android:hint="Date..." />
+        android:hint="Date..."
         android:onClick="showDatePickerDialog" />
 
     <Spinner
