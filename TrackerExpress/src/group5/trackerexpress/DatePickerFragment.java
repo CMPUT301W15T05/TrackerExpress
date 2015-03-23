@@ -10,7 +10,8 @@ import android.os.Bundle;
 import android.widget.DatePicker;
 
 public class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
-
+	
+	
 	TheListener listener;
 
 	public interface TheListener {
@@ -24,6 +25,7 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
 		int year = c.get(Calendar.YEAR);
 		int month = c.get(Calendar.MONTH);
 		int day = c.get(Calendar.DAY_OF_MONTH);
+		
 		listener = (TheListener) getActivity();
 
 		// Create a new instance of DatePickerDialog and return it
@@ -35,12 +37,10 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
 		Calendar c = Calendar.getInstance();
 		c.set(year, month, day);
 
-		SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+		SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE MMMM dd, yyyy");
 		String date = dateFormat.format(c.getTime());
 		if (listener != null) {
-			listener.returnDate(date);
-
+		listener.returnDate(date);
 		}
-
-	}
+    }
 }

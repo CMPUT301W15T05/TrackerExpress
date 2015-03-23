@@ -11,14 +11,15 @@
         android:layout_height="wrap_content"
         android:hint="Description..." />
 
-    <EditText
-        android:id="@+id/editExpenseDate"
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/tvExpenseDate"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:inputType="date"
         android:hint="Date..."
-        android:onClick="showDatePickerDialog" />
+        android:onClick="showDatePickerDialog"
+        android:padding="15dp"
+        android:textSize="17dp" />
 
     <Spinner
         android:id="@+id/editExpenseCategorySpinner"
@@ -37,8 +38,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="40"
             android:ems="10"
-            android:hint="Amount Spent..." 
-            android:inputType="phone"/>
+            android:hint="Amount Spent..."
+            android:inputType="phone" />
 
         <Spinner
             android:id="@+id/editExpenseCurrencySpinner"
@@ -51,7 +52,7 @@
         android:id="@+id/editExpenseTakeAPhoto"
         android:layout_width="fill_parent"
         android:layout_height="75dp"
-        android:layout_weight="0.82"/>
+        android:layout_weight="0.82" />
 
     <CheckBox
         android:id="@+id/editExpenseIncompleteCheckBox"

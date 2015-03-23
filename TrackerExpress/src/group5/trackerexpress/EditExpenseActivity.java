@@ -1,33 +1,25 @@
 package group5.trackerexpress;
 
 import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.UUID;
 
-import android.app.Activity;
-import android.app.DatePickerDialog;
-import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.text.InputType;
-import android.app.DatePickerDialog.OnDateSetListener;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 // TODO: Auto-generated Javadoc
@@ -36,10 +28,7 @@ import android.widget.Toast;
  * @author Peter Crinklaw, Randy Hu, Parash Rahman, Jesse Emery, Sean Baergen, Rishi Barnwal
  * @version Part 4
  */
-public class EditExpenseActivity extends Activity implements DatePickerFragment.TheListener{
-	
-	/** The date. */
-	private Date expenseDate;
+public class EditExpenseActivity extends EditableActivity implements DatePickerFragment.TheListener{
 	
 	/** The category and currency. */
 	private Spinner categorySpinner, currencySpinner;
@@ -53,11 +42,11 @@ public class EditExpenseActivity extends Activity implements DatePickerFragment.
 	/** The flag check box. */
 	private CheckBox flagCheckBox;
 	
-	/** The description, amount and date. */
-	private EditText description, amount, dateEditText;
+	/** The description, amount. */
+	private EditText description, amount;
 	
-	/**Receipt Bitmap. */
-	private Bitmap receiptBitmap;
+	/**The date. */
+	private TextView dateTextView;
 	
 	/** The receipt uri. */
 	private Uri receiptUri;
@@ -79,9 +68,15 @@ public class EditExpenseActivity extends Activity implements DatePickerFragment.
 		
 		final Expense newExpense = new Expense("");
 		System.out.println("STARTING INIT VARS");
-		initializeVars();
+		initializeVariables();
 		System.out.println("FINISHED INIT VARS");
 		
+		final Intent intent = this.getIntent();
+	    final boolean isNewExpense = (boolean) intent.getBooleanExtra("isNewExpense", true);
+		
+	    UUID serialisedId = (UUID) intent.getSerializableExtra("claimUUID");
+	    final Claim claim = Controller.getClaim(EditExpenseActivity.this, serialisedId);
+	    
 		OnClickListener picListener = new OnClickListener() {
 			public void onClick(View v) {
 				takeAPhoto();
@@ -107,7 +102,7 @@ public class EditExpenseActivity extends Activity implements DatePickerFragment.
 	/**
 	 * Initialize variables.
 	 */
-	private void initializeVars() {
+	private void initializeVariables() {
 		intent = this.getIntent();
 		serialisedId = (UUID) intent.getSerializableExtra("claimUUID");
 		claim = Controller.getClaimList(EditExpenseActivity.this).getClaim(serialisedId);
@@ -115,7 +110,7 @@ public class EditExpenseActivity extends Activity implements DatePickerFragment.
 		description = (EditText) findViewById(R.id.editExpenseDescription);
 		amount = (EditText) findViewById(R.id.editExpenseAmount);
 		imgButton = (ImageButton) findViewById(R.id.editExpenseTakeAPhoto);
-		dateEditText = (EditText) findViewById(R.id.editExpenseDate);
+		dateTextView = (TextView) findViewById(R.id.tvExpenseDate);
 		
 		categorySpinner = (Spinner) findViewById(R.id.editExpenseCategorySpinner);
 		ArrayAdapter<CharSequence> categoryAdapter = ArrayAdapter.createFromResource 
@@ -131,7 +126,6 @@ public class EditExpenseActivity extends Activity implements DatePickerFragment.
 		
 		createExpenseButton = (Button) findViewById(R.id.editExpenseCreateExpenseButton);
 		flagCheckBox = (CheckBox) findViewById(R.id.editExpenseIncompleteCheckBox);
-		
 	}
 	
 	public void showDatePickerDialog(View v) {
@@ -141,10 +135,9 @@ public class EditExpenseActivity extends Activity implements DatePickerFragment.
 	
 	public void returnDate(String date) {
         // TODO Auto-generated method stub
-		dateEditText.setText(date);
+		dateTextView.setText(date);
     }
 	
-	    
 	
 	/** The Constant CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE. */
 	private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
@@ -211,7 +204,8 @@ public class EditExpenseActivity extends Activity implements DatePickerFragment.
 		String currencySelection = currencySpinner.getSelectedItem().toString();
 		expense.setCurrency(this, currencySelection);
 		
-		expense.setDate(this, expenseDate);
+		Date dateSelection = (Date) dateTextView.getText();
+		expense.setDate(this, dateSelection);
 		
 	}
 	
