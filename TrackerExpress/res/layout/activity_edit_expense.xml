@@ -18,8 +18,8 @@
         android:ems="10"
         android:hint="Date..."
         android:onClick="showDatePickerDialog"
-        android:padding="15dp"
-        android:textSize="17dp" />
+        android:padding="13dp"
+        android:textSize="18dp" />
 
     <Spinner
         android:id="@+id/editExpenseCategorySpinner"
