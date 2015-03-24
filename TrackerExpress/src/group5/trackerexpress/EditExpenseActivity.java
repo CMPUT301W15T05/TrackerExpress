@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import android.app.DialogFragment;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -36,11 +37,20 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 	/** The img button. */
 	private ImageButton imgButton;
 	
+	/** The img Bitmap. */
+	private Bitmap bmp;
+	
+	/** Checks if checkbox is clicked. */
+	private boolean checked;
+	
 	/** The create expense button. */
 	private Button createExpenseButton;
 	
 	/** The flag check box. */
 	private CheckBox flagCheckBox;
+	
+	/** The incomplete flag. */
+	private int incompleteFlag;
 	
 	/** The description, amount. */
 	private EditText description, amount;
@@ -54,12 +64,8 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 	/** The intent. */
 	private Intent intent;
 	
-	/** The serialised id. */
-	UUID serialisedId;// = (UUID) intent.getSerializableExtra("claimUUID");
 	
-	/** The claim. */
-	Claim claim;// = Controller.getClaimList(EditExpenseActivity.this).getClaim(serialisedId);
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -74,12 +80,15 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 		final Intent intent = this.getIntent();
 	    final boolean isNewExpense = (boolean) intent.getBooleanExtra("isNewExpense", true);
 		
-	    UUID serialisedId = (UUID) intent.getSerializableExtra("claimUUID");
-	    final Claim claim = Controller.getClaim(EditExpenseActivity.this, serialisedId);
+	    UUID claimId = (UUID)intent.getSerializableExtra("claimUUID");
+	    UUID expenseId = (UUID)intent.getSerializableExtra("expenseUUID");
+	    final Expense expense = Controller.getExpense(EditExpenseActivity.this, claimId, expenseId);
 	    
 		OnClickListener picListener = new OnClickListener() {
 			public void onClick(View v) {
-				takeAPhoto();
+				if(isNewExpense == true){
+					takeAPhoto();
+				}
 			}
 		};
 		imgButton.setOnClickListener(picListener);
@@ -93,7 +102,7 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 			
 		OnClickListener finishListener = new OnClickListener() {
 			public void onClick(View v) {
-				editExpense(newExpense);
+			
 			}
 		};
 		createExpenseButton.setOnClickListener(finishListener);
@@ -103,10 +112,6 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 	 * Initialize variables.
 	 */
 	private void initializeVariables() {
-		intent = this.getIntent();
-		serialisedId = (UUID) intent.getSerializableExtra("claimUUID");
-		claim = Controller.getClaimList(EditExpenseActivity.this).getClaim(serialisedId);
-		
 		description = (EditText) findViewById(R.id.editExpenseDescription);
 		amount = (EditText) findViewById(R.id.editExpenseAmount);
 		imgButton = (ImageButton) findViewById(R.id.editExpenseTakeAPhoto);
@@ -151,10 +156,6 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 		File folderF = new File(folder);
 		if (!folderF.exists()) {
 			folderF.mkdir();
-
-		ImageButton button = (ImageButton) findViewById(R.id.editExpenseTakeAPhoto);
-		Drawable photo = Drawable.createFromPath(receiptUri.getPath());
-		button.setImageDrawable(photo);
 		}
 
 		// Create a URI for the picture file
@@ -173,7 +174,7 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 		// TODO Auto-generated method stub
 		if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE){
 			if (resultCode == RESULT_OK){
-				Toast.makeText(EditExpenseActivity.this, "Photo Set", Toast.LENGTH_SHORT).show();
+				Toast.makeText(EditExpenseActivity.this, "Photo Set", Toast.LENGTH_SHORT).show(); 
 				Drawable photo = Drawable.createFromPath(receiptUri.getPath());
 				imgButton.setImageDrawable(photo);
 				//imgButton.setImageURI(receiptUri);
@@ -186,7 +187,14 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 	}
 	
 	
-
+	private void status(View v){
+		checked = ((CheckBox) v).isChecked();
+		if (checked == true){
+			incompleteFlag = 1;
+		}else{
+			incompleteFlag = 0;
+		}
+	}
 
 
     
@@ -194,6 +202,9 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 		
 		String title = description.getText().toString();
 		expense.setTitle(this, title);
+		
+		Date dateSelection = (Date) dateTextView.getText();
+		expense.setDate(this, dateSelection);
 		
 		Double money = Double.parseDouble(amount.getText().toString());
 		expense.setAmount(this, money);
@@ -204,8 +215,8 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 		String currencySelection = currencySpinner.getSelectedItem().toString();
 		expense.setCurrency(this, currencySelection);
 		
-		Date dateSelection = (Date) dateTextView.getText();
-		expense.setDate(this, dateSelection);
+		expense.setStatus(this, incompleteFlag);
+		
 		
 	}
 	
