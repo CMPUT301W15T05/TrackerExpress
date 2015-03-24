@@ -82,6 +82,7 @@ public class ExpenseListFragment extends Fragment implements TView {
 				Intent intent = new Intent( getActivity(), EditExpenseActivity.class );
 				intent.putExtra("claimUUID", claim.getUuid());
 				intent.putExtra("expenseUUID", exp.getUuid());
+				intent.putExtra("isNewExpense", true);
 				System.out.println("INITS GOOD");
 				startActivity(intent);
 				System.out.println("ACTIVITY START GOOD");

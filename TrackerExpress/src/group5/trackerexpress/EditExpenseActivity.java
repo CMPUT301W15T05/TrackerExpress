@@ -6,6 +6,7 @@ import java.util.UUID;
 import android.app.DialogFragment;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -31,40 +32,30 @@ import android.widget.Toast;
  */
 public class EditExpenseActivity extends EditableActivity implements DatePickerFragment.TheListener{
 	
+
+	/**The date. */
+	private TextView dateTextView;
+	
 	/** The category and currency. */
 	private Spinner categorySpinner, currencySpinner;
 	
 	/** The img button. */
 	private ImageButton imgButton;
 	
-	/** The img Bitmap. */
-	private Bitmap bmp;
-	
-	/** Checks if checkbox is clicked. */
-	private boolean checked;
-	
 	/** The create expense button. */
 	private Button createExpenseButton;
-	
-	/** The flag check box. */
-	private CheckBox flagCheckBox;
-	
-	/** The incomplete flag. */
-	private int incompleteFlag;
-	
+
 	/** The description, amount. */
 	private EditText description, amount;
 	
-	/**The date. */
-	private TextView dateTextView;
+	/** The status checkbox. */
+	private CheckBox flagCheckBox;
+	
+	/** The status flag. */
+	private int flagStatus;
 	
 	/** The receipt uri. */
 	private Uri receiptUri;
-	
-	/** The intent. */
-	private Intent intent;
-	
-	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -83,30 +74,34 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 	    UUID claimId = (UUID)intent.getSerializableExtra("claimUUID");
 	    UUID expenseId = (UUID)intent.getSerializableExtra("expenseUUID");
 	    final Expense expense = Controller.getExpense(EditExpenseActivity.this, claimId, expenseId);
+	    final Claim claim = Controller.getClaim(this, claimId);
 	    
-		OnClickListener picListener = new OnClickListener() {
-			public void onClick(View v) {
-				if(isNewExpense == true){
-					takeAPhoto();
-				}
-			}
-		};
-		imgButton.setOnClickListener(picListener);
-		
-		OnClickListener statusListener = new OnClickListener(){
-			public void onClick(View v){
-				
-			}
-		};
-		flagCheckBox.setOnClickListener(statusListener);
-			
-		OnClickListener finishListener = new OnClickListener() {
-			public void onClick(View v) {
-			
-			}
-		};
-		createExpenseButton.setOnClickListener(finishListener);
+	    //if not a new expense, set fields to clicked expense
+	    if (isNewExpense != true){
+	    	description.setText(expense.getTitle().toString());
+	    }
+	    
+	    //the image button to take a picture of the receipt
+	    imgButton.setOnClickListener(new Button.OnClickListener(){
+	    	public void onClick(View v) {
+	    		takeAPhoto();
+		    }
+		});
+	   
+	    //the create expense button
+	    createExpenseButton.setOnClickListener(new Button.OnClickListener(){
+	    	public void onClick(View v) {
+	    		if (isNewExpense == true){
+	    	    	editExpense(newExpense);
+	    	    }else{
+	    	    	editExpense(expense);
+	    	    }
+	    		
+		    }
+		});
+	    
 	}
+	    
 	
 	/**
 	 * Initialize variables.
@@ -186,37 +181,31 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 		}
 	}
 	
-	
-	private void status(View v){
-		checked = ((CheckBox) v).isChecked();
-		if (checked == true){
-			incompleteFlag = 1;
-		}else{
-			incompleteFlag = 0;
-		}
-	}
+	public void status(View v) {
+        //code to check if this checkbox is checked!
+		flagCheckBox = (CheckBox)v;
+        if(flagCheckBox.isChecked()){
+        	flagStatus = 1;
+        }else{
+        	flagStatus = 0;
+        }
+    }
+
 
 
     
 	private void editExpense(final Expense expense) {
 		
 		String title = description.getText().toString();
-		expense.setTitle(this, title);
-		
 		Date dateSelection = (Date) dateTextView.getText();
-		expense.setDate(this, dateSelection);
-		
 		Double money = Double.parseDouble(amount.getText().toString());
-		expense.setAmount(this, money);
-		
 		String categorySelection = categorySpinner.getSelectedItem().toString();
-		expense.setCategory(this, categorySelection);
+		String currencySelection = currencySpinner.getSelectedItem().toString();	
 		
-		String currencySelection = currencySpinner.getSelectedItem().toString();
-		expense.setCurrency(this, currencySelection);
-		
-		expense.setStatus(this, incompleteFlag);
-		
+		expense.setTitle(this, title);
+		expense.setDate(this, dateSelection);
+		expense.setAmount(this, money);
+		expense.setStatus(this, flagStatus);
 		
 	}
 	

@@ -52,7 +52,9 @@
         android:id="@+id/editExpenseTakeAPhoto"
         android:layout_width="fill_parent"
         android:layout_height="75dp"
-        android:layout_weight="0.82" />
+        android:layout_weight="0.82"
+        android:scaleType="fitXY"
+        android:src="@drawable/a" />
 
     <CheckBox
         android:id="@+id/editExpenseIncompleteCheckBox"
