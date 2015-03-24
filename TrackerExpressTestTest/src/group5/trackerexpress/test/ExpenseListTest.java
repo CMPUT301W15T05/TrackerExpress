@@ -27,7 +27,7 @@ public class ExpenseListTest extends ActivityInstrumentationTestCase2<MainActivi
 		
 		Expense testExp = new Expense();
 		UUID testUuid = testExp.getUuid();
-		expList.addExpense(testExp);
+		expList.addExpense(getActivity(), testExp);
 		
 		assertTrue("Empty expense list", expList.size()==1);
 		assertTrue("Test expense item not contained", 
@@ -40,11 +40,11 @@ public class ExpenseListTest extends ActivityInstrumentationTestCase2<MainActivi
 		Expense testExp = new Expense();
 		UUID testUuid = testExp.getUuid();
 		
-		expList.addExpense(testExp);
+		expList.addExpense(getActivity(), testExp);
 		assertTrue("List size isn't big enough", expList.size()==1);
 		assertTrue("Test expense item is not contained", 
 					testExp.equals(expList.getExpense(testUuid)) );
-		expList.deleteExpense(testExp.getUuid());
+		expList.removeExpense(getActivity(), testExp.getUuid());
 		assertTrue("List size isn't small enough", expList.size()==0);
 		
 		try{
@@ -68,9 +68,9 @@ public class ExpenseListTest extends ActivityInstrumentationTestCase2<MainActivi
 		e3.setTitle(context, "3");
 
     	
-		expenseList.addExpense(e1);
-		expenseList.addExpense(e2);
-		expenseList.addExpense(e3);
+		expenseList.addExpense(getActivity(), e1);
+		expenseList.addExpense(getActivity(), e2);
+		expenseList.addExpense(getActivity(), e3);
 
 		assertTrue("Item '1' is not first",  
 					expenseList.getExpenseList().get(0).getTitle().equals(e1.getTitle()) );

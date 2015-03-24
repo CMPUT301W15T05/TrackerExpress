@@ -163,17 +163,6 @@ public class Claim extends TModel implements Comparable<Claim>{
 	}
 	
 
-	/**
-	 * Adds the expense to the expenseList.
-	 *
-	 * @param context Needed for file IO
-	 * @param expense the expense
-	 */
-	public void addExpense(Context context, Expense expense) {
-		expenseList.addExpense(expense);
-		notifyViews(context);		
-	}
-
 
 	/**
 	 * Gets the expense list.
@@ -196,19 +185,6 @@ public class Claim extends TModel implements Comparable<Claim>{
 		notifyViews(context);
 	}
 	
-
-	/**
-	 * Removes the expense from the expenseList.
-	 *
-	 * @param context Needed for file IO
-	 * @param expenseUuid the expense uuid
-	 */
-	public void removeExpense(Context context, UUID expenseUuid) {
-		// TODO Auto-generated method stub
-		expenseList.deleteExpense(expenseUuid);
-		//expenseList.remove(expenseList.indexOf(string));
-		notifyViews(context);		
-	}
 
 
 	/**
