@@ -76,6 +76,11 @@ public class MainActivity extends ActionBarActivity {
 		return true;
 	}
 	
+	/**
+	 * Returns the fragment currently on screen
+	 * 
+	 * @return Fragment currently visible
+	 */
 	public Fragment getVisibleFragment(){
 	    FragmentManager fragmentManager = MainActivity.this.getSupportFragmentManager();
 	    List<Fragment> fragments = fragmentManager.getFragments();
