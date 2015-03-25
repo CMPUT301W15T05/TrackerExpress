@@ -39,7 +39,7 @@
             android:layout_weight="40"
             android:ems="10"
             android:hint="Amount Spent..."
-            android:inputType="phone" />
+            android:inputType="number" />
 
         <Spinner
             android:id="@+id/editExpenseCurrencySpinner"
