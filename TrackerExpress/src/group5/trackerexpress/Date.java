@@ -1,5 +1,9 @@
 package group5.trackerexpress;
 
+import android.annotation.SuppressLint;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 // TODO: Auto-generated Javadoc
 // Simple date object that consists of an integer
 // in the form of DDMMYYYY
@@ -37,9 +41,13 @@ public class Date implements Comparable<Date>{
 	}
 	
 	/**
-	 * Instantiates a new date.
+	 * Instantiates a new date with the parameters set to the current date.
 	 */
 	public Date() {
+		Calendar c = Calendar.getInstance();
+		dd = c.get(Calendar.DATE);
+		mm = c.get(Calendar.MONTH);
+		yyyy = c.get(Calendar.YEAR);
 	}
 
 	/**
@@ -107,11 +115,25 @@ public class Date implements Comparable<Date>{
 	
 	/**
 	 * Gets the date as a string in the form DD/MM/YYYY
-	 * @return the date as a string
+	 * @return the date as a short string
 	 */
 	
-	public String getString() {
+	public String getShortString() {
 		return dd.toString() + "/" + mm.toString() + "/" + yyyy.toString();
+	}
+	
+	/**
+	 * Gets the date as a string in the form EEEE MMMM dd, yyyy
+	 * @return the date as a long string
+	 */
+	
+	@SuppressLint("SimpleDateFormat") // This is fine, since it won't be machine-read
+	public String getLongString() {
+		Calendar c = Calendar.getInstance();
+		c.set(yyyy, mm, dd);
+		
+		SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE MMMM dd, yyyy");
+		return dateFormat.format(c.getTime());
 	}
 	
 	/**
@@ -121,7 +143,6 @@ public class Date implements Comparable<Date>{
 	 */
 	@Override
 	public int compareTo(Date d) {
-		// TODO Auto-generated method stub
 		if ( ! (d instanceof Date) ){
 			// Just return they are not equal. 
 			// Should not be used in practice.

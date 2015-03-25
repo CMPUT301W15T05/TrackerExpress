@@ -116,8 +116,8 @@ public class Expense extends TModel{
 	 * @param context Needed for file IO
 	 * @param d1 the Date
 	 */
-	public void setDate(Context context, Date date) {
-		this.date = date;
+	public void setDate(Context context, Date convertedDateSelection) {
+		this.date = convertedDateSelection;
 		notifyViews(context);
 	}
 

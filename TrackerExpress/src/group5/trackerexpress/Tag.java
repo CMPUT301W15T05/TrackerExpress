@@ -12,6 +12,11 @@ import android.content.Context;
  */
 public class Tag extends TModel {
 	
+	/**
+	 * generated serial number for Serializable type
+	 */
+	private static final long serialVersionUID = -6043555803464415928L;
+
 	/** The tag string. */
 	private String tagString;
 	

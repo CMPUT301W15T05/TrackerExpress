@@ -20,6 +20,11 @@ import android.content.Context;
  */
 public class TagMap extends TModel{
 	
+	/**
+	 * generate serial number for Serializable type
+	 */
+	private static final long serialVersionUID = 6425570581599584964L;
+
 	/** The Constant FILENAME. */
 	private static final String FILENAME = "tags.sav";
 	

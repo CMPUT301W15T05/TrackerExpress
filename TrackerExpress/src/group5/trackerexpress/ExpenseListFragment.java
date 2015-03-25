@@ -32,7 +32,7 @@ public class ExpenseListFragment extends Fragment implements TView {
 
 	private ListView lv_expense_list;
 	
-	private ExpenseListAdapter adapter;
+	//private ExpenseListAdapter adapter;
 	
 	private Button b_add_expense;
 	
@@ -62,30 +62,25 @@ public class ExpenseListFragment extends Fragment implements TView {
 		lv_expense_list = (ListView) rootView.findViewById(R.id.lv_my_expenses);
 		lv_expense_list.setItemsCanFocus(true);
 		
+		update(null);
+		claim.addView(this);
+
+		
 		b_add_expense = (Button) rootView.findViewById(R.id.b_add_expense);
-		
-		final ExpenseList listOfExpenses = claim.getExpenseList();
-		ArrayList<Expense> arrayListExpense = listOfExpenses.getExpenseList();
-		
-		adapter = new ExpenseListAdapter(getActivity(), arrayListExpense);
-		lv_expense_list.setAdapter(adapter);
 		
 		b_add_expense.setOnClickListener(new Button.OnClickListener(){
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				System.out.println("STARTING EXPENSE STUFF");
 				Expense exp = new Expense();
-				listOfExpenses.addExpense(exp);
-				claim.setExpenseList(getActivity(), listOfExpenses);
+				claim.getExpenseList().addExpense(getActivity(), exp);
+
 				Intent intent = new Intent( getActivity(), EditExpenseActivity.class );
 				intent.putExtra("claimUUID", claim.getUuid());
 				intent.putExtra("expenseUUID", exp.getUuid());
 				intent.putExtra("isNewExpense", true);
-				System.out.println("INITS GOOD");
+				
 				startActivity(intent);
-				System.out.println("ACTIVITY START GOOD");
 			}	
 		});
 		
@@ -97,8 +92,10 @@ public class ExpenseListFragment extends Fragment implements TView {
 	 */
 	@Override
 	public void update(TModel model) {
-		// TODO Auto-generated method stub
-		
+		lv_expense_list.setAdapter(
+				new ExpenseListAdapter(
+						getActivity(), 
+						claim.getExpenseList().getExpenseList()));
 	}
 
 }

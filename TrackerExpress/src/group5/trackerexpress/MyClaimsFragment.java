@@ -1,5 +1,8 @@
 package group5.trackerexpress;
 
+import java.util.ArrayList;
+import java.util.UUID;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -23,13 +26,10 @@ import android.widget.AdapterView.OnItemClickListener;
  */
 public class MyClaimsFragment extends Fragment implements TView {
 
-	/** The lv_claim_list. */
+	/** The ListView of claims */
 	private ListView lv_claim_list;
 	
-	/** The adapter. */
-	private MainClaimListAdapter adapter;
-	
-	/** The b_add_claim. */
+	/** The button to Add Claim */
 	private Button b_add_claim;
 
 	// Menu items to hide when selecting an option on a claim
@@ -41,7 +41,7 @@ public class MyClaimsFragment extends Fragment implements TView {
 	 */
 	public MyClaimsFragment() {
 	}
-
+	
 	/** onCreateView
 	 ** @see android.support.v4.app.Fragment#onCreateView(android.view.LayoutInflater, android.view.ViewGroup, android.os.Bundle)
 	 **/
@@ -56,15 +56,12 @@ public class MyClaimsFragment extends Fragment implements TView {
 		lv_claim_list = (ListView) rootView.findViewById(R.id.lv_my_claims);
 		lv_claim_list.setItemsCanFocus(true);
 		b_add_claim = (Button) rootView.findViewById(R.id.b_add_claim);
-		
-		final ClaimList listOfClaims = Controller.getClaimList(getActivity());
-		final Claim[] arrayClaims = listOfClaims.toList();
-		
-		adapter = new MainClaimListAdapter(getActivity(), arrayClaims);
-		lv_claim_list.setAdapter(adapter);
+
+
+		update(null);
+		Controller.getClaimList(getActivity()).addView(this);
 		
 		b_add_claim.setOnClickListener(new Button.OnClickListener(){
-
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
@@ -72,7 +69,6 @@ public class MyClaimsFragment extends Fragment implements TView {
 				intent.putExtra("isNewClaim", true);
 				startActivity(intent);
 			}
-			
 		});
 		
 		lv_claim_list.setOnItemClickListener(new OnItemClickListener(){
@@ -82,56 +78,49 @@ public class MyClaimsFragment extends Fragment implements TView {
 					final int position, long arg3) {
 				// TODO Auto-generated method stub
 				
-				final Claim c = (Claim) lv_claim_list.getAdapter().getItem(position);
+				final Claim clickedOnClaim = (Claim) lv_claim_list.getAdapter().getItem(position);
 				
 				PopupMenu popup = new PopupMenu(getActivity(), v);
 				popup.getMenuInflater().inflate(R.menu.my_claims_popup, popup.getMenu());
 				
-				onPrepareOptionsMenu(popup, c);
+				onPrepareOptionsMenu(popup, clickedOnClaim);
 				
 				// Popup menu item click listener
 				popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
 					
 					@Override
                     public boolean onMenuItemClick(MenuItem item) {
-                    	Claim claimAnalyzed = (Claim) lv_claim_list.getAdapter().getItem(position);
                     	Intent intent;
                         switch(item.getItemId()){
                         case R.id.op_delete_claim: 
-                        	// Delete tag off of Claim ArrayList for listview
-                        	listOfClaims.deleteClaim(getActivity(), claimAnalyzed.getUuid());
-                        	Claim[] arrayClaims = listOfClaims.toList();
-                        	MainClaimListAdapter a = new MainClaimListAdapter( getActivity().getBaseContext(), arrayClaims );
-                			lv_claim_list.setAdapter(a);
-                			// Delete it off the model
-                        	listOfClaims.deleteClaim(getActivity(), claimAnalyzed.getUuid());
+                        	Controller.getClaimList(getActivity()).deleteClaim(getActivity(), clickedOnClaim.getUuid());
                         	break;
                         case R.id.op_edit_claim:
                         	intent = new Intent( getActivity(), EditClaimActivity.class );
                         	intent.putExtra( "isNewClaim", false );
-                        	intent.putExtra("claimUUID", c.getUuid());
+                        	intent.putExtra("claimUUID", clickedOnClaim.getUuid());
                         	Log.i("myMessage", "hi");
                         	startActivity(intent);
                         	break;
                         case R.id.op_view_claim:
                         	intent = new Intent( getActivity(), ClaimInfoActivity.class );
-                        	intent.putExtra( "claimUUID",  c.getUuid() );
+                        	intent.putExtra( "claimUUID",  clickedOnClaim.getUuid() );
                         	startActivity(intent);
                         	break;
                         case R.id.op_submit_claim:
                         	// TODO:
                         	// Submit the claim to server
                         	// using controller
-                        	if ( c.isIncomplete() ){
-            					Toast.makeText(getActivity(), "Updating", Toast.LENGTH_SHORT). show();
+                        	if ( clickedOnClaim.isIncomplete() ){
+            					Toast.makeText(getActivity(), "Can't submit, claim is incomplete.", Toast.LENGTH_SHORT). show();
                         	} else {
-                        		c.setStatus(getActivity(), Claim.SUBMITTED);
+                        		clickedOnClaim.setStatus(getActivity(), Claim.SUBMITTED);
                         	}
                         	break;
                         default: break;
                         }
 
-                        update(null);
+                        //update(null);
                         
                         return true;
                     }
@@ -141,15 +130,15 @@ public class MyClaimsFragment extends Fragment implements TView {
 			}
 			
 		});
-		
+				
 		return rootView;
 	}
 	
 	/**
 	 * On prepare options menu.
 	 *
-	 * @param popup the popup
-	 * @param c the c
+	 * @param popup the Popup Menu in question
+	 * @param c the Claim in question
 	 */
 	public void onPrepareOptionsMenu( PopupMenu popup, Claim c ){
 		switch(c.getStatus()){
@@ -164,12 +153,48 @@ public class MyClaimsFragment extends Fragment implements TView {
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see group5.trackerexpress.TView#update(group5.trackerexpress.TModel)
-	 */
+	/** 
+	 * Update method updates the listview
+	 * 
+	 * @param model for when a model calls it
+	 **/
 	@Override
 	public void update(TModel model) {
+		Log.i("myMessage", "I have arrived");
 		// TODO Auto-generated method stub
+		Claim[] listOfClaims = Controller.getClaimList(getActivity()).toList();		
+		ArrayList<Claim> filteredClaims = new ArrayList<Claim>();
+
+		ArrayList<Tag> listOfTags = Controller.getTagMap(getActivity()).toList();
+		ArrayList<Tag> filterTags = new ArrayList<Tag>();
 		
+		for ( Tag t : listOfTags ){
+			if ( t.isSelected() ){
+				filterTags.add(t);
+			}
+		}
+		MainClaimListAdapter adapter;
+		
+		// If all the tags are selected
+		if ( filterTags.size() == listOfTags.size() ) {
+			// Do not filter out anything
+			// Even those without tags
+			adapter = new MainClaimListAdapter(getActivity(), 
+					listOfClaims);
+		} else {	
+			for ( Claim c : listOfClaims ){
+				ArrayList<UUID> tempTags = c.getTagsIds();
+				for ( Tag t : filterTags ){
+					if ( tempTags.contains(t.getUuid()) ){
+						filteredClaims.add(c);
+						break;
+					}
+				}
+			}
+			adapter= new MainClaimListAdapter(getActivity(), 
+					filteredClaims.toArray(new Claim[filteredClaims.size()]));
+		}
+		
+		lv_claim_list.setAdapter(adapter);
 	}
 }

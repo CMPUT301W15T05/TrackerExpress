@@ -32,7 +32,7 @@ public class MainTagListAdapter extends ArrayAdapter<Tag> {
 	 * Instantiates a new main tag list adapter.
 	 *
 	 * @param context Needed for file IO
-	 * @param tags the tags
+	 * @param tags are the tags to be displayed
 	 */
 	public MainTagListAdapter(Context context, ArrayList<Tag> tags){
 		super(context, R.layout.fragment_tags_list_item, tags);
@@ -49,7 +49,7 @@ public class MainTagListAdapter extends ArrayAdapter<Tag> {
 	
 	
 	/**
-	 * The Class TagHolder.
+	 * The Class TagHolder holds views for custom listview
 	 */
 	private static class TagHolder{
 		
@@ -60,8 +60,13 @@ public class MainTagListAdapter extends ArrayAdapter<Tag> {
 		public CheckBox chkBox;
 	}
 	
-	/* (non-Javadoc)
-	 * @see android.widget.ArrayAdapter#getView(int, android.view.View, android.view.ViewGroup)
+	/**
+	 * 
+	 * Updates the respective listview item in the custom listview
+	 * 
+	 * @param position: index of item
+	 * @param convertView: view of item
+	 * @param parent: parent of item ( the listView )
 	 */
 	@Override
 	public View getView(final int position, View convertView, ViewGroup parent){
