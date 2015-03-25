@@ -41,30 +41,11 @@
         
         <EditText
             android:id="@+id/editClaimStartDateYear"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:ems="10"
-            android:hint="@string/promote_year"
-            android:inputType="number" />
-
-        <EditText
-            android:id="@+id/editClaimStartDateMonth"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:ems="10"
-            android:hint="@string/promote_month"
-            android:inputType="number" />
-
-        <EditText
-            android:id="@+id/editClaimStartDateDay"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:ems="10"
-            android:hint="@string/promote_day"
-            android:inputType="number" />
+            android:hint="@string/promote_year" />
         
     </LinearLayout>
     
@@ -82,30 +63,11 @@
         
         <EditText
             android:id="@+id/editClaimEndDateYear"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:ems="10"
-            android:hint="@string/promote_year"
-            android:inputType="number" />
-
-        <EditText
-            android:id="@+id/editClaimEndDateMonth"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:ems="10"
-            android:hint="@string/promote_month"
-            android:inputType="number" />
-
-        <EditText
-            android:id="@+id/editClaimEndDateDay"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:ems="10"
-            android:hint="@string/promote_day"
-            android:inputType="number" />
+            android:hint="@string/promote_year"/>
         
     </LinearLayout>
 	<LinearLayout 
