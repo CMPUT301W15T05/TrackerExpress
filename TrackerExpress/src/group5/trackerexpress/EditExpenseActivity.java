@@ -3,7 +3,10 @@ package group5.trackerexpress;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.UUID;
+import java.util.Date;
 
 import android.app.DialogFragment;
 import android.content.Intent;
@@ -78,6 +81,7 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 	    UUID expenseId = (UUID)intent.getSerializableExtra("expenseUUID");
 	    final Expense expense = Controller.getExpense(EditExpenseActivity.this, claimId, expenseId);
 	    final Claim claim = Controller.getClaim(this, claimId);
+	    final ExpenseList newExpenseList = claim.getExpenseList();
 	    
 	    //if not a new expense, set fields to clicked expense
 	    if (isNewExpense != true){
@@ -103,6 +107,7 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 	    	public void onClick(View v) {
 	    		if (isNewExpense == true){
 	    	    	editExpense(newExpense);
+	    	    	newExpenseList.addExpense(EditExpenseActivity.this, expense);
 	    	    }else{
 	    	    	editExpense(expense);
 	    	    }
@@ -252,13 +257,14 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
     
 	private void editExpense(final Expense expense) {
 		
+		
 		String title = description.getText().toString();
 		Double money = Double.parseDouble(amount.getText().toString());
 		String categorySelection = categorySpinner.getSelectedItem().toString();
 		String currencySelection = currencySpinner.getSelectedItem().toString();
 		
 		expense.setTitle(this, title);
-		expense.setDate(this, dateSelection);
+		expense.setDate(this, convertedDateSelection);
 		expense.setAmount(this, money);
 		expense.setStatus(this, flagStatus);
 		expense.setCategory(this, categorySelection);
@@ -266,7 +272,6 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 		
 		finish();
 	}
-	
 	/**
 	 * On item selected.
 	 *

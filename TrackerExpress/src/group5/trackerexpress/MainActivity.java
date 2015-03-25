@@ -1,12 +1,14 @@
 package group5.trackerexpress;
 
+import java.util.List;
 import java.util.Locale;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
+import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.util.Log;
 import android.view.Menu;
 
@@ -41,8 +43,26 @@ public class MainActivity extends ActionBarActivity {
 		// primary sections of the activity.
 		SectionsPagerAdapter mSectionsPagerAdapter = new MainPagerAdapter(
 				getSupportFragmentManager());
-		
+	
 		setUpActionBar(mSectionsPagerAdapter, R.id.pager_activity_main);
+
+		final ViewPager mViewPager = (ViewPager) findViewById(R.id.pager_activity_main);
+		
+		// Keeps the fragments updated
+		mViewPager.setOnPageChangeListener(new OnPageChangeListener() {
+
+		     @Override
+		     public void onPageSelected(int position){
+		    	 Fragment visible = getVisibleFragment();
+		    	 
+		    	 ((TView)visible).update(null);
+		     }
+
+		     @Override
+		     public void onPageScrolled(int arg0, float arg1, int arg2) {}
+		     @Override
+		     public void onPageScrollStateChanged(int arg0) {}
+		  });
 	}
 
 	/* (non-Javadoc)
@@ -55,6 +75,20 @@ public class MainActivity extends ActionBarActivity {
 		return true;
 	}
 	
+	/**
+	 * Returns the fragment currently on screen
+	 * 
+	 * @return Fragment currently visible
+	 */
+	public Fragment getVisibleFragment(){
+	    FragmentManager fragmentManager = MainActivity.this.getSupportFragmentManager();
+	    List<Fragment> fragments = fragmentManager.getFragments();
+	    for(Fragment fragment : fragments){
+	        if(fragment != null && fragment.isVisible())
+	            return fragment;
+	    }
+	    return null;
+	}
 	
 	/**
 	 * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
@@ -125,15 +159,6 @@ public class MainActivity extends ActionBarActivity {
 			}
 			return null;
 		}
-	}
-
-	/**
-	 * Gets the this.
-	 *
-	 * @return the this
-	 */
-	public Context getThis() {
-		return this;
 	}
 
 }
