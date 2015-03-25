@@ -40,7 +40,7 @@ public class MainClaimListAdapter extends ArrayAdapter<Claim> {
 	}
 	
 	/**
-	 * The Class ClaimHolder.
+	 * The Class ClaimHolder holds the views of the custom listview
 	 */
 	private static class ClaimHolder{
 		
@@ -73,9 +73,12 @@ public class MainClaimListAdapter extends ArrayAdapter<Claim> {
 		
 	}
 	
-	/* (non-Javadoc)
-	 * @see android.widget.ArrayAdapter#getView(int, android.view.View, android.view.ViewGroup)
-	 */
+	/** Updates the respective listview item in the custom listview
+	 * 
+	 * @param position: index of item
+	 * @param convertView: view of item
+	 * @param parent: parent of item ( the listView )
+	**/
 	@Override
 	public View getView(final int position, View convertView, ViewGroup parent){
 		View v = convertView;

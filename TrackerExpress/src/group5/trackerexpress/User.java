@@ -13,6 +13,11 @@ import android.content.Context;
  */
 public class User extends TModel{
 	
+	/**
+	 * generated serial number for Serializable type
+	 */
+	private static final long serialVersionUID = -2978019878882065454L;
+
 	/** The email of the user. */
 	private String email;
 	

@@ -13,6 +13,7 @@
     
     <!-- strings for taglist tab -->
     <string name="button_add_tag" > Add Tag </string>
+    <string name="button_select_all" > Select All </string>
     
     <!-- strings for myclaims tab -->
     <string name="button_add_claim"> Add Claim </string>

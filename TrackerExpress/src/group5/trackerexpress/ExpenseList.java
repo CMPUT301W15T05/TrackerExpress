@@ -3,6 +3,8 @@ package group5.trackerexpress;
 import java.util.ArrayList;
 import java.util.UUID;
 
+import android.content.Context;
+
 // TODO: Auto-generated Javadoc
 /**
  * The Class ExpenseList.
@@ -38,11 +40,12 @@ public class ExpenseList extends TModel{
 	}
 
 	/**
-	 * Adds the expense.
+	 * Adds the expense to the expenseList.
 	 *
+	 * @param context Needed for file IO
 	 * @param expense the expense
 	 */
-	public void addExpense(Expense expense) {
+	public void addExpense(Context context, Expense expense) {
 		expenseList.add(expense);
 		expenseIds.add(expense.getUuid());
 	}
@@ -56,16 +59,16 @@ public class ExpenseList extends TModel{
 	 */
 	public Expense getExpense(UUID expenseId) throws ExpenseNotFoundException {
 		int index = expenseIds.indexOf(expenseId);
-		
 		return expenseList.get(index);
 	}
 
 	/**
-	 * Delete expense.
+	 * Removes the expense from the expenseList.
 	 *
-	 * @param expenseId the expense id
+	 * @param context Needed for file IO
+	 * @param expenseUuid the expense uuid
 	 */
-	public void deleteExpense(UUID expenseId) {
+	public void removeExpense(Context context, UUID expenseId) {
 		int index = expenseIds.indexOf(expenseId);
 		try{
 			expenseIds.remove(index);
@@ -73,6 +76,7 @@ public class ExpenseList extends TModel{
 		} catch ( IndexOutOfBoundsException e ){
 			throw new RuntimeException(e);
 		}
+		notifyViews(context);
 	}
 
 	/**

@@ -8,7 +8,6 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -32,14 +31,17 @@ public class TagListFragment extends Fragment implements TView {
 	 */
 	public static final String ARG_SECTION_NUMBER = "section_number";
 
-	/** The lv_tag_list. */
+	/** The ListView of tags */
 	private ListView lv_tag_list;
 
-	/** The value. */
+	/** The return Value of the Input Box. */
 	private Editable value = null;
 
-	/** The b_add_tag. */
+	/** The button Add Tag. */
 	private Button b_add_tag;
+	
+	/** The button that Selects All tags **/
+	private Button b_select_all;
 
 	/**
 	 * Instantiates a new tag list fragment.
@@ -47,13 +49,11 @@ public class TagListFragment extends Fragment implements TView {
 	public TagListFragment() {
 	}
 
-	/*
-	 * (non-Javadoc)
+	/**
 	 * 
-	 * @see
-	 * android.support.v4.app.Fragment#onCreateView(android.view.LayoutInflater,
-	 * android.view.ViewGroup, android.os.Bundle)
-	 */
+	 * Sets up all the OnClickListeners
+	 * 
+	 **/
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -72,21 +72,25 @@ public class TagListFragment extends Fragment implements TView {
 		getTagMap(getActivity()).addView(this);
 
 		b_add_tag = (Button) rootView.findViewById(R.id.b_add_tag);
-
+		b_select_all = (Button) rootView.findViewById(R.id.b_select_all);
+		
 		b_add_tag.setOnClickListener(new Button.OnClickListener() {
 			public void onClick(View v) {
 				Tag t = new Tag("");
 				getName(t, false);
-				/*
-				 * if ( value != null ){ String name = value.toString(); Tag
-				 * newTag = new Tag(name); mapOfTags.addTag(getActivity(),
-				 * newTag); //listOfTags.add(newTag); //MainTagListAdapter a =
-				 * new MainTagListAdapter( myContext, listOfTags );
-				 * lv_tag_list.setAdapter(a); }
-				 * 
-				 * value = null;
-				 */
 			}
+		});
+		
+		b_select_all.setOnClickListener(new Button.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				ArrayList<Tag> tm = getTagMap(getActivity()).toList();
+				for ( Tag t : tm ){
+					t.setSelected(getActivity(), true);
+				}
+			}
+			
 		});
 
 		// Item click listener
@@ -111,7 +115,6 @@ public class TagListFragment extends Fragment implements TView {
 							break;
 						case R.id.op_edit_tag:
 							getName(t, true);
-							Log.v("Test", "Hello");
 							value = null;
 							break;
 						default:
@@ -126,7 +129,6 @@ public class TagListFragment extends Fragment implements TView {
 				return false;
 			}
 		});
-		Log.i("myMessage", Integer.toString(listOfTags.size()));
 
 		return rootView;
 	}

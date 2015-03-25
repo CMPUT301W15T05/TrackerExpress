@@ -56,11 +56,12 @@ public class MyClaimsFragment extends Fragment implements TView {
 		lv_claim_list = (ListView) rootView.findViewById(R.id.lv_my_claims);
 		lv_claim_list.setItemsCanFocus(true);
 		b_add_claim = (Button) rootView.findViewById(R.id.b_add_claim);
-		
-		final ClaimList listOfClaims = Controller.getClaimList(getActivity());
+
+
+		update(null);
+		Controller.getClaimList(getActivity()).addView(this);
 		
 		b_add_claim.setOnClickListener(new Button.OnClickListener(){
-
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
@@ -68,7 +69,6 @@ public class MyClaimsFragment extends Fragment implements TView {
 				intent.putExtra("isNewClaim", true);
 				startActivity(intent);
 			}
-			
 		});
 		
 		lv_claim_list.setOnItemClickListener(new OnItemClickListener(){
@@ -78,50 +78,49 @@ public class MyClaimsFragment extends Fragment implements TView {
 					final int position, long arg3) {
 				// TODO Auto-generated method stub
 				
-				final Claim c = (Claim) lv_claim_list.getAdapter().getItem(position);
+				final Claim clickedOnClaim = (Claim) lv_claim_list.getAdapter().getItem(position);
 				
 				PopupMenu popup = new PopupMenu(getActivity(), v);
 				popup.getMenuInflater().inflate(R.menu.my_claims_popup, popup.getMenu());
 				
-				onPrepareOptionsMenu(popup, c);
+				onPrepareOptionsMenu(popup, clickedOnClaim);
 				
 				// Popup menu item click listener
 				popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
 					
 					@Override
                     public boolean onMenuItemClick(MenuItem item) {
-                    	Claim claimAnalyzed = (Claim) lv_claim_list.getAdapter().getItem(position);
                     	Intent intent;
                         switch(item.getItemId()){
                         case R.id.op_delete_claim: 
-                        	listOfClaims.deleteClaim(getActivity(), claimAnalyzed.getUuid());
+                        	Controller.getClaimList(getActivity()).deleteClaim(getActivity(), clickedOnClaim.getUuid());
                         	break;
                         case R.id.op_edit_claim:
                         	intent = new Intent( getActivity(), EditClaimActivity.class );
                         	intent.putExtra( "isNewClaim", false );
-                        	intent.putExtra("claimUUID", c.getUuid());
+                        	intent.putExtra("claimUUID", clickedOnClaim.getUuid());
                         	Log.i("myMessage", "hi");
                         	startActivity(intent);
                         	break;
                         case R.id.op_view_claim:
                         	intent = new Intent( getActivity(), ClaimInfoActivity.class );
-                        	intent.putExtra( "claimUUID",  c.getUuid() );
+                        	intent.putExtra( "claimUUID",  clickedOnClaim.getUuid() );
                         	startActivity(intent);
                         	break;
                         case R.id.op_submit_claim:
                         	// TODO:
                         	// Submit the claim to server
                         	// using controller
-                        	if ( c.isIncomplete() ){
-            					Toast.makeText(getActivity(), "Updating", Toast.LENGTH_SHORT). show();
+                        	if ( clickedOnClaim.isIncomplete() ){
+            					Toast.makeText(getActivity(), "Can't submit, claim is incomplete.", Toast.LENGTH_SHORT). show();
                         	} else {
-                        		c.setStatus(getActivity(), Claim.SUBMITTED);
+                        		clickedOnClaim.setStatus(getActivity(), Claim.SUBMITTED);
                         	}
                         	break;
                         default: break;
                         }
 
-                        update(null);
+                        //update(null);
                         
                         return true;
                     }
@@ -131,9 +130,7 @@ public class MyClaimsFragment extends Fragment implements TView {
 			}
 			
 		});
-		
-		update(null);
-		
+				
 		return rootView;
 	}
 	

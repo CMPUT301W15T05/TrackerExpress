@@ -3,7 +3,6 @@ package group5.trackerexpress;
 import java.util.List;
 import java.util.Locale;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
