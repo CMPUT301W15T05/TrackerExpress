@@ -9,22 +9,23 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class AccountFormActivity.
+ * Super class for CreateAccount and Login Activities
+ * 
  * @author Peter Crinklaw, Randy Hu, Parash Rahman, Jesse Emery, Sean Baergen, Rishi Barnwal
  * @version Part 4
+ * @see CreateAccountActivity, LoginActivity
  */
 public class AccountFormActivity extends Activity {
 
-	/** The m progress view. */
+	/** The progress view. */
 	private View mProgressView;
 	
-	/** The m form view. */
+	/** The form view. */
 	private View mFormView;
 	
 	/**
-	 * Gets the progress view.
+	 * Gets the progress view, used to show progress
 	 *
 	 * @return the progress view
 	 */
@@ -59,13 +60,12 @@ public class AccountFormActivity extends Activity {
 		this.mFormView = mFormView;
 	}
 
-	// Check for a valid email address.
 	/**
-	 * Email errors.
+	 * Checks for a valid email address.
 	 *
-	 * @param email the email
-	 * @param mEmailView the m email view
-	 * @return true, if successful
+	 * @param email
+	 * @param mEmailView email view
+	 * @return true if valid
 	 */
 	protected boolean emailErrors(String email, TextView mEmailView) {
 		
@@ -84,7 +84,7 @@ public class AccountFormActivity extends Activity {
 	 *
 	 * @param password the password
 	 * @param mPasswordView the m password view
-	 * @return true, if successful
+	 * @return true, if valid
 	 */
 	protected boolean passwordErrors(String password, TextView mPasswordView) {
 		
@@ -102,7 +102,7 @@ public class AccountFormActivity extends Activity {
 	 * Checks if is email valid.
 	 *
 	 * @param email the email
-	 * @return true, if is email valid
+	 * @return true, if email is valid
 	 */
 	protected boolean isEmailValid(String email) {
 		// TODO: Replace this with your own logic
@@ -125,7 +125,6 @@ public class AccountFormActivity extends Activity {
 	 * @return true, if is password valid
 	 */
 	protected boolean isPasswordValid(String password) {
-		// TODO: Replace this with your own logic
 		return password.length() > 4;
 	}
 	
@@ -143,7 +142,7 @@ public class AccountFormActivity extends Activity {
 	/**
 	 * Shows the progress UI and hides the form.
 	 *
-	 * @param show the show
+	 * @param show true if ui should be shown
 	 */
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
 	protected void showProgress(final boolean show) {

@@ -1,7 +1,6 @@
 package group5.trackerexpress;
 
 import java.util.UUID;
-import java.util.Date;
 
 
 import android.content.Context;

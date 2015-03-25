@@ -1,22 +1,20 @@
 package group5.trackerexpress;
 
+
 import java.io.File;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.UUID;
-import java.util.Date;
 
 import android.app.DialogFragment;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -24,7 +22,6 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 // TODO: Auto-generated Javadoc
@@ -35,18 +32,16 @@ import android.widget.Toast;
  */
 public class EditExpenseActivity extends EditableActivity implements DatePickerFragment.TheListener{
 	
-
-	/**The date. */
-	private TextView dateTextView;
-	
 	/** The category and currency. */
 	private Spinner categorySpinner, currencySpinner;
+	
+	private TextWatcher currencyWatcher;
 	
 	/** The img button. */
 	private ImageButton imgButton;
 	
 	/** The create expense button. */
-	private Button createExpenseButton;
+	private Button createExpenseButton, dateButton;
 
 	/** The description, amount. */
 	private EditText description, amount;
@@ -59,6 +54,11 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 	
 	/** The receipt uri. */
 	private Uri receiptUri;
+	
+	/** The date from the DatePicker*/
+	private Date dateSelection;
+	
+	private String curSymbol = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -84,7 +84,14 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 	    if (isNewExpense != true){
 	    	description.setText(expense.getTitle().toString());
 	    }
-	    
+
+	    // The date button that shows a date dialog
+		dateButton.setOnClickListener(new Button.OnClickListener(){
+			public void onClick(View v) {
+				showDatePickerDialog(v);
+			}
+		});
+		
 	    //the image button to take a picture of the receipt
 	    imgButton.setOnClickListener(new Button.OnClickListener(){
 	    	public void onClick(View v) {
@@ -106,7 +113,7 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 		});
 	    
 	}
-	    
+
 	
 	/**
 	 * Initialize variables.
@@ -115,32 +122,80 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 		description = (EditText) findViewById(R.id.editExpenseDescription);
 		amount = (EditText) findViewById(R.id.editExpenseAmount);
 		imgButton = (ImageButton) findViewById(R.id.editExpenseTakeAPhoto);
-		dateTextView = (TextView) findViewById(R.id.tvExpenseDate);
+		dateButton = (Button) findViewById(R.id.tvExpenseDate);
+		
+		dateSelection = new Date();
+		dateButton.setText(dateSelection.getLongString());
 		
 		categorySpinner = (Spinner) findViewById(R.id.editExpenseCategorySpinner);
 		ArrayAdapter<CharSequence> categoryAdapter = ArrayAdapter.createFromResource 
-				(this,  R.array.category_array,  android.R.layout.simple_spinner_item); //create array adapter using string array and default spinner layout
+				(this, R.array.category_array, android.R.layout.simple_spinner_item); //create array adapter using string array and default spinner layout
 		categoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); //specify layout to use when list of choices appears
 		categorySpinner.setAdapter(categoryAdapter);
 		
+
+		final ArrayList<String> symbols = new ArrayList<String>();
+		final String[] currencies = getResources().getStringArray(R.array.currency_array);
+		String[] splitCurrency;
+		for (int index = 0; index < currencies.length; index++){
+			splitCurrency = currencies[index].split(",");
+		    currencies[index] = splitCurrency[0];
+		    symbols.add(splitCurrency[1]);
+		}
+		
 		currencySpinner = (Spinner) findViewById(R.id.editExpenseCurrencySpinner);
-		ArrayAdapter<CharSequence> currencyAdapter = ArrayAdapter.createFromResource
-				(this,  R.array.currency_array,  android.R.layout.simple_spinner_item); //create array adapter using string array and default spinner layout
-		currencyAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); //specify layout to use when list of choices appears
+		ArrayAdapter<String> currencyAdapter = 
+				new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, currencies);
+		currencyAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		currencySpinner.setAdapter(currencyAdapter);
+		
+		curSymbol = symbols.get(0);
+		
+		currencyWatcher = new basicWatcher() {
+			Boolean editting = false;
+
+			@Override
+			public void afterTextChanged(Editable s) {
+				// http://stackoverflow.com/a/28865522/4269270 25/03/2015
+				if (!editting) {
+					editting = true;
+					String sString = s.toString();
+					if (sString.contains(" ")) {
+						s.replace(0, sString.indexOf(" "), curSymbol);
+					}
+					editting = false;
+				}
+				
+			}		
+		};
+		
+		amount.addTextChangedListener(currencyWatcher);
+		
+		currencySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+		    public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+		    	String amountString = amount.getText().toString();
+		    	if (!amountString.isEmpty()) {
+		    		curSymbol = symbols.get(pos);
+		    		amount.setText(curSymbol + " " + amountString.split(" ")[1]);
+		    		amount.setSelection(amount.length());
+		    	}
+		    }
+		    public void onNothingSelected(AdapterView<?> parent) {}
+		});
 		
 		createExpenseButton = (Button) findViewById(R.id.editExpenseCreateExpenseButton);
 		flagCheckBox = (CheckBox) findViewById(R.id.editExpenseIncompleteCheckBox);
 	}
 	
 	public void showDatePickerDialog(View v) {
-	    DialogFragment dateFragment = new DatePickerFragment();
+	    DialogFragment dateFragment = new DatePickerFragment(dateSelection);
 	    dateFragment.show(getFragmentManager(), "datePicker");
 	}
 	
-	public void returnDate(String date) {
-        // TODO Auto-generated method stub
-		dateTextView.setText(date);
+	@Override
+	public void returnDate(Date date) {
+		dateButton.setText(date.getLongString());
+		dateSelection = date;
     }
 	
 	
@@ -157,7 +212,7 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 		if (!folderF.exists()) {
 			folderF.mkdir();
 		}
-
+		
 		// Create a URI for the picture file
 		String imageFilePath = folder + "/"
 				+ String.valueOf(System.currentTimeMillis()) + ".jpg";
@@ -196,44 +251,23 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
         }
     }
 
-
-
     
 	private void editExpense(final Expense expense) {
 		
 		
 		String title = description.getText().toString();
-		String dateSelection = dateTextView.getText().toString();
 		Double money = Double.parseDouble(amount.getText().toString());
 		String categorySelection = categorySpinner.getSelectedItem().toString();
-		String currencySelection = currencySpinner.getSelectedItem().toString();	
-	
-		Date convertedDateSelection = convertDate(dateSelection);
-	 
-		
-		Toast.makeText(EditExpenseActivity.this, "TEST" + convertedDateSelection, Toast.LENGTH_SHORT).show();
+		String currencySelection = currencySpinner.getSelectedItem().toString();
 		
 		expense.setTitle(this, title);
-		expense.setDate(this, convertedDateSelection);
+		expense.setDate(this, dateSelection);
 		expense.setAmount(this, money);
 		expense.setStatus(this, flagStatus);
-		expense.setCurrency(this, currencySelection);
 		expense.setCategory(this, categorySelection);
-		finish();
+		expense.setCurrency(this, currencySelection);
 		
-	}
-	
-	//converts string date from textview into type Date.
-	public Date convertDate(String date) {
-		SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE MMMM dd, yyyy");
-		Date convertedDate = new Date();
-		try {
-			convertedDate = dateFormat.parse(date);
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return convertedDate;
+		finish();
 	}
 	/**
 	 * On item selected.

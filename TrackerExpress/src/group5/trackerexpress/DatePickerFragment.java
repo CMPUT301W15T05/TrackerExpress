@@ -1,8 +1,5 @@
 package group5.trackerexpress;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
@@ -11,20 +8,28 @@ import android.widget.DatePicker;
 
 public class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
 	
+	private TheListener listener;
+	private Date selectedDate;
 	
-	TheListener listener;
-
-	public interface TheListener {
-		public void returnDate(String date);
+	public DatePickerFragment(Date date) {
+		selectedDate = date;
+	}
+	
+	public DatePickerFragment() {
+		selectedDate = new Date();
 	}
 
+	public interface TheListener {
+		public void returnDate(Date date);
+	}
+	
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
 		// Use the current date as the default date in the picker
-		final Calendar c = Calendar.getInstance();
-		int year = c.get(Calendar.YEAR);
-		int month = c.get(Calendar.MONTH);
-		int day = c.get(Calendar.DAY_OF_MONTH);
+	
+		int year = selectedDate.getYYYY();
+		int month = selectedDate.getMM();
+		int day = selectedDate.getDD();
 		
 		listener = (TheListener) getActivity();
 
@@ -34,13 +39,11 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
 
 	@Override
 	public void onDateSet(DatePicker view, int year, int month, int day) {
-		Calendar c = Calendar.getInstance();
-		c.set(year, month, day);
 
-		SimpleDateFormat dateFormat = new SimpleDateFormat("EEEE MMMM dd, yyyy");
-		String date = dateFormat.format(c.getTime());
+		Date date = new Date(year, month, day);
 		if (listener != null) {
-		listener.returnDate(date);
+			listener.returnDate(date);
 		}
     }
+	
 }
