@@ -33,6 +33,7 @@ public class ViewClaimFragment extends Fragment implements TView {
 	public ViewClaimFragment(Claim claim) {
 		this.claim = claim;
 	}
+	
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -56,13 +57,13 @@ public class ViewClaimFragment extends Fragment implements TView {
 		
 		if (startDate != null && endDate != null) {
 			datePrefix = getString(R.string.view_claim_duration);
-			duration = startDate.getString() + " - " + endDate.getString();
+			duration = startDate.getShortString() + " - " + endDate.getShortString();
 		} else if (startDate != null) {
 			datePrefix = getString(R.string.view_claim_start_date);
-			duration = startDate.getString();
+			duration = startDate.getShortString();
 		} else if (endDate != null ) {
 			datePrefix = getString(R.string.view_claim_end_date);
-			duration = " - " + endDate.getString();
+			duration = " - " + endDate.getShortString();
 		}
 		
 		if (datePrefix != null) {
