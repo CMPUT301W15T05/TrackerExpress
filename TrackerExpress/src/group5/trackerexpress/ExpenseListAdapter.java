@@ -76,7 +76,7 @@ public class ExpenseListAdapter extends ArrayAdapter<Expense> {
 		holder.expenseTitle.setText(e.getTitle());
 		
 		if (e.getDate() != null) {
-			holder.date.setText(e.getDate().getString());
+			holder.date.setText(e.getDate().toString());
 		}
 		holder.category.setText(e.getCategory());
 		holder.amount.setText(e.getCurrency());

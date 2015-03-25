@@ -1,5 +1,8 @@
 package group5.trackerexpress;
 
+import java.util.ArrayList;
+import java.util.UUID;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -23,10 +26,10 @@ import android.widget.AdapterView.OnItemClickListener;
  */
 public class MyClaimsFragment extends Fragment implements TView {
 
-	/** The lv_claim_list. */
+	/** The ListView of claims */
 	private ListView lv_claim_list;
 	
-	/** The b_add_claim. */
+	/** The button to Add Claim */
 	private Button b_add_claim;
 
 	// Menu items to hide when selecting an option on a claim
@@ -38,7 +41,7 @@ public class MyClaimsFragment extends Fragment implements TView {
 	 */
 	public MyClaimsFragment() {
 	}
-
+	
 	/** onCreateView
 	 ** @see android.support.v4.app.Fragment#onCreateView(android.view.LayoutInflater, android.view.ViewGroup, android.os.Bundle)
 	 **/
@@ -53,6 +56,7 @@ public class MyClaimsFragment extends Fragment implements TView {
 		lv_claim_list = (ListView) rootView.findViewById(R.id.lv_my_claims);
 		lv_claim_list.setItemsCanFocus(true);
 		b_add_claim = (Button) rootView.findViewById(R.id.b_add_claim);
+
 
 		update(null);
 		Controller.getClaimList(getActivity()).addView(this);
@@ -89,7 +93,6 @@ public class MyClaimsFragment extends Fragment implements TView {
                     	Intent intent;
                         switch(item.getItemId()){
                         case R.id.op_delete_claim: 
-                        	// Delete tag off of Claim ArrayList for listview
                         	Controller.getClaimList(getActivity()).deleteClaim(getActivity(), clickedOnClaim.getUuid());
                         	break;
                         case R.id.op_edit_claim:
@@ -127,15 +130,15 @@ public class MyClaimsFragment extends Fragment implements TView {
 			}
 			
 		});
-		
+				
 		return rootView;
 	}
 	
 	/**
 	 * On prepare options menu.
 	 *
-	 * @param popup the popup
-	 * @param c the c
+	 * @param popup the Popup Menu in question
+	 * @param c the Claim in question
 	 */
 	public void onPrepareOptionsMenu( PopupMenu popup, Claim c ){
 		switch(c.getStatus()){
@@ -150,14 +153,48 @@ public class MyClaimsFragment extends Fragment implements TView {
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see group5.trackerexpress.TView#update(group5.trackerexpress.TModel)
-	 */
+	/** 
+	 * Update method updates the listview
+	 * 
+	 * @param model for when a model calls it
+	 **/
 	@Override
 	public void update(TModel model) {
-		lv_claim_list.setAdapter(
-				new MainClaimListAdapter( 
-						getActivity().getBaseContext(), 
-						Controller.getClaimList(getActivity()).toList() ));	
+		Log.i("myMessage", "I have arrived");
+		// TODO Auto-generated method stub
+		Claim[] listOfClaims = Controller.getClaimList(getActivity()).toList();		
+		ArrayList<Claim> filteredClaims = new ArrayList<Claim>();
+
+		ArrayList<Tag> listOfTags = Controller.getTagMap(getActivity()).toList();
+		ArrayList<Tag> filterTags = new ArrayList<Tag>();
+		
+		for ( Tag t : listOfTags ){
+			if ( t.isSelected() ){
+				filterTags.add(t);
+			}
+		}
+		MainClaimListAdapter adapter;
+		
+		// If all the tags are selected
+		if ( filterTags.size() == listOfTags.size() ) {
+			// Do not filter out anything
+			// Even those without tags
+			adapter = new MainClaimListAdapter(getActivity(), 
+					listOfClaims);
+		} else {	
+			for ( Claim c : listOfClaims ){
+				ArrayList<UUID> tempTags = c.getTagsIds();
+				for ( Tag t : filterTags ){
+					if ( tempTags.contains(t.getUuid()) ){
+						filteredClaims.add(c);
+						break;
+					}
+				}
+			}
+			adapter= new MainClaimListAdapter(getActivity(), 
+					filteredClaims.toArray(new Claim[filteredClaims.size()]));
+		}
+		
+		lv_claim_list.setAdapter(adapter);
 	}
 }

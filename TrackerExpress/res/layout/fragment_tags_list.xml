@@ -7,7 +7,7 @@
     <ListView
         android:id="@+id/lv_tags"
         android:layout_width="match_parent"
-        android:layout_height="400sp" >
+        android:layout_height="350sp" >
     </ListView>
     
     <Button 
@@ -15,5 +15,11 @@
    		android:layout_width="fill_parent" 
    		android:layout_height="wrap_content"
    		android:text="@string/button_add_tag" />
+    
+    <Button 
+   		android:id="@+id/b_select_all"
+   		android:layout_width="fill_parent" 
+   		android:layout_height="wrap_content"
+   		android:text="@string/button_select_all" />
 
 </LinearLayout>

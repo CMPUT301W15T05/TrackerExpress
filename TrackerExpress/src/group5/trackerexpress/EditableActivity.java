@@ -10,7 +10,6 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.view.View.OnFocusChangeListener;
 import android.widget.EditText;
-import android.widget.TextView;
 
 public class EditableActivity extends Activity{
 	

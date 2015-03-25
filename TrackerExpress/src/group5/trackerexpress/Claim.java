@@ -1,9 +1,7 @@
 package group5.trackerexpress;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.UUID;
-import java.util.Map.Entry;
 
 import android.content.Context;
 
@@ -50,7 +48,7 @@ public class Claim extends TModel implements Comparable<Claim>{
 
 	/** The ArrayList of tagIds.*/
 	private ArrayList<UUID> tagIds;
-
+	
     
 	/** The Constant IN_PROGRESS. */
 	public static final int IN_PROGRESS = 0;
@@ -64,8 +62,9 @@ public class Claim extends TModel implements Comparable<Claim>{
 	/** The Constant APPROVED. */
 	public static final int APPROVED = 3;
 	
+	
 	/** Creates a random id for the claim */
-	private UUID uuid = UUID.randomUUID();
+	private UUID uuid;
 	
 	
 	/**
@@ -75,6 +74,7 @@ public class Claim extends TModel implements Comparable<Claim>{
 	 */
 	public Claim(String claimName) {
 		// TODO Auto-generated constructor stub
+		this.uuid = UUID.randomUUID();
 		this.claimName = claimName;
 		this.expenseList = new ExpenseList();
 		this.status = IN_PROGRESS;
@@ -339,9 +339,28 @@ public class Claim extends TModel implements Comparable<Claim>{
 	 * 
 	 * @return the list of tag Ids
 	 */
-	
 	public ArrayList<UUID> getTagsIds() {
 		return tagIds;
+	}
+	
+	/**
+	 * formats and gets a string list of the tags
+	 * 
+	 * @return a string of tags in list form
+	 */
+	public String toStringTags(Context context){
+		String stringTags = "";
+		TagMap tm = Controller.getTagMap(context);
+		
+		for ( int i = 0; i < tagIds.size() - 1; i++ ) {
+			stringTags += tm.getTag(tagIds.get(i)).toString() + ", "; 
+		}
+		
+		if ( tagIds.size() > 0 ){
+			stringTags += tm.getTag(tagIds.get(tagIds.size() - 1)).toString();
+		}
+		
+		return stringTags;
 	}
 
 	/**
