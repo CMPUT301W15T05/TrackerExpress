@@ -1,6 +1,7 @@
 package group5.trackerexpress;
 
 import java.util.UUID;
+import java.util.Date;
 
 
 import android.content.Context;
@@ -116,8 +117,8 @@ public class Expense extends TModel{
 	 * @param context Needed for file IO
 	 * @param d1 the Date
 	 */
-	public void setDate(Context context, Date date) {
-		this.date = date;
+	public void setDate(Context context, Date convertedDateSelection) {
+		this.date = convertedDateSelection;
 		notifyViews(context);
 	}
 
