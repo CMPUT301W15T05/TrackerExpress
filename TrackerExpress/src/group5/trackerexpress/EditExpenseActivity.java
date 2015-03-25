@@ -3,10 +3,7 @@ package group5.trackerexpress;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.UUID;
-import java.util.Date;
 
 import android.app.DialogFragment;
 import android.content.Intent;
@@ -264,7 +261,7 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 		String currencySelection = currencySpinner.getSelectedItem().toString();
 		
 		expense.setTitle(this, title);
-		expense.setDate(this, convertedDateSelection);
+		expense.setDate(this, dateSelection);
 		expense.setAmount(this, money);
 		expense.setStatus(this, flagStatus);
 		expense.setCategory(this, categorySelection);
