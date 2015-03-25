@@ -107,12 +107,6 @@ public class TagListFragment extends Fragment implements TView {
 
 						switch (item.getItemId()) {
 						case R.id.op_delete_tag:
-							// Delete tag off of Tag ArrayList for listview
-							// listOfTags.remove(t);
-							// MainTagListAdapter a = new MainTagListAdapter(
-							// getActivity().getBaseContext(), listOfTags );
-							// lv_tag_list.setAdapter(a);
-							// Delete it off the model
 							mapOfTags.deleteTag(getActivity(), t.getUuid());
 							break;
 						case R.id.op_edit_tag:

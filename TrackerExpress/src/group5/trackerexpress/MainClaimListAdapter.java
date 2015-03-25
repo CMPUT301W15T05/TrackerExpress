@@ -1,6 +1,7 @@
 package group5.trackerexpress;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,6 +61,16 @@ public class MainClaimListAdapter extends ArrayAdapter<Claim> {
 		
 		/** official status of claim **/
 		public TextView status;
+		
+		/** start date  of claim **/
+		public TextView startDate;
+		
+		/** "to" between dates **/
+		public TextView toDate;
+		
+		/** end date of claim **/
+		public TextView endDate;
+		
 	}
 	
 	/* (non-Javadoc)
@@ -80,6 +91,9 @@ public class MainClaimListAdapter extends ArrayAdapter<Claim> {
 			holder.tags = (TextView) v.findViewById(R.id.tv_main_claim_list_tags);
 			holder.isIncompleteStatus = (TextView ) v.findViewById(R.id.tv_main_claim_list_isIncomplete);
 			holder.status = (TextView) v.findViewById(R.id.tv_main_claim_list_status);
+			holder.startDate = (TextView) v.findViewById(R.id.tv_main_claim_list_start);
+			holder.toDate = (TextView) v.findViewById(R.id.tv_main_claim_list_to);
+			holder.endDate = (TextView) v.findViewById(R.id.tv_main_claim_list_end);
 			
 			v.setTag(holder);
 		} else {
@@ -109,7 +123,25 @@ public class MainClaimListAdapter extends ArrayAdapter<Claim> {
 			holder.status.setText(submittedStatus);
 			break;
 		}
-		//holder.tags.setText(text);
+		
+		if ( c.getTagsIds() == null ){
+			Log.i("myMessage", "SuckMaFriends");
+		}
+		
+		holder.tags.setText("Tags: " + c.toStringTags(context));
+		
+		if ( c.getStartDate() != null ){
+			holder.startDate.setText("Date(s): " + c.getStartDate().toString());
+			
+			if ( c.getEndDate() != null ){
+				holder.toDate.setVisibility(View.VISIBLE);
+				holder.endDate.setText(c.getEndDate().toString());
+			} else {
+				holder.toDate.setVisibility(View.INVISIBLE);
+			}
+		} else {
+			holder.toDate.setVisibility(View.INVISIBLE);
+		}
 		
 		return v;
 	}

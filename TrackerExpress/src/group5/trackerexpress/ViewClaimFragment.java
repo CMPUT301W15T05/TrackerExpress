@@ -56,13 +56,13 @@ public class ViewClaimFragment extends Fragment implements TView {
 		
 		if (startDate != null && endDate != null) {
 			datePrefix = getString(R.string.view_claim_duration);
-			duration = startDate.getString() + " - " + endDate.getString();
+			duration = startDate.toString() + " - " + endDate.toString();
 		} else if (startDate != null) {
 			datePrefix = getString(R.string.view_claim_start_date);
-			duration = startDate.getString();
+			duration = startDate.toString();
 		} else if (endDate != null ) {
 			datePrefix = getString(R.string.view_claim_end_date);
-			duration = " - " + endDate.getString();
+			duration = " - " + endDate.toString();
 		}
 		
 		if (datePrefix != null) {

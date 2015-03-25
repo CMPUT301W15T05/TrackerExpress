@@ -110,7 +110,7 @@ public class Date implements Comparable<Date>{
 	 * @return the date as a string
 	 */
 	
-	public String getString() {
+	public String toString() {
 		return dd.toString() + "/" + mm.toString() + "/" + yyyy.toString();
 	}
 	

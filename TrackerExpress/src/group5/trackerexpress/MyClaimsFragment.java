@@ -1,5 +1,8 @@
 package group5.trackerexpress;
 
+import java.util.ArrayList;
+import java.util.UUID;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -25,9 +28,6 @@ public class MyClaimsFragment extends Fragment implements TView {
 
 	/** The lv_claim_list. */
 	private ListView lv_claim_list;
-	
-	/** The adapter. */
-	private MainClaimListAdapter adapter;
 	
 	/** The b_add_claim. */
 	private Button b_add_claim;
@@ -58,10 +58,6 @@ public class MyClaimsFragment extends Fragment implements TView {
 		b_add_claim = (Button) rootView.findViewById(R.id.b_add_claim);
 		
 		final ClaimList listOfClaims = Controller.getClaimList(getActivity());
-		final Claim[] arrayClaims = listOfClaims.toList();
-		
-		adapter = new MainClaimListAdapter(getActivity(), arrayClaims);
-		lv_claim_list.setAdapter(adapter);
 		
 		b_add_claim.setOnClickListener(new Button.OnClickListener(){
 
@@ -98,12 +94,6 @@ public class MyClaimsFragment extends Fragment implements TView {
                     	Intent intent;
                         switch(item.getItemId()){
                         case R.id.op_delete_claim: 
-                        	// Delete tag off of Claim ArrayList for listview
-                        	listOfClaims.deleteClaim(getActivity(), claimAnalyzed.getUuid());
-                        	Claim[] arrayClaims = listOfClaims.toList();
-                        	MainClaimListAdapter a = new MainClaimListAdapter( getActivity().getBaseContext(), arrayClaims );
-                			lv_claim_list.setAdapter(a);
-                			// Delete it off the model
                         	listOfClaims.deleteClaim(getActivity(), claimAnalyzed.getUuid());
                         	break;
                         case R.id.op_edit_claim:
@@ -142,6 +132,8 @@ public class MyClaimsFragment extends Fragment implements TView {
 			
 		});
 		
+		update(null);
+		
 		return rootView;
 	}
 	
@@ -169,7 +161,23 @@ public class MyClaimsFragment extends Fragment implements TView {
 	 */
 	@Override
 	public void update(TModel model) {
+		Log.i("myMessage", "I have arrived");
 		// TODO Auto-generated method stub
+		Claim[] listOfClaims = Controller.getClaimList(getActivity()).toList();
+		ArrayList<Tag> listOfTags = Controller.getTagMap(getActivity()).toList();
+		ArrayList<Claim> filteredClaims = new ArrayList<Claim>();
+				
+		for ( Claim c : listOfClaims ){
+			ArrayList<UUID> tempTags = c.getTagsIds();
+			for ( Tag t : listOfTags ){
+				if ( tempTags.contains(t.getUuid()) && t.isSelected() ){
+					filteredClaims.add(c);
+					break;
+				}
+			}
+		}
 		
+		MainClaimListAdapter adapter = new MainClaimListAdapter(getActivity(), 
+				filteredClaims.toArray(new Claim[filteredClaims.size()]));
 	}
 }
