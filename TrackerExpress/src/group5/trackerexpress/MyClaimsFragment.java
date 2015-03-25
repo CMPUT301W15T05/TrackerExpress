@@ -26,10 +26,10 @@ import android.widget.AdapterView.OnItemClickListener;
  */
 public class MyClaimsFragment extends Fragment implements TView {
 
-	/** The lv_claim_list. */
+	/** The ListView of claims */
 	private ListView lv_claim_list;
 	
-	/** The b_add_claim. */
+	/** The button to Add Claim */
 	private Button b_add_claim;
 
 	// Menu items to hide when selecting an option on a claim
@@ -41,7 +41,7 @@ public class MyClaimsFragment extends Fragment implements TView {
 	 */
 	public MyClaimsFragment() {
 	}
-
+	
 	/** onCreateView
 	 ** @see android.support.v4.app.Fragment#onCreateView(android.view.LayoutInflater, android.view.ViewGroup, android.os.Bundle)
 	 **/
@@ -140,8 +140,8 @@ public class MyClaimsFragment extends Fragment implements TView {
 	/**
 	 * On prepare options menu.
 	 *
-	 * @param popup the popup
-	 * @param c the c
+	 * @param popup the Popup Menu in question
+	 * @param c the Claim in question
 	 */
 	public void onPrepareOptionsMenu( PopupMenu popup, Claim c ){
 		switch(c.getStatus()){
@@ -156,28 +156,48 @@ public class MyClaimsFragment extends Fragment implements TView {
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see group5.trackerexpress.TView#update(group5.trackerexpress.TModel)
-	 */
+	/** 
+	 * Update method updates the listview
+	 * 
+	 * @param model for when a model calls it
+	 **/
 	@Override
 	public void update(TModel model) {
 		Log.i("myMessage", "I have arrived");
 		// TODO Auto-generated method stub
-		Claim[] listOfClaims = Controller.getClaimList(getActivity()).toList();
-		ArrayList<Tag> listOfTags = Controller.getTagMap(getActivity()).toList();
+		Claim[] listOfClaims = Controller.getClaimList(getActivity()).toList();		
 		ArrayList<Claim> filteredClaims = new ArrayList<Claim>();
-				
-		for ( Claim c : listOfClaims ){
-			ArrayList<UUID> tempTags = c.getTagsIds();
-			for ( Tag t : listOfTags ){
-				if ( tempTags.contains(t.getUuid()) && t.isSelected() ){
-					filteredClaims.add(c);
-					break;
-				}
+
+		ArrayList<Tag> listOfTags = Controller.getTagMap(getActivity()).toList();
+		ArrayList<Tag> filterTags = new ArrayList<Tag>();
+		
+		for ( Tag t : listOfTags ){
+			if ( t.isSelected() ){
+				filterTags.add(t);
 			}
 		}
+		MainClaimListAdapter adapter;
 		
-		MainClaimListAdapter adapter = new MainClaimListAdapter(getActivity(), 
-				filteredClaims.toArray(new Claim[filteredClaims.size()]));
+		// If all the tags are selected
+		if ( filterTags.size() == listOfTags.size() ) {
+			// Do not filter out anything
+			// Even those without tags
+			adapter = new MainClaimListAdapter(getActivity(), 
+					listOfClaims);
+		} else {	
+			for ( Claim c : listOfClaims ){
+				ArrayList<UUID> tempTags = c.getTagsIds();
+				for ( Tag t : filterTags ){
+					if ( tempTags.contains(t.getUuid()) ){
+						filteredClaims.add(c);
+						break;
+					}
+				}
+			}
+			adapter= new MainClaimListAdapter(getActivity(), 
+					filteredClaims.toArray(new Claim[filteredClaims.size()]));
+		}
+		
+		lv_claim_list.setAdapter(adapter);
 	}
 }
