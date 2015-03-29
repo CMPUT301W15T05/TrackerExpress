@@ -409,6 +409,7 @@ public class EditClaimActivity extends EditableActivity {
 	     */
 	    desListView.setOnItemClickListener(onListClick);
 	    
+	    
 	    /**
 		 * On click listener for edit claim/create claim button (button name will change depending on what button
 		 * was pressed from the previous activity). Saving the edited/new claim will be triggered only when the 
