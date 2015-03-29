@@ -2,6 +2,7 @@ package group5.trackerexpress;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -11,10 +12,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.PopupMenu.OnMenuItemClickListener;
-import android.widget.TextView;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -84,12 +85,19 @@ public class GlobalClaimsFragment extends Fragment implements TView {
 					@Override
 					public boolean onMenuItemClick(MenuItem item) {
 						// TODO Auto-generated method stub
-						Claim claimAnalyzed = (Claim) lv_global_list.getAdapter().getItem(position);
                     	Intent intent;
                     	AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                     	String message = "Enter comments";
+                    	final EditText input = new EditText(getActivity());
+                    	builder.setMessage(message);
+                    	builder.setView(input);
+                    	builder.setNegativeButton("Cancel", new OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								// Do Nothing
+							}
+						});
                     	
-                    	final TextView input = new TextView(getActivity());
                         switch(item.getItemId()){
                         case R.id.op_view_global:
                         	intent = new Intent( getActivity(), ClaimInfoActivity.class );
@@ -98,18 +106,40 @@ public class GlobalClaimsFragment extends Fragment implements TView {
                         	break;
                         case R.id.op_approve:
                         	builder.setTitle("Approve Claim");
-                        	
+                        	builder.setPositiveButton("Approve", new OnClickListener() {
+								
+								@Override
+								public void onClick(DialogInterface dialog, int which) {
+									// TODO Auto-generated method stub
+									c.setComments(input.getText().toString());
+									c.setApprover(Controller.getUser(getActivity()));
+									c.setStatus(getActivity(), Claim.APPROVED);
+									globalClaims.notifyViews(getActivity());
+								}
+							});
                         	break;
                         case R.id.op_return:
                         	builder.setTitle("Return Claim");
+                        	builder.setPositiveButton("Return", new OnClickListener() {
+								
+								@Override
+								public void onClick(DialogInterface dialog, int which) {
+									// TODO Auto-generated method stub
+									c.setComments(input.getText().toString());
+									c.setApprover(Controller.getUser(getActivity()));
+									c.setStatus(getActivity(), Claim.RETURNED);
+									globalClaims.notifyViews(getActivity());
+								}
+							});
                         	break;
                         }
                         
-                        	
+                        AlertDialog build = builder.create();
+                        build.show();
 						return false;
 					}
 				});
-			
+				popup.show();
 			}
 		});
 		return rootView;
@@ -133,4 +163,5 @@ public class GlobalClaimsFragment extends Fragment implements TView {
 		// TODO Auto-generated method stub
 
 	}
+	
 }

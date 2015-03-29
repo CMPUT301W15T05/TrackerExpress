@@ -45,6 +45,11 @@ public class Claim extends TModel implements Comparable<Claim>{
 	/** The incomplete indicator. */
 	private boolean incomplete;
 	
+	/** The comments returned from an approver*/
+	private String comments;
+	
+	/** The user who approved/returned the claim*/
+	private User approver;
 
 	/** The ArrayList of tagIds.*/
 	private ArrayList<UUID> tagIds;
@@ -61,7 +66,6 @@ public class Claim extends TModel implements Comparable<Claim>{
 	
 	/** The Constant APPROVED. */
 	public static final int APPROVED = 3;
-	
 	
 	/** Creates a random id for the claim */
 	private UUID uuid;
@@ -100,6 +104,41 @@ public class Claim extends TModel implements Comparable<Claim>{
 	public void setIncomplete(Context context, boolean incomplete) {
 		this.incomplete = incomplete;
 		notifyViews(context);
+	}
+	/**
+	 * Gets the Comments from the approver
+	 * 
+	 * @return the comments
+	 */
+	public String getComments() {
+		return comments;
+	}
+
+	/**
+	 * Sets the comments from the approver
+	 * 
+	 * @param comments
+	 */
+	public void setComments(String comments) {
+		this.comments = comments;
+	}
+	
+	/**
+	 * Gets the approver as a User
+	 * 
+	 * @return the approver
+	 */
+	public User getApprover() {
+		return approver;
+	}
+
+	/**
+	 * Sets the approver
+	 * 
+	 * @param the User approver
+	 */
+	public void setApprover(User approver) {
+		this.approver = approver;
 	}
 
 	/**

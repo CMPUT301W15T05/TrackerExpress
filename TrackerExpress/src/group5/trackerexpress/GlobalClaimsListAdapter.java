@@ -1,5 +1,6 @@
 package group5.trackerexpress;
 
+
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -8,16 +9,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-// TODO: Auto-generated Javadoc
-/**
- * The Class MainClaimListAdapter.
- * @author Peter Crinklaw, Randy Hu, Parash Rahman, Jesse Emery, Sean Baergen, Rishi Barnwal
- * @version Part 4
- */
-public class MainClaimListAdapter extends ArrayAdapter<Claim> {
-	public static final String incompleteString = "INCOMPLETE";
+public class GlobalClaimsListAdapter extends ArrayAdapter<Claim> {
 	public static final String approvedStatus = "APPROVED";
-	public static final String inProgressStatus = "IN PROGRESS";
 	public static final String returnedStatus = "RETURNED";
 	public static final String submittedStatus = "SUBMITTED";
 	
@@ -33,7 +26,7 @@ public class MainClaimListAdapter extends ArrayAdapter<Claim> {
 	 * @param context Needed for file IO
 	 * @param claims the claims
 	 */
-	public MainClaimListAdapter(Context context, Claim[] claims){
+	public GlobalClaimsListAdapter(Context context, Claim[] claims){
 		super(context, R.layout.fragment_my_claims_item, claims);
 		this.claimList = claims;
 		this.context = context;
@@ -54,10 +47,10 @@ public class MainClaimListAdapter extends ArrayAdapter<Claim> {
 		public TextView amounts;
 		
 		/** The tags. */
-		public TextView tags;
+		public TextView user;
 		
 		/** incompleteness of claim **/
-		public TextView isIncompleteStatus;
+		public TextView isApprovedStatus;
 		
 		/** official status of claim **/
 		public TextView status;
@@ -89,10 +82,10 @@ public class MainClaimListAdapter extends ArrayAdapter<Claim> {
 			v = inflater.inflate(R.layout.fragment_my_claims_item, null);
 			
 			holder.claimName = (TextView) v.findViewById(R.id.tv_main_claim_list_name);
-			holder.destinations = (TextView) v.findViewById(R.id.tv_main_claim_list_destinations);
-			holder.amounts = (TextView) v.findViewById(R.id.tv_main_claim_list_amounts);
-			holder.tags = (TextView) v.findViewById(R.id.tv_main_claim_list_tags);
-			holder.isIncompleteStatus = (TextView ) v.findViewById(R.id.tv_main_claim_list_isIncomplete);
+			holder.user = (TextView) v.findViewById(R.id.tv_main_claim_list_destinations);
+			holder.destinations = (TextView) v.findViewById(R.id.tv_main_claim_list_amounts);
+			holder.amounts = (TextView) v.findViewById(R.id.tv_main_claim_list_tags);
+			holder.isApprovedStatus = (TextView ) v.findViewById(R.id.tv_main_claim_list_isIncomplete);
 			holder.status = (TextView) v.findViewById(R.id.tv_main_claim_list_status);
 			holder.startDate = (TextView) v.findViewById(R.id.tv_main_claim_list_start);
 			holder.toDate = (TextView) v.findViewById(R.id.tv_main_claim_list_to);
@@ -107,17 +100,9 @@ public class MainClaimListAdapter extends ArrayAdapter<Claim> {
 		holder.claimName.setText(c.getClaimName());
 		holder.destinations.setText("Destinations: " + c.toStringDestinations());
 		holder.amounts.setText("Currency Totals: " + c.getExpenseList().toStringTotalCurrencies());
-		if ( c.isIncomplete() ){
-			holder.isIncompleteStatus.setText(incompleteString);
-		} else {
-			holder.isIncompleteStatus.setText("");
-		}
 		switch(c.getStatus()){
 		case Claim.APPROVED:
 			holder.status.setText(approvedStatus);
-			break;
-		case Claim.IN_PROGRESS:
-			holder.status.setText(inProgressStatus);
 			break;
 		case Claim.RETURNED:
 			holder.status.setText(returnedStatus);
@@ -130,8 +115,8 @@ public class MainClaimListAdapter extends ArrayAdapter<Claim> {
 		if ( c.getTagsIds() == null ){
 			Log.i("myMessage", "SuckMaFriends");
 		}
-		
-		holder.tags.setText("Tags: " + c.toStringTags(context));
+		c.setuserName(getContext(), "Sean"); // For testing
+		holder.user.setText("User: " + c.getuserName());
 		
 		if ( c.getStartDate() != null ){
 			holder.startDate.setText("Date(s): " + c.getStartDate().getShortString());
