@@ -204,7 +204,6 @@ public class EditClaimActivity extends EditableActivity {
 		
 		final Intent intent = this.getIntent();
 	    final boolean isNewClaim = (boolean) intent.getBooleanExtra("isNewClaim", true);
-	    final ClaimList newclaimlist = Controller.getClaimList(EditClaimActivity.this);
 	    
 	    UUID serialisedId = (UUID) intent.getSerializableExtra("claimUUID");
 	    final Claim claim = Controller.getClaimList(EditClaimActivity.this).getClaim(serialisedId);
@@ -289,6 +288,7 @@ public class EditClaimActivity extends EditableActivity {
 				/** this procedure will check if the claim name is repeated */
 				boolean repeatedClaimName = false;
 				Claim[] claims = Controller.getClaimList(EditClaimActivity.this).toList();
+				
 				for ( Claim c : claims ){
 						if ( c.getClaimName().equals( ClaimTitle.getText().toString() )
 							&& ( isNewClaim || ! c.getUuid().equals(claim.getUuid())) ){
@@ -318,14 +318,11 @@ public class EditClaimActivity extends EditableActivity {
 					
 					if (isNewClaim == true){
 						editclaim(newclaim);
-						newclaimlist.addClaim(EditClaimActivity.this, newclaim);
-						newclaim.setDestination(EditClaimActivity.this, Destination);
 						checkCompleteness(newclaim);
-						
+						Controller.getClaimList(EditClaimActivity.this).addClaim(EditClaimActivity.this, newclaim);
 						
 					} else{
 						editclaim(claim);
-						claim.setDestination(EditClaimActivity.this, Destination);
 						checkCompleteness(claim);
 						
 					}
@@ -333,8 +330,9 @@ public class EditClaimActivity extends EditableActivity {
 					/**
 					 *  launch MainClaimActivity.
 					 */
-					Intent intent = new Intent(EditClaimActivity.this, MainActivity.class);
-					startActivity(intent);
+					finish();
+					//Intent intent = new Intent(EditClaimActivity.this, MainActivity.class);
+					//startActivity(intent);
 				}
 			}
 		});
@@ -542,7 +540,7 @@ public class EditClaimActivity extends EditableActivity {
 	 */
 	private void editclaim(final Claim claim) {
 		// TODO Auto-generated method stub
-		int mySDateY, mySDateM, mySDateD,myEDateY, myEDateM, myEDateD;
+		int mySDateY, mySDateM, mySDateD, myEDateY, myEDateM, myEDateD;
 		Date d2 = null;
 		Date d1 = null;
 		String claimUser = ClaimName.getText().toString();
@@ -579,18 +577,22 @@ public class EditClaimActivity extends EditableActivity {
 			d1 = new Date(mySDateY, mySDateM, mySDateD);
 		}
 		
+		if (claim == null) {
+			System.out.println("JHJKDS");
+		}
+		
 		claim.setuserName(this, claimUser);
 		claim.setClaimName(this, Claim_title);
 
 		claim.setStartDate(this, d1);
 		claim.setEndDate(this, d2);
 		claim.setDescription(this, Descrip);
+		claim.setDestination(this, Destination);
 		
-		for (Tag tag: tagsOfClaim)
+		for (Tag tag: tagsOfClaim) {
 			claim.getTagsIds().add(tag.getUuid());
-
-		
-		Controller.getClaimList(this).addClaim(this, claim);		
+		}
+	
 	}
 
 
@@ -605,7 +607,7 @@ public class EditClaimActivity extends EditableActivity {
 	 * Create a popup window for entering and editing destination/reason then call save it into the dummy
 	 * 2d destination array.
 	 */
-	private void createDestinationButton( final boolean isNewClaim, final ArrayList<String[]> destination2, final int i,final int position) {
+	private void createDestinationButton( final boolean isNewClaim, final ArrayList<String[]> destination2, final int i, final int position) {
 
 		/**
 		 *  http://www.androiddom.com/2011/06/displaying-android-pop-up-dialog_13.html 	2015-03-11
@@ -619,70 +621,35 @@ public class EditClaimActivity extends EditableActivity {
         helperBuilder.setView(popupview);
         DesName = (EditText) popupview.findViewById(R.id.inputDestination);
         DesRea = (EditText) popupview.findViewById(R.id.inputDestinationReason);
-        		
-		switch(i){	
-		/** for creating new destination */
-		case newDestination:
-			helperBuilder.setPositiveButton("Done", new DialogInterface.OnClickListener() {
-				
-				/** Once done, add destination into dummy destination
-				 * @see android.content.DialogInterface.OnClickListener#onClick(android.content.DialogInterface, int)
-				 */
-				public void onClick(DialogInterface dialog, int which) {
-					
-					String Des_Name = DesName.getText().toString();
-					String Des_Rea = DesRea.getText().toString();
-					editDummyDestination(EditClaimActivity.this, Des_Name, Des_Rea, doNothing, null, newDestination);
-				}
-			});
-			
-			helperBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-				
-				/** Return to EditClaimActivity doing nothing
-				 * @see android.content.DialogInterface.OnClickListener#onClick(android.content.DialogInterface, int)
-				 */
-				public void onClick(DialogInterface dialog, int which) {
-							
-				}
-			});
-					
-			AlertDialog helperDialog = helperBuilder.create();
-			helperDialog.show();
-			break;
-			
-		/** for editing a existing destination */ 
-		case editDestination:
+        
+		if (i == editDestination){
 			DesName.setText(destination2.get(position)[0]);
 			DesRea.setText(destination2.get(position)[1]);
-			final String oldDestination = destination2.get(position)[0]+" - "+destination2.get(position)[1];
-			
-			helperBuilder.setPositiveButton("Done", new DialogInterface.OnClickListener() {
-				
-				/** update destination dummy list
-				 * @see android.content.DialogInterface.OnClickListener#onClick(android.content.DialogInterface, int)
-				 */
-				public void onClick(DialogInterface dialog, int which) {
-					String Des_Name2 = DesName.getText().toString();
-					String Des_Rea2 = DesRea.getText().toString();
-					editDummyDestination(EditClaimActivity.this, Des_Name2, Des_Rea2, position, oldDestination,editDestination);
-				}
-			});
-			
-			
-			helperBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-				
-				/** Do nothing and return
-				 * @see android.content.DialogInterface.OnClickListener#onClick(android.content.DialogInterface, int)
-				 */
-				public void onClick(DialogInterface dialog, int which) {
-							
-				}
-			});
-					
-			AlertDialog helpDialog = helperBuilder.create();
-			helpDialog.show();
-			break;
 		}
+		
+		helperBuilder.setPositiveButton("Done", new DialogInterface.OnClickListener() {
+			
+			/** Once done, add destination into dummy destination
+			 * @see android.content.DialogInterface.OnClickListener#onClick(android.content.DialogInterface, int)
+			 */
+			public void onClick(DialogInterface dialog, int which) {
+				
+				String Des_Name = DesName.getText().toString();
+				String Des_Rea = DesRea.getText().toString();
+				editDummyDestination(EditClaimActivity.this, Des_Name, Des_Rea, position, newDestination);
+			}
+		});
+		
+        helperBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+			
+			/** Return to EditClaimActivity doing nothing
+			 * @see android.content.DialogInterface.OnClickListener#onClick(android.content.DialogInterface, int)
+			 */
+			public void onClick(DialogInterface dialog, int which) {}
+		});
+        
+		AlertDialog helpDialog = helperBuilder.create();
+		helpDialog.show();
 				
 	}
 	
@@ -706,12 +673,11 @@ public class EditClaimActivity extends EditableActivity {
 	 * @param place the place
 	 * @param Reason the reason
 	 * @param position the position
-	 * @param oldDestination the old destination
 	 * @param i the i
 
 	// Update the adapter and dummy destination arrayList.
 	 */
-	public void editDummyDestination(Context context, String place, String Reason, int position, String oldDestination, int i){
+	public void editDummyDestination(Context context, String place, String Reason, int position, int i) {
 		String[] travelInfo = new String[2];
 		travelInfo[0] = place;
 		travelInfo[1] = Reason; 
@@ -723,7 +689,7 @@ public class EditClaimActivity extends EditableActivity {
 			break;
 		case editDestination:
 			adapter2.insert(place+ " - " + Reason, position);
-			adapter2.remove(oldDestination);
+			adapter2.remove(Destination.get(position)[0] + " - " + Destination.get(position)[1]);
 			Destination.set(position,travelInfo);
 			adapter2.notifyDataSetChanged();
 		}	

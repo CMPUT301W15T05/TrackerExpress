@@ -2,8 +2,13 @@ package group5.trackerexpress;
 
 
 import java.io.File;
+import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Locale;
+import java.util.Scanner;
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import android.app.DialogFragment;
 import android.content.Intent;
@@ -13,6 +18,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.Editable;
+import android.text.SpannableStringBuilder;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.AdapterView;
@@ -34,8 +40,6 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 	
 	/** The category and currency. */
 	private Spinner categorySpinner, currencySpinner;
-	
-	private TextWatcher currencyWatcher;
 	
 	/** The img button. */
 	private ImageButton imgButton;
@@ -107,20 +111,76 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 	    	    	newExpenseList.addExpense(EditExpenseActivity.this, expense);
 	    	    }else{
 	    	    	editExpense(expense);
-	    	    }
+	    	    } 
+	    		
+	    		finish();
 	    		
 		    }
 		});
-	    
+	  
 	}
+	
+	private TextWatcher currencyWatcher = new basicWatcher() {
+		Boolean editting = false;
+		String preChange = "";
 
+		@Override 
+		public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+			preChange = s.toString();
+		};
+		
+		@Override
+		public void afterTextChanged(Editable s) {
+			String sString = s.toString();
+			
+			// http://stackoverflow.com/a/28865522/4269270 25/03/2015
+			if (!editting && !sString.isEmpty()) {
+				editting = true;
+				
+				if (preChange.equals("0.") && sString.equals("0")) {
+					s.delete(0, 1);
+					editting = false;
+					return;
+				}
+				
+				if (sString.contains(".")) {
+					Integer pointIndex = sString.indexOf(".");
+					
+					// x.xxx -> x.xx
+					if (sString.length() > pointIndex + 3) {
+						s.delete(pointIndex + 3, s.length());
+					}
+					
+					// .xx -> 0.xx
+					if (pointIndex.equals(0)) {
+						s.insert(0, "0");
+					}
+				}
+				
+				
+				// 0x.x -> x.x
+				while (s.charAt(0) == '0') {
+					if (s.length() < 2 || s.charAt(1) == '.') {
+						break;
+					}
+				
+					s.delete(0, 1);
+				}
+				
+				editting = false;
+			}
+		}
+	};
 	
 	/**
 	 * Initialize variables.
 	 */
 	private void initializeVariables() {
 		description = (EditText) findViewById(R.id.editExpenseDescription);
+		
 		amount = (EditText) findViewById(R.id.editExpenseAmount);
+		amount.addTextChangedListener(currencyWatcher);
+		
 		imgButton = (ImageButton) findViewById(R.id.editExpenseTakeAPhoto);
 		dateButton = (Button) findViewById(R.id.tvExpenseDate);
 		
@@ -131,57 +191,13 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 		ArrayAdapter<CharSequence> categoryAdapter = ArrayAdapter.createFromResource 
 				(this, R.array.category_array, android.R.layout.simple_spinner_item); //create array adapter using string array and default spinner layout
 		categoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); //specify layout to use when list of choices appears
-		categorySpinner.setAdapter(categoryAdapter);
-		
-
-		final ArrayList<String> symbols = new ArrayList<String>();
-		final String[] currencies = getResources().getStringArray(R.array.currency_array);
-		String[] splitCurrency;
-		for (int index = 0; index < currencies.length; index++){
-			splitCurrency = currencies[index].split(",");
-		    currencies[index] = splitCurrency[0];
-		    symbols.add(splitCurrency[1]);
-		}
+		categorySpinner.setAdapter(categoryAdapter);	
 		
 		currencySpinner = (Spinner) findViewById(R.id.editExpenseCurrencySpinner);
-		ArrayAdapter<String> currencyAdapter = 
-				new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, currencies);
-		currencyAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		ArrayAdapter<CharSequence> currencyAdapter = ArrayAdapter.createFromResource 
+				(this, R.array.currency_array, android.R.layout.simple_spinner_item); //create array adapter using string array and default spinner layout
+		currencyAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); //specify layout to use when list of choices appears
 		currencySpinner.setAdapter(currencyAdapter);
-		
-		curSymbol = symbols.get(0);
-		
-		currencyWatcher = new basicWatcher() {
-			Boolean editting = false;
-
-			@Override
-			public void afterTextChanged(Editable s) {
-				// http://stackoverflow.com/a/28865522/4269270 25/03/2015
-				if (!editting) {
-					editting = true;
-					String sString = s.toString();
-					if (sString.contains(" ")) {
-						s.replace(0, sString.indexOf(" "), curSymbol);
-					}
-					editting = false;
-				}
-				
-			}		
-		};
-		
-		amount.addTextChangedListener(currencyWatcher);
-		
-		currencySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-		    public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-		    	String amountString = amount.getText().toString();
-		    	if (!amountString.isEmpty()) {
-		    		curSymbol = symbols.get(pos);
-		    		amount.setText(curSymbol + " " + amountString.split(" ")[1]);
-		    		amount.setSelection(amount.length());
-		    	}
-		    }
-		    public void onNothingSelected(AdapterView<?> parent) {}
-		});
 		
 		createExpenseButton = (Button) findViewById(R.id.editExpenseCreateExpenseButton);
 		flagCheckBox = (CheckBox) findViewById(R.id.editExpenseIncompleteCheckBox);
@@ -256,19 +272,26 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 		
 		
 		String title = description.getText().toString();
-		Double money = Double.parseDouble(amount.getText().toString());
+		String sAmount = amount.getText().toString();
+		Double money;
+		
+		if (!sAmount.isEmpty()) {
+			money = Double.parseDouble(sAmount);
+		} else {
+			money = 0.0;
+		}
+	
 		String categorySelection = categorySpinner.getSelectedItem().toString();
 		String currencySelection = currencySpinner.getSelectedItem().toString();
 		
 		expense.setTitle(this, title);
-		expense.setDate(this, dateSelection);
 		expense.setAmount(this, money);
+		expense.setDate(this, dateSelection);
 		expense.setStatus(this, flagStatus);
 		expense.setCategory(this, categorySelection);
 		expense.setCurrency(this, currencySelection);
-		
-		finish();
 	}
+	
 	/**
 	 * On item selected.
 	 *
@@ -291,6 +314,5 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
     public void onNothingSelected(AdapterView<?> parent) {
         // Another interface callback
     }
-
 
 }
