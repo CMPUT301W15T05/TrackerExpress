@@ -5,11 +5,11 @@ import java.util.UUID;
 
 import android.content.Context;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class ExpenseList.
+ * Holds the expenses for a single claim.
  * @author Peter Crinklaw, Randy Hu, Parash Rahman, Jesse Emery, Sean Baergen, Rishi Barnwal
  * @version Part 4
+ * @see Claim, Expense
  */
 public class ExpenseList extends TModel{
 	
@@ -40,7 +40,7 @@ public class ExpenseList extends TModel{
 	}
 
 	/**
-	 * Adds the expense to the expenseList.
+	 * Adds and expense to the expenseList.
 	 *
 	 * @param context Needed for file IO
 	 * @param expense the expense

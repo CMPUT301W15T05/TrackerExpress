@@ -18,9 +18,8 @@ import android.widget.TextView;
 import android.widget.Button;
 import android.widget.AdapterView.OnItemClickListener;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class ExpenseListFragment.
+ * Fragment that displays the expense list.
  * @authors Peter Crinklaw, Randy Hu, Parash Rahman, Jesse Emery, Sean Baergen, Rishi Barnwal
  * @version Part 4
  */

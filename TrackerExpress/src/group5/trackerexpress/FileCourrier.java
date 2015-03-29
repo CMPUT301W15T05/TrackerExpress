@@ -11,9 +11,8 @@ import com.google.gson.Gson;
 
 import android.content.Context;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class FileCourrier.
+ * Stores and retrieves files.
  *
  * @param <T> the generic type
  * @author Peter Crinklaw, Randy Hu, Parash Rahman, Jesse Emery, Sean Baergen, Rishi Barnwal
@@ -21,7 +20,7 @@ import android.content.Context;
  */
 public class FileCourrier<T> {
 	
-	/** The type of the file. */
+	/** The class of the file being stored. */
 	private T type;
 	
 	/**
@@ -54,11 +53,11 @@ public class FileCourrier<T> {
 	/**
 	 * Load file using gson.
 	 *
-	 * @param context the context
+	 * @param context Needed for file IO operations
 	 * @param fileName the file name
-	 * @return the t
+	 * @return the file
 	 * @throws IOException Signals that an I/O exception has occurred.
-	 * @throws FileNotFoundException the file not found exception
+	 * @throws FileNotFoundException
 	 */
 	public T loadFile(Context context, String fileName) throws IOException, FileNotFoundException {		
 

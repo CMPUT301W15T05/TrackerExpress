@@ -24,9 +24,9 @@ import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class EditExpenseActivity.
+ * Allows creation and editing of an expense. Editing is just like creation, except some
+ * of the fields are already filled in.
  * @author Peter Crinklaw, Randy Hu, Parash Rahman, Jesse Emery, Sean Baergen, Rishi Barnwal
  * @version Part 4
  */
@@ -37,7 +37,7 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 	
 	private TextWatcher currencyWatcher;
 	
-	/** The img button. */
+	/** The image button. */
 	private ImageButton imgButton;
 	
 	/** The create expense button. */

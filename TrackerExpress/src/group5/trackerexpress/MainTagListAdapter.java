@@ -10,10 +10,9 @@ import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
-// TODO: Auto-generated Javadoc
 // http://androidcocktail.blogspot.it/2012/04/adding-checkboxes-to-custom-listview-in.html
 /**
- * The Class MainTagListAdapter.
+ * List object for the tag list. Helps keeps the complexity of the tag list fragment class down. 
  * @author Peter Crinklaw, Randy Hu, Parash Rahman, Jesse Emery, Sean Baergen, Rishi Barnwal
  * @version Part 4
  */
@@ -61,7 +60,6 @@ public class MainTagListAdapter extends ArrayAdapter<Tag> {
 	}
 	
 	/**
-	 * 
 	 * Updates the respective listview item in the custom listview
 	 * 
 	 * @param position: index of item

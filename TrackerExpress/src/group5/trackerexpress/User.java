@@ -5,9 +5,8 @@ import java.io.IOException;
 
 import android.content.Context;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class User.
+ * Stores data about the current user. Only a single user may exist on a phone. 
  * @author Peter Crinklaw, Randy Hu, Parash Rahman, Jesse Emery, Sean Baergen, Rishi Barnwal
  * @version Part 4
  */
