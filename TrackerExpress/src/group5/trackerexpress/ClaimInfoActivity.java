@@ -12,9 +12,8 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.util.Log;
 import android.view.Menu;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class ClaimInfoActivity.
+ * Displays information about claims. Contains a fragment for the expense list and the claim property view.
  * @author Peter Crinklaw, Randy Hu, Parash Rahman, Jesse Emery, Sean Baergen, Rishi Barnwal
  * @version Part 4
  */

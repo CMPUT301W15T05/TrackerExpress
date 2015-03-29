@@ -17,9 +17,8 @@ import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.PopupMenu.OnMenuItemClickListener;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class GlobalClaimsFragment.
+ * Fragment that deals with the global claim list, claims submitted by other users.
  * 
  * @author Peter Crinklaw, Randy Hu, Parash Rahman, Jesse Emery, Sean Baergen,
  *         Rishi Barnwal
@@ -27,7 +26,7 @@ import android.widget.PopupMenu.OnMenuItemClickListener;
  */
 public class GlobalClaimsFragment extends Fragment implements TView {
 
-	/** The lv_global_list. */
+	/** The list xml item. */
 	private ListView lv_global_list;
 
 	/** The adapter. */

@@ -4,12 +4,8 @@ import android.annotation.SuppressLint;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-// TODO: Auto-generated Javadoc
-// Simple date object that consists of an integer
-// in the form of DDMMYYYY
+
 /**
- * The Class Date.
- * 
  * The Date object that consists of an integer
  * in the form of DDMMYYYY.
  * 
@@ -30,9 +26,9 @@ public class Date implements Comparable<Date>{
 	/**
 	 * Instantiates a new date.
 	 *
-	 * @param yyyy the yyyy
-	 * @param mm the mm
-	 * @param dd the dd
+	 * @param yyyy the year
+	 * @param mm the month
+	 * @param dd the day
 	 */
 	public Date ( int yyyy, int mm, int dd ){
 		this.dd = dd;

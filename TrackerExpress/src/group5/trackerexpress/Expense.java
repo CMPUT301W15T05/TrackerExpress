@@ -6,17 +6,13 @@ import java.util.UUID;
 import android.content.Context;
 import android.graphics.Bitmap;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class Expense.
+ * An expense item hold data for a signle purchase, as well as a photo and location.
  * @author Peter Crinklaw, Randy Hu, Parash Rahman, Jesse Emery, Sean Baergen, Rishi Barnwal
  * @version Part 4
  */
 public class Expense extends TModel{
 	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	/** The title of the expense. */
@@ -106,7 +102,6 @@ public class Expense extends TModel{
 	 * @return the title
 	 */
 	public String getTitle() {
-		// TODO Auto-generated method stub
 		return title;
 	}
 

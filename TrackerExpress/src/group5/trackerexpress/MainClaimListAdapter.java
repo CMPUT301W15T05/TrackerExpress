@@ -8,9 +8,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class MainClaimListAdapter.
+ * List object for the claim list. Allows lots of information to be displayed in the list.
  * @author Peter Crinklaw, Randy Hu, Parash Rahman, Jesse Emery, Sean Baergen, Rishi Barnwal
  * @version Part 4
  */

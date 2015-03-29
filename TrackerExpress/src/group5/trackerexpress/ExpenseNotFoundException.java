@@ -1,8 +1,7 @@
 package group5.trackerexpress;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class ExpenseNotFoundException.
+ * Thrown if an invalid Uuid is used.
  * @author Peter Crinklaw, Randy Hu, Parash Rahman, Jesse Emery, Sean Baergen, Rishi Barnwal
  * @version Part 4
  */

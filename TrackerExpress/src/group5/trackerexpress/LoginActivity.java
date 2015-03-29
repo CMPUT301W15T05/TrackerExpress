@@ -16,7 +16,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
-// TODO: Auto-generated Javadoc
 /**
  * A login screen that offers login via email/password.
  * @author Peter Crinklaw, Randy Hu, Parash Rahman, Jesse Emery, Sean Baergen, Rishi Barnwal

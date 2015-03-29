@@ -2,9 +2,8 @@ package group5.trackerexpress;
 
 import android.app.Activity;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class Receipt.
+ * Image of a receipt, held by expense objects. Just contains a path to the bitmap. This might be changed. 
  * @author Peter Crinklaw, Randy Hu, Parash Rahman, Jesse Emery, Sean Baergen, Rishi Barnwal
  * @version Part 4
  */

@@ -8,9 +8,8 @@ import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class ActionBarActivity.
+ * Class that is extended by classes that use tab bars.
  * @author Peter Crinklaw, Randy Hu, Parash Rahman, Jesse Emery, Sean Baergen, Rishi Barnwal
  * @version Part 4
  */
