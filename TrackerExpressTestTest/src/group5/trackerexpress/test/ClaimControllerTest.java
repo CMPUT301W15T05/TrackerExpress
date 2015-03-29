@@ -30,7 +30,7 @@ public class ClaimControllerTest extends ActivityInstrumentationTestCase2<MainAc
 	public void testAddExpense() throws ExpenseNotFoundException{
 		Claim claim = new Claim ("Toronto");
 		Expense expense = new Expense ("Supper");
-		claim.addExpense(context, expense);
+		claim.getExpenseList().addExpense(context, expense);
 		assertTrue("Could not add new expense", claim.getExpenseList().getExpense(expense.getUuid()).getTitle().equals("Supper"));
 	}
 
@@ -38,9 +38,9 @@ public class ClaimControllerTest extends ActivityInstrumentationTestCase2<MainAc
 	public void testRemoveExpense() throws ExpenseNotFoundException{
 		Claim claim = new Claim ("Toronto");
 		Expense expense = new Expense ("Supper");
-		claim.addExpense(context, expense);
+		claim.getExpenseList().addExpense(context, expense);
 		int size = claim.getExpenseList().size();
-		claim.removeExpense(context, expense.getUuid());
+		claim.getExpenseList().removeExpense(context, expense.getUuid());
 		assertTrue("Could not remove expense", claim.getExpenseList().size()==size-1);
 	}
 
