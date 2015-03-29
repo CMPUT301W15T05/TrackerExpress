@@ -6,14 +6,15 @@ import group5.trackerexpress.Claim;
 import group5.trackerexpress.ClaimList;
 import group5.trackerexpress.Date;
 import group5.trackerexpress.MainActivity;
+import group5.trackerexpress.TestActivity;
 import android.content.Context;
 import android.test.ActivityInstrumentationTestCase2;
 
-public class ClaimListTest extends ActivityInstrumentationTestCase2<MainActivity> {
+public class ClaimListTest extends ActivityInstrumentationTestCase2<TestActivity> {
 	Context context;
 	
 	public ClaimListTest() {
-		super(MainActivity.class);
+		super(TestActivity.class);
 	}
 
 	protected void setUp() throws Exception {
@@ -32,10 +33,14 @@ public class ClaimListTest extends ActivityInstrumentationTestCase2<MainActivity
 		ClaimList claimList = new ClaimList(context);
 		String claimName = "A Claim";
 		Claim testClaim = new Claim(claimName);
+		int claimListSizeBefore = claimList.size();
 		claimList.addClaim(context, testClaim);
-		assertTrue("Empty claim list", claimList.size()==1);
+		
+		assertTrue("Claim list not right size", 
+				claimList.size() == claimListSizeBefore + 1);
 		assertTrue("Test claim not contained", 
-					testClaim.equals(claimList.getClaim(testClaim.getUuid())));
+					testClaim.getClaimName().equals(
+							claimList.getClaim(testClaim.getUuid()).getClaimName()));
 	}
 	
 	

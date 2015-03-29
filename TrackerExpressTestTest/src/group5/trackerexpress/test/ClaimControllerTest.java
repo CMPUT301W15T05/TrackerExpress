@@ -6,18 +6,19 @@ import group5.trackerexpress.Controller;
 import group5.trackerexpress.Expense;
 import group5.trackerexpress.ExpenseNotFoundException;
 import group5.trackerexpress.MainActivity;
+import group5.trackerexpress.TestActivity;
 import android.app.Instrumentation;
 import android.content.Context;
 import android.test.ActivityInstrumentationTestCase2;
 import android.util.Log;
 
-public class ClaimControllerTest extends ActivityInstrumentationTestCase2<MainActivity> {
+public class ClaimControllerTest extends ActivityInstrumentationTestCase2<TestActivity> {
 
 	Instrumentation instrumentation;
 	Context context;
 	ClaimList claims;
 	public ClaimControllerTest() {
-		super(MainActivity.class);
+		super(TestActivity.class);
 	}
 
 	protected void setUp() throws Exception {

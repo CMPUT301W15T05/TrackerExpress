@@ -10,6 +10,7 @@ import android.test.ActivityInstrumentationTestCase2;
 import group5.trackerexpress.Claim;
 import group5.trackerexpress.ElasticSearchEngine;
 import group5.trackerexpress.MainActivity;
+import group5.trackerexpress.TestActivity;
 import group5.trackerexpress.User;
 import junit.framework.TestCase;
 
@@ -18,13 +19,13 @@ import junit.framework.TestCase;
  * @author crinklaw
  *
  */
-public class ElasticSearchEngineTest extends ActivityInstrumentationTestCase2<MainActivity> {
+public class ElasticSearchEngineTest extends ActivityInstrumentationTestCase2<TestActivity> {
 	
 	/**
 	 * @param activityClass
 	 */
-	public ElasticSearchEngineTest(Class<MainActivity> activityClass) {
-		super(MainActivity.class);
+	public ElasticSearchEngineTest() {
+		super(TestActivity.class);
 	}
 
 

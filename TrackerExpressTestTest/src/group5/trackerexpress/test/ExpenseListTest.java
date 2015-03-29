@@ -6,14 +6,15 @@ import group5.trackerexpress.Expense;
 import group5.trackerexpress.ExpenseList;
 import group5.trackerexpress.ExpenseNotFoundException;
 import group5.trackerexpress.MainActivity;
+import group5.trackerexpress.TestActivity;
 import android.content.Context;
 import android.test.ActivityInstrumentationTestCase2;
 
-public class ExpenseListTest extends ActivityInstrumentationTestCase2<MainActivity> {
+public class ExpenseListTest extends ActivityInstrumentationTestCase2<TestActivity> {
 	Context context;
 	
 	public ExpenseListTest() {
-		super(MainActivity.class);
+		super(TestActivity.class);
 	}
 
 	protected void setUp() throws Exception {

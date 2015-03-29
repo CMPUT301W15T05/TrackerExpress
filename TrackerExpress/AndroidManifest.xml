@@ -49,7 +49,7 @@
             android:name=".ClaimInfoActivity"
             android:label="@string/title_activity_claim_info" >
         </activity>
-        <activity android:name=".DummyTestModels" >
+        <activity android:name=".TestActivity" >
         </activity>
     </application>
 
