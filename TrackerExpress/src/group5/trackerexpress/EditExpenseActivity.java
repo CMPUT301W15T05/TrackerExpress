@@ -104,7 +104,7 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 	    	public void onClick(View v) {
 	    		if (isNewExpense == true){
 	    	    	editExpense(newExpense);
-	    	    	newExpenseList.addExpense(EditExpenseActivity.this, expense);
+	    	    	newExpenseList.addExpense(EditExpenseActivity.this, newExpense);
 	    	    }else{
 	    	    	editExpense(expense);
 	    	    }
