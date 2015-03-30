@@ -242,7 +242,7 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 	}
 	
 	public void status(View v) {
-        //code to check if this checkbox is checked!
+        //code to check if this checkbox is checked
 		flagCheckBox = (CheckBox)v;
         if(flagCheckBox.isChecked()){
         	flagStatus = 1;
