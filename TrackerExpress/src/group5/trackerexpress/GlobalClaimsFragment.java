@@ -16,9 +16,11 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.PopupMenu.OnMenuItemClickListener;
+import android.widget.Toast;
 
 /**
- * Fragment that deals with the global claim list, claims submitted by other users.
+ * Fragment that deals with the global claim list, claims submitted by other
+ * users.
  * 
  * @author Peter Crinklaw, Randy Hu, Parash Rahman, Jesse Emery, Sean Baergen,
  *         Rishi Barnwal
@@ -62,79 +64,117 @@ public class GlobalClaimsFragment extends Fragment implements TView {
 				.findViewById(R.id.lv_global_claims);
 		lv_global_list.setItemsCanFocus(true);
 
-		globalClaims = GetGlobalClaims(); // Placeholder until elastic search implemented
+		globalClaims = GetGlobalClaims(); // Placeholder until elastic search
+											// implemented
+		globalClaims.addView(this);
+		// update(null);
 		final Claim[] arrayGlobalClaims = globalClaims.toList();
 
 		adapter = new MainClaimListAdapter(getActivity(), arrayGlobalClaims);
 		lv_global_list.setAdapter(adapter);
 
-		
 		lv_global_list.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> a, View v,
 					final int position, long arg3) {
+
+				final Claim c = (Claim) lv_global_list.getAdapter().getItem(
+						position);
+
+				final PopupMenu popup = new PopupMenu(getActivity(), v);
+				popup.getMenuInflater().inflate(R.menu.global_claims_popup,
+						popup.getMenu());
 				
-				final Claim c = (Claim)lv_global_list.getAdapter().getItem(position);
-				
-				PopupMenu popup = new PopupMenu(getActivity(), v);
-				popup.getMenuInflater().inflate(R.menu.global_claims_popup, popup.getMenu());
-			
 				popup.setOnMenuItemClickListener(new OnMenuItemClickListener() {
-					
+
 					@Override
 					public boolean onMenuItemClick(MenuItem item) {
 						// TODO Auto-generated method stub
-                    	Intent intent;
-                    	AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                    	String message = "Enter comments";
-                    	final EditText input = new EditText(getActivity());
-                    	builder.setMessage(message);
-                    	builder.setView(input);
-                    	builder.setNegativeButton("Cancel", new OnClickListener() {
-							@Override
-							public void onClick(DialogInterface dialog, int which) {
-								// Do Nothing
-							}
-						});
-                    	
-                        switch(item.getItemId()){
-                        case R.id.op_view_global:
-                        	intent = new Intent( getActivity(), ClaimInfoActivity.class );
-                        	intent.putExtra( "claimUUID",  c.getUuid() );
-                        	startActivity(intent);
-                        	break;
-                        case R.id.op_approve:
-                        	builder.setTitle("Approve Claim");
-                        	builder.setPositiveButton("Approve", new OnClickListener() {
-								
-								@Override
-								public void onClick(DialogInterface dialog, int which) {
-									// TODO Auto-generated method stub
-									c.setComments(input.getText().toString());
-									c.setApprover(Controller.getUser(getActivity()));
-									c.setStatus(getActivity(), Claim.APPROVED);
-									globalClaims.notifyViews(getActivity());
-								}
-							});
-                        	break;
-                        case R.id.op_return:
-                        	builder.setTitle("Return Claim");
-                        	builder.setPositiveButton("Return", new OnClickListener() {
-								
-								@Override
-								public void onClick(DialogInterface dialog, int which) {
-									// TODO Auto-generated method stub
-									c.setComments(input.getText().toString());
-									c.setApprover(Controller.getUser(getActivity()));
-									c.setStatus(getActivity(), Claim.RETURNED);
-									globalClaims.notifyViews(getActivity());
-								}
-							});
-                        	break;
-                        }
-                        
-                        AlertDialog build = builder.create();
-                        build.show();
+						Intent intent;
+						final AlertDialog.Builder builder = new AlertDialog.Builder(
+								getActivity());
+						String message = "Enter comments";
+						final EditText input = new EditText(getActivity());
+						builder.setMessage(message);
+						builder.setView(input);
+						builder.setNegativeButton("Cancel",
+								new OnClickListener() {
+									@Override
+									public void onClick(DialogInterface dialog,
+											int which) {
+										// Do Nothing
+									}
+								});
+
+						switch (item.getItemId()) {
+						case R.id.op_view_global:
+							intent = new Intent(getActivity(),
+									ClaimInfoActivity.class);
+							intent.putExtra("claimUUID", c.getUuid());
+							startActivity(intent);
+							break;
+						case R.id.op_approve:
+							builder.setTitle("Approve Claim");
+							builder.setPositiveButton("Approve",
+									new OnClickListener() {
+
+										@Override
+										public void onClick(
+												DialogInterface dialog,
+												int which) {
+											// TODO Auto-generated method stub
+											if (input.getText().toString()
+													.equals("")) {
+												Toast.makeText(getActivity(),
+														"Comments Required",
+														Toast.LENGTH_LONG)
+														.show();
+											} else {
+												c.setComments(input.getText()
+														.toString());
+												c.setApprover(Controller
+														.getUser(getActivity()));
+												c.setStatus(getActivity(),
+														Claim.APPROVED);
+												globalClaims
+														.notifyViews(getActivity());
+											}
+										}
+									});
+							break;
+						case R.id.op_return:
+							builder.setTitle("Return Claim");
+							builder.setPositiveButton("Return",
+									new OnClickListener() {
+
+										@Override
+										public void onClick(
+												DialogInterface dialog,
+												int which) {
+											// TODO Auto-generated method stub
+											if (input.getText().toString()
+													.equals("")) {
+												Toast.makeText(getActivity(),
+														"Comments Required",
+														Toast.LENGTH_LONG)
+														.show();
+											} else {
+												c.setComments(input.getText()
+														.toString());
+												c.setApprover(Controller
+														.getUser(getActivity()));
+												c.setStatus(getActivity(),
+														Claim.RETURNED);
+												globalClaims
+														.notifyViews(getActivity());
+											}
+										}
+									});
+							break;
+						}
+
+						AlertDialog build = builder.create();
+						build.show();
 						return false;
 					}
 				});
@@ -160,7 +200,13 @@ public class GlobalClaimsFragment extends Fragment implements TView {
 	@Override
 	public void update(TModel model) {
 		// TODO Auto-generated method stub
-
+		ClaimList claims = Controller.getClaimList(getActivity());
+		if (claims == null) {
+			claims = new ClaimList(getActivity());
+		}
+		GlobalClaimsListAdapter a = new GlobalClaimsListAdapter(getActivity(),
+				claims.toList());
+		lv_global_list.setAdapter(a);
 	}
-	
+
 }
