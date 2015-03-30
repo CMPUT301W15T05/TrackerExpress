@@ -133,7 +133,13 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 		categoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); //specify layout to use when list of choices appears
 		categorySpinner.setAdapter(categoryAdapter);
 		
-
+		currencySpinner = (Spinner) findViewById(R.id.editExpenseCurrencySpinner);
+		ArrayAdapter<CharSequence> currencyAdapter = ArrayAdapter.createFromResource 
+				(this, R.array.currency_array, android.R.layout.simple_spinner_item); //create array adapter using string array and default spinner layout
+		currencyAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); //specify layout to use when list of choices appears
+		currencySpinner.setAdapter(currencyAdapter);
+		
+		/*
 		final ArrayList<String> symbols = new ArrayList<String>();
 		final String[] currencies = getResources().getStringArray(R.array.currency_array);
 		String[] splitCurrency;
@@ -182,7 +188,7 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 		    }
 		    public void onNothingSelected(AdapterView<?> parent) {}
 		});
-		
+		*/
 		createExpenseButton = (Button) findViewById(R.id.editExpenseCreateExpenseButton);
 		flagCheckBox = (CheckBox) findViewById(R.id.editExpenseIncompleteCheckBox);
 	}
