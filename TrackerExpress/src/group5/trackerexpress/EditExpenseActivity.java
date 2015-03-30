@@ -260,8 +260,8 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 		String categorySelection = categorySpinner.getSelectedItem().toString();
 		String currencySelection = currencySpinner.getSelectedItem().toString();
 		
-		expense.setTitle(this, title);
 		expense.setDate(this, dateSelection);
+		expense.setTitle(this, title);
 		expense.setAmount(this, money);
 		expense.setStatus(this, flagStatus);
 		expense.setCategory(this, categorySelection);
