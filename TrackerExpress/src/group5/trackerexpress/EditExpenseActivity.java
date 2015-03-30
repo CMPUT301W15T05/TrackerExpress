@@ -256,13 +256,23 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 		
 		
 		String title = description.getText().toString();
+		if (title == null){
+			expense.setTitle(this, "No title entered");
+		}else{
+			expense.setTitle(this, title);
+		}
+		
 		Double money = Double.parseDouble(amount.getText().toString());
+		if (money == null){
+			expense.setAmount(this, null);
+		}else{
+			expense.setAmount(this, money);
+		}
+		
 		String categorySelection = categorySpinner.getSelectedItem().toString();
 		String currencySelection = currencySpinner.getSelectedItem().toString();
 		
 		expense.setDate(this, dateSelection);
-		expense.setTitle(this, title);
-		expense.setAmount(this, money);
 		expense.setStatus(this, flagStatus);
 		expense.setCategory(this, categorySelection);
 		expense.setCurrency(this, currencySelection);
