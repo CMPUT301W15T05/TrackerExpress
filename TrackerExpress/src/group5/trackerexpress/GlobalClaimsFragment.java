@@ -31,9 +31,6 @@ public class GlobalClaimsFragment extends Fragment implements TView {
 	/** The list xml item. */
 	private ListView lv_global_list;
 
-	/** The adapter. */
-	private MainClaimListAdapter adapter;
-
 	private ClaimList globalClaims;
 
 	// Menu items to hide when selecting an option on a claim
@@ -67,11 +64,10 @@ public class GlobalClaimsFragment extends Fragment implements TView {
 		globalClaims = GetGlobalClaims(); // Placeholder until elastic search
 											// implemented
 		globalClaims.addView(this);
-		// update(null);
+		
+		update(null);
+		
 		final Claim[] arrayGlobalClaims = globalClaims.toList();
-
-		adapter = new MainClaimListAdapter(getActivity(), arrayGlobalClaims);
-		lv_global_list.setAdapter(adapter);
 
 		lv_global_list.setOnItemClickListener(new OnItemClickListener() {
 			@Override

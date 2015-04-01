@@ -387,9 +387,7 @@ public class Claim extends TModel implements Comparable<Claim>{
 		for ( UUID u : toRemove ){
 			tagIds.remove(u);
 		}
-		
-		notifyViews(context);
-		
+				
 		// Then returns the new list of tag ids
 		return tagIds;
 	}

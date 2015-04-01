@@ -15,6 +15,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.PopupMenu;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
@@ -30,14 +31,14 @@ public class MyClaimsFragment extends Fragment implements TView {
 	
 	/** The button to Add Claim */
 	private Button b_add_claim;
-
-	// Menu items to hide when selecting an option on a claim
-	/** The Constant submittedOrApprovedHiddenItems. */
+	
+	/** The textview that shows if the internet is disconnected **/
+	private TextView tv_has_internet;
+	
+	/** The menu items to hide in the options menu for clicked claims. */
 	private static final int[] submittedOrApprovedHiddenItems = {R.id.op_edit_claim, R.id.op_submit_claim};
 	
-	/**
-	 * Instantiates a new my claims fragment.
-	 */
+	/** Empty fragment constructor. */
 	public MyClaimsFragment() {
 	}
 	
@@ -55,10 +56,11 @@ public class MyClaimsFragment extends Fragment implements TView {
 		lv_claim_list = (ListView) rootView.findViewById(R.id.lv_my_claims);
 		lv_claim_list.setItemsCanFocus(true);
 		b_add_claim = (Button) rootView.findViewById(R.id.b_add_claim);
-
-
+		tv_has_internet = (TextView) rootView.findViewById(R.id.tv_internet_status);
+		
 		update(null);
 		Controller.getClaimList(getActivity()).addView(this);
+		NetworkStateReceiver.addView(this);
 		
 		b_add_claim.setOnClickListener(new Button.OnClickListener(){
 			@Override
@@ -159,41 +161,23 @@ public class MyClaimsFragment extends Fragment implements TView {
 	 **/
 	@Override
 	public void update(TModel model) {
-		Log.i("myMessage", "I have arrived");
 		// TODO Auto-generated method stub
-		Claim[] listOfClaims = Controller.getClaimList(getActivity()).toList();		
-		ArrayList<Claim> filteredClaims = new ArrayList<Claim>();
 
-		ArrayList<Tag> listOfTags = Controller.getTagMap(getActivity()).toList();
-		ArrayList<Tag> filterTags = new ArrayList<Tag>();
-		
-		for ( Tag t : listOfTags ){
-			if ( t.isSelected() ){
-				filterTags.add(t);
-			}
-		}
 		MainClaimListAdapter adapter;
-		
-		// If all the tags are selected
-		if ( filterTags.size() == listOfTags.size() ) {
-			// Do not filter out anything
-			// Even those without tags
-			adapter = new MainClaimListAdapter(getActivity(), 
-					listOfClaims);
-		} else {	
-			for ( Claim c : listOfClaims ){
-				ArrayList<UUID> tempTags = c.getTagsIds(getActivity());
-				for ( Tag t : filterTags ){
-					if ( tempTags.contains(t.getUuid()) ){
-						filteredClaims.add(c);
-						break;
-					}
-				}
-			}
-			adapter= new MainClaimListAdapter(getActivity(), 
-					filteredClaims.toArray(new Claim[filteredClaims.size()]));
-		}
+		Claim[] listOfClaims = Controller.getFilteredClaims(getActivity());
+
+		adapter= new MainClaimListAdapter(getActivity(), listOfClaims);
+
 		
 		lv_claim_list.setAdapter(adapter);
+		
+		// Update internet status
+		if ( Controller.isInternetConnected(getActivity()) ){
+			tv_has_internet.setVisibility(View.GONE);
+		} else {
+			tv_has_internet.setVisibility(View.VISIBLE);
+		}
+		
 	}
+	
 }
