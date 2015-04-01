@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
@@ -56,6 +57,7 @@ public class ExpenseListFragment extends Fragment implements TView {
 				container, false);
 		
 		TextView title = (TextView) rootView.findViewById(R.id.tv_expense_list_title);
+		ImageView receiptView = (ImageView) rootView.findViewById(R.id.iv_expense_receipt); 
 		
 		// Fragment's views
 		lv_expense_list = (ListView) rootView.findViewById(R.id.lv_my_expenses);

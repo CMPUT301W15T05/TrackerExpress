@@ -7,6 +7,9 @@ import java.util.UUID;
 
 import android.app.DialogFragment;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -213,7 +216,7 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 	 * Take a photo.
 	 */
 	public void takeAPhoto() {
-		String folder = Environment.getExternalStorageDirectory().getAbsolutePath() + "/tmp";
+		String folder = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Tracker Express";
 		File folderF = new File(folder);
 		if (!folderF.exists()) {
 			folderF.mkdir();
@@ -269,20 +272,19 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 		}
 		
 		Double money = Double.parseDouble(amount.getText().toString());
-		if (money == null){
-			expense.setAmount(this, null);
-		}else{
-			expense.setAmount(this, money);
-		}
-		
 		String categorySelection = categorySpinner.getSelectedItem().toString();
 		String currencySelection = currencySpinner.getSelectedItem().toString();
 		
+		BitmapDrawable photo = (BitmapDrawable) imgButton.getDrawable();
+		Bitmap receipt = photo.getBitmap();
+	
+		expense.setAmount(this, money);
+		expense.setBitmap(this, receipt);
 		expense.setDate(this, dateSelection);
 		expense.setStatus(this, flagStatus);
 		expense.setCategory(this, categorySelection);
 		expense.setCurrency(this, currencySelection);
-		
+		Toast.makeText(EditExpenseActivity.this, "Your total is " + expense.getAmount(), Toast.LENGTH_SHORT).show();
 		finish();
 	}
 	/**

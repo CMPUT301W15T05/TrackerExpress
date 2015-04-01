@@ -202,7 +202,9 @@ public class Expense extends TModel{
 	 * @param context
 	 * @param bitmap
 	 */
-	public void setBitmap(Context context, Bitmap bitmap){
+
+	public void setBitmap(Context context, Bitmap receipt) {
+		// TODO Auto-generated method stub
 		this.bitmap = bitmap;
 		notifyViews(context);
 	}

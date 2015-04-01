@@ -7,6 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 /**
@@ -48,6 +50,9 @@ public class ExpenseListAdapter extends ArrayAdapter<Expense> {
 		
 		/** The amount. */
 		public TextView amount;
+		
+		/** The receipt. */
+		public ImageView receipt;
 	}
 	
 	/* (non-Javadoc)
@@ -66,6 +71,7 @@ public class ExpenseListAdapter extends ArrayAdapter<Expense> {
 			holder.date = (TextView) v.findViewById(R.id.tv_expense_date);
 			holder.category = (TextView) v.findViewById(R.id.tv_expense_list_category);
 			holder.amount = (TextView) v.findViewById(R.id.tv_expense_list_amount);
+			holder.receipt = (ImageView) v.findViewById(R.id.iv_expense_receipt);
 
 			v.setTag(holder);
 		} else {
@@ -75,11 +81,14 @@ public class ExpenseListAdapter extends ArrayAdapter<Expense> {
 		Expense e = expenseList.get(position);
 		holder.expenseTitle.setText(e.getTitle());
 		
+		String amountSpent = String.valueOf(e.getAmount());
+		
 		if (e.getDate() != null) {
 			holder.date.setText(e.getDate().getShortString());
 		}
 		holder.category.setText(e.getCategory());
-		holder.amount.setText(e.getCurrency());
+		holder.amount.setText(amountSpent + " " + e.getCurrency());
+		holder.receipt.setImageBitmap(e.getBitmap());
 		//holder.tags.setText(text);
 		
 		return v;
