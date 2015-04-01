@@ -51,6 +51,9 @@ public class ExpenseListAdapter extends ArrayAdapter<Expense> {
 		/** The amount. */
 		public TextView amount;
 		
+		/** The status. */
+		public TextView status;
+		
 		/** The receipt. */
 		public ImageView receipt;
 	}
@@ -72,6 +75,7 @@ public class ExpenseListAdapter extends ArrayAdapter<Expense> {
 			holder.category = (TextView) v.findViewById(R.id.tv_expense_list_category);
 			holder.amount = (TextView) v.findViewById(R.id.tv_expense_list_amount);
 			holder.receipt = (ImageView) v.findViewById(R.id.iv_expense_receipt);
+			holder.status = (TextView) v.findViewById(R.id.tv_expense_list_status);
 
 			v.setTag(holder);
 		} else {
@@ -81,13 +85,20 @@ public class ExpenseListAdapter extends ArrayAdapter<Expense> {
 		Expense e = expenseList.get(position);
 		holder.expenseTitle.setText(e.getTitle());
 		
-		String amountSpent = String.valueOf(e.getAmount());
+		if(e.isComplete()){
+			holder.status.setText("");
+		}else{
+			holder.status.setText("INCOMPLETE");
+		}
 		
 		if (e.getDate() != null) {
 			holder.date.setText(e.getDate().getShortString());
 		}
-		holder.category.setText(e.getCategory());
+		
+		String amountSpent = String.valueOf(e.getAmount());
 		holder.amount.setText(amountSpent + " " + e.getCurrency());
+		
+		holder.category.setText(e.getCategory());
 		holder.receipt.setImageBitmap(e.getBitmap());
 		//holder.tags.setText(text);
 		

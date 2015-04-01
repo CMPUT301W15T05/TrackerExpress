@@ -37,7 +37,7 @@ public class Expense extends TModel{
 	private Bitmap bitmap;
 
 	/** The status of the expense (incompleteness). */
-	private int status; 
+	private boolean complete; 
 	
 	/**
 	 * Instantiates a new expense.
@@ -61,8 +61,8 @@ public class Expense extends TModel{
 	 *
 	 * @return the status
 	 */
-	public int getStatus() {
-		return status;
+	public boolean isComplete() {
+		return complete;
 	}
 
 	/**
@@ -71,8 +71,8 @@ public class Expense extends TModel{
 	 * @param context Needed for file IO
 	 * @param status the status
 	 */
-	public void setStatus(Context context, int status) {
-		this.status = status;
+	public void setComplete(Context context, boolean complete) {
+		this.complete = complete;
 		notifyViews(context);
 	}
 
