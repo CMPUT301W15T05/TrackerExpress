@@ -70,7 +70,6 @@ public class ExpenseListFragment extends Fragment implements TView {
 		b_add_expense = (Button) rootView.findViewById(R.id.b_add_expense);
 		
 		b_add_expense.setOnClickListener(new Button.OnClickListener(){
-
 			@Override
 			public void onClick(View v) {
 				Expense exp = new Expense();

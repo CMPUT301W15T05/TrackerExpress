@@ -5,7 +5,9 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.UUID;
 
+import android.app.AlertDialog;
 import android.app.DialogFragment;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -17,11 +19,14 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
@@ -44,22 +49,25 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 	private ImageButton imgButton;
 	
 	/** The create expense button. */
-	private Button createExpenseButton, dateButton;
+	private Button cancelExpenseButton, createExpenseButton, dateButton;
 
 	/** The description, amount. */
 	private EditText description, amount;
 	
 	/** The status checkbox. */
-	private CheckBox flagCheckBox;
+	private CheckBox statusCheckBox;
 	
 	/** The status flag. */
-	private int flagStatus;
+	private boolean complete;
 	
 	/** The receipt uri. */
 	private Uri receiptUri;
 	
 	/** The date from the DatePicker*/
 	private Date dateSelection;
+	
+	/** The Claim UUID and the Expense UUID. */
+	private UUID claimId, expenseId;
 	
 	private String curSymbol = null;
 
@@ -77,8 +85,8 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 		final Intent intent = this.getIntent();
 	    final boolean isNewExpense = (boolean) intent.getBooleanExtra("isNewExpense", true);
 		
-	    UUID claimId = (UUID)intent.getSerializableExtra("claimUUID");
-	    UUID expenseId = (UUID)intent.getSerializableExtra("expenseUUID");
+	    claimId = (UUID)intent.getSerializableExtra("claimUUID");
+	    expenseId = (UUID)intent.getSerializableExtra("expenseUUID");
 	    final Expense expense = Controller.getExpense(EditExpenseActivity.this, claimId, expenseId);
 	    final Claim claim = Controller.getClaim(this, claimId);
 	    final ExpenseList newExpenseList = claim.getExpenseList();
@@ -101,10 +109,19 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 	    		takeAPhoto();
 		    }
 		});
-	   
+	
+	    
+	  //the cancel expense button
+	    cancelExpenseButton.setOnClickListener(new Button.OnClickListener(){
+	    	public void onClick(View v) {
+	    		cancelCheck();
+		    }
+		});
+	    
 	    //the create expense button
 	    createExpenseButton.setOnClickListener(new Button.OnClickListener(){
 	    	public void onClick(View v) {
+	    		Toast.makeText(EditExpenseActivity.this, "Updating", Toast.LENGTH_SHORT). show();
 	    		if (isNewExpense == true){
 	    	    	editExpense(newExpense);
 	    	    	newExpenseList.addExpense(EditExpenseActivity.this, newExpense);
@@ -192,8 +209,10 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 		    public void onNothingSelected(AdapterView<?> parent) {}
 		});
 		*/
+		statusCheckBox = (CheckBox) findViewById(R.id.editExpenseIncompleteCheckBox);
+		cancelExpenseButton = (Button) findViewById(R.id.editExpenseCancelExpenseButton);
 		createExpenseButton = (Button) findViewById(R.id.editExpenseCreateExpenseButton);
-		flagCheckBox = (CheckBox) findViewById(R.id.editExpenseIncompleteCheckBox);
+		
 	}
 	
 	public void showDatePickerDialog(View v) {
@@ -250,41 +269,38 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 		}
 	}
 	
-	public void status(View v) {
-        //code to check if this checkbox is checked
-		flagCheckBox = (CheckBox)v;
-        if(flagCheckBox.isChecked()){
-        	flagStatus = 1;
-        }else{
-        	flagStatus = 0;
-        }
-    }
-
     
-	private void editExpense(final Expense expense) {
+	public void editExpense(final Expense expense) {
 		
 		
 		String title = description.getText().toString();
-		if (title == null){
-			expense.setTitle(this, "No title entered");
-		}else{
-			expense.setTitle(this, title);
-		}
-		
+	
+		expense.setTitle(this, title);
+	
 		Double money = Double.parseDouble(amount.getText().toString());
+		
+		expense.setAmount(this, money);
+			
+		
+		
 		String categorySelection = categorySpinner.getSelectedItem().toString();
 		String currencySelection = currencySpinner.getSelectedItem().toString();
 		
 		BitmapDrawable photo = (BitmapDrawable) imgButton.getDrawable();
 		Bitmap receipt = photo.getBitmap();
 	
-		expense.setAmount(this, money);
+		if(statusCheckBox.isChecked()){
+			complete = false;
+		}else{
+			complete = true;
+		}
+		
+		expense.setComplete(this, complete);
 		expense.setBitmap(this, receipt);
 		expense.setDate(this, dateSelection);
-		expense.setStatus(this, flagStatus);
 		expense.setCategory(this, categorySelection);
 		expense.setCurrency(this, currencySelection);
-		Toast.makeText(EditExpenseActivity.this, "Your total is " + expense.getAmount(), Toast.LENGTH_SHORT).show();
+			
 		finish();
 	}
 	/**
@@ -309,6 +325,48 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
     public void onNothingSelected(AdapterView<?> parent) {
         // Another interface callback
     }
+    
+    /**
+	 * Cancelcheck.
+	 */
+	public void cancelCheck(){
+		AlertDialog.Builder helperBuilder = new AlertDialog.Builder(EditExpenseActivity.this);
+		helperBuilder.setCancelable(false);
+		helperBuilder.setTitle("Warning");
+		helperBuilder.setMessage("Are you sure you want to exit before saving?");
+		helperBuilder.setPositiveButton("Proceed", new DialogInterface.OnClickListener(){
+			
+			/** make Cancel button clickable
+			 * @see android.content.DialogInterface.OnClickListener#onClick(android.content.DialogInterface, int)
+			 */
+			public void onClick(DialogInterface dialog, int which){
+								
+				Toast.makeText(EditExpenseActivity.this, "Canceling", Toast.LENGTH_SHORT). show();
+				finish();
+				}
+			});
+						
+		helperBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener(){
+						
+			/** Do Nothing, return to EditClaimActivity
+			 * @see android.content.DialogInterface.OnClickListener#onClick(android.content.DialogInterface, int)
+			 */
+			@Override
+			public void onClick(DialogInterface dialog, int which){
+								
+				}
+			});
+		AlertDialog helpDialog = helperBuilder.create();
+		helpDialog.show();
+	}
+	
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+	    if (keyCode == KeyEvent.KEYCODE_BACK) {
+	        //do your stuff
+	    	cancelCheck();
+	    }
+	    return super.onKeyDown(keyCode, event);
+	}
 
 
 }
