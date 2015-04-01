@@ -126,10 +126,6 @@ public class MainClaimListAdapter extends ArrayAdapter<Claim> {
 			break;
 		}
 		
-		if ( c.getTagsIds() == null ){
-			Log.i("myMessage", "SuckMaFriends");
-		}
-		
 		holder.tags.setText("Tags: " + c.toStringTags(context));
 		
 		if ( c.getStartDate() != null ){

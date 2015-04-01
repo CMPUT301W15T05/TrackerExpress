@@ -106,7 +106,7 @@ public class ViewClaimFragment extends Fragment implements TView {
 		}
 		
 		// TODO: Inserting tags
-		ArrayList<UUID> tagList = claim.getTagsIds();
+		ArrayList<UUID> tagList = claim.getTagsIds(getActivity());
 		
 		
 		if (tagList != null && tagList.size() > 0) {
