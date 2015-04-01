@@ -10,14 +10,19 @@ import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.UUID;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -76,6 +81,14 @@ public class ElasticSearchEngine {
 			}
 			//searchRequest.getEntity().consumeContent();
 
+			//return in reverse sorted order:
+			Collections.sort(claims, new Comparator<Claim>(){
+				@Override
+				public int compare(Claim arg0, Claim arg1) {
+					return -1 * arg0.getStartDate().compareTo(arg1.getStartDate());
+				}
+			});
+			
 			return claims;
 			
 		} catch(IOException e){
@@ -129,6 +142,60 @@ public class ElasticSearchEngine {
 			e.printStackTrace();
 		}
 	}		
+	
+	
+	
+	
+	public void deleteClaim(UUID id){
+		try {
+		HttpDelete httpDelete = new HttpDelete(HTTP_PATH + id);
+		httpDelete.addHeader("Accept","application/json");
+
+		HttpResponse response = httpclient.execute(httpDelete);
+
+		String status = response.getStatusLine().toString();
+		System.out.println(status);
+
+		HttpEntity entity = response.getEntity();
+		BufferedReader br = new BufferedReader(new InputStreamReader(entity.getContent()));
+		String output;
+		System.err.println("Output from Server -> ");
+		while ((output = br.readLine()) != null) {
+			System.err.println(output);
+		}
+		entity.consumeContent();
+
+//		httpDelete.releaseConnection();
+		
+		}
+		catch (IOException e){
+			throw new RuntimeException();
+		}
+	}	
+	
+	public void approveClaim(UUID id){
+		try {
+			HttpPost updateRequest = new HttpPost(HTTP_PATH + id + "/_update");
+			String query = 	"{\"script\" : \"ctx._source.status = " + Claim.APPROVED + "}";
+			StringEntity stringentity = new StringEntity(query);
+
+			updateRequest.setHeader("Accept","application/json");
+			updateRequest.setEntity(stringentity);
+
+			HttpResponse response = httpclient.execute(updateRequest);
+			String status = response.getStatusLine().toString();
+			System.out.println(status);
+
+			String json = getEntityContent(response);
+			//		updateRequest.releaseConnection();
+		}
+		catch(IOException E){
+			throw new RuntimeException();
+		}
+	}	
+	
+	
+	
 	
 	
 	/**
