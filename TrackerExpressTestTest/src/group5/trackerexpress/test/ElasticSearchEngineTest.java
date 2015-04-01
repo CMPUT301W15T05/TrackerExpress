@@ -39,6 +39,9 @@ public class ElasticSearchEngineTest extends ActivityInstrumentationTestCase2<Te
 
 	
 	private ElasticSearchEngine elasticSearchEngine = new ElasticSearchEngine();
+	private Claim claim;
+	private User user;
+	private UUID id;
 	
 	/**
 	 * @param activityClass
@@ -48,26 +51,71 @@ public class ElasticSearchEngineTest extends ActivityInstrumentationTestCase2<Te
 	}
 
 	public void setup(){
-		
+		claim = new Claim("Name");
+		user = new User(getActivity());
+		user.setEmail(getActivity(), "foo@example.com");
+		user.setName(getActivity(), "Foo Bar");
 	}
 
 
 	public void testSubmitAndGet(){
-		Claim claim = new Claim("Name");
-		User user = new User(getActivity());
-		user.setEmail(getActivity(), "foo@example.com");
-		user.setName(getActivity(), "Foo Bar");
 
-		UUID id = claim.getUuid();
+
 		elasticSearchEngine.submitClaim(claim);
 
 		try {
-			Thread.sleep(2000);                 //1000 milliseconds is one second.
+			Thread.sleep(2000);
 		} catch(InterruptedException ex) {
 			Thread.currentThread().interrupt();
 		}
 
 		ArrayList<Claim> claims = elasticSearchEngine.getClaims();
 		assertTrue(claims.get(0).getClaimName().equals("Name"));
+		
+		elasticSearchEngine.deleteClaim(claim.getUuid());
+	}
+	
+	public void testDelete(){
+
+		ArrayList<Claim> claims = elasticSearchEngine.getClaims();
+		int sizeBefore = claims.size();
+		
+		elasticSearchEngine.submitClaim(claim);
+
+		try {
+			Thread.sleep(2000);
+		} catch(InterruptedException ex) {
+			Thread.currentThread().interrupt();
+		}
+
+		elasticSearchEngine.deleteClaim(claim.getUuid());
+		
+		claims = elasticSearchEngine.getClaims();
+		assertEquals(claims.size(), sizeBefore);
+	}
+	
+	
+	public void testApprove(){
+		elasticSearchEngine.submitClaim(claim);
+
+		try {
+			Thread.sleep(2000);
+		} catch(InterruptedException ex) {
+			Thread.currentThread().interrupt();
+		}
+
+		elasticSearchEngine.approveClaim(claim.getUuid());
+
+		ArrayList<Claim> claims = elasticSearchEngine.getClaims();
+
+		for (Claim claimElement : claims){
+			if (claimElement.getUuid() == claim.getUuid()){
+				assertEquals("Claim status was not chagned to approved.", claimElement.getStatus(), Claim.APPROVED);
+				elasticSearchEngine.deleteClaim(claim.getUuid());
+				return;
+			}
+		}
+		
+		fail("Claim couldn't be added or retrived.");
 	}
 }
