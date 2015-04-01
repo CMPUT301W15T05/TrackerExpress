@@ -76,10 +76,19 @@ public class TagMap extends TModel{
 	}
 	
 	
+	/** Checks if the tag exist 
+	 * 
+	 * @param id of the tag
+	 * @return boolean of whether the tag is in the TagMap
+	 */
+	public boolean contains(UUID id){
+		return tags.containsKey(id);			
+	}
+	
 	/**
 	 * Gets the tag.
 	 *
-	 * @param id the id
+	 * @param id of the id
 	 * @return the tag
 	 */
 	public Tag getTag(UUID id){

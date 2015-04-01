@@ -182,7 +182,7 @@ public class MyClaimsFragment extends Fragment implements TView {
 					listOfClaims);
 		} else {	
 			for ( Claim c : listOfClaims ){
-				ArrayList<UUID> tempTags = c.getTagsIds();
+				ArrayList<UUID> tempTags = c.getTagsIds(getActivity());
 				for ( Tag t : filterTags ){
 					if ( tempTags.contains(t.getUuid()) ){
 						filteredClaims.add(c);

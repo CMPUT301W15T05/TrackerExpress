@@ -112,9 +112,6 @@ public class GlobalClaimsListAdapter extends ArrayAdapter<Claim> {
 			break;
 		}
 		
-		if ( c.getTagsIds() == null ){
-			Log.i("myMessage", "SuckMaFriends");
-		}
 		c.setuserName(getContext(), "Sean"); // For testing
 		holder.user.setText("User: " + c.getuserName());
 		

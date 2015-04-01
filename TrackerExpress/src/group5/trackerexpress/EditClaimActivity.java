@@ -805,7 +805,7 @@ public class EditClaimActivity extends EditableActivity {
 		claim.setDescription(this, Descrip);
 		
 		for (Tag tag: tagsOfClaim)
-			claim.getTagsIds().add(tag.getUuid());
+			claim.getTagsIds(this).add(tag.getUuid());
 
 		
 		Controller.getClaimList(this).addClaim(this, claim);		

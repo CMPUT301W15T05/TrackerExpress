@@ -200,8 +200,6 @@ public class Claim extends TModel implements Comparable<Claim>{
 		this.claimName = claimName;
 		notifyViews(context);
 	}
-	
-
 
 	/**
 	 * Gets the expense list.
@@ -223,8 +221,6 @@ public class Claim extends TModel implements Comparable<Claim>{
 		this.expenseList = expenseList;
 		notifyViews(context);
 	}
-	
-
 
 	/**
 	 * Sets the start date.
@@ -378,7 +374,23 @@ public class Claim extends TModel implements Comparable<Claim>{
 	 * 
 	 * @return the list of tag Ids
 	 */
-	public ArrayList<UUID> getTagsIds() {
+	public ArrayList<UUID> getTagsIds(Context context) {
+		
+		// First removes tags that no longer exist
+		TagMap tm = Controller.getTagMap(context);
+		ArrayList<UUID> toRemove = new ArrayList<UUID>();
+		for ( UUID u : tagIds ){
+			if ( ! tm.contains(u)){
+				toRemove.add(u);
+			}
+		}
+		for ( UUID u : toRemove ){
+			tagIds.remove(u);
+		}
+		
+		notifyViews(context);
+		
+		// Then returns the new list of tag ids
 		return tagIds;
 	}
 	
@@ -390,13 +402,14 @@ public class Claim extends TModel implements Comparable<Claim>{
 	public String toStringTags(Context context){
 		String stringTags = "";
 		TagMap tm = Controller.getTagMap(context);
+		ArrayList<UUID> tagUuids = getTagsIds(context);
 		
-		for ( int i = 0; i < tagIds.size() - 1; i++ ) {
-			stringTags += tm.getTag(tagIds.get(i)).toString() + ", "; 
+		for ( int i = 0; i < tagUuids.size() - 1; i++ ) {
+			stringTags += tm.getTag(tagUuids.get(i)).toString() + ", "; 
 		}
 		
-		if ( tagIds.size() > 0 ){
-			stringTags += tm.getTag(tagIds.get(tagIds.size() - 1)).toString();
+		if ( tagUuids.size() > 0 ){
+			stringTags += tm.getTag(tagUuids.get(tagUuids.size() - 1)).toString();
 		}
 		
 		return stringTags;
