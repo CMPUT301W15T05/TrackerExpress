@@ -120,8 +120,6 @@ public class MyClaimsFragment extends Fragment implements TView {
                         	break;
                         default: break;
                         }
-
-                        //update(null);
                         
                         return true;
                     }

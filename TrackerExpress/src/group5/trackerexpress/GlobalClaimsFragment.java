@@ -6,6 +6,7 @@ import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,8 +31,6 @@ public class GlobalClaimsFragment extends Fragment implements TView {
 
 	/** The list xml item. */
 	private ListView lv_global_list;
-
-	private ClaimList globalClaims;
 
 	// Menu items to hide when selecting an option on a claim
 	/** The Constant submittedOrApprovedHiddenItems. */
@@ -60,15 +59,9 @@ public class GlobalClaimsFragment extends Fragment implements TView {
 		lv_global_list = (ListView) rootView
 				.findViewById(R.id.lv_global_claims);
 		lv_global_list.setItemsCanFocus(true);
-
-		globalClaims = GetGlobalClaims(); // Placeholder until elastic search
-											// implemented
-		globalClaims.addView(this);
 		
 		update(null);
 		
-		final Claim[] arrayGlobalClaims = globalClaims.toList();
-
 		lv_global_list.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> a, View v,
@@ -132,8 +125,6 @@ public class GlobalClaimsFragment extends Fragment implements TView {
 														.getUser(getActivity()));
 												c.setStatus(getActivity(),
 														Claim.APPROVED);
-												globalClaims
-														.notifyViews(getActivity());
 											}
 										}
 									});
@@ -161,8 +152,6 @@ public class GlobalClaimsFragment extends Fragment implements TView {
 														.getUser(getActivity()));
 												c.setStatus(getActivity(),
 														Claim.RETURNED);
-												globalClaims
-														.notifyViews(getActivity());
 											}
 										}
 									});
@@ -181,7 +170,7 @@ public class GlobalClaimsFragment extends Fragment implements TView {
 	}
 
 	// Creates Dummy ClaimList for testing
-	private ClaimList GetGlobalClaims() {
+	private ClaimList getGlobalClaims() {
 		// TODO Auto-generated method stub
 		final ClaimList listOfClaims = Controller.getClaimList(getActivity());
 		return listOfClaims;
@@ -190,12 +179,12 @@ public class GlobalClaimsFragment extends Fragment implements TView {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see group5.trackerexpress.TView#update(group5.trackerexpress.TModel)
 	 */
-
 	@Override
 	public void update(TModel model) {
 		// TODO Auto-generated method stub
+		Log.i("myMessage", "What is up San Fransisco?");
+		
 		ClaimList claims = Controller.getClaimList(getActivity());
 		if (claims == null) {
 			claims = new ClaimList(getActivity());

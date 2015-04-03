@@ -38,7 +38,7 @@ import junit.framework.TestCase;
 public class ElasticSearchEngineTest extends ActivityInstrumentationTestCase2<TestActivity> {
 
 	
-	private ElasticSearchEngine elasticSearchEngine = new ElasticSearchEngine();
+	private ElasticSearchEngine elasticSearchEngine;
 	private Claim claim;
 	private User user;
 	private UUID id;
@@ -51,6 +51,7 @@ public class ElasticSearchEngineTest extends ActivityInstrumentationTestCase2<Te
 	}
 
 	public void setup(){
+		elasticSearchEngine = new ElasticSearchEngine();
 		claim = new Claim("Name");
 		user = new User(getActivity());
 		user.setEmail(getActivity(), "foo@example.com");
