@@ -25,7 +25,7 @@ public class ElasticSearchEngine {
 				try {
 					claims[0] = elasicSearchEngineUnthreaded.getClaims();
 				} catch (Exception e) {
-					e.printStackTrace();
+					throw new RuntimeException();
 				}
 			}
 		});

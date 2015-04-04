@@ -78,7 +78,7 @@ public class ViewClaimFragment extends Fragment implements TView {
 		}
 		
 		// Inserting destinations
-		ArrayList<String[]> destinations = claim.getDestinationList();
+		ArrayList<Destination> destinations = claim.getDestinationList();
 		
 		if (destinations.size() > 0) {
 			String destination;
@@ -86,7 +86,7 @@ public class ViewClaimFragment extends Fragment implements TView {
 			insertRow(R.id.viewClaimDestinationTable, getString(R.string.view_claim_destinations), true);
 			
 			for (int i = 0; i < destinations.size(); i++){
-				destination = destinations.get(i)[0] + " - " + destinations.get(i)[1];
+				destination = destinations.get(i).getName() + " - " + destinations.get(i).getDescription();
 				insertRow(R.id.viewClaimDestinationTable, destination, false);
 			}
 		}

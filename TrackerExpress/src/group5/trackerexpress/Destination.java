@@ -1,5 +1,7 @@
 package group5.trackerexpress;
 
+import java.io.Serializable;
+
 import android.location.Location;
 
 /**
@@ -10,6 +12,8 @@ import android.location.Location;
  * @version Part 4
  */
 public class Destination {
+	
+	private static final long serialVersionUID = 1L;
 	
 	/** The name of the destination */
 	private String name;
@@ -116,6 +120,15 @@ public class Destination {
 	}
 	
 	/**
+	 * string information about the destination
+	 * 
+	 * @return name and description info
+	 */
+	public String toString(){
+		return name + " - " + description;
+	}
+	
+	/**
 	 * gets the distance between two destinations
 	 * 
 	 * @param d1: first destination
@@ -125,4 +138,5 @@ public class Destination {
 	public static double getDistanceBetween( Destination d1, Destination d2 ){
 		return d1.getLocation().distanceTo(d2.getLocation());
 	}
+	
 }

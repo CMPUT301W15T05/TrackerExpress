@@ -30,20 +30,25 @@ public class ExpenseListFragment extends Fragment implements TView {
 	/** The claim. */
 	private Claim claim;
 
+	/** Tells whether the Add Expense button should show */
+	private boolean myClaimListVersion;
+	
 	private ListView lv_expense_list;
 	
 	//private ExpenseListAdapter adapter;
-	
+
 	private Button b_add_expense;
 	
 	/**
 	 * Instantiates a new expense list fragment.
 	 *
 	 * @param claim the claim
+	 * @param myClaimListVersion 
 	 */
 	@SuppressLint("ValidFragment")
-	public ExpenseListFragment(Claim claim) {
+	public ExpenseListFragment(Claim claim, boolean myClaimListVersion) {
 		this.claim = claim;
+		this.myClaimListVersion = myClaimListVersion;
 	}
 
 	/* (non-Javadoc)
@@ -66,8 +71,11 @@ public class ExpenseListFragment extends Fragment implements TView {
 		update(null);
 		claim.addView(this);
 
-		
 		b_add_expense = (Button) rootView.findViewById(R.id.b_add_expense);
+
+		if ( ! myClaimListVersion ){
+			b_add_expense.setVisibility(View.GONE);
+		}
 		
 		b_add_expense.setOnClickListener(new Button.OnClickListener(){
 			@Override
@@ -93,8 +101,7 @@ public class ExpenseListFragment extends Fragment implements TView {
 	@Override
 	public void update(TModel model) {
 		lv_expense_list.setAdapter(
-				new ExpenseListAdapter(
-						getActivity(), 
+				new ExpenseListAdapter( getActivity(), 
 						claim.getExpenseList().getExpenseList()));
 	}
 

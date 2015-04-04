@@ -1,8 +1,6 @@
 package group5.trackerexpress;
 
 import java.util.UUID;
-
-
 import android.content.Context;
 import android.graphics.Bitmap;
 

@@ -107,7 +107,7 @@ public class EditClaimActivity extends EditableActivity {
 	private Boolean checkCorrectness;
 
 	/** The Destination. */
-	private ArrayList<String[]> Destination;
+	private ArrayList<Destination> destination;
 	
 	/** The adapter2. */
 	private ArrayAdapter<String> adapter2;
@@ -137,7 +137,7 @@ public class EditClaimActivity extends EditableActivity {
 		/**Initialize the dummy destination 2d array which will 
 		be used to store destination and reason of travel for both edit claim and create new claim.*/
 		
-		Destination = new ArrayList<String[]>();
+		destination = new ArrayList<Destination>();
 		
 		final Claim newclaim = new Claim("");
 		
@@ -351,10 +351,10 @@ public class EditClaimActivity extends EditableActivity {
 			public void onClick(View v) {
 				/** check if the user pressed create new claim or edit existing claim button from MainActivity.*/
 				if (isNewClaim == true){
-					createDestinationButton(isNewClaim,Destination,newDestination,doNothing);
+					createDestinationButton(isNewClaim,destination,newDestination,doNothing);
 				} else {
-					Destination = claim.getDestinationList();
-					createDestinationButton(isNewClaim, Destination,newDestination,doNothing);
+					destination = claim.getDestinationList();
+					createDestinationButton(isNewClaim, destination,newDestination,doNothing);
 				}
 			}
 		});
@@ -367,11 +367,11 @@ public class EditClaimActivity extends EditableActivity {
 		 */
 	    if (isNewClaim == true){
 		    done.setText("Create Claim");
-		    DestinationListview(desListView,Destination);
+		    DestinationListview(desListView,destination);
 		   		
 	    } else {
 		   	done.setText("Edit Claim");
-		   	Destination = claim.getDestinationList();
+		   	destination = claim.getDestinationList();
 		    ClaimName.setText(claim.getuserName());
 			ClaimTitle.setText(claim.getClaimName());
 					
@@ -393,7 +393,7 @@ public class EditClaimActivity extends EditableActivity {
 				*/
 			}
 			Description.setText(String.valueOf(claim.getDescription()));
-			DestinationListview(desListView,Destination);
+			DestinationListview(desListView,destination);
 			
 			/** Saving new tags */
 			ArrayList<Tag> current = Controller.getTagMap(this).toList();
@@ -477,13 +477,13 @@ public class EditClaimActivity extends EditableActivity {
 					if (isNewClaim == true){
 						editclaim(newclaim);
 						newclaimlist.addClaim(EditClaimActivity.this, newclaim);
-						newclaim.setDestinationList(EditClaimActivity.this, Destination);
+						newclaim.setDestinationList(EditClaimActivity.this, destination);
 						checkCompleteness(newclaim);
 						
 						
 					} else{
 						editclaim(claim);
-						claim.setDestinationList(EditClaimActivity.this, Destination);
+						claim.setDestinationList(EditClaimActivity.this, destination);
 						checkCompleteness(claim);
 						
 					}
@@ -710,7 +710,7 @@ public class EditClaimActivity extends EditableActivity {
 				 * @see android.content.DialogInterface.OnClickListener#onClick(android.content.DialogInterface, int)
 				 */
 				public void onClick(DialogInterface dialog, int which){
-					createDestinationButton(false, Destination,editDestination,position);
+					createDestinationButton(false, destination,editDestination,position);
 				}
 			});
 			
@@ -734,7 +734,7 @@ public class EditClaimActivity extends EditableActivity {
 				public void onClick(DialogInterface dialog, int which){
 					String toRemove = adapter2.getItem(position);
 					adapter2.remove(toRemove);
-					Destination.remove(position);
+					destination.remove(position);
 					adapter2.notifyDataSetChanged();
 				}
 			});
@@ -823,7 +823,7 @@ public class EditClaimActivity extends EditableActivity {
 	 * Create a popup window for entering and editing destination/reason then call save it into the dummy
 	 * 2d destination array.
 	 */
-	private void createDestinationButton( final boolean isNewClaim, final ArrayList<String[]> destination2, final int i,final int position) {
+	private void createDestinationButton( final boolean isNewClaim, final ArrayList<Destination> destination2, final int i,final int position) {
 
 		/**
 		 *  http://www.androiddom.com/2011/06/displaying-android-pop-up-dialog_13.html 	2015-03-11
@@ -870,9 +870,9 @@ public class EditClaimActivity extends EditableActivity {
 			
 		/** for editing a existing destination */ 
 		case editDestination:
-			DesName.setText(destination2.get(position)[0]);
-			DesRea.setText(destination2.get(position)[1]);
-			final String oldDestination = destination2.get(position)[0]+" - "+destination2.get(position)[1];
+			DesName.setText(destination2.get(position).getName());
+			DesRea.setText(destination2.get(position).getDescription());
+			final String oldDestination = destination2.get(position).toString();
 			
 			helperBuilder.setPositiveButton("Done", new DialogInterface.OnClickListener() {
 				
@@ -922,27 +922,27 @@ public class EditClaimActivity extends EditableActivity {
 	 *
 	 * @param context Needed for file IO
 	 * @param place the place
-	 * @param Reason the reason
+	 * @param reason the reason
 	 * @param position the position
 	 * @param oldDestination the old destination
 	 * @param i the i
 
 	// Update the adapter and dummy destination arrayList.
 	 */
-	public void editDummyDestination(Context context, String place, String Reason, int position, String oldDestination, int i){
-		String[] travelInfo = new String[2];
-		travelInfo[0] = place;
-		travelInfo[1] = Reason; 
+	public void editDummyDestination(Context context, String place, String reason, int position, String oldDestination, int i){
+		Destination travelInfo = new Destination();
+		travelInfo.setName(place);
+		travelInfo.setDescription(reason); 
 		switch(i){
 		case newDestination:
-			adapter2.add(place + " - " + Reason);
+			adapter2.add(place + " - " + reason);
 			adapter2.notifyDataSetChanged();
-			Destination.add(travelInfo);
+			destination.add(travelInfo);
 			break;
 		case editDestination:
-			adapter2.insert(place+ " - " + Reason, position);
+			adapter2.insert(place + " - " + reason, position);
 			adapter2.remove(oldDestination);
-			Destination.set(position,travelInfo);
+			destination.set(position,travelInfo);
 			adapter2.notifyDataSetChanged();
 		}	
 	}
@@ -951,12 +951,12 @@ public class EditClaimActivity extends EditableActivity {
 	 * Destination listview.
 	 *
 	 * @param myListView the my list view
-	 * @param destination the destination
+	 * @param destination2 the destination
 	// set adapter for destination
 	*/
-	public void DestinationListview(ListView myListView, ArrayList<String[]> destination){
+	public void DestinationListview(ListView myListView, ArrayList<Destination> destination2){
 		
-		ArrayList<String> destinationArray = destinationReason(destination);
+		ArrayList<String> destinationArray = destinationReason(destination2);
 		adapter2 = new ArrayAdapter<String>(this,  
 		          R.layout.edit_claim_listview, 
 		          destinationArray);
@@ -970,11 +970,11 @@ public class EditClaimActivity extends EditableActivity {
 	 * @return the array list
 	// Concatenate destination into one string to display it on simple ListView adapter
 	 */
-	public ArrayList<String> destinationReason(ArrayList<String[]> destination2){
+	public ArrayList<String> destinationReason(ArrayList<Destination> destination2){
 		final ArrayList<String> destinationreason = new ArrayList<String>();
 		String destination_reason = "";
 		for (int i = 0; i< destination2.size(); i++){
-			destination_reason = destination2.get(i)[0]+ " - " + destination2.get(i)[1];
+			destination_reason = destination2.get(i).toString();
 			destinationreason.add(destination_reason);
 		}
 		return destinationreason;

@@ -1,7 +1,5 @@
 package group5.trackerexpress;
 
-import java.util.ArrayList;
-
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
@@ -34,10 +32,6 @@ public class GlobalClaimsFragment extends Fragment implements TView {
 	/** The list xml item. */
 	private ListView lv_global_list;
 
-	// Menu items to hide when selecting an option on a claim
-	/** The Constant submittedOrApprovedHiddenItems. */
-	private static final int[] submittedOrApprovedHiddenItems = {
-			R.id.op_edit_claim, R.id.op_submit_claim };
 
 	/**
 	 * Instantiates a new global claims fragment.
@@ -81,7 +75,6 @@ public class GlobalClaimsFragment extends Fragment implements TView {
 					@Override
 					public boolean onMenuItemClick(MenuItem item) {
 						// TODO Auto-generated method stub
-						Intent intent;
 						final AlertDialog.Builder builder = new AlertDialog.Builder(
 								getActivity());
 						String message = "Enter comments";
@@ -99,14 +92,15 @@ public class GlobalClaimsFragment extends Fragment implements TView {
 
 						switch (item.getItemId()) {
 						case R.id.op_view_global:
-							break; ////FIXME: View claim method won't work, since it can only get claims from ClaimList.  
-							/*
+							// FIXME: View claim method won't work, since it can only get claims from ClaimList.  
+							// FIXED: View claim now works for getting things from ElasticSearch
+							Intent intent;
 							intent = new Intent(getActivity(),
 									ClaimInfoActivity.class);
 							intent.putExtra("claimUUID", c.getUuid());
 							startActivity(intent);
 							break;
-							*/
+							
 						case R.id.op_approve:
 							builder.setTitle("Approve Claim");
 							builder.setPositiveButton("Approve",
@@ -132,7 +126,9 @@ public class GlobalClaimsFragment extends Fragment implements TView {
 												c.setStatus(getActivity(),
 														Claim.APPROVED);
 												 */
-												new ElasticSearchEngine().approveClaim(c.getUuid());//FIXME:Should approved claims have comments? 
+												new ElasticSearchEngine().approveClaim(c.getUuid());
+												// FIXME:Should approved claims have comments? 
+												// FIXME: Yes, approved claims should have comments
 											}
 										}
 									});
@@ -154,15 +150,8 @@ public class GlobalClaimsFragment extends Fragment implements TView {
 														Toast.LENGTH_LONG)
 														.show();
 											} else {
-												/*
-												c.setComments(input.getText()
-														.toString());
-												c.setApprover(Controller
-														.getUser(getActivity()));
-												c.setStatus(getActivity(),
-														Claim.RETURNED);
-														*/
-												new ElasticSearchEngine().returnClaim(c.getUuid(), input.getText().toString());//FIXME:Should approved claims have comments? 												
+												new ElasticSearchEngine().returnClaim(c.getUuid(), input.getText().toString());
+												//FIXME:Should approved claims have comments? 												
 											}
 										}
 									});
@@ -192,14 +181,6 @@ public class GlobalClaimsFragment extends Fragment implements TView {
 	@Override
 	public void update(TModel model) {
 		// TODO Auto-generated method stub
-		Log.i("myMessage", "What is up San Fransisco?");
-
-		/*
-		ClaimList claims = Controller.getClaimList(getActivity());
-		if (claims == null) {
-			claims = new ClaimList(getActivity());
-		}
-		*/
 		GlobalClaimsListAdapter a = new GlobalClaimsListAdapter(getActivity(), new ElasticSearchEngine().getClaims());
 		lv_global_list.setAdapter(a);
 	}

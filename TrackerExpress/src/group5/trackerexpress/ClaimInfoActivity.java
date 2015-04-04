@@ -26,7 +26,14 @@ public class ClaimInfoActivity extends ActionBarActivity {
 	private static final int INDEX_OF_EXPENSE_LIST_TAB = 1;
 
 	private static Context instance;
+	
+	/** the claim to be viewed */
 	private Claim claim;
+	
+	/** tells the expense list fragment if it should
+	 *  be able to add expenses
+	 */
+	private boolean myClaimListVersion;
 	
 	/* (non-Javadoc)
 	 * @see group5.trackerexpress.ActionBarActivity#onCreate(android.os.Bundle)
@@ -39,12 +46,27 @@ public class ClaimInfoActivity extends ActionBarActivity {
 		instance = this;
 
 		final Intent intent = this.getIntent();
-    	UUID serializedId = (UUID) intent.getSerializableExtra("claimUUID");
-
-	    claim = Controller.getClaimList(this).getClaim(serializedId);
-	    
-	    
 		
+		UUID serializedId = (UUID) intent.getSerializableExtra("claimUUID");
+
+		myClaimListVersion = intent.getBooleanExtra("fromMyClaims", false);
+		
+		Log.i("myMessage", Boolean.toString(myClaimListVersion));
+		
+		if ( myClaimListVersion ){
+	    	claim = Controller.getClaim(this, serializedId);
+		} else {
+			// FIXME: This junk can be moved somewhere else
+			// It gets the claim from elastic search rather than the myclaimlist
+			Claim[] claims = (new ElasticSearchEngine()).getClaims();
+			for ( Claim c : claims ){
+				if ( c.getUuid() == serializedId ){
+					claim = c;
+					break;
+				}
+			}
+		}
+	    
 		// Create the adapter that will return a fragment for each of the three
 		// primary sections of the activity.
 		SectionsPagerAdapter mSectionsPagerAdapter = new ClaimInfoPagerAdapter(
@@ -94,7 +116,7 @@ public class ClaimInfoActivity extends ActionBarActivity {
 					fragment = new ViewClaimFragment(claim);
 					break;
 				case INDEX_OF_EXPENSE_LIST_TAB:
-					fragment = new ExpenseListFragment(claim);
+					fragment = new ExpenseListFragment(claim, myClaimListVersion);
 					break;
 				default: Log.i("myMessage", "This should never happen");
 			}

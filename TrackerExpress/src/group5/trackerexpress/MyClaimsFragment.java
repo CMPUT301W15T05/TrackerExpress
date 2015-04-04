@@ -106,6 +106,7 @@ public class MyClaimsFragment extends Fragment implements TView {
                         case R.id.op_view_claim:
                         	intent = new Intent( getActivity(), ClaimInfoActivity.class );
                         	intent.putExtra( "claimUUID",  clickedOnClaim.getUuid() );
+                        	intent.putExtra( "fromMyClaims", true);
                         	startActivity(intent);
                         	break;
                         case R.id.op_submit_claim:
