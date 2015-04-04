@@ -353,7 +353,7 @@ public class EditClaimActivity extends EditableActivity {
 				if (isNewClaim == true){
 					createDestinationButton(isNewClaim,Destination,newDestination,doNothing);
 				} else {
-					Destination = claim.getDestination();
+					Destination = claim.getDestinationList();
 					createDestinationButton(isNewClaim, Destination,newDestination,doNothing);
 				}
 			}
@@ -371,7 +371,7 @@ public class EditClaimActivity extends EditableActivity {
 		   		
 	    } else {
 		   	done.setText("Edit Claim");
-		   	Destination = claim.getDestination();
+		   	Destination = claim.getDestinationList();
 		    ClaimName.setText(claim.getuserName());
 			ClaimTitle.setText(claim.getClaimName());
 					
@@ -477,13 +477,13 @@ public class EditClaimActivity extends EditableActivity {
 					if (isNewClaim == true){
 						editclaim(newclaim);
 						newclaimlist.addClaim(EditClaimActivity.this, newclaim);
-						newclaim.setDestination(EditClaimActivity.this, Destination);
+						newclaim.setDestinationList(EditClaimActivity.this, Destination);
 						checkCompleteness(newclaim);
 						
 						
 					} else{
 						editclaim(claim);
-						claim.setDestination(EditClaimActivity.this, Destination);
+						claim.setDestinationList(EditClaimActivity.this, Destination);
 						checkCompleteness(claim);
 						
 					}
@@ -596,7 +596,7 @@ public class EditClaimActivity extends EditableActivity {
 	private void checkCompleteness(Claim claim){
 		if (ClaimName.getText().toString().length() > 0 && ClaimTitle.getText().toString().length() > 0 &&
 				Description.getText().toString().length() > 0 && claim.getStartDate() != null && claim.getEndDate() != null
-				&& claim.getDestination().size() >= 1){
+				&& claim.getDestinationList().size() >= 1){
 			claim.setIncomplete(this, false);
 		}else {
 			claim.setIncomplete(this, true);

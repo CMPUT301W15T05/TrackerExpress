@@ -78,7 +78,7 @@ public class ViewClaimFragment extends Fragment implements TView {
 		}
 		
 		// Inserting destinations
-		ArrayList<String[]> destinations = claim.getDestination();
+		ArrayList<String[]> destinations = claim.getDestinationList();
 		
 		if (destinations.size() > 0) {
 			String destination;

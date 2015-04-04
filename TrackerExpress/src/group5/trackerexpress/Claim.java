@@ -25,13 +25,13 @@ public class Claim extends TModel implements Comparable<Claim>{
 	private String claimName;
 	
 	/** The Description of the claim. */
-	private String Description;
+	private String description;
 	
 	/** The list of expenses for the claim. */
 	private ExpenseList expenseList;
 	
 	/** The destinations visited in claim. */
-	private ArrayList<String[]> destination = new ArrayList<String[]>();
+	private ArrayList<String[]> destinations;
 	
 	/** The status of the claim (in_progress, submitted, returned, or approved. */
 	private int status; 
@@ -42,7 +42,7 @@ public class Claim extends TModel implements Comparable<Claim>{
 	/** The end date of the claim. */
 	private Date endDate;
 	
-	/** The incomplete indicator. */
+	/** The incompleteness indicator. */
 	private boolean incomplete;
 	
 	/** The comments returned from an approver*/
@@ -84,6 +84,7 @@ public class Claim extends TModel implements Comparable<Claim>{
 		this.status = IN_PROGRESS;
 		this.incomplete = true;
 		this.tagIds = new ArrayList<UUID>();
+		this.destinations = new ArrayList<String[]>();
 	}
 	
 	/**
@@ -274,7 +275,7 @@ public class Claim extends TModel implements Comparable<Claim>{
 		String[] travelInfo = new String[2];
 		travelInfo[0] = place;
 		travelInfo[1] = Reason;
-		destination.add(travelInfo);
+		destinations.add(travelInfo);
 		notifyViews(context);
 	}
 	
@@ -285,8 +286,8 @@ public class Claim extends TModel implements Comparable<Claim>{
 	 * @param context Needed for file IO
 	 * @param destination the destination
 	 */
-	public void setDestination(Context context, ArrayList<String[]> destination) {
-		this.destination = destination;
+	public void setDestinationList(Context context, ArrayList<String[]> destination) {
+		this.destinations = destination;
 		notifyViews(context);
 	}
 	
@@ -298,11 +299,11 @@ public class Claim extends TModel implements Comparable<Claim>{
 	public String toStringDestinations(){
 		// Get the destinations in a list format
 		String str_destinations = "";
-		for ( int i = 0; i < destination.size() - 1; i++ ){
-			str_destinations += destination.get(i)[0] + ", ";
+		for ( int i = 0; i < destinations.size() - 1; i++ ){
+			str_destinations += destinations.get(i)[0] + ", ";
 		}
-		if (destination.size()>0)
-			str_destinations += destination.get(destination.size() - 1)[0];
+		if (destinations.size()>0)
+			str_destinations += destinations.get(destinations.size() - 1)[0];
 		return str_destinations;
 	}
 	
@@ -311,8 +312,8 @@ public class Claim extends TModel implements Comparable<Claim>{
 	 *
 	 * @return the destination
 	 */
-	public ArrayList<String[]> getDestination() {
-		return destination;
+	public ArrayList<String[]> getDestinationList() {
+		return destinations;
 	}	
 	
 	/**
@@ -322,7 +323,7 @@ public class Claim extends TModel implements Comparable<Claim>{
 	 * @param Description the description
 	 */
 	public void setDescription(Context context, String Description){
-		this.Description = Description;
+		this.description = Description;
 		notifyViews(context);
 	}
 	
@@ -332,7 +333,7 @@ public class Claim extends TModel implements Comparable<Claim>{
 	 * @return the description
 	 */
 	public String getDescription(){
-		return Description; 
+		return description; 
 	}
 	
 

@@ -49,8 +49,10 @@ public class NetworkStateReceiver extends BroadcastReceiver {
 	}
 	
 	private void updateViews(){
-		for ( TView v : views ){
-			v.update(null);
+		if ( views != null ){
+			for ( TView v : views ){
+				v.update(null);
+			}
 		}
 	}
 }

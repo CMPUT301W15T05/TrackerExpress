@@ -47,11 +47,11 @@ public class ClaimControllerTest extends ActivityInstrumentationTestCase2<TestAc
 
 	public void testAddDestination(){
 		Claim claim = new Claim ("Toronto");
-		int size = claim.getDestination().size();
+		int size = claim.getDestinationList().size();
 		claim.addDestination(context, "Hamilton", "Business");
-		assertTrue("Size did not increase", size + 1 == claim.getDestination().size());
-		assertTrue("Could not add destination", claim.getDestination().get(claim.getDestination().size()-1)[0] == "Hamilton");
-		assertTrue("Could not add destination2", claim.getDestination().get(claim.getDestination().size()-1)[1] == "Business");
+		assertTrue("Size did not increase", size + 1 == claim.getDestinationList().size());
+		assertTrue("Could not add destination", claim.getDestinationList().get(claim.getDestinationList().size()-1)[0] == "Hamilton");
+		assertTrue("Could not add destination2", claim.getDestinationList().get(claim.getDestinationList().size()-1)[1] == "Business");
 
 	}
 }
