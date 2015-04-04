@@ -1,11 +1,17 @@
 package group5.trackerexpress;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Random;
+
 import android.content.Context;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 /**
@@ -26,6 +32,9 @@ public class MainClaimListAdapter extends ArrayAdapter<Claim> {
 	/** The context. */
 	private Context context;
 	
+	/** Claim's distances from home ordered **/
+	ArrayList<Claim> distanceOrderedClaims;
+	
 	/**
 	 * Instantiates a new main claim list adapter.
 	 *
@@ -36,6 +45,7 @@ public class MainClaimListAdapter extends ArrayAdapter<Claim> {
 		super(context, R.layout.fragment_my_claims_item, claims);
 		this.claimList = claims;
 		this.context = context;
+		this.distanceOrderedClaims = new ArrayList<Claim>(Arrays.asList(claims)); // For testing purposes
 	}
 	
 	/**
@@ -70,6 +80,9 @@ public class MainClaimListAdapter extends ArrayAdapter<Claim> {
 		/** end date of claim **/
 		public TextView endDate;
 		
+		/** color box indicating distance **/
+		public ImageView distanceView;
+		
 	}
 	
 	/** Updates the respective listview item in the custom listview
@@ -96,6 +109,7 @@ public class MainClaimListAdapter extends ArrayAdapter<Claim> {
 			holder.startDate = (TextView) v.findViewById(R.id.tv_main_claim_list_start);
 			holder.toDate = (TextView) v.findViewById(R.id.tv_main_claim_list_to);
 			holder.endDate = (TextView) v.findViewById(R.id.tv_main_claim_list_end);
+			holder.distanceView = (ImageView) v.findViewById(R.id.iv_distance);
 			
 			v.setTag(holder);
 		} else {
@@ -103,14 +117,24 @@ public class MainClaimListAdapter extends ArrayAdapter<Claim> {
 		}
 		
 		Claim c = claimList[position];
+		
+		// Print claim name
 		holder.claimName.setText(c.getClaimName());
+		
+		// Print destinations
 		holder.destinations.setText("Destinations: " + c.toStringDestinations());
+		
+		// Print currency totals
 		holder.amounts.setText("Currency Totals: " + c.getExpenseList().toStringTotalCurrencies());
+		
+		// Print incompleteness indicator
 		if ( c.isIncomplete() ){
 			holder.isIncompleteStatus.setText(incompleteString);
 		} else {
 			holder.isIncompleteStatus.setText("");
 		}
+		
+		// Print status
 		switch(c.getStatus()){
 		case Claim.APPROVED:
 			holder.status.setText(approvedStatus);
@@ -126,8 +150,10 @@ public class MainClaimListAdapter extends ArrayAdapter<Claim> {
 			break;
 		}
 		
+		// Print tags
 		holder.tags.setText("Tags: " + c.toStringTags(context));
 		
+		// Print date(s)
 		if ( c.getStartDate() != null ){
 			holder.startDate.setText("Date(s): " + c.getStartDate().getShortString());
 			
@@ -141,6 +167,35 @@ public class MainClaimListAdapter extends ArrayAdapter<Claim> {
 			holder.toDate.setVisibility(View.INVISIBLE);
 		}
 		
+		
+		// Print distance color indicator
+		int destinationSize = c.getDestinationList().size();
+		if ( destinationSize == 0 ){
+			holder.distanceView.setVisibility( View.GONE );
+		} else {
+			holder.distanceView.setVisibility( View.VISIBLE );
+			
+
+			DisplayMetrics metrics = context.getResources().getDisplayMetrics();
+			int screenWidth = metrics.widthPixels;
+			
+			int posOfClaim = distanceOrderedClaims.indexOf(c) + 1;
+			
+			double percentile = ((double)posOfClaim)/distanceOrderedClaims.size();			
+			holder.distanceView.getLayoutParams().width = (int)(screenWidth*percentile);
+			
+			if ( percentile <= 0.25 ){
+				holder.distanceView.setBackgroundColor(context.getResources().getColor(R.color.closest));
+			} else if ( percentile <= 0.5 ){
+				holder.distanceView.setBackgroundColor(context.getResources().getColor(R.color.close));
+			} else if ( percentile <= 0.75 ){
+				holder.distanceView.setBackgroundColor(context.getResources().getColor(R.color.far));
+			} else {
+				holder.distanceView.setBackgroundColor(context.getResources().getColor(R.color.furthest));
+			}
+		}
+		
 		return v;
 	}
+	
 }
