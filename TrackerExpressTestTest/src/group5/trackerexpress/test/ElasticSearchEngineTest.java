@@ -24,7 +24,7 @@ import com.google.gson.Gson;
 
 import android.test.ActivityInstrumentationTestCase2;
 import group5.trackerexpress.Claim;
-import group5.trackerexpress.ElasticSearchEngine;
+import group5.trackerexpress.ElasticSearchEngineUnthreaded;
 import group5.trackerexpress.MainActivity;
 import group5.trackerexpress.TestActivity;
 import group5.trackerexpress.User;
@@ -38,7 +38,7 @@ import junit.framework.TestCase;
 public class ElasticSearchEngineTest extends ActivityInstrumentationTestCase2<TestActivity> {
 
 	
-	private ElasticSearchEngine elasticSearchEngine;
+	private ElasticSearchEngineUnthreaded elasticSearchEngine;
 	private Claim claim;
 	private User user;
 	private UUID id;
@@ -50,8 +50,8 @@ public class ElasticSearchEngineTest extends ActivityInstrumentationTestCase2<Te
 		super(TestActivity.class);
 	}
 
-	public void setup(){
-		elasticSearchEngine = new ElasticSearchEngine();
+	public void setUp(){
+		elasticSearchEngine = new ElasticSearchEngineUnthreaded();
 		claim = new Claim("Name");
 		user = new User(getActivity());
 		user.setEmail(getActivity(), "foo@example.com");
@@ -61,7 +61,6 @@ public class ElasticSearchEngineTest extends ActivityInstrumentationTestCase2<Te
 
 	public void testSubmitAndGet(){
 
-
 		elasticSearchEngine.submitClaim(claim);
 
 		try {
@@ -70,16 +69,16 @@ public class ElasticSearchEngineTest extends ActivityInstrumentationTestCase2<Te
 			Thread.currentThread().interrupt();
 		}
 
-		ArrayList<Claim> claims = elasticSearchEngine.getClaims();
-		assertTrue(claims.get(0).getClaimName().equals("Name"));
+		Claim[] claims = elasticSearchEngine.getClaims();
+		assertTrue(claims[0].getClaimName().equals("Name"));
 		
 		elasticSearchEngine.deleteClaim(claim.getUuid());
 	}
 	
 	public void testDelete(){
 
-		ArrayList<Claim> claims = elasticSearchEngine.getClaims();
-		int sizeBefore = claims.size();
+		Claim[] claims = elasticSearchEngine.getClaims();
+		int sizeBefore = claims.length;
 		
 		elasticSearchEngine.submitClaim(claim);
 
@@ -91,8 +90,13 @@ public class ElasticSearchEngineTest extends ActivityInstrumentationTestCase2<Te
 
 		elasticSearchEngine.deleteClaim(claim.getUuid());
 		
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {}
+		
+		
 		claims = elasticSearchEngine.getClaims();
-		assertEquals(claims.size(), sizeBefore);
+		assertEquals(sizeBefore, claims.length);
 	}
 	
 	
@@ -106,12 +110,17 @@ public class ElasticSearchEngineTest extends ActivityInstrumentationTestCase2<Te
 		}
 
 		elasticSearchEngine.approveClaim(claim.getUuid());
+		
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {}
 
-		ArrayList<Claim> claims = elasticSearchEngine.getClaims();
+
+		Claim[]claims = elasticSearchEngine.getClaims();
 
 		for (Claim claimElement : claims){
-			if (claimElement.getUuid() == claim.getUuid()){
-				assertEquals("Claim status was not chagned to approved.", claimElement.getStatus(), Claim.APPROVED);
+			if (claimElement.getUuid().equals(claim.getUuid())){
+				assertEquals("Claim status was not chagned to approved.", Claim.APPROVED, claimElement.getStatus());
 				elasticSearchEngine.deleteClaim(claim.getUuid());
 				return;
 			}
@@ -119,4 +128,37 @@ public class ElasticSearchEngineTest extends ActivityInstrumentationTestCase2<Te
 		
 		fail("Claim couldn't be added or retrived.");
 	}
+	
+	
+	public void testReturn(){
+		elasticSearchEngine.submitClaim(claim);
+
+		try {
+			Thread.sleep(1000);
+		} catch(InterruptedException ex) {
+			Thread.currentThread().interrupt();
+		}
+
+		elasticSearchEngine.returnClaim(claim.getUuid(), "test comment");
+		
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {}
+
+
+		Claim[] claims = elasticSearchEngine.getClaims();
+
+		for (Claim claimElement : claims){
+			if (claimElement.getUuid().equals(claim.getUuid())){
+				assertEquals("Claim status was not chagned to returned.", Claim.RETURNED, claimElement.getStatus());
+				assertTrue("Claim comment wasn't added correctly.", "test comment".equals(claimElement.getComments()));
+				elasticSearchEngine.deleteClaim(claim.getUuid());
+				return;
+			}
+		}
+		
+		fail("Claim couldn't be added or retrived.");
+	}
+	
+	
 }
