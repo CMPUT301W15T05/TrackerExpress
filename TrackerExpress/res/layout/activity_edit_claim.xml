@@ -10,14 +10,17 @@
         android:layout_height="wrap_content"
         android:inputType="textCapWords"
         android:ems="10"
-        android:hint="@string/promote_claim_name" />
+        android:hint="@string/promote_claim_name"
+        android:maxLines="1" />
 
     <EditText
         android:id="@+id/editClaimTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:inputType="textCapWords"
         android:ems="10"
-        android:hint="@string/promote_claim_title" />
+        android:hint="@string/promote_claim_title"
+        android:maxLines="1" />
 
     <EditText
         android:id="@+id/editClaimDescription"
