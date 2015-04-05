@@ -63,8 +63,8 @@ public class TModel implements Serializable{
     /**
      * Delete view. 
      * 
-     * NOTE: Not implemented correctly, doing so would mean many child classes would have to override
-     * this function. Since we have not done that, I'm commenting this out - Peter
+     * NOTE: Not implemented correctly. Implementing correctly would mean many child classes would have to override
+     * this function. Until we see the need to do that, I'm commenting this out - Peter
      *
      * @param view the view
      */
@@ -87,12 +87,11 @@ public class TModel implements Serializable{
         	view.update(this);
         }
 
-        System.out.println ("Saving...");
-        Controller.getTagMap(context).saveData(context);
-        Controller.getClaimList(context).saveData(context);	
-        Controller.getUser(context).saveData(context);	
-        System.out.println ("Saved.");
-
+        if (context != null){
+        	Controller.getTagMap(context).saveData(context);
+        	Controller.getClaimList(context).saveData(context);	
+        	Controller.getUser(context).saveData(context);
+        }
     }
     
     /*

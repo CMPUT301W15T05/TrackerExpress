@@ -24,6 +24,7 @@ import com.google.gson.Gson;
 
 import android.test.ActivityInstrumentationTestCase2;
 import group5.trackerexpress.Claim;
+import group5.trackerexpress.ElasticSearchEngine;
 import group5.trackerexpress.ElasticSearchEngineUnthreaded;
 import group5.trackerexpress.MainActivity;
 import group5.trackerexpress.TestActivity;
@@ -38,7 +39,7 @@ import junit.framework.TestCase;
 public class ElasticSearchEngineTest extends ActivityInstrumentationTestCase2<TestActivity> {
 
 	
-	private ElasticSearchEngineUnthreaded elasticSearchEngine;
+	private ElasticSearchEngine elasticSearchEngine;
 	private Claim claim;
 	private User user;
 	private UUID id;
@@ -51,7 +52,7 @@ public class ElasticSearchEngineTest extends ActivityInstrumentationTestCase2<Te
 	}
 
 	public void setUp(){
-		elasticSearchEngine = new ElasticSearchEngineUnthreaded();
+		elasticSearchEngine = new ElasticSearchEngine();
 		claim = new Claim("Name");
 		user = new User(getActivity());
 		user.setEmail(getActivity(), "foo@example.com");
@@ -61,7 +62,7 @@ public class ElasticSearchEngineTest extends ActivityInstrumentationTestCase2<Te
 
 	public void testSubmitAndGet(){
 
-		elasticSearchEngine.submitClaim(claim);
+		elasticSearchEngine.submitClaim(getActivity(), claim);
 
 		try {
 			Thread.sleep(2000);
@@ -69,8 +70,7 @@ public class ElasticSearchEngineTest extends ActivityInstrumentationTestCase2<Te
 			Thread.currentThread().interrupt();
 		}
 
-		Claim[] claims = elasticSearchEngine.getClaims();
-		assertTrue(claims[0].getClaimName().equals("Name"));
+		assertTrue(elasticSearchEngine.getClaim(claim.getUuid()).getClaimName().equals("Name"));
 		
 		elasticSearchEngine.deleteClaim(claim.getUuid());
 	}
@@ -80,7 +80,7 @@ public class ElasticSearchEngineTest extends ActivityInstrumentationTestCase2<Te
 		Claim[] claims = elasticSearchEngine.getClaims();
 		int sizeBefore = claims.length;
 		
-		elasticSearchEngine.submitClaim(claim);
+		elasticSearchEngine.submitClaim(getActivity(), claim);
 
 		try {
 			Thread.sleep(2000);
@@ -101,7 +101,7 @@ public class ElasticSearchEngineTest extends ActivityInstrumentationTestCase2<Te
 	
 	
 	public void testApprove(){
-		elasticSearchEngine.submitClaim(claim);
+		elasticSearchEngine.submitClaim(getActivity(), claim);
 
 		try {
 			Thread.sleep(2000);
@@ -109,7 +109,7 @@ public class ElasticSearchEngineTest extends ActivityInstrumentationTestCase2<Te
 			Thread.currentThread().interrupt();
 		}
 
-		elasticSearchEngine.approveClaim(claim.getUuid());
+		elasticSearchEngine.approveClaim(getActivity(), claim.getUuid(), "Comment");
 		
 		try {
 			Thread.sleep(1000);
@@ -131,7 +131,7 @@ public class ElasticSearchEngineTest extends ActivityInstrumentationTestCase2<Te
 	
 	
 	public void testReturn(){
-		elasticSearchEngine.submitClaim(claim);
+		elasticSearchEngine.submitClaim(getActivity(), claim);
 
 		try {
 			Thread.sleep(1000);
@@ -139,7 +139,7 @@ public class ElasticSearchEngineTest extends ActivityInstrumentationTestCase2<Te
 			Thread.currentThread().interrupt();
 		}
 
-		elasticSearchEngine.returnClaim(claim.getUuid(), "test comment");
+		elasticSearchEngine.returnClaim(getActivity(), claim.getUuid(), "test comment");
 		
 		try {
 			Thread.sleep(1000);

@@ -19,7 +19,12 @@ public class Claim extends TModel implements Comparable<Claim>{
 	private static final long serialVersionUID = 1L;
 
 	/** The name of the claim creator*/
-	private String userName;
+	private String submitterName;
+	private String submitterEmail;
+	
+	/** The name of the claim creator*/
+	private String approverName;
+	private String approverEmail;	
 	
 	/** The claim name. */
 	private String claimName;
@@ -47,9 +52,6 @@ public class Claim extends TModel implements Comparable<Claim>{
 	
 	/** The comments returned from an approver*/
 	private String comments;
-	
-	/** The user who approved/returned the claim*/
-	private User approver;
 
 	/** The ArrayList of tagIds.*/
 	private ArrayList<UUID> tagIds;
@@ -77,7 +79,6 @@ public class Claim extends TModel implements Comparable<Claim>{
 	 * @param claimName the claim name
 	 */
 	public Claim(String claimName) {
-		// TODO Auto-generated constructor stub
 		this.uuid = UUID.randomUUID();
 		this.claimName = claimName;
 		this.expenseList = new ExpenseList();
@@ -123,24 +124,7 @@ public class Claim extends TModel implements Comparable<Claim>{
 	public void setComments(String comments) {
 		this.comments = comments;
 	}
-	
-	/**
-	 * Gets the approver as a User
-	 * 
-	 * @return the approver
-	 */
-	public User getApprover() {
-		return approver;
-	}
 
-	/**
-	 * Sets the approver
-	 * 
-	 * @param the User approver
-	 */
-	public void setApprover(User approver) {
-		this.approver = approver;
-	}
 
 	/**
 	 * Gets the uuid.
@@ -167,20 +151,84 @@ public class Claim extends TModel implements Comparable<Claim>{
 	 *
 	 * @return the user name
 	 */
-	public String getuserName(){
-		return userName;
+	public String getSubmitterName(){
+		return submitterName;
 	}
 	
 	/**
 	 * Set User name.
 	 *
 	 * @param context Needed for file IO
-	 * @param userName the user name
+	 * @param submitterName the name
 	 */
-	public void setuserName(Context context, String userName){
-		this.userName = userName;
+	public void setSubmitterName(Context context, String submitterName){
+		this.submitterName = submitterName;
 		notifyViews(context);
 	}
+	
+	
+	/**
+	 * Gets the user name.
+	 *
+	 * @return the user name
+	 */
+	public String getSubmitterEmail(){
+		return submitterEmail;
+	}
+	
+	/**
+	 * Set User name.
+	 *
+	 * @param context Needed for file IO
+	 * @param submitterName the name
+	 */
+	public void setSubmitterEmail(Context context, String submitterEmail){
+		this.submitterEmail = submitterEmail;
+		notifyViews(context);
+	}
+	
+	
+	
+	/**
+	 * Gets the user name.
+	 *
+	 * @return the user name
+	 */
+	public String getApproverName(){
+		return approverName;
+	}
+	
+	/**
+	 * Set User name.
+	 *
+	 * @param context Needed for file IO
+	 * @param submitterName the name
+	 */
+	public void setApproverName(Context context, String approverName){
+		this.approverName = approverName;
+		notifyViews(context);
+	}
+	
+	
+	/**
+	 * Gets the user name.
+	 *
+	 * @return the user name
+	 */
+	public String getApproverEmail(){
+		return approverEmail;
+	}
+	
+	/**
+	 * Set User name.
+	 *
+	 * @param context Needed for file IO
+	 * @param submitterName the name
+	 */
+	public void setApproverEmail(Context context, String approverEmail){
+		this.approverEmail = approverEmail;
+		notifyViews(context);
+	}	
 	
 	/**
 	 * Gets the claim name.

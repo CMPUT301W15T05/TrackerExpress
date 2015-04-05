@@ -92,8 +92,6 @@ public class GlobalClaimsFragment extends Fragment implements TView {
 
 						switch (item.getItemId()) {
 						case R.id.op_view_global:
-							// FIXME: View claim method won't work, since it can only get claims from ClaimList.  
-							// FIXED: View claim now works for getting things from ElasticSearch
 							Intent intent;
 							intent = new Intent(getActivity(),
 									ClaimInfoActivity.class);
@@ -118,17 +116,7 @@ public class GlobalClaimsFragment extends Fragment implements TView {
 														Toast.LENGTH_LONG)
 														.show();
 											} else {
-												/*
-												c.setComments(input.getText()
-														.toString());
-												c.setApprover(Controller
-														.getUser(getActivity()));
-												c.setStatus(getActivity(),
-														Claim.APPROVED);
-												 */
-												new ElasticSearchEngine().approveClaim(c.getUuid());
-												// FIXME:Should approved claims have comments? 
-												// FIXME: Yes, approved claims should have comments
+												new ElasticSearchEngine().approveClaim(getActivity(), c.getUuid(), input.getText().toString());
 											}
 										}
 									});
@@ -150,14 +138,13 @@ public class GlobalClaimsFragment extends Fragment implements TView {
 														Toast.LENGTH_LONG)
 														.show();
 											} else {
-												new ElasticSearchEngine().returnClaim(c.getUuid(), input.getText().toString());
-												//FIXME:Should approved claims have comments? 												
+												new ElasticSearchEngine().returnClaim(getActivity(), c.getUuid(), input.getText().toString());
 											}
 										}
 									});
 							break;
 						}
-
+						update(null);
 						AlertDialog build = builder.create();
 						build.show();
 						return false;
@@ -169,10 +156,6 @@ public class GlobalClaimsFragment extends Fragment implements TView {
 		return rootView;
 	}
 
-	// Creates Dummy ClaimList for testing
-	private Claim[] getGlobalClaims() {
-		return new ElasticSearchEngine().getClaims();
-	}
 
 	/*
 	 * (non-Javadoc)
@@ -180,9 +163,8 @@ public class GlobalClaimsFragment extends Fragment implements TView {
 	 */
 	@Override
 	public void update(TModel model) {
-		// TODO Auto-generated method stub
-		GlobalClaimsListAdapter a = new GlobalClaimsListAdapter(getActivity(), new ElasticSearchEngine().getClaims());
-		lv_global_list.setAdapter(a);
+		Claim[] claims = new ElasticSearchEngine().getClaimsForGlobalClaimList(getActivity());
+		lv_global_list.setAdapter(new GlobalClaimsListAdapter(getActivity(), claims));
 	}
 
 }
