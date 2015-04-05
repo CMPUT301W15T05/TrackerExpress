@@ -19,9 +19,8 @@ import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.AdapterView.OnItemLongClickListener;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class TagListFragment.
+ * Fragment activity that deals with the tag list tab in the main activity.
  * @author Peter Crinklaw, Randy Hu, Parash Rahman, Jesse Emery, Sean Baergen, Rishi Barnwal
  * @version Part 4
  */

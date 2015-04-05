@@ -2,13 +2,7 @@ package group5.trackerexpress;
 
 
 import java.io.File;
-import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.Locale;
-import java.util.Scanner;
 import java.util.UUID;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import android.app.DialogFragment;
 import android.content.Intent;
@@ -18,7 +12,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.Editable;
-import android.text.SpannableStringBuilder;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.AdapterView;
@@ -30,9 +23,9 @@ import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class EditExpenseActivity.
+ * Allows creation and editing of an expense. Editing is just like creation, except some
+ * of the fields are already filled in.
  * @author Peter Crinklaw, Randy Hu, Parash Rahman, Jesse Emery, Sean Baergen, Rishi Barnwal
  * @version Part 4
  */
@@ -41,7 +34,7 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 	/** The category and currency. */
 	private Spinner categorySpinner, currencySpinner;
 	
-	/** The img button. */
+	/** The image button. */
 	private ImageButton imgButton;
 	
 	/** The create expense button. */
@@ -61,8 +54,6 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 	
 	/** The date from the DatePicker*/
 	private Date dateSelection;
-	
-	private String curSymbol = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -108,7 +99,7 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 	    	public void onClick(View v) {
 	    		if (isNewExpense == true){
 	    	    	editExpense(newExpense);
-	    	    	newExpenseList.addExpense(EditExpenseActivity.this, expense);
+	    	    	newExpenseList.addExpense(EditExpenseActivity.this, newExpense);
 	    	    }else{
 	    	    	editExpense(expense);
 	    	    } 

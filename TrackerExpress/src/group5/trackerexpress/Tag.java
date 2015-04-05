@@ -4,9 +4,8 @@ import java.util.UUID;
 
 import android.content.Context;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class Tag.
+ * Tags allow claims to be categorized. They allow for claims to be filtered. They remain local.
  * @author Peter Crinklaw, Randy Hu, Parash Rahman, Jesse Emery, Sean Baergen, Rishi Barnwal
  * @version Part 4
  */
@@ -69,7 +68,7 @@ public class Tag extends TModel {
 	}
 
 	/**
-	 * Checks if is selected.
+	 * Checks if tag is selected.
 	 *
 	 * @return true, if is selected
 	 */

@@ -18,9 +18,8 @@ import android.widget.PopupMenu;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class MyClaimsFragment.
+ * Displays the list of claims made by the current user.
  * @author Peter Crinklaw, Randy Hu, Parash Rahman, Jesse Emery, Sean Baergen, Rishi Barnwal
  * @version Part 4
  */
@@ -135,7 +134,7 @@ public class MyClaimsFragment extends Fragment implements TView {
 	}
 	
 	/**
-	 * On prepare options menu.
+	 * Prepares option menu for when a claim is selected.
 	 *
 	 * @param popup the Popup Menu in question
 	 * @param c the Claim in question

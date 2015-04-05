@@ -13,9 +13,8 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class ViewClaimFragment.
+ * Fragment that handles the tab that displays claim properties in the view claim activity.
  * @author Peter Crinklaw, Randy Hu, Parash Rahman, Jesse Emery, Sean Baergen, Rishi Barnwal
  * @version Part 4
  */
