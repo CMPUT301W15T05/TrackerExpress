@@ -1,11 +1,16 @@
 package group5.trackerexpress;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 import java.util.UUID;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +25,10 @@ import android.widget.TextView;
  */
 @SuppressLint("ValidFragment")
 public class ViewClaimFragment extends Fragment implements TView {
+	
+	
+	final String myFormat = "MM/dd/yyyy"; //In which you need put here
+	final SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
 
 	private TableRow.LayoutParams trlp = 
 			new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, 
@@ -34,6 +43,7 @@ public class ViewClaimFragment extends Fragment implements TView {
 	}
 	
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -42,27 +52,28 @@ public class ViewClaimFragment extends Fragment implements TView {
 
 		// Claim title
 		TextView title = (TextView) rootView.findViewById(R.id.viewClaimTitle);
+
 		title.setText(claim.getClaimName());
 		
 		// User name
 		TextView nameInfo = (TextView) rootView.findViewById(R.id.viewClaimNameInfo);
-		nameInfo.setText(" " + claim.getuserName());
+		nameInfo.setText(" " + claim.getSubmitterName());
 		
 		// Inserting duration row
 		String datePrefix = null;
 		String duration = null;
-		Date startDate = claim.getStartDate();
-		Date endDate = claim.getEndDate();
+		Calendar startDate = claim.getStartDate();
+		Calendar endDate = claim.getEndDate();
 		
 		if (startDate != null && endDate != null) {
 			datePrefix = getString(R.string.view_claim_duration);
-			duration = startDate.getShortString() + " - " + endDate.getShortString();
+			duration = sdf.format(startDate.getTime()) + " - " + sdf.format(endDate.getTime());
 		} else if (startDate != null) {
 			datePrefix = getString(R.string.view_claim_start_date);
-			duration = startDate.getShortString();
+			duration = sdf.format(startDate.getTime());
 		} else if (endDate != null ) {
 			datePrefix = getString(R.string.view_claim_end_date);
-			duration = " - " + endDate.getShortString();
+			duration = " - " + sdf.format(endDate.getTime());
 		}
 		
 		if (datePrefix != null) {
@@ -78,7 +89,7 @@ public class ViewClaimFragment extends Fragment implements TView {
 		}
 		
 		// Inserting destinations
-		ArrayList<String[]> destinations = claim.getDestination();
+		ArrayList<Destination> destinations = claim.getDestinationList();
 		
 		if (destinations.size() > 0) {
 			String destination;
@@ -86,7 +97,7 @@ public class ViewClaimFragment extends Fragment implements TView {
 			insertRow(R.id.viewClaimDestinationTable, getString(R.string.view_claim_destinations), true);
 			
 			for (int i = 0; i < destinations.size(); i++){
-				destination = destinations.get(i)[0] + " - " + destinations.get(i)[1];
+				destination = destinations.get(i).getName() + " - " + destinations.get(i).getDescription();
 				insertRow(R.id.viewClaimDestinationTable, destination, false);
 			}
 		}
@@ -94,7 +105,7 @@ public class ViewClaimFragment extends Fragment implements TView {
 		// Inserting amounts
 		ExpenseList expenseList = claim.getExpenseList();
 		
-		if (expenseList.getExpenseList().size() > 0) {
+		if (expenseList.toList().size() > 0) {
 			String[] expenses = expenseList.toStringTotalCurrencies().split(", ");
 
 			insertRow(R.id.viewClaimAmountSpentTable, getString(R.string.view_claim_ammount_spent), true);
@@ -106,7 +117,7 @@ public class ViewClaimFragment extends Fragment implements TView {
 		}
 		
 		// TODO: Inserting tags
-		ArrayList<UUID> tagList = claim.getTagsIds();
+		ArrayList<UUID> tagList = claim.getTagsIds(getActivity());
 		
 		
 		if (tagList != null && tagList.size() > 0) {

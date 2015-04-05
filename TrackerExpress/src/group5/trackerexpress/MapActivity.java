@@ -35,7 +35,6 @@ import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.PlaceBuffer;
 import com.google.android.gms.location.places.Places;
-import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.InfoWindowAdapter;
@@ -43,13 +42,10 @@ import com.google.android.gms.maps.GoogleMap.OnCameraChangeListener;
 import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMapLoadedCallback;
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
-import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
-import com.google.android.gms.maps.GoogleMap.OnMyLocationButtonClickListener;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.UiSettings;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -64,7 +60,6 @@ import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -91,8 +86,7 @@ import android.widget.Toast;
 public class MapActivity extends FragmentActivity 
 			implements OnMapReadyCallback, OnMapClickListener, OnMapLongClickListener,
 			OnCameraChangeListener, GoogleApiClient.OnConnectionFailedListener, 
-			GoogleApiClient.ConnectionCallbacks, OnMyLocationButtonClickListener,
-			OnMarkerClickListener {
+			GoogleApiClient.ConnectionCallbacks {
 
     /**
      * GoogleApiClient wraps our service connection to Google Play Services and provides access
@@ -110,20 +104,14 @@ public class MapActivity extends FragmentActivity
             new LatLng(-34.041458, 150.790100), new LatLng(-33.682247, 151.383362));
 
     private Marker lastMarker = null;
-    private Marker myLocMarker = null;;
     private GoogleMap mMap;
     
     private String intentDestination;
     private LatLng intentLatLng;
-    private Location curLocation;
     
     private Rect windowRect;
     
     private ImageButton mConfirmButton;
-    
-    private Drawable mConfirmMarker;
-    private Drawable mConfirmBlueMarker;
-    private Drawable mConfirmMyMarker;
     
     // A comfortable zoom level to go to
     private static final int MAX_AUTO_ZOOM = 13;
@@ -142,11 +130,6 @@ public class MapActivity extends FragmentActivity
             rebuildGoogleApiClient();
         }
         
-        // https://github.com/joshua2ua/MockLocationTester 04/04/2015
-		LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-		curLocation = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-		lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 1, mLocationListener);
-        
         mGeocoder = new Geocoder(this);
         
         setContentView(R.layout.activity_map);
@@ -162,10 +145,6 @@ public class MapActivity extends FragmentActivity
         mAdapter = new PlaceAutocompleteAdapter(this, android.R.layout.simple_list_item_1,
                 BOUNDS_GREATER_SYDNEY, null);
         mAutocompleteView.setAdapter(mAdapter);
-        
-        mConfirmBlueMarker = getResources().getDrawable(R.drawable.ic_confirm_blue_marker);
-        mConfirmMarker = getResources().getDrawable(R.drawable.ic_confirm_marker);
-        mConfirmMyMarker = getResources().getDrawable(R.drawable.ic_confirm_my_location);
         
         mConfirmButton = (ImageButton) findViewById(R.id.confirm_geolocation_button);
         mConfirmButton.setOnClickListener(new OnClickListener() {
@@ -200,41 +179,6 @@ public class MapActivity extends FragmentActivity
         MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
     }
-    
-    private LocationListener mLocationListener = new LocationListener() {
-    	private Location pLocation;
-		@Override
-		public void onLocationChanged (Location location) {
-			curLocation = location;
-			pLocation = location;
-			updateCurrentLocation();
-		}
-
-		@Override
-		public void onProviderDisabled (String provider) {
-			if (myLocMarker != null) {
-				myLocMarker.remove();
-			}
-			
-			UiSettings uis = mMap.getUiSettings();
-			uis.setMyLocationButtonEnabled(false);
-			
-			curLocation = null;
-		}
-
-		@Override
-		public  void onProviderEnabled (String provider) {
-			curLocation = pLocation;
-			
-			UiSettings uis = mMap.getUiSettings();
-			uis.setMyLocationButtonEnabled(true);
-
-			updateCurrentLocation();
-		}
-
-		@Override
-		public void onStatusChanged (String provider, int status, Bundle extras) {}
-    };
     
     private void setAutoCompleteListeners() {
     	
@@ -453,13 +397,14 @@ public class MapActivity extends FragmentActivity
     public void onConnected(Bundle bundle) {
         // Successfully connected to the API client. Pass it to the adapter to enable API access.
         mAdapter.setGoogleApiClient(mGoogleApiClient);
-
-		// Get a copy just in case it gets set to null halfway through
-		Location myLocation = curLocation;
+        
+        // User already selected a location; abort
+		if (lastMarker == null) {
+			return;
+		}
 		
         if (intentLatLng != null) {
 			makeLatLngMarker(intentLatLng);
-			updateCurrentLocation();
 		} else if (intentDestination != null) {
 			mAutocompleteView.setText(intentDestination);
 			
@@ -472,11 +417,11 @@ public class MapActivity extends FragmentActivity
 	                 }
 	             });
 			}
-			updateCurrentLocation();
-		} else if (myLocation != null) {
-			UiSettings uis = mMap.getUiSettings();
-			uis.setMyLocationButtonEnabled(true);
-			onMyLocationButtonClick();
+		} else {
+			LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+			Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+			LatLng locLatLng = new LatLng(location.getLatitude(), location.getLongitude());
+			goToLocation(locLatLng, MAX_AUTO_ZOOM);
 		}
     }
 
@@ -540,24 +485,7 @@ public class MapActivity extends FragmentActivity
 		goToMarker(lastMarker);
 	}
 	
-	public void updateCurrentLocation() {
-		// Get a copy just in case it gets set to null halfway through
-		Location myLocation = curLocation;
-		if (myLocMarker != null && myLocation != null) {
-			myLocMarker.remove();
-			
-			UiSettings uis = mMap.getUiSettings();
-			uis.setMyLocationButtonEnabled(true);
-			
-			LatLng curLatLng = new LatLng(myLocation.getLatitude(), myLocation.getLongitude());
-			
-			myLocMarker = mMap.addMarker(new MarkerOptions()
-											.position(curLatLng)
-											.title("Current Location")
-											.snippet(latLngFormat(curLatLng))
-											.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_location_marker)));
-		}
-	}
+	
 	
 	public void makeMarker(LatLng latLng, String title, String snippet) {
 		
@@ -569,23 +497,11 @@ public class MapActivity extends FragmentActivity
 			mConfirmButton.setVisibility(View.VISIBLE);
 		}
 		
-		if (!mConfirmButton.getDrawable().getConstantState().equals(mConfirmMarker.getConstantState())) {
-			mConfirmButton.setImageDrawable(mConfirmMarker);
-			System.out.println("JFHSDJ");
-		}
-		
 		lastMarker = mMap.addMarker(new MarkerOptions()
 										.position(latLng)
 										.title(title)
 										.snippet(snippet));
 		
-		// Set the marker to anything other than null
-		if (myLocMarker == null) {
-			myLocMarker = mMap.addMarker(new MarkerOptions()
-									.position(new LatLng(0,0))
-									.visible(false));
-			updateCurrentLocation();
-		}
 	}
 
 	public void goToMarker(final Marker marker) {
@@ -593,19 +509,6 @@ public class MapActivity extends FragmentActivity
 	}
 	
 	public void goToMarker(final Marker marker, Integer newZoom) {
-		float curZoom = mMap.getCameraPosition().zoom;
-		
-		CameraUpdate cameraUpdate;
-		
-		if (newZoom != null) {
-			cameraUpdate = CameraUpdateFactory.newLatLngZoom(marker.getPosition(), newZoom);
-		} else if (curZoom < MAX_AUTO_ZOOM) {
-			cameraUpdate = CameraUpdateFactory.newLatLngZoom(marker.getPosition(), curZoom + 2);
-		} else {
-			cameraUpdate = CameraUpdateFactory.newLatLng(marker.getPosition());
-		}
-		
-		mMap.animateCamera(cameraUpdate);
 
 		marker.showInfoWindow();
 		
@@ -618,8 +521,21 @@ public class MapActivity extends FragmentActivity
             }
         });
 		
+		goToLocation(marker.getPosition(), newZoom);
+	}
+	
+	public void goToLocation(LatLng latLng, Integer newZoom) {
+		float curZoom = mMap.getCameraPosition().zoom;
+		
+		if (newZoom != null) {
+			curZoom = newZoom;
+		} else if (curZoom < MAX_AUTO_ZOOM) {
+			curZoom += 2;
+		}
+		
+    	mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, curZoom));
+		
 		// Set the bounds for search proximity to be around the newly selected location
-        LatLng latLng = marker.getPosition();
         LatLng neLatLng = new LatLng(latLng.latitude + 0.3, latLng.longitude + 0.3);
         LatLng swLatLng = new LatLng(latLng.latitude - 0.3, latLng.longitude - 0.3);
         
@@ -632,10 +548,7 @@ public class MapActivity extends FragmentActivity
         map.setOnMapClickListener(this);
         map.setOnMapLongClickListener(this);
         map.setOnCameraChangeListener(this);
-        map.setOnMyLocationButtonClickListener(this);
         map.setMyLocationEnabled(true);
-        map.setOnMarkerClickListener(this);
-
         
         // http://stackoverflow.com/a/15786363/4269270 04/04/2015
         map.setInfoWindowAdapter(new InfoWindowAdapter() {
@@ -689,9 +602,7 @@ public class MapActivity extends FragmentActivity
 		
 		if (lastMarker != null && lastMarker.isInfoWindowShown() && !markerOnMap(lastMarker)) { 
 			lastMarker.hideInfoWindow();
-		} else if (myLocMarker != null && myLocMarker.isInfoWindowShown() && !markerOnMap(myLocMarker)) { 
-			myLocMarker.hideInfoWindow();
-		}
+		} 
 	}
 	
 	private Boolean markerOnMap(Marker marker) {
@@ -711,53 +622,5 @@ public class MapActivity extends FragmentActivity
 	@Override
 	public void onMapLongClick(LatLng latLng) {
 		onMapClick(latLng);
-	}
-
-	@Override
-	public boolean onMyLocationButtonClick() {
-		Location myLocation = curLocation;
-		
-		if (myLocation != null) {
-			if (myLocMarker != null) {
-				myLocMarker.remove();
-				myLocMarker = null;
-			}
-			
-			LatLng curLatLng = new LatLng(myLocation.getLatitude(), myLocation.getLongitude());
-			
-			if (lastMarker != null) {
-				lastMarker.remove();
-			}
-
-			if (mConfirmButton.getVisibility() != View.VISIBLE) {
-				mConfirmButton.setVisibility(View.VISIBLE);
-			}
-			
-			mConfirmButton.setImageDrawable(mConfirmBlueMarker);
-			
-			lastMarker = mMap.addMarker(new MarkerOptions()
-								.position(curLatLng)
-								.title("Current Location")
-								.snippet(latLngFormat(curLatLng))
-								.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
-			
-			goToMarker(lastMarker, MAX_AUTO_ZOOM);
-		}
-		
-		return true;
-	}
-
-	@Override
-	public boolean onMarkerClick(Marker marker) {
-		if (marker.equals(myLocMarker)) {
-			mConfirmButton.setImageDrawable(mConfirmMyMarker);
-		} else if (marker.equals(lastMarker)) {
-			if (myLocMarker == null) {
-				mConfirmButton.setImageDrawable(mConfirmMarker);
-			} else {
-				mConfirmButton.setImageDrawable(mConfirmBlueMarker);
-			}
-		}
-		return false;
 	}
 }

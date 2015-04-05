@@ -6,14 +6,15 @@ import group5.trackerexpress.Expense;
 import group5.trackerexpress.ExpenseList;
 import group5.trackerexpress.ExpenseNotFoundException;
 import group5.trackerexpress.MainActivity;
+import group5.trackerexpress.TestActivity;
 import android.content.Context;
 import android.test.ActivityInstrumentationTestCase2;
 
-public class ExpenseListTest extends ActivityInstrumentationTestCase2<MainActivity> {
+public class ExpenseListTest extends ActivityInstrumentationTestCase2<TestActivity> {
 	Context context;
 	
 	public ExpenseListTest() {
-		super(MainActivity.class);
+		super(TestActivity.class);
 	}
 
 	protected void setUp() throws Exception {
@@ -73,11 +74,11 @@ public class ExpenseListTest extends ActivityInstrumentationTestCase2<MainActivi
 		expenseList.addExpense(getActivity(), e3);
 
 		assertTrue("Item '1' is not first",  
-					expenseList.getExpenseList().get(0).getTitle().equals(e1.getTitle()) );
+					expenseList.toList().get(0).getTitle().equals(e1.getTitle()) );
 		assertTrue("Item '2' is not second", 
-					expenseList.getExpenseList().get(1).getTitle().equals(e2.getTitle()) );
+					expenseList.toList().get(1).getTitle().equals(e2.getTitle()) );
 		assertTrue("Item '3' is not last", 
-					expenseList.getExpenseList().get(2).getTitle().equals(e3.getTitle()) );
+					expenseList.toList().get(2).getTitle().equals(e3.getTitle()) );
 
 	}
 	

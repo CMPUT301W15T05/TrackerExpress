@@ -1,26 +1,23 @@
 package group5.trackerexpress.test;
 
 
-import java.util.UUID;
-
 import group5.trackerexpress.Controller;
-import group5.trackerexpress.MainActivity;
 import group5.trackerexpress.Tag;
 import group5.trackerexpress.TagMap;
-import android.app.Activity;
+import group5.trackerexpress.TestActivity;
 import android.app.Instrumentation;
 import android.content.Context;
 import android.test.ActivityInstrumentationTestCase2;
 
 public class TagControllerTest extends
-ActivityInstrumentationTestCase2<MainActivity> {
+ActivityInstrumentationTestCase2<TestActivity> {
 
 	Instrumentation instrumentation;
 	Context context;
 	TagMap tags;
 
 	public TagControllerTest() {
-		super(MainActivity.class);
+		super(TestActivity.class);
 	}
 
 	protected void setUp() throws Exception {

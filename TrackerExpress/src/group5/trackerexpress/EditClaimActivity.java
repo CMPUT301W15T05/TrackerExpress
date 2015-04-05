@@ -3,33 +3,31 @@ package group5.trackerexpress;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.UUID;
 
 import android.app.AlertDialog;
-import android.app.DatePickerDialog;
 import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.text.Editable;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.PopupMenu;
+import android.widget.TextView;
 import android.widget.Toast;
 
 /**
@@ -40,20 +38,10 @@ import android.widget.Toast;
  * @version Part 4
  *
  */
-public class EditClaimActivity extends EditableActivity {
+public class EditClaimActivity extends EditableActivity implements DatePickerFragment.TheListener{
 	
-	private int SYear;
-	
-	private int SMonth;
-	
-	private int SDay;
-	
-	private int EYear;
-	
-	private int EMonth;
-	
-	private int EDay;
-	
+	final String myFormat = "EEEE MMMM dd, yyyy"; //In which you need put here
+	final SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
 	
 	/** The Claim name. */
 	private EditText ClaimName;
@@ -62,22 +50,10 @@ public class EditClaimActivity extends EditableActivity {
 	private EditText ClaimTitle;
 	
 	/** The Start date year. */
-	private EditText StartDateYear;
-	
-	/** The Start date month. */
-	private EditText StartDateMonth;
-	
-	/** The Start date day. */
-	private EditText StartDateDay;
+	private Button StartDateYear;
 	
 	/** The End date year. */
-	private EditText EndDateYear;
-	
-	/** The End date month. */
-	private EditText EndDateMonth;
-	
-	/** The End date day. */
-	private EditText EndDateDay;
+	private Button EndDateYear;
 	
 	/** The Description. */
 	private EditText Description; 
@@ -107,7 +83,7 @@ public class EditClaimActivity extends EditableActivity {
 	private Boolean checkCorrectness;
 
 	/** The Destination. */
-	private ArrayList<String[]> Destination;
+	private ArrayList<Destination> destination;
 	
 	/** The adapter2. */
 	private ArrayAdapter<String> adapter2;
@@ -120,6 +96,10 @@ public class EditClaimActivity extends EditableActivity {
 	
 	/** The do nothing. */
 	private final int doNothing = 5;
+	
+	private Date startDate; 
+	
+	private Date endDate;
 	
 	/** The my calender. */
 	private Calendar myCalendar = Calendar.getInstance();
@@ -137,7 +117,7 @@ public class EditClaimActivity extends EditableActivity {
 		/**Initialize the dummy destination 2d array which will 
 		be used to store destination and reason of travel for both edit claim and create new claim.*/
 		
-		Destination = new ArrayList<String[]>();
+		destination = new ArrayList<Destination>();
 		
 		final Claim newclaim = new Claim("");
 		
@@ -152,11 +132,11 @@ public class EditClaimActivity extends EditableActivity {
 		ClaimTitle = (EditText) findViewById(R.id.editClaimTitle);
 		limitLength(ClaimTitle, 20);
 		
-		StartDateYear = (EditText) findViewById(R.id.editClaimStartDateYear);
+		StartDateYear = (Button) findViewById(R.id.editClaimStartDateYear);
 //		StartDateMonth = (EditText) findViewById(R.id.editClaimStartDateMonth);
 //		StartDateDay = (EditText) findViewById(R.id.editClaimStartDateDay);
 
-		EndDateYear = (EditText) findViewById(R.id.editClaimEndDateYear);
+		EndDateYear = (Button) findViewById(R.id.editClaimEndDateYear);
 //		EndDateMonth = (EditText) findViewById(R.id.editClaimEndDateMonth);
 //		EndDateDay = (EditText) findViewById(R.id.editClaimEndDateDay);
 		Description = (EditText) findViewById(R.id.editClaimDescription);
@@ -229,6 +209,7 @@ public class EditClaimActivity extends EditableActivity {
 		
 		final Intent intent = this.getIntent();
 	    final boolean isNewClaim = (boolean) intent.getBooleanExtra("isNewClaim", true);
+	    final ClaimList newclaimlist = Controller.getClaimList(EditClaimActivity.this);
 	    
 	    UUID serialisedId = (UUID) intent.getSerializableExtra("claimUUID");
 	    final Claim claim = Controller.getClaimList(EditClaimActivity.this).getClaim(serialisedId);
@@ -239,97 +220,49 @@ public class EditClaimActivity extends EditableActivity {
 		 */
 
 		if (isNewClaim == true){
-			StartDateYear.setOnClickListener(new OnClickListener() {
-
-		        @Override
-		        public void onClick(View v) {
-		            // TODO Auto-generated method stub
-		        	
-
-		            new DatePickerDialog(EditClaimActivity.this, date, myCalendar
-		                    .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
-		                    myCalendar.get(Calendar.DAY_OF_MONTH)).show();
-		            
-		            
-		        }
-		    });
-		
-			EndDateYear.setOnClickListener(new OnClickListener() {
-
-				@Override
+			
+			StartDateYear.setOnClickListener(new TextView.OnClickListener(){
 				public void onClick(View v) {
-					// TODO Auto-generated method stub
-
-						new DatePickerDialog(EditClaimActivity.this, date2, myCalendar2
-								.get(Calendar.YEAR), myCalendar2.get(Calendar.MONTH),
-								myCalendar2.get(Calendar.DAY_OF_MONTH)).show();
-
+					showDatePickerDialog(v, myCalendar);
 				}
-	        
+			});
+		
+			EndDateYear.setOnClickListener(new TextView.OnClickListener(){
+				public void onClick(View v) {
+					showDatePickerDialog(v, myCalendar2);
+				}
 			});
 		} else{
-				
-			StartDateYear.setOnClickListener(new OnClickListener() {
-
-		        @Override
-		        public void onClick(View v) {
-		            // TODO Auto-generated method stub
-		        	String calenderstart = StartDateYear.getText().toString();
-		        	if (calenderstart.length() < 1){
-		        		new DatePickerDialog(EditClaimActivity.this, date, myCalendar
-								.get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
-								myCalendar.get(Calendar.DAY_OF_MONTH)).show();
-		        	}else{
-		        	String  [] parts = calenderstart.split("/");
-		        	
-		        	SYear = Integer.parseInt(parts[2]);
-		        	SMonth = Integer.parseInt(parts[0]);
-		        	SDay = Integer.parseInt(parts[1]);
-		        	
-		    	    myCalendar.set(Calendar.YEAR, SYear);
-			        myCalendar.set(Calendar.MONTH, SMonth-1);
-			        myCalendar.set(Calendar.DAY_OF_MONTH, SDay);
-			        
-			        new DatePickerDialog(EditClaimActivity.this, date, myCalendar
-							.get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
-							myCalendar.get(Calendar.DAY_OF_MONTH)).show();
-			        
-			        
-		        	}
-		        }
-		        
-		    });
-		
-			EndDateYear.setOnClickListener(new OnClickListener() {
-
-				@Override
-				public void onClick(View v) {
-					// TODO Auto-generated method stub
-					String calenderend = EndDateYear.getText().toString();
-					
-					if (calenderend.length() < 1){
-						new DatePickerDialog(EditClaimActivity.this, date2, myCalendar2
-								.get(Calendar.YEAR), myCalendar2.get(Calendar.MONTH),
-								myCalendar2.get(Calendar.DAY_OF_MONTH)).show();
-					}else{
-					String  [] parts2 = calenderend.split("/");
-		        	
-		        	EYear = Integer.parseInt(parts2[2]);
-		        	EMonth = Integer.parseInt(parts2[0]);
-		        	EDay = Integer.parseInt(parts2[1]);
-					
-		        	myCalendar2.set(Calendar.YEAR, EYear);
-			        myCalendar2.set(Calendar.MONTH, EMonth-1);
-			        myCalendar2.set(Calendar.DAY_OF_MONTH, EDay);
-				    
-			        new DatePickerDialog(EditClaimActivity.this, date2, myCalendar2
-							.get(Calendar.YEAR), myCalendar2.get(Calendar.MONTH),
-							myCalendar2.get(Calendar.DAY_OF_MONTH)).show();
-			        
-		        	
-					}
+			
+			if (claim.getStartDate() == null || claim.getEndDate() == null){
+				if (claim.getStartDate() == null){
+					myCalendar = Calendar.getInstance();
 				}
-	        
+				if (claim.getEndDate() == null){
+					myCalendar2 = Calendar.getInstance();
+				}
+			}
+			
+			if (claim.getStartDate() != null || claim.getEndDate() != null){
+				if(claim.getStartDate() != null){
+					myCalendar = claim.getStartDate();
+				}
+				if (claim.getEndDate() != null){
+					myCalendar2 = claim.getEndDate();
+				}
+			}
+			
+			
+			StartDateYear.setOnClickListener(new TextView.OnClickListener(){
+				public void onClick(View v) {
+					showDatePickerDialog(v, myCalendar);
+				}
+			});
+		
+			EndDateYear.setOnClickListener(new TextView.OnClickListener(){
+				public void onClick(View v) {
+					showDatePickerDialog(v, myCalendar2);
+				}
 			});
 			
 		}
@@ -350,10 +283,10 @@ public class EditClaimActivity extends EditableActivity {
 			public void onClick(View v) {
 				/** check if the user pressed create new claim or edit existing claim button from MainActivity.*/
 				if (isNewClaim == true){
-					createDestinationButton(isNewClaim,Destination,newDestination,doNothing);
+					createDestinationButton(isNewClaim,destination,newDestination,doNothing);
 				} else {
-					Destination = claim.getDestination();
-					createDestinationButton(isNewClaim, Destination,newDestination,doNothing);
+					destination = claim.getDestinationList();
+					createDestinationButton(isNewClaim, destination,newDestination,doNothing);
 				}
 			}
 		});
@@ -366,33 +299,29 @@ public class EditClaimActivity extends EditableActivity {
 		 */
 	    if (isNewClaim == true){
 		    done.setText("Create Claim");
-		    DestinationListview(desListView,Destination);
+		    DestinationListview(desListView,destination);
 		   		
 	    } else {
 		   	done.setText("Edit Claim");
-		   	Destination = claim.getDestination();
-		    ClaimName.setText(claim.getuserName());
+		   	destination = claim.getDestinationList();
+		    ClaimName.setText(claim.getSubmitterName());
 			ClaimTitle.setText(claim.getClaimName());
 					
 			if ( claim.getStartDate() != null ){
-				StartDateYear.setText(String.valueOf(claim.getStartDate().getMM())+"/"
-						+String.valueOf(claim.getStartDate().getDD())+"/"
-						+String.valueOf(claim.getStartDate().getYYYY()));
+				StartDateYear.setText(sdf.format(claim.getStartDate().getTime()));
 /*				StartDateMonth.setText(String.valueOf(claim.getStartDate().getMM()));
 				StartDateDay.setText(String.valueOf(claim.getStartDate().getDD()));
 				*/
 			}
 					
-			if ( claim.getStartDate() != null ){
-				EndDateYear.setText(String.valueOf(claim.getEndDate().getMM())+"/"
-						+String.valueOf(claim.getEndDate().getDD())+"/"
-						+String.valueOf(claim.getEndDate().getYYYY()));
+			if ( claim.getEndDate() != null ){
+				EndDateYear.setText(sdf.format(claim.getEndDate().getTime()));
 /*				EndDateMonth.setText(String.valueOf(claim.getEndDate().getMM()));
 				EndDateDay.setText(String.valueOf(claim.getEndDate().getDD()));
 				*/
 			}
 			Description.setText(String.valueOf(claim.getDescription()));
-			DestinationListview(desListView,Destination);
+			DestinationListview(desListView,destination);
 			
 			/** Saving new tags */
 			ArrayList<Tag> current = Controller.getTagMap(this).toList();
@@ -420,29 +349,11 @@ public class EditClaimActivity extends EditableActivity {
 			 */
 			@Override
 			public void onClick(View v) {
-				
-				String aftermath = StartDateYear.getText().toString();
-		        String [] afterpart1 = aftermath.split("/");
 		        
-		        SYear = Integer.parseInt(afterpart1[2]);
-	        	SMonth = Integer.parseInt(afterpart1[0]);
-	        	SDay = Integer.parseInt(afterpart1[1]);
-	        	
-	        	String aftermath2 = EndDateYear.getText().toString();
-		        String [] afterpart2 = aftermath2.split("/");
-		        
-		        EYear = Integer.parseInt(afterpart2[2]);
-	        	EMonth = Integer.parseInt(afterpart2[0]);
-	        	EDay = Integer.parseInt(afterpart2[1]);
-		        
-				
-				Date d1 = new Date(SYear, SMonth, SDay);
-				Date d2 = new Date(EYear, EMonth, EDay);
 				
 				/** this procedure will check if the claim name is repeated */
 				boolean repeatedClaimName = false;
 				Claim[] claims = Controller.getClaimList(EditClaimActivity.this).toList();
-				
 				for ( Claim c : claims ){
 						if ( c.getClaimName().equals( ClaimTitle.getText().toString() )
 							&& ( isNewClaim || ! c.getUuid().equals(claim.getUuid())) ){
@@ -460,14 +371,15 @@ public class EditClaimActivity extends EditableActivity {
 				    	ClaimTitle.setError( "Title is required!" );
 				    	ClaimTitle.requestFocus();
 				    }
-				} else if (repeatedClaimName) {
+				}
+				if (myCalendar.compareTo(myCalendar2)==1){
+					EndDateYear.setError("End date is SMALLER than start date!");
+					EndDateYear.requestFocus();
+				}
+				if (repeatedClaimName) {
 					ClaimTitle.setError( "Repeated claim name!" );
 			    	ClaimTitle.requestFocus();
-				} else if (d1.getDate() > d2.getDate()){
-						EndDateYear.setError("End date is SMALLER than start date!");
-						EndDateYear.requestFocus();
-					
-				}else {
+				} else {
 					
 				/**
 				 *  Saves user input into claim class.(calling each method)
@@ -476,11 +388,14 @@ public class EditClaimActivity extends EditableActivity {
 					
 					if (isNewClaim == true){
 						editclaim(newclaim);
+						newclaimlist.addClaim(EditClaimActivity.this, newclaim);
+						newclaim.setDestinationList(EditClaimActivity.this, destination);
 						checkCompleteness(newclaim);
-						Controller.getClaimList(EditClaimActivity.this).addClaim(EditClaimActivity.this, newclaim);
+						
 						
 					} else{
 						editclaim(claim);
+						claim.setDestinationList(EditClaimActivity.this, destination);
 						checkCompleteness(claim);
 						
 					}
@@ -488,9 +403,8 @@ public class EditClaimActivity extends EditableActivity {
 					/**
 					 *  launch MainClaimActivity.
 					 */
-					finish();
-					//Intent intent = new Intent(EditClaimActivity.this, MainActivity.class);
-					//startActivity(intent);
+					Intent intent = new Intent(EditClaimActivity.this, MainActivity.class);
+					startActivity(intent);
 				}
 			}
 		});
@@ -530,53 +444,23 @@ public class EditClaimActivity extends EditableActivity {
 	}
 	
 	
-	/**
-	 * http://stackoverflow.com/questions/14933330/datepicker-how-to-popup-datepicker-when-click-on-edittext
-	 * Mar/24/2015
-	 */
-
-	private DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
-
-	    @Override
-	    public void onDateSet(DatePicker view, int year, int monthOfYear,
-	            int dayOfMonth) {
-	        // TODO Auto-generated method stub
-	        myCalendar.set(Calendar.YEAR, year);
-	        myCalendar.set(Calendar.MONTH, monthOfYear);
-	        myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-	        updateLabel(StartDateYear,myCalendar);
-	        
-	    }
-
-	};
 	
-	private DatePickerDialog.OnDateSetListener date2 = new DatePickerDialog.OnDateSetListener() {
-
-	    @Override
-	    public void onDateSet(DatePicker view, int year, int monthOfYear,
-	            int dayOfMonth) {
-	        // TODO Auto-generated method stub
-	        myCalendar2.set(Calendar.YEAR, year);
-	        myCalendar2.set(Calendar.MONTH, monthOfYear);
-	        myCalendar2.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-	        updateLabel(EndDateYear,myCalendar2);
-	    }
-
-	};
-	
-	/**
-	 * http://stackoverflow.com/questions/14933330/datepicker-how-to-popup-datepicker-when-click-on-edittext
-	 * Mar/24/2015
-	 * @param myCalendar3 
-	 * @param date 
-	 */
-	private void updateLabel(EditText Date, Calendar myCalendar3) {
-
-	    String myFormat = "MM/dd/yyyy"; //In which you need put here
-	    SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
-
-	    Date.setText(sdf.format(myCalendar3.getTime()));
+	public void showDatePickerDialog(View v, Calendar dateSelection) {
+	    DialogFragment dateFragment = new DatePickerFragment(v, dateSelection);
+	    dateFragment.show(getFragmentManager(), "datePicker");
 	}
+	
+	@Override
+	public void returnDate(View view, Calendar date) {
+		if (view == StartDateYear) {
+			StartDateYear.setText(sdf.format(date.getTime()));
+			myCalendar = date;
+		} else if (view == EndDateYear) {
+				EndDateYear.setText(sdf.format(date.getTime()));
+				myCalendar2 = date;
+			}
+		
+    }
 	
 	
 	
@@ -594,7 +478,7 @@ public class EditClaimActivity extends EditableActivity {
 	private void checkCompleteness(Claim claim){
 		if (ClaimName.getText().toString().length() > 0 && ClaimTitle.getText().toString().length() > 0 &&
 				Description.getText().toString().length() > 0 && claim.getStartDate() != null && claim.getEndDate() != null
-				&& claim.getDestination().size() >= 1){
+				&& claim.getDestinationList().size() >= 1){
 			claim.setIncomplete(this, false);
 		}else {
 			claim.setIncomplete(this, true);
@@ -708,7 +592,7 @@ public class EditClaimActivity extends EditableActivity {
 				 * @see android.content.DialogInterface.OnClickListener#onClick(android.content.DialogInterface, int)
 				 */
 				public void onClick(DialogInterface dialog, int which){
-					createDestinationButton(false, Destination,editDestination,position);
+					createDestinationButton(false, destination,editDestination,position);
 				}
 			});
 			
@@ -732,7 +616,7 @@ public class EditClaimActivity extends EditableActivity {
 				public void onClick(DialogInterface dialog, int which){
 					String toRemove = adapter2.getItem(position);
 					adapter2.remove(toRemove);
-					Destination.remove(position);
+					destination.remove(position);
 					adapter2.notifyDataSetChanged();
 				}
 			});
@@ -749,64 +633,41 @@ public class EditClaimActivity extends EditableActivity {
 	 */
 	private void editclaim(final Claim claim) {
 		// TODO Auto-generated method stub
-		int mySDateY, mySDateM, mySDateD, myEDateY, myEDateM, myEDateD;
-		Date d2 = null;
-		Date d1 = null;
+		String aftermath = StartDateYear.getText().toString();
+		String aftermath2 = EndDateYear.getText().toString();
+
+		Calendar d2 = Calendar.getInstance();
+		Calendar d1 = Calendar.getInstance();
 		String claimUser = ClaimName.getText().toString();
 		String Claim_title = ClaimTitle.getText().toString();
 		
-		String editS = StartDateYear.getText().toString();
-		String [] Sdate = editS.split("/");
-		
-		String editE = EndDateYear.getText().toString();
-		String [] Edate =  editE.split("/");
-		
-		String SDateY = Sdate[2];
-		String SDateM = Sdate[0];
-		String SDateD = Sdate[1];
-		
-		String EDateY = Edate[2];
-		String EDateM = Edate[0];
-		String EDateD = Edate[1];
-		
 		String Descrip = Description.getText().toString();
 		
+		d2=myCalendar2;
 		
-		
-		/** A check if date is parseable (preventing app from crashing) */
-		if (ParseHelper.isIntegerParsable(EDateD) && 
-			ParseHelper.isIntegerParsable(EDateM) && 
-			ParseHelper.isIntegerParsable(EDateY)){
+		d1=myCalendar;
 			
-			myEDateD = Integer.parseInt(EDateD);
-			myEDateM = Integer.parseInt(EDateM);
-			myEDateY = Integer.parseInt(EDateY);
-			d2 = new Date(myEDateY, myEDateM, myEDateD);
-		} 
-		
-		if (ParseHelper.isIntegerParsable(SDateD) &&
-			ParseHelper.isIntegerParsable(SDateM) &&
-			ParseHelper.isIntegerParsable(SDateY)){
-			
-			mySDateD = Integer.parseInt(SDateD);
-			mySDateM = Integer.parseInt(SDateM);
-			mySDateY = Integer.parseInt(SDateY);
-			d1 = new Date(mySDateY, mySDateM, mySDateD);
-			
+		if (aftermath.length() > 0 || aftermath2.length() > 0){
+			if ( aftermath.length() > 0 ){
+		    	claim.setStartDate(this, d1);
+			}
+		    if ( aftermath2.length() > 0 ){
+		    	claim.setEndDate(this, d2);
+		    }
 		}
-		
-		claim.setuserName(this, claimUser);
+
+		claim.setSubmitterName(this, claimUser);
 		claim.setClaimName(this, Claim_title);
 
-		claim.setStartDate(this, d1);
-		claim.setEndDate(this, d2);
-		claim.setDescription(this, Descrip);
-		claim.setDestination(this, Destination);
 		
-		for (Tag tag: tagsOfClaim) {
-			claim.getTagsIds().add(tag.getUuid());
-		}
-	
+		
+		claim.setDescription(this, Descrip);
+		
+		for (Tag tag: tagsOfClaim)
+			claim.getTagsIds(this).add(tag.getUuid());
+
+		
+		Controller.getClaimList(this).addClaim(this, claim);		
 	}
 
 
@@ -821,7 +682,7 @@ public class EditClaimActivity extends EditableActivity {
 	 * Create a popup window for entering and editing destination/reason then call save it into the dummy
 	 * 2d destination array.
 	 */
-	private void createDestinationButton( final boolean isNewClaim, final ArrayList<String[]> destination2, final int i, final int position) {
+	private void createDestinationButton( final boolean isNewClaim, final ArrayList<Destination> destination2, final int i,final int position) {
 
 		/**
 		 *  http://www.androiddom.com/2011/06/displaying-android-pop-up-dialog_13.html 	2015-03-11
@@ -835,35 +696,70 @@ public class EditClaimActivity extends EditableActivity {
         helperBuilder.setView(popupview);
         DesName = (EditText) popupview.findViewById(R.id.inputDestination);
         DesRea = (EditText) popupview.findViewById(R.id.inputDestinationReason);
-        
-		if (i == editDestination){
-			DesName.setText(destination2.get(position)[0]);
-			DesRea.setText(destination2.get(position)[1]);
-		}
-		
-		helperBuilder.setPositiveButton("Done", new DialogInterface.OnClickListener() {
-			
-			/** Once done, add destination into dummy destination
-			 * @see android.content.DialogInterface.OnClickListener#onClick(android.content.DialogInterface, int)
-			 */
-			public void onClick(DialogInterface dialog, int which) {
+        		
+		switch(i){	
+		/** for creating new destination */
+		case newDestination:
+			helperBuilder.setPositiveButton("Done", new DialogInterface.OnClickListener() {
 				
-				String Des_Name = DesName.getText().toString();
-				String Des_Rea = DesRea.getText().toString();
-				editDummyDestination(EditClaimActivity.this, Des_Name, Des_Rea, position, newDestination);
-			}
-		});
-		
-        helperBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+				/** Once done, add destination into dummy destination
+				 * @see android.content.DialogInterface.OnClickListener#onClick(android.content.DialogInterface, int)
+				 */
+				public void onClick(DialogInterface dialog, int which) {
+					
+					String Des_Name = DesName.getText().toString();
+					String Des_Rea = DesRea.getText().toString();
+					editDummyDestination(EditClaimActivity.this, Des_Name, Des_Rea, doNothing, null, newDestination);
+				}
+			});
 			
-			/** Return to EditClaimActivity doing nothing
-			 * @see android.content.DialogInterface.OnClickListener#onClick(android.content.DialogInterface, int)
-			 */
-			public void onClick(DialogInterface dialog, int which) {}
-		});
-        
-		AlertDialog helpDialog = helperBuilder.create();
-		helpDialog.show();
+			helperBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+				
+				/** Return to EditClaimActivity doing nothing
+				 * @see android.content.DialogInterface.OnClickListener#onClick(android.content.DialogInterface, int)
+				 */
+				public void onClick(DialogInterface dialog, int which) {
+							
+				}
+			});
+					
+			AlertDialog helperDialog = helperBuilder.create();
+			helperDialog.show();
+			break;
+			
+		/** for editing a existing destination */ 
+		case editDestination:
+			DesName.setText(destination2.get(position).getName());
+			DesRea.setText(destination2.get(position).getDescription());
+			final String oldDestination = destination2.get(position).toString();
+			
+			helperBuilder.setPositiveButton("Done", new DialogInterface.OnClickListener() {
+				
+				/** update destination dummy list
+				 * @see android.content.DialogInterface.OnClickListener#onClick(android.content.DialogInterface, int)
+				 */
+				public void onClick(DialogInterface dialog, int which) {
+					String Des_Name2 = DesName.getText().toString();
+					String Des_Rea2 = DesRea.getText().toString();
+					editDummyDestination(EditClaimActivity.this, Des_Name2, Des_Rea2, position, oldDestination,editDestination);
+				}
+			});
+			
+			
+			helperBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+				
+				/** Do nothing and return
+				 * @see android.content.DialogInterface.OnClickListener#onClick(android.content.DialogInterface, int)
+				 */
+				public void onClick(DialogInterface dialog, int which) {
+							
+				}
+			});
+					
+			AlertDialog helpDialog = helperBuilder.create();
+			helpDialog.show();
+			break;
+		}
 				
 	}
 	
@@ -885,26 +781,27 @@ public class EditClaimActivity extends EditableActivity {
 	 *
 	 * @param context Needed for file IO
 	 * @param place the place
-	 * @param Reason the reason
+	 * @param reason the reason
 	 * @param position the position
+	 * @param oldDestination the old destination
 	 * @param i the i
 
 	// Update the adapter and dummy destination arrayList.
 	 */
-	public void editDummyDestination(Context context, String place, String Reason, int position, int i) {
-		String[] travelInfo = new String[2];
-		travelInfo[0] = place;
-		travelInfo[1] = Reason; 
+	public void editDummyDestination(Context context, String place, String reason, int position, String oldDestination, int i){
+		Destination travelInfo = new Destination();
+		travelInfo.setName(place);
+		travelInfo.setDescription(reason); 
 		switch(i){
 		case newDestination:
-			adapter2.add(place + " - " + Reason);
+			adapter2.add(place + " - " + reason);
 			adapter2.notifyDataSetChanged();
-			Destination.add(travelInfo);
+			destination.add(travelInfo);
 			break;
 		case editDestination:
-			adapter2.insert(place+ " - " + Reason, position);
-			adapter2.remove(Destination.get(position)[0] + " - " + Destination.get(position)[1]);
-			Destination.set(position,travelInfo);
+			adapter2.insert(place + " - " + reason, position);
+			adapter2.remove(oldDestination);
+			destination.set(position,travelInfo);
 			adapter2.notifyDataSetChanged();
 		}	
 	}
@@ -913,12 +810,12 @@ public class EditClaimActivity extends EditableActivity {
 	 * Destination listview.
 	 *
 	 * @param myListView the my list view
-	 * @param destination the destination
+	 * @param destination2 the destination
 	// set adapter for destination
 	*/
-	public void DestinationListview(ListView myListView, ArrayList<String[]> destination){
+	public void DestinationListview(ListView myListView, ArrayList<Destination> destination2){
 		
-		ArrayList<String> destinationArray = destinationReason(destination);
+		ArrayList<String> destinationArray = destinationReason(destination2);
 		adapter2 = new ArrayAdapter<String>(this,  
 		          R.layout.edit_claim_listview, 
 		          destinationArray);
@@ -932,11 +829,11 @@ public class EditClaimActivity extends EditableActivity {
 	 * @return the array list
 	// Concatenate destination into one string to display it on simple ListView adapter
 	 */
-	public ArrayList<String> destinationReason(ArrayList<String[]> destination2){
+	public ArrayList<String> destinationReason(ArrayList<Destination> destination2){
 		final ArrayList<String> destinationreason = new ArrayList<String>();
 		String destination_reason = "";
 		for (int i = 0; i< destination2.size(); i++){
-			destination_reason = destination2.get(i)[0]+ " - " + destination2.get(i)[1];
+			destination_reason = destination2.get(i).toString();
 			destinationreason.add(destination_reason);
 		}
 		return destinationreason;

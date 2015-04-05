@@ -40,7 +40,7 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:scaleType="center"
-        android:src="@drawable/ic_confirm_button"
+        android:src="@drawable/ic_confirm_marker"
         android:contentDescription="@string/confirm_geolocation"
         android:visibility="gone" />
     

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
@@ -8,33 +8,54 @@
         android:id="@+id/tv_expense_list_title"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:clickable="false"
+        android:focusable="false"
         android:focusableInTouchMode="false"
-        android:textSize="25sp"
-		android:clickable="false"
-		android:focusable="false" />
+        android:textSize="25sp" />
 
     <TextView
         android:id="@+id/tv_expense_date"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:focusableInTouchMode="false"
-		android:clickable="false"
-		android:focusable="false" />
+        android:layout_below="@id/tv_expense_list_title"
+        android:clickable="false"
+        android:focusable="false"
+        android:focusableInTouchMode="false" />
 
     <TextView
         android:id="@+id/tv_expense_list_category"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:focusableInTouchMode="false"
-		android:clickable="false"
-		android:focusable="false" />
+        android:layout_below="@id/tv_expense_date"
+        android:clickable="false"
+        android:focusable="false"
+        android:focusableInTouchMode="false" />
 
     <TextView
         android:id="@+id/tv_expense_list_amount"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:focusableInTouchMode="false"
-		android:clickable="false"
-		android:focusable="false" />
+        android:layout_below="@id/tv_expense_list_category"
+        android:clickable="false"
+        android:focusable="false"
+        android:focusableInTouchMode="false" />
 
-</LinearLayout>
+    <TextView
+        android:id="@+id/tv_expense_list_status"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_expense_list_amount"
+        android:clickable="false"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:textColor="@color/error_color" />
+
+    <ImageView
+        android:id="@+id/iv_expense_receipt"
+        android:layout_width="110dp"
+        android:layout_height="110dp"
+        android:layout_alignParentEnd="true"
+        android:scaleType="fitXY"
+        android:src="@drawable/a" />
+
+</RelativeLayout>

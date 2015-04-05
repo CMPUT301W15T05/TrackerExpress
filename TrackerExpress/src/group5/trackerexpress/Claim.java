@@ -1,6 +1,8 @@
 package group5.trackerexpress;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.UUID;
 
 import android.content.Context;
@@ -19,37 +21,39 @@ public class Claim extends TModel implements Comparable<Claim>{
 	private static final long serialVersionUID = 1L;
 
 	/** The name of the claim creator*/
-	private String userName;
+	private String submitterName;
+	private String submitterEmail;
+	
+	/** The name of the claim creator*/
+	private String approverName;
+	private String approverEmail;	
 	
 	/** The claim name. */
 	private String claimName;
 	
 	/** The Description of the claim. */
-	private String Description;
+	private String description;
 	
 	/** The list of expenses for the claim. */
 	private ExpenseList expenseList;
 	
 	/** The destinations visited in claim. */
-	private ArrayList<String[]> destination = new ArrayList<String[]>();
+	private ArrayList<Destination> destinations;
 	
 	/** The status of the claim (in_progress, submitted, returned, or approved. */
 	private int status; 
 	
 	/** The start date of the claim. */
-	private Date startDate;
+	private Calendar startDate;
 	
 	/** The end date of the claim. */
-	private Date endDate;
+	private Calendar endDate;
 	
-	/** The incomplete indicator. */
+	/** The incompleteness indicator. */
 	private boolean incomplete;
 	
 	/** The comments returned from an approver*/
 	private String comments;
-	
-	/** The user who approved/returned the claim*/
-	private User approver;
 
 	/** The ArrayList of tagIds.*/
 	private ArrayList<UUID> tagIds;
@@ -77,13 +81,13 @@ public class Claim extends TModel implements Comparable<Claim>{
 	 * @param claimName the claim name
 	 */
 	public Claim(String claimName) {
-		// TODO Auto-generated constructor stub
 		this.uuid = UUID.randomUUID();
 		this.claimName = claimName;
 		this.expenseList = new ExpenseList();
 		this.status = IN_PROGRESS;
 		this.incomplete = true;
 		this.tagIds = new ArrayList<UUID>();
+		this.destinations = new ArrayList<Destination>();
 	}
 	
 	/**
@@ -122,24 +126,7 @@ public class Claim extends TModel implements Comparable<Claim>{
 	public void setComments(String comments) {
 		this.comments = comments;
 	}
-	
-	/**
-	 * Gets the approver as a User
-	 * 
-	 * @return the approver
-	 */
-	public User getApprover() {
-		return approver;
-	}
 
-	/**
-	 * Sets the approver
-	 * 
-	 * @param the User approver
-	 */
-	public void setApprover(User approver) {
-		this.approver = approver;
-	}
 
 	/**
 	 * Gets the uuid.
@@ -166,20 +153,84 @@ public class Claim extends TModel implements Comparable<Claim>{
 	 *
 	 * @return the user name
 	 */
-	public String getuserName(){
-		return userName;
+	public String getSubmitterName(){
+		return submitterName;
 	}
 	
 	/**
 	 * Set User name.
 	 *
 	 * @param context Needed for file IO
-	 * @param userName the user name
+	 * @param submitterName the name
 	 */
-	public void setuserName(Context context, String userName){
-		this.userName = userName;
+	public void setSubmitterName(Context context, String submitterName){
+		this.submitterName = submitterName;
 		notifyViews(context);
 	}
+	
+	
+	/**
+	 * Gets the user name.
+	 *
+	 * @return the user name
+	 */
+	public String getSubmitterEmail(){
+		return submitterEmail;
+	}
+	
+	/**
+	 * Set User name.
+	 *
+	 * @param context Needed for file IO
+	 * @param submitterName the name
+	 */
+	public void setSubmitterEmail(Context context, String submitterEmail){
+		this.submitterEmail = submitterEmail;
+		notifyViews(context);
+	}
+	
+	
+	
+	/**
+	 * Gets the user name.
+	 *
+	 * @return the user name
+	 */
+	public String getApproverName(){
+		return approverName;
+	}
+	
+	/**
+	 * Set User name.
+	 *
+	 * @param context Needed for file IO
+	 * @param submitterName the name
+	 */
+	public void setApproverName(Context context, String approverName){
+		this.approverName = approverName;
+		notifyViews(context);
+	}
+	
+	
+	/**
+	 * Gets the user name.
+	 *
+	 * @return the user name
+	 */
+	public String getApproverEmail(){
+		return approverEmail;
+	}
+	
+	/**
+	 * Set User name.
+	 *
+	 * @param context Needed for file IO
+	 * @param submitterName the name
+	 */
+	public void setApproverEmail(Context context, String approverEmail){
+		this.approverEmail = approverEmail;
+		notifyViews(context);
+	}	
 	
 	/**
 	 * Gets the claim name.
@@ -200,8 +251,6 @@ public class Claim extends TModel implements Comparable<Claim>{
 		this.claimName = claimName;
 		notifyViews(context);
 	}
-	
-
 
 	/**
 	 * Gets the expense list.
@@ -223,8 +272,6 @@ public class Claim extends TModel implements Comparable<Claim>{
 		this.expenseList = expenseList;
 		notifyViews(context);
 	}
-	
-
 
 	/**
 	 * Sets the start date.
@@ -232,7 +279,7 @@ public class Claim extends TModel implements Comparable<Claim>{
 	 * @param context Needed for file IO
 	 * @param d1 the date to use as the start date
 	 */
-	public void setStartDate(Context context, Date d1) {
+	public void setStartDate(Context context, Calendar d1) {
 		// TODO Auto-generated method stub
 		this.startDate = d1;
 		notifyViews(context);
@@ -243,7 +290,7 @@ public class Claim extends TModel implements Comparable<Claim>{
 	 *
 	 * @return the start date
 	 */
-	public Date getStartDate() {
+	public Calendar getStartDate() {
 		return startDate;
 	}	
 	
@@ -253,7 +300,7 @@ public class Claim extends TModel implements Comparable<Claim>{
 	 * @param context Needed for file IO
 	 * @param d2 the date to use as the end date
 	 */
-	public void setEndDate(Context context, Date d2){
+	public void setEndDate(Context context, Calendar d2){
 		this.endDate = d2;
 		notifyViews(context);
 	}
@@ -263,7 +310,7 @@ public class Claim extends TModel implements Comparable<Claim>{
 	 *
 	 * @return the end date
 	 */
-	public Date getEndDate() {
+	public Calendar getEndDate() {
 		return endDate;
 	}
 		
@@ -274,11 +321,12 @@ public class Claim extends TModel implements Comparable<Claim>{
 	 * @param place the location of destination
 	 * @param Reason the reason for travel to destination
 	 */
-	public void addDestination(Context context, String place, String Reason){
-		String[] travelInfo = new String[2];
-		travelInfo[0] = place;
-		travelInfo[1] = Reason;
-		destination.add(travelInfo);
+	public void addDestination(Context context, String place, String reason){
+		Destination travelInfo = new Destination();
+		travelInfo.setDescription(reason);
+		travelInfo.setName(place);
+		
+		destinations.add(travelInfo);
 		notifyViews(context);
 	}
 	
@@ -289,8 +337,8 @@ public class Claim extends TModel implements Comparable<Claim>{
 	 * @param context Needed for file IO
 	 * @param destination the destination
 	 */
-	public void setDestination(Context context, ArrayList<String[]> destination) {
-		this.destination = destination;
+	public void setDestinationList(Context context, ArrayList<Destination> destination) {
+		this.destinations = destination;
 		notifyViews(context);
 	}
 	
@@ -302,11 +350,11 @@ public class Claim extends TModel implements Comparable<Claim>{
 	public String toStringDestinations(){
 		// Get the destinations in a list format
 		String str_destinations = "";
-		for ( int i = 0; i < destination.size() - 1; i++ ){
-			str_destinations += destination.get(i)[0] + ", ";
+		for ( int i = 0; i < destinations.size() - 1; i++ ){
+			str_destinations += destinations.get(i).getName() + ", ";
 		}
-		if (destination.size()>0)
-			str_destinations += destination.get(destination.size() - 1)[0];
+		if (destinations.size()>0)
+			str_destinations += destinations.get(destinations.size() - 1).getName();
 		return str_destinations;
 	}
 	
@@ -315,8 +363,8 @@ public class Claim extends TModel implements Comparable<Claim>{
 	 *
 	 * @return the destination
 	 */
-	public ArrayList<String[]> getDestination() {
-		return destination;
+	public ArrayList<Destination> getDestinationList() {
+		return destinations;
 	}	
 	
 	/**
@@ -326,7 +374,7 @@ public class Claim extends TModel implements Comparable<Claim>{
 	 * @param Description the description
 	 */
 	public void setDescription(Context context, String Description){
-		this.Description = Description;
+		this.description = Description;
 		notifyViews(context);
 	}
 	
@@ -336,7 +384,7 @@ public class Claim extends TModel implements Comparable<Claim>{
 	 * @return the description
 	 */
 	public String getDescription(){
-		return Description; 
+		return description; 
 	}
 	
 
@@ -378,7 +426,21 @@ public class Claim extends TModel implements Comparable<Claim>{
 	 * 
 	 * @return the list of tag Ids
 	 */
-	public ArrayList<UUID> getTagsIds() {
+	public ArrayList<UUID> getTagsIds(Context context) {
+		
+		// First removes tags that no longer exist
+		TagMap tm = Controller.getTagMap(context);
+		ArrayList<UUID> toRemove = new ArrayList<UUID>();
+		for ( UUID u : tagIds ){
+			if ( ! tm.contains(u)){
+				toRemove.add(u);
+			}
+		}
+		for ( UUID u : toRemove ){
+			tagIds.remove(u);
+		}
+				
+		// Then returns the new list of tag ids
 		return tagIds;
 	}
 	
@@ -390,13 +452,14 @@ public class Claim extends TModel implements Comparable<Claim>{
 	public String toStringTags(Context context){
 		String stringTags = "";
 		TagMap tm = Controller.getTagMap(context);
+		ArrayList<UUID> tagUuids = getTagsIds(context);
 		
-		for ( int i = 0; i < tagIds.size() - 1; i++ ) {
-			stringTags += tm.getTag(tagIds.get(i)).toString() + ", "; 
+		for ( int i = 0; i < tagUuids.size() - 1; i++ ) {
+			stringTags += tm.getTag(tagUuids.get(i)).toString() + ", "; 
 		}
 		
-		if ( tagIds.size() > 0 ){
-			stringTags += tm.getTag(tagIds.get(tagIds.size() - 1)).toString();
+		if ( tagUuids.size() > 0 ){
+			stringTags += tm.getTag(tagUuids.get(tagUuids.size() - 1)).toString();
 		}
 		
 		return stringTags;

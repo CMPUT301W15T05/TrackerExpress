@@ -2,14 +2,15 @@ package group5.trackerexpress.test;
 
 import group5.trackerexpress.Claim;
 import group5.trackerexpress.MainActivity;
+import group5.trackerexpress.TestActivity;
 import android.content.Context;
 import android.test.ActivityInstrumentationTestCase2;
 
-public class ClaimTest extends ActivityInstrumentationTestCase2<MainActivity> {
+public class ClaimTest extends ActivityInstrumentationTestCase2<TestActivity> {
 	Context context;
 	
 	public ClaimTest() {
-		super(MainActivity.class);
+		super(TestActivity.class);
 	}
 
 	protected void setUp() throws Exception {

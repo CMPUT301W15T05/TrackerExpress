@@ -9,16 +9,16 @@
         android:id="@+id/editExpenseDescription"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:inputType="textCapSentences"
-        android:hint="Description..." />
+        android:hint="Description..."
+        android:inputType="textCapSentences" />
 
     <Button
         android:id="@+id/tvExpenseDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="showDatePickerDialog"
-        android:text="Date"
         android:padding="13dp"
+        android:text="Date"
         android:textSize="18sp" />
 
     <Spinner
@@ -61,13 +61,27 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="Flag as incomplete" 
-        android:onClick="status"/>
+        android:text="Flag as incomplete" />
 
-    <Button
-        android:id="@+id/editExpenseCreateExpenseButton"
+    <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Finish" />
+        android:orientation="horizontal"
+        android:weightSum="100" >
+
+        <Button
+            android:id="@+id/editExpenseCancelExpenseButton"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="50"
+            android:text="Cancel" />
+
+        <Button
+            android:id="@+id/editExpenseCreateExpenseButton"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="50"
+            android:text="Finish" />
+    </LinearLayout>
 
 </LinearLayout>

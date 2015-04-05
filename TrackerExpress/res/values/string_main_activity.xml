@@ -18,5 +18,6 @@
     <!-- strings for myclaims tab -->
     <string name="button_add_claim"> Add Claim </string>
    	<string name="to"> \u00A0to\u00A0 </string>
+   	<string name="nointernet"> Not Connected to Internet </string>
     
 </resources>

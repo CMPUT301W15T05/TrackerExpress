@@ -2,10 +2,21 @@ package group5.trackerexpress;
 
 
 import java.io.File;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 import java.util.UUID;
 
+import android.app.AlertDialog;
 import android.app.DialogFragment;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -13,11 +24,14 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
@@ -38,47 +52,50 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 	private ImageButton imgButton;
 	
 	/** The create expense button. */
-	private Button createExpenseButton, dateButton;
+	private Button cancelExpenseButton, createExpenseButton, dateButton;
 
 	/** The description, amount. */
 	private EditText description, amount;
 	
 	/** The status checkbox. */
-	private CheckBox flagCheckBox;
+	private CheckBox statusCheckBox;
 	
 	/** The status flag. */
-	private int flagStatus;
+	private boolean complete;
 	
 	/** The receipt uri. */
 	private Uri receiptUri;
 	
 	/** The date from the DatePicker*/
-	private Date dateSelection;
+	private Calendar dateSelection;
+	
+	/** The Claim UUID and the Expense UUID. */
+	private UUID claimId, expenseId;
+	
+	private String curSymbol = null;
+	
+
+	private Calendar myCalendar = Calendar.getInstance();
+	
+	final String myFormat = "EEEE MMMM dd, yyyy"; //In which you need put here
+	final SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+
+	/** The expense in question */
+	private Expense expense;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_edit_expense);
 		
-		
-		final Expense newExpense = new Expense("");
-		System.out.println("STARTING INIT VARS");
-		initializeVariables();
-		System.out.println("FINISHED INIT VARS");
-		
 		final Intent intent = this.getIntent();
-	    final boolean isNewExpense = (boolean) intent.getBooleanExtra("isNewExpense", true);
-		
-	    UUID claimId = (UUID)intent.getSerializableExtra("claimUUID");
-	    UUID expenseId = (UUID)intent.getSerializableExtra("expenseUUID");
-	    final Expense expense = Controller.getExpense(EditExpenseActivity.this, claimId, expenseId);
-	    final Claim claim = Controller.getClaim(this, claimId);
-	    final ExpenseList newExpenseList = claim.getExpenseList();
+	    claimId = (UUID)intent.getSerializableExtra("claimUUID");
+	    expenseId = (UUID)intent.getSerializableExtra("expenseUUID");
 	    
-	    //if not a new expense, set fields to clicked expense
-	    if (isNewExpense != true){
-	    	description.setText(expense.getTitle().toString());
-	    }
+	    expense = Controller.getExpense(EditExpenseActivity.this, claimId, expenseId);
+		
+		initializeVariables();
+		
 
 	    // The date button that shows a date dialog
 		dateButton.setOnClickListener(new Button.OnClickListener(){
@@ -93,19 +110,20 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 	    		takeAPhoto();
 		    }
 		});
-	   
+	
+	    
+	  //the cancel expense button
+	    cancelExpenseButton.setOnClickListener(new Button.OnClickListener(){
+	    	public void onClick(View v) {
+	    		cancelCheck();
+		    }
+		});
+	    
 	    //the create expense button
 	    createExpenseButton.setOnClickListener(new Button.OnClickListener(){
 	    	public void onClick(View v) {
-	    		if (isNewExpense == true){
-	    	    	editExpense(newExpense);
-	    	    	newExpenseList.addExpense(EditExpenseActivity.this, newExpense);
-	    	    }else{
-	    	    	editExpense(expense);
-	    	    } 
-	    		
-	    		finish();
-	    		
+	    		Toast.makeText(EditExpenseActivity.this, "Updating", Toast.LENGTH_SHORT). show();
+	    	    editExpense(expense);
 		    }
 		});
 	  
@@ -167,6 +185,8 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 	 * Initialize variables.
 	 */
 	private void initializeVariables() {
+		
+		// Retrieve the views 
 		description = (EditText) findViewById(R.id.editExpenseDescription);
 		
 		amount = (EditText) findViewById(R.id.editExpenseAmount);
@@ -175,33 +195,57 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 		imgButton = (ImageButton) findViewById(R.id.editExpenseTakeAPhoto);
 		dateButton = (Button) findViewById(R.id.tvExpenseDate);
 		
-		dateSelection = new Date();
-		dateButton.setText(dateSelection.getLongString());
+		dateSelection = Calendar.getInstance();
+		dateButton.setText(sdf.format(dateSelection.getTime()));
 		
 		categorySpinner = (Spinner) findViewById(R.id.editExpenseCategorySpinner);
 		ArrayAdapter<CharSequence> categoryAdapter = ArrayAdapter.createFromResource 
 				(this, R.array.category_array, android.R.layout.simple_spinner_item); //create array adapter using string array and default spinner layout
 		categoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); //specify layout to use when list of choices appears
-		categorySpinner.setAdapter(categoryAdapter);	
+
+		categorySpinner.setAdapter(categoryAdapter);
 		
 		currencySpinner = (Spinner) findViewById(R.id.editExpenseCurrencySpinner);
 		ArrayAdapter<CharSequence> currencyAdapter = ArrayAdapter.createFromResource 
 				(this, R.array.currency_array, android.R.layout.simple_spinner_item); //create array adapter using string array and default spinner layout
 		currencyAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); //specify layout to use when list of choices appears
 		currencySpinner.setAdapter(currencyAdapter);
-		
+	
+		statusCheckBox = (CheckBox) findViewById(R.id.editExpenseIncompleteCheckBox);
+		cancelExpenseButton = (Button) findViewById(R.id.editExpenseCancelExpenseButton);
 		createExpenseButton = (Button) findViewById(R.id.editExpenseCreateExpenseButton);
-		flagCheckBox = (CheckBox) findViewById(R.id.editExpenseIncompleteCheckBox);
+		
+		// If expense already has values, plug them in
+		if (expense.getTitle() != null){
+	    	description.setText(expense.getTitle().toString());
+	    }
+
+	    if ( expense.getAmount() != null ){
+	    	amount.setText(Double.toString(expense.getAmount()));
+	    }
+	    
+	    if ( expense.getCurrency() != null ){
+	    	currencySpinner.setSelection(getIndex(currencySpinner, expense.getCurrency()));
+	    }
+	    
+	    if ( expense.getCategory() != null ){
+	    	categorySpinner.setSelection(getIndex(categorySpinner, expense.getCategory()));
+	    }
+	    
+	    if ( expense.getBitmap() != null ){
+	    	imgButton.setImageBitmap(expense.getBitmap());
+	    }
 	}
 	
 	public void showDatePickerDialog(View v) {
-	    DialogFragment dateFragment = new DatePickerFragment(dateSelection);
+	    DialogFragment dateFragment = new DatePickerFragment(v, dateSelection);
 	    dateFragment.show(getFragmentManager(), "datePicker");
 	}
 	
+
 	@Override
-	public void returnDate(Date date) {
-		dateButton.setText(date.getLongString());
+	public void returnDate(View view, Calendar date) {
+		dateButton.setText(sdf.format(date.getTime()));
 		dateSelection = date;
     }
 	
@@ -214,7 +258,7 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 	 * Take a photo.
 	 */
 	public void takeAPhoto() {
-		String folder = Environment.getExternalStorageDirectory().getAbsolutePath() + "/tmp";
+		String folder = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Tracker Express";
 		File folderF = new File(folder);
 		if (!folderF.exists()) {
 			folderF.mkdir();
@@ -248,62 +292,94 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 		}
 	}
 	
-	public void status(View v) {
-        //code to check if this checkbox is checked!
-		flagCheckBox = (CheckBox)v;
-        if(flagCheckBox.isChecked()){
-        	flagStatus = 1;
-        }else{
-        	flagStatus = 0;
-        }
-    }
-
     
-	private void editExpense(final Expense expense) {
+	public void editExpense(final Expense expense) {
 		
 		
 		String title = description.getText().toString();
-		String sAmount = amount.getText().toString();
-		Double money;
-		
-		if (!sAmount.isEmpty()) {
-			money = Double.parseDouble(sAmount);
-		} else {
-			money = 0.0;
-		}
 	
+		expense.setTitle(this, title);
+	
+		String amt = amount.getText().toString();
+		Double money;
+		if ( ParseHelper.isDoubleParsable(amt) ){
+			money = Double.parseDouble(amount.getText().toString());
+		} else {
+			money = null;
+		}
+		
+		expense.setAmount(this, money);
+		
 		String categorySelection = categorySpinner.getSelectedItem().toString();
 		String currencySelection = currencySpinner.getSelectedItem().toString();
 		
-		expense.setTitle(this, title);
-		expense.setAmount(this, money);
+		BitmapDrawable photo = (BitmapDrawable) imgButton.getDrawable();
+		Bitmap receipt = photo.getBitmap();
+	
+		if(statusCheckBox.isChecked()){
+			complete = false;
+		}else{
+			complete = true;
+		}
+		
+		expense.setComplete(this, complete);
+		expense.setBitmap(this, receipt);
 		expense.setDate(this, dateSelection);
-		expense.setStatus(this, flagStatus);
 		expense.setCategory(this, categorySelection);
 		expense.setCurrency(this, currencySelection);
+			
+		finish();
 	}
-	
-	/**
-	 * On item selected.
-	 *
-	 * @param parent the parent
-	 * @param view the view
-	 * @param position the position
-	 * @param id the id
-	 */
-	public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        // An item was selected. You can retrieve the selected item using
-        // parent.getItemAtPosition(pos)
-		parent.getItemAtPosition(position);
-    }
 
     /**
-     * On nothing selected.
-     *
-     * @param parent the parent
-     */
-    public void onNothingSelected(AdapterView<?> parent) {
-        // Another interface callback
-    }
+	 * Cancelcheck.
+	 */
+	public void cancelCheck(){
+		AlertDialog.Builder helperBuilder = new AlertDialog.Builder(EditExpenseActivity.this);
+		helperBuilder.setCancelable(false);
+		helperBuilder.setTitle("Warning");
+		helperBuilder.setMessage("Are you sure you want to exit before saving?");
+		helperBuilder.setPositiveButton("Proceed", new DialogInterface.OnClickListener(){
+			
+			/** make Cancel button clickable
+			 * @see android.content.DialogInterface.OnClickListener#onClick(android.content.DialogInterface, int)
+			 */
+			public void onClick(DialogInterface dialog, int which){
+								
+				Toast.makeText(EditExpenseActivity.this, "Canceling", Toast.LENGTH_SHORT). show();
+				finish();
+				}
+			});
+						
+		helperBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener(){
+						
+			/** Do Nothing, return to EditClaimActivity
+			 * @see android.content.DialogInterface.OnClickListener#onClick(android.content.DialogInterface, int)
+			 */
+			@Override
+			public void onClick(DialogInterface dialog, int which){
+								
+				}
+			});
+		AlertDialog helpDialog = helperBuilder.create();
+		helpDialog.show();
+	}
 
+	/**
+	 * gets the index of a string in the spinner
+	 * 
+	 * @param spinner: spinner in question
+	 * @param myString: the string in question
+	 * @return myString's index in the spinner
+	 */
+	private int getIndex(Spinner spinner, String myString) {
+		int index = 0;
+		for (int i=0;i<spinner.getCount();i++){
+			if (spinner.getItemAtPosition(i).toString().equalsIgnoreCase(myString)){
+				index = i;
+				break;
+			}
+		}
+		return index;
+	} 
 }

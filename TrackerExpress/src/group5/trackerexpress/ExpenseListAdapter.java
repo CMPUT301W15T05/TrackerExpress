@@ -1,18 +1,25 @@
 package group5.trackerexpress;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Locale;
 
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 /**
  * The Class ExpenseListAdapter.
  */
 public class ExpenseListAdapter extends ArrayAdapter<Expense> {
+	
+	final String myFormat = "MM/dd/yyyy"; //In which you need put here
+	final SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
 	
 	/** The expense list. */
 	private ArrayList<Expense> expenseList;
@@ -48,11 +55,18 @@ public class ExpenseListAdapter extends ArrayAdapter<Expense> {
 		
 		/** The amount. */
 		public TextView amount;
+		
+		/** The status. */
+		public TextView status;
+		
+		/** The receipt. */
+		public ImageView receipt;
 	}
 	
 	/* (non-Javadoc)
 	 * @see android.widget.ArrayAdapter#getView(int, android.view.View, android.view.ViewGroup)
 	 */
+	@SuppressWarnings("deprecation")
 	@Override
 	public View getView(final int position, View convertView, ViewGroup parent){
 		View v = convertView;
@@ -66,6 +80,8 @@ public class ExpenseListAdapter extends ArrayAdapter<Expense> {
 			holder.date = (TextView) v.findViewById(R.id.tv_expense_date);
 			holder.category = (TextView) v.findViewById(R.id.tv_expense_list_category);
 			holder.amount = (TextView) v.findViewById(R.id.tv_expense_list_amount);
+			holder.receipt = (ImageView) v.findViewById(R.id.iv_expense_receipt);
+			holder.status = (TextView) v.findViewById(R.id.tv_expense_list_status);
 
 			v.setTag(holder);
 		} else {
@@ -73,14 +89,25 @@ public class ExpenseListAdapter extends ArrayAdapter<Expense> {
 		}
 		
 		Expense e = expenseList.get(position);
-		holder.expenseTitle.setText(e.getTitle());
+		holder.expenseTitle.setText(String.valueOf(e.getTitle()));
+		
+		if(e.isComplete()){
+			holder.status.setText("");
+		}else{
+			holder.status.setText("INCOMPLETE");
+		}
 		
 		if (e.getDate() != null) {
-			holder.date.setText(e.getDate().getShortString());
+			holder.date.setText(sdf.format(e.getDate().getTime()));
 		}
+		
+		if ( e.getAmount() != null ){
+			String amountSpent = String.valueOf(e.getAmount());
+			holder.amount.setText(amountSpent + " " + e.getCurrency());
+		} 
+		
 		holder.category.setText(e.getCategory());
-		holder.amount.setText(e.getCurrency());
-		//holder.tags.setText(text);
+		holder.receipt.setImageBitmap(e.getBitmap());
 		
 		return v;
 	}

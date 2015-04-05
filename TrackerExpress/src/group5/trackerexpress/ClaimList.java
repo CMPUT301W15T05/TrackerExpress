@@ -2,9 +2,13 @@ package group5.trackerexpress;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.Map.Entry;
@@ -102,7 +106,7 @@ public class ClaimList extends TModel{
 	}
 
 	/**
-	 * Gets all claims in an array of Claims.
+	 * Gets all claims in an array of Claims, sorted newest to oldest.
 	 *
 	 * @return claimArray an array of Claims
 	 */
@@ -110,6 +114,24 @@ public class ClaimList extends TModel{
 		Claim[] claimArray = claims.values().toArray(new Claim[0]);
 		Arrays.sort(claimArray);
 		return claimArray;
+	}
+	
+	/**
+	 * 
+	 * @return claim as array sorted from oldest to newest.
+	 */
+	public ArrayList<Claim> toListWithReverseSorting(){
+		ArrayList<Claim> claimList = new ArrayList<Claim>(claims.values());
+		
+		Comparator<Claim> comparator = new Comparator<Claim>(){
+			@Override
+			public int compare(Claim lhs, Claim rhs) {
+				return lhs.getStartDate().compareTo(rhs.getStartDate());
+			}
+		};
+		
+		Collections.sort(claimList, comparator);
+		return claimList;
 	}
 	
 	

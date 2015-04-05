@@ -76,9 +76,11 @@ public class AccountFormActivity extends Activity {
 			setError(mEmailView, R.string.error_invalid_email);
 			return true;
 		}
+			
 		return false;
 	}
 	
+
 	/**
 	 * Check for a valid password.
 	 *

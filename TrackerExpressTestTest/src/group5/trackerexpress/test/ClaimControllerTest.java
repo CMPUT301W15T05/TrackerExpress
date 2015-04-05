@@ -6,18 +6,19 @@ import group5.trackerexpress.Controller;
 import group5.trackerexpress.Expense;
 import group5.trackerexpress.ExpenseNotFoundException;
 import group5.trackerexpress.MainActivity;
+import group5.trackerexpress.TestActivity;
 import android.app.Instrumentation;
 import android.content.Context;
 import android.test.ActivityInstrumentationTestCase2;
 import android.util.Log;
 
-public class ClaimControllerTest extends ActivityInstrumentationTestCase2<MainActivity> {
+public class ClaimControllerTest extends ActivityInstrumentationTestCase2<TestActivity> {
 
 	Instrumentation instrumentation;
 	Context context;
 	ClaimList claims;
 	public ClaimControllerTest() {
-		super(MainActivity.class);
+		super(TestActivity.class);
 	}
 
 	protected void setUp() throws Exception {
@@ -46,11 +47,11 @@ public class ClaimControllerTest extends ActivityInstrumentationTestCase2<MainAc
 
 	public void testAddDestination(){
 		Claim claim = new Claim ("Toronto");
-		int size = claim.getDestination().size();
+		int size = claim.getDestinationList().size();
 		claim.addDestination(context, "Hamilton", "Business");
-		assertTrue("Size did not increase", size + 1 == claim.getDestination().size());
-		assertTrue("Could not add destination", claim.getDestination().get(claim.getDestination().size()-1)[0] == "Hamilton");
-		assertTrue("Could not add destination2", claim.getDestination().get(claim.getDestination().size()-1)[1] == "Business");
+		assertTrue("Size did not increase", size + 1 == claim.getDestinationList().size());
+		assertTrue("Could not add destination", claim.getDestinationList().get(claim.getDestinationList().size()-1).getName() == "Hamilton");
+		assertTrue("Could not add destination2", claim.getDestinationList().get(claim.getDestinationList().size()-1).getDescription() == "Business");
 
 	}
 }

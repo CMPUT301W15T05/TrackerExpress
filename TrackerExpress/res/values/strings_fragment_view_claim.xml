@@ -9,5 +9,6 @@
     <string name="view_claim_destinations"><b>Destinations:</b></string>
     <string name="view_claim_ammount_spent"><b>Amount Spent:</b></string>
     <string name="view_claim_tags"><b>Tags:</b></string>
+    
     	
 </resources>
