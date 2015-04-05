@@ -75,37 +75,29 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 	
 	private String curSymbol = null;
 	
+
 	private Calendar myCalendar = Calendar.getInstance();
 	
 	final String myFormat = "EEEE MMMM dd, yyyy"; //In which you need put here
 	final SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
-	
+
+	/** The expense in question */
+	private Expense expense;
+
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_edit_expense);
 		
-		
-		final Expense newExpense = new Expense("");
-		System.out.println("STARTING INIT VARS");
-		initializeVariables();
-		System.out.println("FINISHED INIT VARS");
-		
 		final Intent intent = this.getIntent();
-	    final boolean isNewExpense = (boolean) intent.getBooleanExtra("isNewExpense", true);
-		
 	    claimId = (UUID)intent.getSerializableExtra("claimUUID");
 	    expenseId = (UUID)intent.getSerializableExtra("expenseUUID");
-	    final Expense expense = Controller.getExpense(EditExpenseActivity.this, claimId, expenseId);
-	    final Claim claim = Controller.getClaim(this, claimId);
-	    final ExpenseList newExpenseList = claim.getExpenseList();
 	    
-	    
-	    
-	    //if not a new expense, set fields to clicked expense
-	    if (isNewExpense != true){
-	    	description.setText(expense.getTitle().toString());
-	    }
+	    expense = Controller.getExpense(EditExpenseActivity.this, claimId, expenseId);
+		
+		initializeVariables();
+		
 
 	    // The date button that shows a date dialog
 		dateButton.setOnClickListener(new Button.OnClickListener(){
@@ -133,13 +125,7 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 	    createExpenseButton.setOnClickListener(new Button.OnClickListener(){
 	    	public void onClick(View v) {
 	    		Toast.makeText(EditExpenseActivity.this, "Updating", Toast.LENGTH_SHORT). show();
-	    		if (isNewExpense == true){
-	    	    	editExpense(newExpense);
-	    	    	newExpenseList.addExpense(EditExpenseActivity.this, newExpense);
-	    	    }else{
-	    	    	editExpense(expense);
-	    	    }
-	    		
+	    	    editExpense(expense);
 		    }
 		});
 	    
@@ -150,6 +136,8 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 	 * Initialize variables.
 	 */
 	private void initializeVariables() {
+		
+		// Retrieve the views 
 		description = (EditText) findViewById(R.id.editExpenseDescription);
 		amount = (EditText) findViewById(R.id.editExpenseAmount);
 		imgButton = (ImageButton) findViewById(R.id.editExpenseTakeAPhoto);
@@ -170,60 +158,30 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 		currencyAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); //specify layout to use when list of choices appears
 		currencySpinner.setAdapter(currencyAdapter);
 		
-		/*
-		final ArrayList<String> symbols = new ArrayList<String>();
-		final String[] currencies = getResources().getStringArray(R.array.currency_array);
-		String[] splitCurrency;
-		for (int index = 0; index < currencies.length; index++){
-			splitCurrency = currencies[index].split(",");
-		    currencies[index] = splitCurrency[0];
-		    symbols.add(splitCurrency[1]);
-		}
-		
-		currencySpinner = (Spinner) findViewById(R.id.editExpenseCurrencySpinner);
-		ArrayAdapter<String> currencyAdapter = 
-				new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, currencies);
-		currencyAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		currencySpinner.setAdapter(currencyAdapter);
-		
-		curSymbol = symbols.get(0);
-		
-		currencyWatcher = new basicWatcher() {
-			Boolean editting = false;
-
-			@Override
-			public void afterTextChanged(Editable s) {
-				// http://stackoverflow.com/a/28865522/4269270 25/03/2015
-				if (!editting) {
-					editting = true;
-					String sString = s.toString();
-					if (sString.contains(" ")) {
-						s.replace(0, sString.indexOf(" "), curSymbol);
-					}
-					editting = false;
-				}
-				
-			}		
-		};
-		
-		amount.addTextChangedListener(currencyWatcher);
-		
-		currencySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-		    public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-		    	String amountString = amount.getText().toString();
-		    	if (!amountString.isEmpty()) {
-		    		curSymbol = symbols.get(pos);
-		    		amount.setText(curSymbol + " " + amountString.split(" ")[1]);
-		    		amount.setSelection(amount.length());
-		    	}
-		    }
-		    public void onNothingSelected(AdapterView<?> parent) {}
-		});
-		*/
 		statusCheckBox = (CheckBox) findViewById(R.id.editExpenseIncompleteCheckBox);
 		cancelExpenseButton = (Button) findViewById(R.id.editExpenseCancelExpenseButton);
 		createExpenseButton = (Button) findViewById(R.id.editExpenseCreateExpenseButton);
 		
+		// If expense already has values, plug them in
+		if (expense.getTitle() != null){
+	    	description.setText(expense.getTitle().toString());
+	    }
+
+	    if ( expense.getAmount() != null ){
+	    	amount.setText(Double.toString(expense.getAmount()));
+	    }
+	    
+	    if ( expense.getCurrency() != null ){
+	    	currencySpinner.setSelection(getIndex(currencySpinner, expense.getCurrency()));
+	    }
+	    
+	    if ( expense.getCategory() != null ){
+	    	categorySpinner.setSelection(getIndex(categorySpinner, expense.getCategory()));
+	    }
+	    
+	    if ( expense.getBitmap() != null ){
+	    	imgButton.setImageBitmap(expense.getBitmap());
+	    }
 	}
 	
 	public void showDatePickerDialog(View v) {
@@ -289,11 +247,15 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 	
 		expense.setTitle(this, title);
 	
-		Double money = Double.parseDouble(amount.getText().toString());
+		String amt = amount.getText().toString();
+		Double money;
+		if ( ParseHelper.isDoubleParsable(amt) ){
+			money = Double.parseDouble(amount.getText().toString());
+		} else {
+			money = null;
+		}
 		
 		expense.setAmount(this, money);
-			
-		
 		
 		String categorySelection = categorySpinner.getSelectedItem().toString();
 		String currencySelection = currencySpinner.getSelectedItem().toString();
@@ -315,29 +277,7 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 			
 		finish();
 	}
-	/**
-	 * On item selected.
-	 *
-	 * @param parent the parent
-	 * @param view the view
-	 * @param position the position
-	 * @param id the id
-	 */
-	public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        // An item was selected. You can retrieve the selected item using
-        // parent.getItemAtPosition(pos)
-		parent.getItemAtPosition(position);
-    }
 
-    /**
-     * On nothing selected.
-     *
-     * @param parent the parent
-     */
-    public void onNothingSelected(AdapterView<?> parent) {
-        // Another interface callback
-    }
-    
     /**
 	 * Cancelcheck.
 	 */
@@ -371,14 +311,23 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 		AlertDialog helpDialog = helperBuilder.create();
 		helpDialog.show();
 	}
-	
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-	    if (keyCode == KeyEvent.KEYCODE_BACK) {
-	        //do your stuff
-	    	cancelCheck();
-	    }
-	    return super.onKeyDown(keyCode, event);
-	}
 
 
+	/**
+	 * gets the index of a string in the spinner
+	 * 
+	 * @param spinner: spinner in question
+	 * @param myString: the string in question
+	 * @return myString's index in the spinner
+	 */
+	private int getIndex(Spinner spinner, String myString) {
+		int index = 0;
+		for (int i=0;i<spinner.getCount();i++){
+			if (spinner.getItemAtPosition(i).toString().equalsIgnoreCase(myString)){
+				index = i;
+				break;
+			}
+		}
+		return index;
+	} 
 }

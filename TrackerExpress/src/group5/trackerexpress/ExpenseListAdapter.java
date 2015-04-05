@@ -89,7 +89,7 @@ public class ExpenseListAdapter extends ArrayAdapter<Expense> {
 		}
 		
 		Expense e = expenseList.get(position);
-		holder.expenseTitle.setText(e.getTitle());
+		holder.expenseTitle.setText(String.valueOf(e.getTitle()));
 		
 		if(e.isComplete()){
 			holder.status.setText("");
@@ -101,12 +101,13 @@ public class ExpenseListAdapter extends ArrayAdapter<Expense> {
 			holder.date.setText(sdf.format(e.getDate().getTime()));
 		}
 		
-		String amountSpent = String.valueOf(e.getAmount());
-		holder.amount.setText(amountSpent + " " + e.getCurrency());
+		if ( e.getAmount() != null ){
+			String amountSpent = String.valueOf(e.getAmount());
+			holder.amount.setText(amountSpent + " " + e.getCurrency());
+		} 
 		
 		holder.category.setText(e.getCategory());
 		holder.receipt.setImageBitmap(e.getBitmap());
-		//holder.tags.setText(text);
 		
 		return v;
 	}

@@ -10,6 +10,7 @@ import java.util.UUID;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,6 +52,7 @@ public class ViewClaimFragment extends Fragment implements TView {
 
 		// Claim title
 		TextView title = (TextView) rootView.findViewById(R.id.viewClaimTitle);
+
 		title.setText(claim.getClaimName());
 		
 		// User name
@@ -103,7 +105,7 @@ public class ViewClaimFragment extends Fragment implements TView {
 		// Inserting amounts
 		ExpenseList expenseList = claim.getExpenseList();
 		
-		if (expenseList.getExpenseList().size() > 0) {
+		if (expenseList.toList().size() > 0) {
 			String[] expenses = expenseList.toStringTotalCurrencies().split(", ");
 
 			insertRow(R.id.viewClaimAmountSpentTable, getString(R.string.view_claim_ammount_spent), true);

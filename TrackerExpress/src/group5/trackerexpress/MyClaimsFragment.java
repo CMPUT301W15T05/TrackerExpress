@@ -36,7 +36,7 @@ public class MyClaimsFragment extends Fragment implements TView {
 	private TextView tv_has_internet;
 	
 	/** The menu items to hide in the options menu for clicked claims. */
-	private static final int[] submittedOrApprovedHiddenItems = {R.id.op_edit_claim, R.id.op_submit_claim};
+	private static final int[] submittedOrApprovedHiddenItems = {R.id.op_edit_claim, R.id.op_submit_claim, R.id.op_delete_claim};
 	
 	/** Empty fragment constructor. */
 	public MyClaimsFragment() {

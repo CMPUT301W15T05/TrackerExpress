@@ -17,6 +17,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.PopupMenu.OnMenuItemClickListener;
+import android.widget.TextView;
 import android.widget.Toast;
 
 /**
@@ -32,7 +33,9 @@ public class GlobalClaimsFragment extends Fragment implements TView {
 	/** The list xml item. */
 	private ListView lv_global_list;
 
-
+	/** The error notice xml item */
+	private TextView tv_global_error;
+	
 	/**
 	 * Instantiates a new global claims fragment.
 	 */
@@ -52,9 +55,10 @@ public class GlobalClaimsFragment extends Fragment implements TView {
 		View rootView = inflater.inflate(R.layout.fragment_global_claims,
 				container, false);
 
-		lv_global_list = (ListView) rootView
-				.findViewById(R.id.lv_global_claims);
+		lv_global_list = (ListView) rootView.findViewById(R.id.lv_global_claims);
 		lv_global_list.setItemsCanFocus(true);
+		
+		tv_global_error = (TextView) rootView.findViewById(R.id.tv_global_claims_error);
 		
 		update(null);
 		
@@ -74,7 +78,6 @@ public class GlobalClaimsFragment extends Fragment implements TView {
 
 					@Override
 					public boolean onMenuItemClick(MenuItem item) {
-						// TODO Auto-generated method stub
 						final AlertDialog.Builder builder = new AlertDialog.Builder(
 								getActivity());
 						String message = "Enter comments";
@@ -110,7 +113,6 @@ public class GlobalClaimsFragment extends Fragment implements TView {
 										public void onClick(
 												DialogInterface dialog,
 												int which) {
-											// TODO Auto-generated method stub
 											if (input.getText().toString()
 													.equals("")) {
 												Toast.makeText(getActivity(),
@@ -142,7 +144,6 @@ public class GlobalClaimsFragment extends Fragment implements TView {
 										public void onClick(
 												DialogInterface dialog,
 												int which) {
-											// TODO Auto-generated method stub
 											if (input.getText().toString()
 													.equals("")) {
 												Toast.makeText(getActivity(),
@@ -180,7 +181,13 @@ public class GlobalClaimsFragment extends Fragment implements TView {
 	 */
 	@Override
 	public void update(TModel model) {
-		// TODO Auto-generated method stub
+		Claim[] listOfClaims = new ElasticSearchEngine().getClaims();
+		if (listOfClaims == null ){
+			tv_global_error.setVisibility(View.VISIBLE);
+			return;
+		} else {
+			tv_global_error.setVisibility(View.GONE);
+		}
 		GlobalClaimsListAdapter a = new GlobalClaimsListAdapter(getActivity(), new ElasticSearchEngine().getClaims());
 		lv_global_list.setAdapter(a);
 	}
