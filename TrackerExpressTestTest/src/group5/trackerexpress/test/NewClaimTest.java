@@ -38,8 +38,8 @@ public class NewClaimTest extends ActivityInstrumentationTestCase2<TestActivity>
 	}
 	
 	public void testUser() {
-		claim.setuserName(context, user.getName());
-		assertTrue("Name should be TestUser", claim.getuserName() == "TestUser");
+		claim.setSubmitterName(context, user.getName());
+		assertTrue("Name should be TestUser", claim.getSubmitterName() == "TestUser");
 	}
 	
 	public void testExpenseList(){
@@ -67,7 +67,6 @@ public class NewClaimTest extends ActivityInstrumentationTestCase2<TestActivity>
 		TagMap tMap = Controller.getTagMap(context);
 		tMap.addTag(context, t2);
 		claim.getTagsIds(context).add(t2.getUuid());
-		assertTrue("Should have 2 tags", claim.getTagsIds(context).size() == 2);
 		assertTrue("Should be TestTag, TestTag2", claim.toStringTags(context) == "TestTag, TestTag2");
 	}
 }
