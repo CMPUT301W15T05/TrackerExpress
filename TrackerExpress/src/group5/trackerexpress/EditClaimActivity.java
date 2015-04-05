@@ -3,6 +3,7 @@ package group5.trackerexpress;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.UUID;
@@ -30,6 +31,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.PopupMenu;
+import android.widget.TextView;
 import android.widget.Toast;
 
 /**
@@ -40,7 +42,7 @@ import android.widget.Toast;
  * @version Part 4
  *
  */
-public class EditClaimActivity extends EditableActivity {
+public class EditClaimActivity extends EditableActivity implements DatePickerFragment.TheListener{
 	
 	private int SYear;
 	
@@ -54,6 +56,8 @@ public class EditClaimActivity extends EditableActivity {
 	
 	private int EDay;
 	
+	final String myFormat = "EEEE MMMM dd, yyyy"; //In which you need put here
+	final SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
 	
 	/** The Claim name. */
 	private EditText ClaimName;
@@ -62,7 +66,7 @@ public class EditClaimActivity extends EditableActivity {
 	private EditText ClaimTitle;
 	
 	/** The Start date year. */
-	private EditText StartDateYear;
+	private Button StartDateYear;
 	
 	/** The Start date month. */
 	private EditText StartDateMonth;
@@ -71,7 +75,7 @@ public class EditClaimActivity extends EditableActivity {
 	private EditText StartDateDay;
 	
 	/** The End date year. */
-	private EditText EndDateYear;
+	private Button EndDateYear;
 	
 	/** The End date month. */
 	private EditText EndDateMonth;
@@ -121,6 +125,10 @@ public class EditClaimActivity extends EditableActivity {
 	/** The do nothing. */
 	private final int doNothing = 5;
 	
+	private Date startDate; 
+	
+	private Date endDate;
+	
 	/** The my calender. */
 	private Calendar myCalendar = Calendar.getInstance();
 	
@@ -152,11 +160,11 @@ public class EditClaimActivity extends EditableActivity {
 		ClaimTitle = (EditText) findViewById(R.id.editClaimTitle);
 		limitLength(ClaimTitle, 20);
 		
-		StartDateYear = (EditText) findViewById(R.id.editClaimStartDateYear);
+		StartDateYear = (Button) findViewById(R.id.editClaimStartDateYear);
 //		StartDateMonth = (EditText) findViewById(R.id.editClaimStartDateMonth);
 //		StartDateDay = (EditText) findViewById(R.id.editClaimStartDateDay);
 
-		EndDateYear = (EditText) findViewById(R.id.editClaimEndDateYear);
+		EndDateYear = (Button) findViewById(R.id.editClaimEndDateYear);
 //		EndDateMonth = (EditText) findViewById(R.id.editClaimEndDateMonth);
 //		EndDateDay = (EditText) findViewById(R.id.editClaimEndDateDay);
 		Description = (EditText) findViewById(R.id.editClaimDescription);
@@ -240,97 +248,49 @@ public class EditClaimActivity extends EditableActivity {
 		 */
 
 		if (isNewClaim == true){
-			StartDateYear.setOnClickListener(new OnClickListener() {
-
-		        @Override
-		        public void onClick(View v) {
-		            // TODO Auto-generated method stub
-		        	
-
-		            new DatePickerDialog(EditClaimActivity.this, date, myCalendar
-		                    .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
-		                    myCalendar.get(Calendar.DAY_OF_MONTH)).show();
-		            
-		            
-		        }
-		    });
-		
-			EndDateYear.setOnClickListener(new OnClickListener() {
-
-				@Override
+			
+			StartDateYear.setOnClickListener(new TextView.OnClickListener(){
 				public void onClick(View v) {
-					// TODO Auto-generated method stub
-
-						new DatePickerDialog(EditClaimActivity.this, date2, myCalendar2
-								.get(Calendar.YEAR), myCalendar2.get(Calendar.MONTH),
-								myCalendar2.get(Calendar.DAY_OF_MONTH)).show();
-
+					showDatePickerDialog(v, myCalendar);
 				}
-	        
+			});
+		
+			EndDateYear.setOnClickListener(new TextView.OnClickListener(){
+				public void onClick(View v) {
+					showDatePickerDialog(v, myCalendar2);
+				}
 			});
 		} else{
-				
-			StartDateYear.setOnClickListener(new OnClickListener() {
-
-		        @Override
-		        public void onClick(View v) {
-		            // TODO Auto-generated method stub
-		        	String calenderstart = StartDateYear.getText().toString();
-		        	if (calenderstart.length() < 1){
-		        		new DatePickerDialog(EditClaimActivity.this, date, myCalendar
-								.get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
-								myCalendar.get(Calendar.DAY_OF_MONTH)).show();
-		        	}else{
-		        	String  [] parts = calenderstart.split("/");
-		        	
-		        	SYear = Integer.parseInt(parts[2]);
-		        	SMonth = Integer.parseInt(parts[0]);
-		        	SDay = Integer.parseInt(parts[1]);
-		        	
-		    	    myCalendar.set(Calendar.YEAR, SYear);
-			        myCalendar.set(Calendar.MONTH, SMonth-1);
-			        myCalendar.set(Calendar.DAY_OF_MONTH, SDay);
-			        
-			        new DatePickerDialog(EditClaimActivity.this, date, myCalendar
-							.get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
-							myCalendar.get(Calendar.DAY_OF_MONTH)).show();
-			        
-			        
-		        	}
-		        }
-		        
-		    });
-		
-			EndDateYear.setOnClickListener(new OnClickListener() {
-
-				@Override
-				public void onClick(View v) {
-					// TODO Auto-generated method stub
-					String calenderend = EndDateYear.getText().toString();
-					
-					if (calenderend.length() < 1){
-						new DatePickerDialog(EditClaimActivity.this, date2, myCalendar2
-								.get(Calendar.YEAR), myCalendar2.get(Calendar.MONTH),
-								myCalendar2.get(Calendar.DAY_OF_MONTH)).show();
-					}else{
-					String  [] parts2 = calenderend.split("/");
-		        	
-		        	EYear = Integer.parseInt(parts2[2]);
-		        	EMonth = Integer.parseInt(parts2[0]);
-		        	EDay = Integer.parseInt(parts2[1]);
-					
-		        	myCalendar2.set(Calendar.YEAR, EYear);
-			        myCalendar2.set(Calendar.MONTH, EMonth-1);
-			        myCalendar2.set(Calendar.DAY_OF_MONTH, EDay);
-				    
-			        new DatePickerDialog(EditClaimActivity.this, date2, myCalendar2
-							.get(Calendar.YEAR), myCalendar2.get(Calendar.MONTH),
-							myCalendar2.get(Calendar.DAY_OF_MONTH)).show();
-			        
-		        	
-					}
+			
+			if (claim.getStartDate() == null || claim.getEndDate() == null){
+				if (claim.getStartDate() == null){
+					myCalendar = Calendar.getInstance();
 				}
-	        
+				if (claim.getEndDate() == null){
+					myCalendar2 = Calendar.getInstance();
+				}
+			}
+			
+			if (claim.getStartDate() != null || claim.getEndDate() != null){
+				if(claim.getStartDate() != null){
+					myCalendar = claim.getStartDate();
+				}
+				if (claim.getEndDate() != null){
+					myCalendar2 = claim.getEndDate();
+				}
+			}
+			
+			
+			StartDateYear.setOnClickListener(new TextView.OnClickListener(){
+				public void onClick(View v) {
+					showDatePickerDialog(v, myCalendar);
+				}
+			});
+		
+			EndDateYear.setOnClickListener(new TextView.OnClickListener(){
+				public void onClick(View v) {
+					showDatePickerDialog(v, myCalendar2);
+				}
 			});
 			
 		}
@@ -376,18 +336,14 @@ public class EditClaimActivity extends EditableActivity {
 			ClaimTitle.setText(claim.getClaimName());
 					
 			if ( claim.getStartDate() != null ){
-				StartDateYear.setText(String.valueOf(claim.getStartDate().getMM())+"/"
-						+String.valueOf(claim.getStartDate().getDD())+"/"
-						+String.valueOf(claim.getStartDate().getYYYY()));
+				StartDateYear.setText(sdf.format(claim.getStartDate().getTime()));
 /*				StartDateMonth.setText(String.valueOf(claim.getStartDate().getMM()));
 				StartDateDay.setText(String.valueOf(claim.getStartDate().getDD()));
 				*/
 			}
 					
-			if ( claim.getStartDate() != null ){
-				EndDateYear.setText(String.valueOf(claim.getEndDate().getMM())+"/"
-						+String.valueOf(claim.getEndDate().getDD())+"/"
-						+String.valueOf(claim.getEndDate().getYYYY()));
+			if ( claim.getEndDate() != null ){
+				EndDateYear.setText(sdf.format(claim.getEndDate().getTime()));
 /*				EndDateMonth.setText(String.valueOf(claim.getEndDate().getMM()));
 				EndDateDay.setText(String.valueOf(claim.getEndDate().getDD()));
 				*/
@@ -421,24 +377,7 @@ public class EditClaimActivity extends EditableActivity {
 			 */
 			@Override
 			public void onClick(View v) {
-				
-				String aftermath = StartDateYear.getText().toString();
-		        String [] afterpart1 = aftermath.split("/");
 		        
-		        SYear = Integer.parseInt(afterpart1[2]);
-	        	SMonth = Integer.parseInt(afterpart1[0]);
-	        	SDay = Integer.parseInt(afterpart1[1]);
-	        	
-	        	String aftermath2 = EndDateYear.getText().toString();
-		        String [] afterpart2 = aftermath2.split("/");
-		        
-		        EYear = Integer.parseInt(afterpart2[2]);
-	        	EMonth = Integer.parseInt(afterpart2[0]);
-	        	EDay = Integer.parseInt(afterpart2[1]);
-		        
-				
-				Date d1 = new Date(SYear, SMonth, SDay);
-				Date d2 = new Date(EYear, EMonth, EDay);
 				
 				/** this procedure will check if the claim name is repeated */
 				boolean repeatedClaimName = false;
@@ -460,14 +399,15 @@ public class EditClaimActivity extends EditableActivity {
 				    	ClaimTitle.setError( "Title is required!" );
 				    	ClaimTitle.requestFocus();
 				    }
-				} else if (repeatedClaimName) {
+				}
+				if (myCalendar.compareTo(myCalendar2)==1){
+					EndDateYear.setError("End date is SMALLER than start date!");
+					EndDateYear.requestFocus();
+				}
+				if (repeatedClaimName) {
 					ClaimTitle.setError( "Repeated claim name!" );
 			    	ClaimTitle.requestFocus();
-				} else if (d1.getDate() > d2.getDate()){
-						EndDateYear.setError("End date is SMALLER than start date!");
-						EndDateYear.requestFocus();
-					
-				}else {
+				} else {
 					
 				/**
 				 *  Saves user input into claim class.(calling each method)
@@ -532,53 +472,23 @@ public class EditClaimActivity extends EditableActivity {
 	}
 	
 	
-	/**
-	 * http://stackoverflow.com/questions/14933330/datepicker-how-to-popup-datepicker-when-click-on-edittext
-	 * Mar/24/2015
-	 */
-
-	private DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
-
-	    @Override
-	    public void onDateSet(DatePicker view, int year, int monthOfYear,
-	            int dayOfMonth) {
-	        // TODO Auto-generated method stub
-	        myCalendar.set(Calendar.YEAR, year);
-	        myCalendar.set(Calendar.MONTH, monthOfYear);
-	        myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-	        updateLabel(StartDateYear,myCalendar);
-	        
-	    }
-
-	};
 	
-	private DatePickerDialog.OnDateSetListener date2 = new DatePickerDialog.OnDateSetListener() {
-
-	    @Override
-	    public void onDateSet(DatePicker view, int year, int monthOfYear,
-	            int dayOfMonth) {
-	        // TODO Auto-generated method stub
-	        myCalendar2.set(Calendar.YEAR, year);
-	        myCalendar2.set(Calendar.MONTH, monthOfYear);
-	        myCalendar2.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-	        updateLabel(EndDateYear,myCalendar2);
-	    }
-
-	};
-	
-	/**
-	 * http://stackoverflow.com/questions/14933330/datepicker-how-to-popup-datepicker-when-click-on-edittext
-	 * Mar/24/2015
-	 * @param myCalendar3 
-	 * @param date 
-	 */
-	private void updateLabel(EditText Date, Calendar myCalendar3) {
-
-	    String myFormat = "MM/dd/yyyy"; //In which you need put here
-	    SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
-
-	    Date.setText(sdf.format(myCalendar3.getTime()));
+	public void showDatePickerDialog(View v, Calendar dateSelection) {
+	    DialogFragment dateFragment = new DatePickerFragment(v, dateSelection);
+	    dateFragment.show(getFragmentManager(), "datePicker");
 	}
+	
+	@Override
+	public void returnDate(View view, Calendar date) {
+		if (view == StartDateYear) {
+			StartDateYear.setText(sdf.format(date.getTime()));
+			myCalendar = date;
+		} else if (view == EndDateYear) {
+				EndDateYear.setText(sdf.format(date.getTime()));
+				myCalendar2 = date;
+			}
+		
+    }
 	
 	
 	
@@ -751,57 +661,34 @@ public class EditClaimActivity extends EditableActivity {
 	 */
 	private void editclaim(final Claim claim) {
 		// TODO Auto-generated method stub
-		int mySDateY, mySDateM, mySDateD,myEDateY, myEDateM, myEDateD;
-		Date d2 = null;
-		Date d1 = null;
+		String aftermath = StartDateYear.getText().toString();
+		String aftermath2 = EndDateYear.getText().toString();
+
+		Calendar d2 = Calendar.getInstance();
+		Calendar d1 = Calendar.getInstance();
 		String claimUser = ClaimName.getText().toString();
 		String Claim_title = ClaimTitle.getText().toString();
 		
-		String editS = StartDateYear.getText().toString();
-		String [] Sdate = editS.split("/");
-		
-		String editE = EndDateYear.getText().toString();
-		String [] Edate =  editE.split("/");
-		
-		String SDateY = Sdate[2];
-		String SDateM = Sdate[0];
-		String SDateD = Sdate[1];
-		
-		String EDateY = Edate[2];
-		String EDateM = Edate[0];
-		String EDateD = Edate[1];
-		
 		String Descrip = Description.getText().toString();
 		
+		d2=myCalendar2;
 		
-		
-		/** A check if date is parseable (preventing app from crashing) */
-		if (ParseHelper.isIntegerParsable(EDateD) && 
-			ParseHelper.isIntegerParsable(EDateM) && 
-			ParseHelper.isIntegerParsable(EDateY)){
+		d1=myCalendar;
 			
-			myEDateD = Integer.parseInt(EDateD);
-			myEDateM = Integer.parseInt(EDateM);
-			myEDateY = Integer.parseInt(EDateY);
-			d2 = new Date(myEDateY, myEDateM, myEDateD);
-		} 
-		
-		if (ParseHelper.isIntegerParsable(SDateD) &&
-			ParseHelper.isIntegerParsable(SDateM) &&
-			ParseHelper.isIntegerParsable(SDateY)){
-			
-			mySDateD = Integer.parseInt(SDateD);
-			mySDateM = Integer.parseInt(SDateM);
-			mySDateY = Integer.parseInt(SDateY);
-			d1 = new Date(mySDateY, mySDateM, mySDateD);
-			
+		if (aftermath.length() > 0 || aftermath2.length() > 0){
+			if ( aftermath.length() > 0 ){
+		    	claim.setStartDate(this, d1);
+			}
+		    if ( aftermath2.length() > 0 ){
+		    	claim.setEndDate(this, d2);
+		    }
 		}
 
 		claim.setuserName(this, claimUser);
 		claim.setClaimName(this, Claim_title);
 
-		claim.setStartDate(this, d1);
-		claim.setEndDate(this, d2);
+		
+		
 		claim.setDescription(this, Descrip);
 		
 		for (Tag tag: tagsOfClaim)

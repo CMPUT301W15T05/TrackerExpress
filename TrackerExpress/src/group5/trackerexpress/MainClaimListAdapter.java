@@ -1,7 +1,9 @@
 package group5.trackerexpress;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Locale;
 import java.util.Random;
 
 import android.content.Context;
@@ -34,6 +36,9 @@ public class MainClaimListAdapter extends ArrayAdapter<Claim> {
 	
 	/** Claim's distances from home ordered **/
 	ArrayList<Claim> distanceOrderedClaims;
+	
+	final String myFormat = "MM/dd/yyyy"; //In which you need put here
+	final SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
 	
 	/**
 	 * Instantiates a new main claim list adapter.
@@ -91,6 +96,7 @@ public class MainClaimListAdapter extends ArrayAdapter<Claim> {
 	 * @param convertView: view of item
 	 * @param parent: parent of item ( the listView )
 	**/
+	@SuppressWarnings("deprecation")
 	@Override
 	public View getView(final int position, View convertView, ViewGroup parent){
 		View v = convertView;
@@ -155,11 +161,11 @@ public class MainClaimListAdapter extends ArrayAdapter<Claim> {
 		
 		// Print date(s)
 		if ( c.getStartDate() != null ){
-			holder.startDate.setText("Date(s): " + c.getStartDate().getShortString());
+			holder.startDate.setText("Date(s): " + sdf.format(c.getStartDate().getTime()));
 			
 			if ( c.getEndDate() != null ){
 				holder.toDate.setVisibility(View.VISIBLE);
-				holder.endDate.setText(c.getEndDate().getShortString());
+				holder.endDate.setText(sdf.format(c.getEndDate().getTime()));
 			} else {
 				holder.toDate.setVisibility(View.INVISIBLE);
 			}

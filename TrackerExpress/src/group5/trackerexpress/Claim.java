@@ -1,6 +1,8 @@
 package group5.trackerexpress;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.UUID;
 
 import android.content.Context;
@@ -37,10 +39,10 @@ public class Claim extends TModel implements Comparable<Claim>{
 	private int status; 
 	
 	/** The start date of the claim. */
-	private Date startDate;
+	private Calendar startDate;
 	
 	/** The end date of the claim. */
-	private Date endDate;
+	private Calendar endDate;
 	
 	/** The incompleteness indicator. */
 	private boolean incomplete;
@@ -229,7 +231,7 @@ public class Claim extends TModel implements Comparable<Claim>{
 	 * @param context Needed for file IO
 	 * @param d1 the date to use as the start date
 	 */
-	public void setStartDate(Context context, Date d1) {
+	public void setStartDate(Context context, Calendar d1) {
 		// TODO Auto-generated method stub
 		this.startDate = d1;
 		notifyViews(context);
@@ -240,7 +242,7 @@ public class Claim extends TModel implements Comparable<Claim>{
 	 *
 	 * @return the start date
 	 */
-	public Date getStartDate() {
+	public Calendar getStartDate() {
 		return startDate;
 	}	
 	
@@ -250,7 +252,7 @@ public class Claim extends TModel implements Comparable<Claim>{
 	 * @param context Needed for file IO
 	 * @param d2 the date to use as the end date
 	 */
-	public void setEndDate(Context context, Date d2){
+	public void setEndDate(Context context, Calendar d2){
 		this.endDate = d2;
 		notifyViews(context);
 	}
@@ -260,7 +262,7 @@ public class Claim extends TModel implements Comparable<Claim>{
 	 *
 	 * @return the end date
 	 */
-	public Date getEndDate() {
+	public Calendar getEndDate() {
 		return endDate;
 	}
 		

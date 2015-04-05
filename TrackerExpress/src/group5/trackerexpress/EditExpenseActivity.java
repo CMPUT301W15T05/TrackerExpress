@@ -2,7 +2,11 @@ package group5.trackerexpress;
 
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 import java.util.UUID;
 
 import android.app.AlertDialog;
@@ -64,13 +68,18 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 	private Uri receiptUri;
 	
 	/** The date from the DatePicker*/
-	private Date dateSelection;
+	private Calendar dateSelection;
 	
 	/** The Claim UUID and the Expense UUID. */
 	private UUID claimId, expenseId;
 	
 	private String curSymbol = null;
-
+	
+	private Calendar myCalendar = Calendar.getInstance();
+	
+	final String myFormat = "EEEE MMMM dd, yyyy"; //In which you need put here
+	final SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -90,6 +99,8 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 	    final Expense expense = Controller.getExpense(EditExpenseActivity.this, claimId, expenseId);
 	    final Claim claim = Controller.getClaim(this, claimId);
 	    final ExpenseList newExpenseList = claim.getExpenseList();
+	    
+	    
 	    
 	    //if not a new expense, set fields to clicked expense
 	    if (isNewExpense != true){
@@ -144,8 +155,8 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 		imgButton = (ImageButton) findViewById(R.id.editExpenseTakeAPhoto);
 		dateButton = (Button) findViewById(R.id.tvExpenseDate);
 		
-		dateSelection = new Date();
-		dateButton.setText(dateSelection.getLongString());
+		dateSelection = Calendar.getInstance();
+		dateButton.setText(sdf.format(dateSelection.getTime()));
 		
 		categorySpinner = (Spinner) findViewById(R.id.editExpenseCategorySpinner);
 		ArrayAdapter<CharSequence> categoryAdapter = ArrayAdapter.createFromResource 
@@ -216,13 +227,14 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 	}
 	
 	public void showDatePickerDialog(View v) {
-	    DialogFragment dateFragment = new DatePickerFragment(dateSelection);
+	    DialogFragment dateFragment = new DatePickerFragment(v, dateSelection);
 	    dateFragment.show(getFragmentManager(), "datePicker");
 	}
 	
+
 	@Override
-	public void returnDate(Date date) {
-		dateButton.setText(date.getLongString());
+	public void returnDate(View view, Calendar date) {
+		dateButton.setText(sdf.format(date.getTime()));
 		dateSelection = date;
     }
 	

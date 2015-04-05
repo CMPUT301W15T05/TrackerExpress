@@ -1,6 +1,9 @@
 package group5.trackerexpress;
 
 
+import java.text.SimpleDateFormat;
+import java.util.Locale;
+
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,6 +16,9 @@ public class GlobalClaimsListAdapter extends ArrayAdapter<Claim> {
 	public static final String approvedStatus = "APPROVED";
 	public static final String returnedStatus = "RETURNED";
 	public static final String submittedStatus = "SUBMITTED";
+	
+	final String myFormat = "MM/dd/yyyy"; //In which you need put here
+	final SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
 	
 	/** The claim list. */
 	private Claim[] claimList;
@@ -72,6 +78,7 @@ public class GlobalClaimsListAdapter extends ArrayAdapter<Claim> {
 	 * @param convertView: view of item
 	 * @param parent: parent of item ( the listView )
 	**/
+	@SuppressWarnings("deprecation")
 	@Override
 	public View getView(final int position, View convertView, ViewGroup parent){
 		View v = convertView;
@@ -116,11 +123,11 @@ public class GlobalClaimsListAdapter extends ArrayAdapter<Claim> {
 		holder.user.setText("User: " + c.getuserName());
 		
 		if ( c.getStartDate() != null ){
-			holder.startDate.setText("Date(s): " + c.getStartDate().getShortString());
+			holder.startDate.setText("Date(s): " + sdf.format(c.getStartDate().getTime()));
 			
 			if ( c.getEndDate() != null ){
 				holder.toDate.setVisibility(View.VISIBLE);
-				holder.endDate.setText(c.getEndDate().getShortString());
+				holder.endDate.setText(sdf.format(c.getEndDate().getTime()));
 			} else {
 				holder.toDate.setVisibility(View.INVISIBLE);
 			}
