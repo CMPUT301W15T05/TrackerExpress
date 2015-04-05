@@ -2,7 +2,6 @@ package group5.trackerexpress;
 
 
 import java.io.File;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -24,6 +23,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -47,6 +47,8 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 	
 	/** The category and currency. */
 	private Spinner categorySpinner, currencySpinner;
+	
+	private TextWatcher currencyWatcher;
 	
 	/** The image button. */
 	private ImageButton imgButton;
@@ -83,6 +85,7 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 	/** The expense in question */
 	private Expense expense;
 
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -100,7 +103,7 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 	    // The date button that shows a date dialog
 		dateButton.setOnClickListener(new Button.OnClickListener(){
 			public void onClick(View v) {
-				showDatePickerDialog(v);
+				showDatePickerDialog(v, Calendar.getInstance());
 			}
 		});
 		
@@ -115,7 +118,7 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 	  //the cancel expense button
 	    cancelExpenseButton.setOnClickListener(new Button.OnClickListener(){
 	    	public void onClick(View v) {
-	    		cancelCheck();
+	    		cancelCheck(EditExpenseActivity.this);
 		    }
 		});
 	    
@@ -126,60 +129,9 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 	    	    editExpense(expense);
 		    }
 		});
-	  
+	    
 	}
-	
-	private TextWatcher currencyWatcher = new basicWatcher() {
-		Boolean editting = false;
-		String preChange = "";
 
-		@Override 
-		public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-			preChange = s.toString();
-		};
-		
-		@Override
-		public void afterTextChanged(Editable s) {
-			String sString = s.toString();
-			
-			// http://stackoverflow.com/a/28865522/4269270 25/03/2015
-			if (!editting && !sString.isEmpty()) {
-				editting = true;
-				
-				if (preChange.equals("0.") && sString.equals("0")) {
-					s.delete(0, 1);
-					editting = false;
-					return;
-				}
-				
-				if (sString.contains(".")) {
-					Integer pointIndex = sString.indexOf(".");
-					
-					// x.xxx -> x.xx
-					if (sString.length() > pointIndex + 3) {
-						s.delete(pointIndex + 3, s.length());
-					}
-					
-					// .xx -> 0.xx
-					if (pointIndex.equals(0)) {
-						s.insert(0, "0");
-					}
-				}
-				
-				
-				// 0x.x -> x.x
-				while (s.charAt(0) == '0') {
-					if (s.length() < 2 || s.charAt(1) == '.') {
-						break;
-					}
-				
-					s.delete(0, 1);
-				}
-				
-				editting = false;
-			}
-		}
-	};
 	
 	/**
 	 * Initialize variables.
@@ -188,10 +140,7 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 		
 		// Retrieve the views 
 		description = (EditText) findViewById(R.id.editExpenseDescription);
-		
 		amount = (EditText) findViewById(R.id.editExpenseAmount);
-		amount.addTextChangedListener(currencyWatcher);
-		
 		imgButton = (ImageButton) findViewById(R.id.editExpenseTakeAPhoto);
 		dateButton = (Button) findViewById(R.id.tvExpenseDate);
 		
@@ -202,7 +151,6 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 		ArrayAdapter<CharSequence> categoryAdapter = ArrayAdapter.createFromResource 
 				(this, R.array.category_array, android.R.layout.simple_spinner_item); //create array adapter using string array and default spinner layout
 		categoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); //specify layout to use when list of choices appears
-
 		categorySpinner.setAdapter(categoryAdapter);
 		
 		currencySpinner = (Spinner) findViewById(R.id.editExpenseCurrencySpinner);
@@ -210,7 +158,7 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 				(this, R.array.currency_array, android.R.layout.simple_spinner_item); //create array adapter using string array and default spinner layout
 		currencyAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); //specify layout to use when list of choices appears
 		currencySpinner.setAdapter(currencyAdapter);
-	
+		
 		statusCheckBox = (CheckBox) findViewById(R.id.editExpenseIncompleteCheckBox);
 		cancelExpenseButton = (Button) findViewById(R.id.editExpenseCancelExpenseButton);
 		createExpenseButton = (Button) findViewById(R.id.editExpenseCreateExpenseButton);
@@ -237,12 +185,6 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 	    }
 	}
 	
-	public void showDatePickerDialog(View v) {
-	    DialogFragment dateFragment = new DatePickerFragment(v, dateSelection);
-	    dateFragment.show(getFragmentManager(), "datePicker");
-	}
-	
-
 	@Override
 	public void returnDate(View view, Calendar date) {
 		dateButton.setText(sdf.format(date.getTime()));
@@ -329,40 +271,6 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 		expense.setCurrency(this, currencySelection);
 			
 		finish();
-	}
-
-    /**
-	 * Cancelcheck.
-	 */
-	public void cancelCheck(){
-		AlertDialog.Builder helperBuilder = new AlertDialog.Builder(EditExpenseActivity.this);
-		helperBuilder.setCancelable(false);
-		helperBuilder.setTitle("Warning");
-		helperBuilder.setMessage("Are you sure you want to exit before saving?");
-		helperBuilder.setPositiveButton("Proceed", new DialogInterface.OnClickListener(){
-			
-			/** make Cancel button clickable
-			 * @see android.content.DialogInterface.OnClickListener#onClick(android.content.DialogInterface, int)
-			 */
-			public void onClick(DialogInterface dialog, int which){
-								
-				Toast.makeText(EditExpenseActivity.this, "Canceling", Toast.LENGTH_SHORT). show();
-				finish();
-				}
-			});
-						
-		helperBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener(){
-						
-			/** Do Nothing, return to EditClaimActivity
-			 * @see android.content.DialogInterface.OnClickListener#onClick(android.content.DialogInterface, int)
-			 */
-			@Override
-			public void onClick(DialogInterface dialog, int which){
-								
-				}
-			});
-		AlertDialog helpDialog = helperBuilder.create();
-		helpDialog.show();
 	}
 
 	/**

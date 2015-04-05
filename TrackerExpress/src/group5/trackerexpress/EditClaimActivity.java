@@ -421,8 +421,7 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 			 */
 			@Override
 			public void onClick(View v) {
-				cancelcheck();
-				
+				cancelCheck(EditClaimActivity.this);				
 			}
 		});
 	    
@@ -438,16 +437,9 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 	    if (keyCode == KeyEvent.KEYCODE_BACK) {
 	        //do your stuff
-	    	cancelcheck();
+	    	cancelCheck(EditClaimActivity.this);
 	    }
 	    return super.onKeyDown(keyCode, event);
-	}
-	
-	
-	
-	public void showDatePickerDialog(View v, Calendar dateSelection) {
-	    DialogFragment dateFragment = new DatePickerFragment(v, dateSelection);
-	    dateFragment.show(getFragmentManager(), "datePicker");
 	}
 	
 	@Override
@@ -837,40 +829,6 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 			destinationreason.add(destination_reason);
 		}
 		return destinationreason;
-	}
-	
-	/**
-	 * Cancelcheck.
-	 */
-	public void cancelcheck(){
-		AlertDialog.Builder helperBuilder = new AlertDialog.Builder(EditClaimActivity.this);
-		helperBuilder.setCancelable(false);
-		helperBuilder.setTitle("Warning");
-		helperBuilder.setMessage("Are you sure you want to exit before saving?");
-		helperBuilder.setPositiveButton("Proceed", new DialogInterface.OnClickListener(){
-			
-			/** make Cancel button clickable
-			 * @see android.content.DialogInterface.OnClickListener#onClick(android.content.DialogInterface, int)
-			 */
-			public void onClick(DialogInterface dialog, int which){
-								
-				Toast.makeText(EditClaimActivity.this, "Canceling", Toast.LENGTH_SHORT). show();
-				finish();
-				}
-			});
-						
-		helperBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener(){
-						
-			/** Do Nothing, return to EditClaimActivity
-			 * @see android.content.DialogInterface.OnClickListener#onClick(android.content.DialogInterface, int)
-			 */
-			@Override
-			public void onClick(DialogInterface dialog, int which){
-								
-				}
-			});
-		AlertDialog helpDialog = helperBuilder.create();
-		helpDialog.show();
 	}
 
 }
