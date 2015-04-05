@@ -1,6 +1,9 @@
 package group5.trackerexpress;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.UUID;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 
@@ -17,7 +20,7 @@ public class Expense extends TModel{
 	private String title;
 	
 	/** The date of the expense. */
-	private Date date;
+	private Calendar date;
 	
 	/** The id of the expense. */
 	private UUID uuid;
@@ -109,7 +112,7 @@ public class Expense extends TModel{
 	 * @param context Needed for file IO
 	 * @param d1 the Date
 	 */
-	public void setDate(Context context, Date convertedDateSelection) {
+	public void setDate(Context context, Calendar convertedDateSelection) {
 		this.date = convertedDateSelection;
 		notifyViews(context);
 	}
@@ -119,7 +122,7 @@ public class Expense extends TModel{
 	 *
 	 * @return the year
 	 */
-	public Date getDate() {
+	public Calendar getDate() {
 		// TODO Auto-generated method stub
 		return date;
 	}
@@ -203,7 +206,7 @@ public class Expense extends TModel{
 
 	public void setBitmap(Context context, Bitmap receipt) {
 		// TODO Auto-generated method stub
-		this.bitmap = bitmap;
+		this.bitmap = receipt;
 		notifyViews(context);
 	}
 	

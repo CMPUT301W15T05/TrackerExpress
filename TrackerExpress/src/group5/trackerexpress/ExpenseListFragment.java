@@ -17,6 +17,7 @@ import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Button;
+import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
 /**
@@ -81,28 +82,78 @@ public class ExpenseListFragment extends Fragment implements TView {
 			@Override
 			public void onClick(View v) {
 				Expense exp = new Expense();
+				
 				claim.getExpenseList().addExpense(getActivity(), exp);
 
 				Intent intent = new Intent( getActivity(), EditExpenseActivity.class );
 				intent.putExtra("claimUUID", claim.getUuid());
 				intent.putExtra("expenseUUID", exp.getUuid());
-				intent.putExtra("isNewExpense", true);
 				
 				startActivity(intent);
 			}	
 		});
 		
+		lv_expense_list.setOnItemClickListener(new OnItemClickListener(){
+
+			@Override
+			public void onItemClick(AdapterView<?> a, View v,
+					final int position, long arg3) {
+				// TODO Auto-generated method stub
+				
+				final Expense clickedOnExpense = (Expense) lv_expense_list.getAdapter().getItem(position);
+				
+				PopupMenu popup = new PopupMenu(getActivity(), v);
+				popup.getMenuInflater().inflate(R.menu.expense_list_popup, popup.getMenu());
+				
+				onPrepareOptionsMenu(popup);
+				
+				// Popup menu item click listener
+				popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+					
+					@Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                    	Intent intent;
+                        switch(item.getItemId()){
+                        case R.id.op_delete_expense: 
+                        	claim.getExpenseList().removeExpense(getActivity(), clickedOnExpense.getUuid());
+                        	break;
+                        case R.id.op_edit_expense:
+                        	intent = new Intent( getActivity(), EditExpenseActivity.class );
+            				intent.putExtra("claimUUID", claim.getUuid());
+                        	intent.putExtra("expenseUUID", clickedOnExpense.getUuid());
+                        	startActivity(intent);
+                        	break;
+                        default: break;
+                        }
+                        
+                        return true;
+                    }
+                });
+				
+	            popup.show();					
+			}
+			
+		});
+		
 		return rootView;
 	}
 
+	public void onPrepareOptionsMenu( PopupMenu popup ){
+		if ( ! myClaimListVersion ||
+				claim.getStatus() == Claim.APPROVED || 
+				claim.getStatus() == Claim.SUBMITTED ){
+			popup.getMenu().getItem(R.id.op_edit_expense).setVisible(false);
+			popup.getMenu().getItem(R.id.op_delete_expense).setVisible(false);
+		}
+	}
+	
 	/* 
 	 * @see group5.trackerexpress.TView#update(group5.trackerexpress.TModel)
 	 */
 	@Override
 	public void update(TModel model) {
-		lv_expense_list.setAdapter(
-				new ExpenseListAdapter( getActivity(), 
-						claim.getExpenseList().getExpenseList()));
+		lv_expense_list.setAdapter( new ExpenseListAdapter( getActivity(), 
+						claim.getExpenseList().toList() ) );
 	}
 
 }

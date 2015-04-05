@@ -1,6 +1,8 @@
 package group5.trackerexpress;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Locale;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -15,6 +17,9 @@ import android.widget.TextView;
  * The Class ExpenseListAdapter.
  */
 public class ExpenseListAdapter extends ArrayAdapter<Expense> {
+	
+	final String myFormat = "MM/dd/yyyy"; //In which you need put here
+	final SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
 	
 	/** The expense list. */
 	private ArrayList<Expense> expenseList;
@@ -61,6 +66,7 @@ public class ExpenseListAdapter extends ArrayAdapter<Expense> {
 	/* (non-Javadoc)
 	 * @see android.widget.ArrayAdapter#getView(int, android.view.View, android.view.ViewGroup)
 	 */
+	@SuppressWarnings("deprecation")
 	@Override
 	public View getView(final int position, View convertView, ViewGroup parent){
 		View v = convertView;
@@ -83,7 +89,7 @@ public class ExpenseListAdapter extends ArrayAdapter<Expense> {
 		}
 		
 		Expense e = expenseList.get(position);
-		holder.expenseTitle.setText(e.getTitle());
+		holder.expenseTitle.setText(String.valueOf(e.getTitle()));
 		
 		if(e.isComplete()){
 			holder.status.setText("");
@@ -92,15 +98,16 @@ public class ExpenseListAdapter extends ArrayAdapter<Expense> {
 		}
 		
 		if (e.getDate() != null) {
-			holder.date.setText(e.getDate().getShortString());
+			holder.date.setText(sdf.format(e.getDate().getTime()));
 		}
 		
-		String amountSpent = String.valueOf(e.getAmount());
-		holder.amount.setText(amountSpent + " " + e.getCurrency());
+		if ( e.getAmount() != null ){
+			String amountSpent = String.valueOf(e.getAmount());
+			holder.amount.setText(amountSpent + " " + e.getCurrency());
+		} 
 		
 		holder.category.setText(e.getCategory());
 		holder.receipt.setImageBitmap(e.getBitmap());
-		//holder.tags.setText(text);
 		
 		return v;
 	}

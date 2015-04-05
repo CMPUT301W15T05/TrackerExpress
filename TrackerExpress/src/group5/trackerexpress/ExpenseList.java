@@ -35,7 +35,7 @@ public class ExpenseList extends TModel{
 	 *
 	 * @return the expense list
 	 */
-	public ArrayList<Expense> getExpenseList() {
+	public ArrayList<Expense> toList() {
 		return expenseList;
 	}
 
@@ -48,6 +48,7 @@ public class ExpenseList extends TModel{
 	public void addExpense(Context context, Expense expense) {
 		expenseList.add(expense);
 		expenseIds.add(expense.getUuid());
+		expense.addViews(this.views);
 	}
 	
 	/**
@@ -99,12 +100,14 @@ public class ExpenseList extends TModel{
 		ArrayList<Double> amounts = new ArrayList<Double>();
 		
 		for ( Expense e: expenseList ){
-			int index = amounts.indexOf( e.getCurrency() );
+			int index = currencies.indexOf( e.getCurrency() );
 			if ( index != -1 ){
 				amounts.set(index, amounts.get(index) + e.getAmount() );
 			} else {
-				currencies.add(e.getCurrency() );
-				amounts.add(0.0);
+				if ( e.getCurrency() != null ){
+					currencies.add(e.getCurrency() );
+					amounts.add(e.getAmount());
+				}
 			}
 		}
 		

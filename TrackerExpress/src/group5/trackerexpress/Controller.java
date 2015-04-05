@@ -1,6 +1,7 @@
 package group5.trackerexpress;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.UUID;
 
 import android.content.Context;
@@ -107,6 +108,8 @@ public class Controller {
 	 * @return: list of filtered Claims depending on tags selected
 	 */
 	public static Claim[] getFilteredClaims(Context context){
+		updateClaimsFromInternet(context);
+		
 		Claim[] listOfClaims = Controller.getClaimList(context).toList();		
 		ArrayList<Claim> filteredClaims = new ArrayList<Claim>();
 
@@ -139,4 +142,19 @@ public class Controller {
 		return filteredClaims.toArray(new Claim[filteredClaims.size()]);
 	}
 
+	private static void updateClaimsFromInternet(Context context){
+		if ( isInternetConnected(context) ){
+			Claim[] localListOfClaims = Controller.getClaimList(context).toList();
+			Claim[] elasticListOfClaims = (new ElasticSearchEngine()).getClaims();
+			
+			for ( Claim c : localListOfClaims ){
+				if ( c.getStatus() == Claim.SUBMITTED ){
+					int index = Arrays.asList(elasticListOfClaims).indexOf(c);
+					if ( index != -1 && elasticListOfClaims[index].getStatus() != Claim.SUBMITTED) {
+						c.setStatus(context, elasticListOfClaims[index].getStatus());
+					}
+				}
+			}
+		}
+	}
 }

@@ -4,6 +4,12 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
+    <TextView 
+        android:id="@+id/tv_global_claims_error"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/server_error" />
+    
     <ListView
         android:id="@+id/lv_global_claims"
         android:layout_width="match_parent"

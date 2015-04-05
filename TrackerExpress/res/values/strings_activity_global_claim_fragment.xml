@@ -4,4 +4,6 @@
     <string name="popup_return"> Return </string>
     <string name="popup_global_view"> View </string>
     <string name="popup_approve"> Approve </string>
+    
+    <string name="server_error"> COULD NOT CONTACT SERVER \nPossibilities: \n* You are disconnected from the Internet \n* Our server is down </string>
 </resources>

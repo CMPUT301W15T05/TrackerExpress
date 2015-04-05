@@ -60,7 +60,7 @@ public class ClaimInfoActivity extends ActionBarActivity {
 			// It gets the claim from elastic search rather than the myclaimlist
 			Claim[] claims = (new ElasticSearchEngine()).getClaims();
 			for ( Claim c : claims ){
-				if ( c.getUuid() == serializedId ){
+				if ( c.getUuid().equals( serializedId ) ){
 					claim = c;
 					break;
 				}

@@ -78,7 +78,7 @@ public class ElasticSearchEngine {
 				try {
 					claim[0] = elasicSearchEngineUnthreaded.getClaim(idFinal);
 				} catch (Exception e) {
-					throw new RuntimeException();
+					e.printStackTrace();
 				}
 			}
 		});
