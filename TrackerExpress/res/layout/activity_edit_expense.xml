@@ -31,7 +31,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:weightSum="100" >
-
+        
         <EditText
             android:id="@+id/editExpenseAmount"
             android:layout_width="fill_parent"
@@ -43,7 +43,7 @@
 
         <Spinner
             android:id="@+id/editExpenseCurrencySpinner"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="60" />
     </LinearLayout>

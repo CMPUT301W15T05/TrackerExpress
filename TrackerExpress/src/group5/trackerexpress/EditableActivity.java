@@ -47,9 +47,9 @@ public class EditableActivity extends Activity implements DatePickerFragment.The
 			
 			@Override
 			public void afterTextChanged(Editable s) {
-				if (s.length() == length+1) {
+				if (s.length() == length + 1) {
 					view.setError(message);
-					s.delete(length, length+1);
+					s.delete(length, length + 1);
 				}
 			}
 		};

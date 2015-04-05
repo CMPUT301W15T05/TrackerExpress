@@ -9,25 +9,21 @@ import java.util.Locale;
 import java.util.UUID;
 
 import android.app.AlertDialog;
-import android.app.DatePickerDialog;
 import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.text.Editable;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.PopupMenu;
@@ -44,18 +40,6 @@ import android.widget.Toast;
  */
 public class EditClaimActivity extends EditableActivity implements DatePickerFragment.TheListener{
 	
-	private int SYear;
-	
-	private int SMonth;
-	
-	private int SDay;
-	
-	private int EYear;
-	
-	private int EMonth;
-	
-	private int EDay;
-	
 	final String myFormat = "EEEE MMMM dd, yyyy"; //In which you need put here
 	final SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
 	
@@ -68,20 +52,8 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 	/** The Start date year. */
 	private Button StartDateYear;
 	
-	/** The Start date month. */
-	private EditText StartDateMonth;
-	
-	/** The Start date day. */
-	private EditText StartDateDay;
-	
 	/** The End date year. */
 	private Button EndDateYear;
-	
-	/** The End date month. */
-	private EditText EndDateMonth;
-	
-	/** The End date day. */
-	private EditText EndDateDay;
 	
 	/** The Description. */
 	private EditText Description; 
