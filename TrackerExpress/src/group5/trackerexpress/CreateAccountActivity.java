@@ -19,14 +19,6 @@ import android.widget.Toast;
 public class CreateAccountActivity extends AccountFormActivity {
 	
 	/**
-	 * A dummy authentication store containing known user names and passwords.
-	 * TODO: remove after connecting to a real authentication system.
-	 */
-	private static final String[] DUMMY_CREDENTIALS = new String[] {
-			"foo@example.com:hello", "bar@example.com:world" };
-
-	
-	/**
 	 * Constants for create account result.
 	 */
 	public static final int ACCOUNT_SUCCESS = 0;
@@ -178,16 +170,12 @@ public class CreateAccountActivity extends AccountFormActivity {
 		 */
 		@Override
 		protected Integer doInBackground(Void... params) {
-			// TODO: attempt authentication against a network service.
 
-			try {
-				// Simulate network access.
-				Thread.sleep(0); //Thread.sleep(2000);
-			} catch (InterruptedException e) {
-				return NETWORK_ERROR;
-			}
+//			String[] credentials = new EmailElasticSearchEngine().getCredentials();
+			//FIXME: getting credentials doesn't work
+			String[] credentials = new String[0];
 
-			for (String credential : DUMMY_CREDENTIALS) {
+			for (String credential : credentials) {
 				String[] pieces = credential.split(":");
 				
 				// Account already exists
@@ -196,21 +184,12 @@ public class CreateAccountActivity extends AccountFormActivity {
 				}
 			}
 
-			// Email wasn't found in database, so add it right away
+			new EmailElasticSearchEngine().addCredential(mEmail + ":" + mPassword);
 
-			// Update User object
-			System.out.println ("Updating user start");
 			User user = Controller.getUser(CreateAccountActivity.this);
-			System.out.println ("User instance good");
 			user.setName(CreateAccountActivity.this, mName);
-			System.out.println ("User set name good");
 			user.setEmail(CreateAccountActivity.this, mEmail);
-			System.out.println ("User set email good");
 			user.setPassword(CreateAccountActivity.this, mPassword);
-			System.out.println ("User set password good");
-			
-			System.out.println ("Updating user good");
-			
 			// TODO: add user to the proper database
 			
 			return ACCOUNT_SUCCESS;
@@ -227,13 +206,10 @@ public class CreateAccountActivity extends AccountFormActivity {
 			// properly with finish()
 			if (success == ACCOUNT_SUCCESS) {
 				Intent intent = new Intent(CreateAccountActivity.this, MainActivity.class);
-				System.err.println ("Creating intent good");
 		    	startActivity(intent);
-				System.err.println ("Starting intent good");
 				User user = Controller.getUser(CreateAccountActivity.this);
 				user.setSignedIn(true);
 				finish();
-				System.err.println ("Exiting activity good");
 			} else if (success == EMAIL_TAKEN) {
 				showProgress(false);
 				setError(mEmailView, R.string.error_email_taken);

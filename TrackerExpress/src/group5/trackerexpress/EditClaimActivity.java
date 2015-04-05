@@ -332,7 +332,7 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 	    } else {
 		   	done.setText("Edit Claim");
 		   	destination = claim.getDestinationList();
-		    ClaimName.setText(claim.getuserName());
+		    ClaimName.setText(claim.getSubmitterName());
 			ClaimTitle.setText(claim.getClaimName());
 					
 			if ( claim.getStartDate() != null ){
@@ -676,7 +676,7 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 		    }
 		}
 
-		claim.setuserName(this, claimUser);
+		claim.setSubmitterName(this, claimUser);
 		claim.setClaimName(this, Claim_title);
 
 		

@@ -38,7 +38,6 @@ public class User extends TModel{
 	 * @param context Needed for file IO
 	 */
 	public User(Context context) {
-		System.out.println ("New User Start GOOD");
 		loadData(context);
 	}
 	
@@ -129,8 +128,6 @@ public class User extends TModel{
 		try {
 			System.out.println ("FileCourrier start");
 			user = new FileCourrier<User>(this).loadFile(context, FILENAME);
-			//user = new FileCourrier<User>().loadFile(context, FILENAME);
-			
 			
 			System.out.println ("FileCourrier end");
 			this.email = user.getEmail();
@@ -138,12 +135,11 @@ public class User extends TModel{
 			this.name = user.getName();
 		} catch (FileNotFoundException e) {
 			System.err.println ("File doesnt exist.");
-		} catch (NullPointerException e) {
-			System.err.println ("Null pointer exception.");
+			this.email = "fuckedupbeyondallbelief@example.com";
+			this.password = "password";
+			this.name = "Art Vandelay";
 		} catch (IOException e) {
-			System.err.println ("No user data found.");
-		} catch (Exception e) {
-			System.out.println (e.getClass().toString());
+			throw new RuntimeException();
 		}
 	}
 	
