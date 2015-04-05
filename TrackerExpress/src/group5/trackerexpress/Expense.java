@@ -35,7 +35,7 @@ public class Expense extends TModel{
 	private Double amount;
 	
 	/** The image of the receipt for the expense. */
-	private Bitmap bitmap;
+	private SerialBitmap bitmap;
 
 	/** The status of the expense (incompleteness). */
 	private boolean complete; 
@@ -45,6 +45,7 @@ public class Expense extends TModel{
 	 */
 	public Expense() {
 		uuid = UUID.randomUUID();
+		bitmap = new SerialBitmap();
 	}
 
 	/**
@@ -53,8 +54,8 @@ public class Expense extends TModel{
 	 * @param string the string
 	 */
 	public Expense(String string) {
+		this();
 		this.title = string;
-		uuid = UUID.randomUUID();
 	}
     
 	/**
@@ -195,7 +196,7 @@ public class Expense extends TModel{
 	 * @return bitmap the receipt image
 	 */
 	public Bitmap getBitmap(){
-		return bitmap;
+		return bitmap.getBitmap();
 	}
 	
 	/**
@@ -206,7 +207,7 @@ public class Expense extends TModel{
 
 	public void setBitmap(Context context, Bitmap receipt) {
 		// TODO Auto-generated method stub
-		this.bitmap = receipt;
+		this.bitmap.setBitmap(receipt);
 		notifyViews(context);
 	}
 	

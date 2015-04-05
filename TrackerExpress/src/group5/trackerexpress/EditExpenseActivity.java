@@ -23,6 +23,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -43,7 +44,6 @@ import android.widget.Toast;
  * @version Part 4
  */
 public class EditExpenseActivity extends EditableActivity implements DatePickerFragment.TheListener{
-	
 	/** The category and currency. */
 	private Spinner categorySpinner, currencySpinner;
 	
@@ -95,9 +95,10 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 	    expenseId = (UUID)intent.getSerializableExtra("expenseUUID");
 	    
 	    expense = Controller.getExpense(EditExpenseActivity.this, claimId, expenseId);
-		
+			    
 		initializeVariables();
 		
+		Log.i("myMessage", "Never  it");
 
 	    // The date button that shows a date dialog
 		dateButton.setOnClickListener(new Button.OnClickListener(){
@@ -166,7 +167,7 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 		if (expense.getTitle() != null){
 	    	description.setText(expense.getTitle().toString());
 	    }
-
+		
 	    if ( expense.getAmount() != null ){
 	    	amount.setText(Double.toString(expense.getAmount()));
 	    }
@@ -174,7 +175,7 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 	    if ( expense.getCurrency() != null ){
 	    	currencySpinner.setSelection(getIndex(currencySpinner, expense.getCurrency()));
 	    }
-	    
+
 	    if ( expense.getCategory() != null ){
 	    	categorySpinner.setSelection(getIndex(categorySpinner, expense.getCategory()));
 	    }
@@ -182,6 +183,7 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 	    if ( expense.getBitmap() != null ){
 	    	imgButton.setImageBitmap(expense.getBitmap());
 	    }
+	    
 	}
 	
 	public void showDatePickerDialog(View v) {
@@ -219,8 +221,8 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 
 		Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 		intent.putExtra(MediaStore.EXTRA_OUTPUT, receiptUri);
-
-		startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);	
+		
+		startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
 	}
 
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -240,9 +242,7 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 	}
 	
     
-	public void editExpense(final Expense expense) {
-		
-		
+	public void editExpense(final Expense expense) {		
 		String title = description.getText().toString();
 	
 		expense.setTitle(this, title);
@@ -279,7 +279,7 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 	}
 
     /**
-	 * Cancelcheck.
+	 * cancelCheck checks if the user truly wants to exit without saving
 	 */
 	public void cancelCheck(){
 		AlertDialog.Builder helperBuilder = new AlertDialog.Builder(EditExpenseActivity.this);
