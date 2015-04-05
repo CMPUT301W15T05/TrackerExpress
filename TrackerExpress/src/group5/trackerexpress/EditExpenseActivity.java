@@ -79,21 +79,13 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_edit_expense);
 		
-		System.out.println("STARTING INIT VARS");
-		initializeVariables();
-		System.out.println("FINISHED INIT VARS");
-		
 		final Intent intent = this.getIntent();
-		
 	    claimId = (UUID)intent.getSerializableExtra("claimUUID");
 	    expenseId = (UUID)intent.getSerializableExtra("expenseUUID");
 	    expense = Controller.getExpense(EditExpenseActivity.this, claimId, expenseId);
-	    
-	    //if not a new expense, set fields to clicked expense
-	    if (expense.getTitle() != null){
-	    	description.setText(expense.getTitle().toString());
-	    }
-
+		
+		initializeVariables();
+		
 	    // The date button that shows a date dialog
 		dateButton.setOnClickListener(new Button.OnClickListener(){
 			public void onClick(View v) {
@@ -131,6 +123,8 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 	 * Initialize variables.
 	 */
 	private void initializeVariables() {
+		
+		// Retrieve the views 
 		description = (EditText) findViewById(R.id.editExpenseDescription);
 		amount = (EditText) findViewById(R.id.editExpenseAmount);
 		imgButton = (ImageButton) findViewById(R.id.editExpenseTakeAPhoto);
@@ -155,6 +149,26 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 		cancelExpenseButton = (Button) findViewById(R.id.editExpenseCancelExpenseButton);
 		createExpenseButton = (Button) findViewById(R.id.editExpenseCreateExpenseButton);
 		
+		// If expense already has values, plug them in
+		if (expense.getTitle() != null){
+	    	description.setText(expense.getTitle().toString());
+	    }
+
+	    if ( expense.getAmount() != null ){
+	    	amount.setText(Double.toString(expense.getAmount()));
+	    }
+	    
+	    if ( expense.getCurrency() != null ){
+	    	currencySpinner.setSelection(getIndex(currencySpinner, expense.getCurrency()));
+	    }
+	    
+	    if ( expense.getCategory() != null ){
+	    	categorySpinner.setSelection(getIndex(categorySpinner, expense.getCategory()));
+	    }
+	    
+	    if ( expense.getBitmap() != null ){
+	    	imgButton.setImageBitmap(expense.getBitmap());
+	    }
 	}
 	
 	public void showDatePickerDialog(View v) {
@@ -228,8 +242,6 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 		}
 		
 		expense.setAmount(this, money);
-			
-		
 		
 		String categorySelection = categorySpinner.getSelectedItem().toString();
 		String currencySelection = currencySpinner.getSelectedItem().toString();
@@ -251,29 +263,7 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 			
 		finish();
 	}
-	/**
-	 * On item selected.
-	 *
-	 * @param parent the parent
-	 * @param view the view
-	 * @param position the position
-	 * @param id the id
-	 */
-	public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        // An item was selected. You can retrieve the selected item using
-        // parent.getItemAtPosition(pos)
-		parent.getItemAtPosition(position);
-    }
 
-    /**
-     * On nothing selected.
-     *
-     * @param parent the parent
-     */
-    public void onNothingSelected(AdapterView<?> parent) {
-        // Another interface callback
-    }
-    
     /**
 	 * Cancelcheck.
 	 */
@@ -307,14 +297,23 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 		AlertDialog helpDialog = helperBuilder.create();
 		helpDialog.show();
 	}
-	
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-	    if (keyCode == KeyEvent.KEYCODE_BACK) {
-	        //do your stuff
-	    	cancelCheck();
-	    }
-	    return super.onKeyDown(keyCode, event);
-	}
 
 
+	/**
+	 * gets the index of a string in the spinner
+	 * 
+	 * @param spinner: spinner in question
+	 * @param myString: the string in question
+	 * @return myString's index in the spinner
+	 */
+	private int getIndex(Spinner spinner, String myString) {
+		int index = 0;
+		for (int i=0;i<spinner.getCount();i++){
+			if (spinner.getItemAtPosition(i).toString().equalsIgnoreCase(myString)){
+				index = i;
+				break;
+			}
+		}
+		return index;
+	} 
 }
