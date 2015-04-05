@@ -110,13 +110,11 @@ public class MyClaimsFragment extends Fragment implements TView {
                         	startActivity(intent);
                         	break;
                         case R.id.op_submit_claim:
-                        	// TODO:
-                        	// Submit the claim to server
-                        	// using controller
                         	if ( clickedOnClaim.isIncomplete() ){
             					Toast.makeText(getActivity(), "Can't submit, claim is incomplete.", Toast.LENGTH_SHORT). show();
                         	} else {
-                        		clickedOnClaim.setStatus(getActivity(), Claim.SUBMITTED);
+                        		//FIXME: Handle connectivity error
+                        		new ElasticSearchEngine().submitClaim(getActivity(), clickedOnClaim);
                         	}
                         	break;
                         default: break;
@@ -130,7 +128,7 @@ public class MyClaimsFragment extends Fragment implements TView {
 			}
 			
 		});
-				
+
 		return rootView;
 	}
 	

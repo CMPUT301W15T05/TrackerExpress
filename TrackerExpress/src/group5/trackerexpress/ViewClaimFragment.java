@@ -57,7 +57,7 @@ public class ViewClaimFragment extends Fragment implements TView {
 		
 		// User name
 		TextView nameInfo = (TextView) rootView.findViewById(R.id.viewClaimNameInfo);
-		nameInfo.setText(" " + claim.getuserName());
+		nameInfo.setText(" " + claim.getSubmitterName());
 		
 		// Inserting duration row
 		String datePrefix = null;
