@@ -35,7 +35,7 @@ public class ExpenseList extends TModel{
 	 *
 	 * @return the expense list
 	 */
-	public ArrayList<Expense> getExpenseList() {
+	public ArrayList<Expense> toList() {
 		return expenseList;
 	}
 
@@ -100,13 +100,13 @@ public class ExpenseList extends TModel{
 		ArrayList<Double> amounts = new ArrayList<Double>();
 		
 		for ( Expense e: expenseList ){
-			int index = amounts.indexOf( e.getCurrency() );
+			int index = currencies.indexOf( e.getCurrency() );
 			if ( index != -1 ){
 				amounts.set(index, amounts.get(index) + e.getAmount() );
 			} else {
 				if ( e.getCurrency() != null ){
 					currencies.add(e.getCurrency() );
-					amounts.add(0.0);
+					amounts.add(e.getAmount());
 				}
 			}
 		}

@@ -74,7 +74,6 @@ public class GlobalClaimsFragment extends Fragment implements TView {
 
 					@Override
 					public boolean onMenuItemClick(MenuItem item) {
-						// TODO Auto-generated method stub
 						final AlertDialog.Builder builder = new AlertDialog.Builder(
 								getActivity());
 						String message = "Enter comments";
@@ -110,7 +109,6 @@ public class GlobalClaimsFragment extends Fragment implements TView {
 										public void onClick(
 												DialogInterface dialog,
 												int which) {
-											// TODO Auto-generated method stub
 											if (input.getText().toString()
 													.equals("")) {
 												Toast.makeText(getActivity(),
@@ -142,7 +140,6 @@ public class GlobalClaimsFragment extends Fragment implements TView {
 										public void onClick(
 												DialogInterface dialog,
 												int which) {
-											// TODO Auto-generated method stub
 											if (input.getText().toString()
 													.equals("")) {
 												Toast.makeText(getActivity(),
@@ -180,7 +177,6 @@ public class GlobalClaimsFragment extends Fragment implements TView {
 	 */
 	@Override
 	public void update(TModel model) {
-		// TODO Auto-generated method stub
 		GlobalClaimsListAdapter a = new GlobalClaimsListAdapter(getActivity(), new ElasticSearchEngine().getClaims());
 		lv_global_list.setAdapter(a);
 	}
