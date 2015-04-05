@@ -119,8 +119,7 @@ public class GlobalClaimsListAdapter extends ArrayAdapter<Claim> {
 			break;
 		}
 		
-		c.setuserName(getContext(), "Sean"); // For testing
-		holder.user.setText("User: " + c.getuserName());
+		holder.user.setText("User: " + c.getSubmitterName());
 		
 		if ( c.getStartDate() != null ){
 			holder.startDate.setText("Date(s): " + sdf.format(c.getStartDate().getTime()));

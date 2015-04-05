@@ -103,7 +103,7 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 	    // The date button that shows a date dialog
 		dateButton.setOnClickListener(new Button.OnClickListener(){
 			public void onClick(View v) {
-				showDatePickerDialog(v);
+				showDatePickerDialog(v, Calendar.getInstance());
 			}
 		});
 		
@@ -118,7 +118,7 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 	  //the cancel expense button
 	    cancelExpenseButton.setOnClickListener(new Button.OnClickListener(){
 	    	public void onClick(View v) {
-	    		cancelCheck();
+	    		cancelCheck(EditExpenseActivity.this);
 		    }
 		});
 	    
@@ -186,12 +186,6 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 	    
 	}
 	
-	public void showDatePickerDialog(View v) {
-	    DialogFragment dateFragment = new DatePickerFragment(v, dateSelection);
-	    dateFragment.show(getFragmentManager(), "datePicker");
-	}
-	
-
 	@Override
 	public void returnDate(View view, Calendar date) {
 		dateButton.setText(sdf.format(date.getTime()));
@@ -276,40 +270,6 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 		expense.setCurrency(this, currencySelection);
 			
 		finish();
-	}
-
-    /**
-	 * cancelCheck checks if the user truly wants to exit without saving
-	 */
-	public void cancelCheck(){
-		AlertDialog.Builder helperBuilder = new AlertDialog.Builder(EditExpenseActivity.this);
-		helperBuilder.setCancelable(false);
-		helperBuilder.setTitle("Warning");
-		helperBuilder.setMessage("Are you sure you want to exit before saving?");
-		helperBuilder.setPositiveButton("Proceed", new DialogInterface.OnClickListener(){
-			
-			/** make Cancel button clickable
-			 * @see android.content.DialogInterface.OnClickListener#onClick(android.content.DialogInterface, int)
-			 */
-			public void onClick(DialogInterface dialog, int which){
-								
-				Toast.makeText(EditExpenseActivity.this, "Canceling", Toast.LENGTH_SHORT). show();
-				finish();
-				}
-			});
-						
-		helperBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener(){
-						
-			/** Do Nothing, return to EditClaimActivity
-			 * @see android.content.DialogInterface.OnClickListener#onClick(android.content.DialogInterface, int)
-			 */
-			@Override
-			public void onClick(DialogInterface dialog, int which){
-								
-				}
-			});
-		AlertDialog helpDialog = helperBuilder.create();
-		helpDialog.show();
 	}
 
 

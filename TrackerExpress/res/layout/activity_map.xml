@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="group5.trackerexpress.MapActivity">
+    
+    <fragment
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.MapFragment"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" />
+    
+	<!-- http://stackoverflow.com/a/1662088/4269270 03/04/2015 -->
+	<!-- Dummy item to prevent AutoCompleteTextView from receiving focus -->
+	<LinearLayout
+   		android:focusable="true"
+   		android:focusableInTouchMode="true"
+    	android:layout_width="0px"
+    	android:layout_height="0px" />
+
+    <AutoCompleteTextView
+        android:id="@+id/autocomplete_places"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="3dp"
+        android:padding="6dp"
+        android:ems="10"
+        android:imeOptions="actionSearch" 
+        android:inputType="textCapWords"
+        android:hint="@string/place_autocomplete_hint"
+        android:textColor="@android:color/primary_text_light"
+        android:background="@drawable/rectangle"
+        android:singleLine="true" />
+
+    <ImageButton
+        android:id="@+id/confirm_geolocation_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:scaleType="center"
+        android:src="@drawable/ic_confirm_marker"
+        android:contentDescription="@string/confirm_geolocation"
+        android:visibility="gone" />
+    
+</RelativeLayout>

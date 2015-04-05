@@ -9,25 +9,21 @@ import java.util.Locale;
 import java.util.UUID;
 
 import android.app.AlertDialog;
-import android.app.DatePickerDialog;
 import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.text.Editable;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.PopupMenu;
@@ -44,18 +40,6 @@ import android.widget.Toast;
  */
 public class EditClaimActivity extends EditableActivity implements DatePickerFragment.TheListener{
 	
-	private int SYear;
-	
-	private int SMonth;
-	
-	private int SDay;
-	
-	private int EYear;
-	
-	private int EMonth;
-	
-	private int EDay;
-	
 	final String myFormat = "EEEE MMMM dd, yyyy"; //In which you need put here
 	final SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
 	
@@ -68,20 +52,8 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 	/** The Start date year. */
 	private Button StartDateYear;
 	
-	/** The Start date month. */
-	private EditText StartDateMonth;
-	
-	/** The Start date day. */
-	private EditText StartDateDay;
-	
 	/** The End date year. */
 	private Button EndDateYear;
-	
-	/** The End date month. */
-	private EditText EndDateMonth;
-	
-	/** The End date day. */
-	private EditText EndDateDay;
 	
 	/** The Description. */
 	private EditText Description; 
@@ -332,7 +304,7 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 	    } else {
 		   	done.setText("Edit Claim");
 		   	destination = claim.getDestinationList();
-		    ClaimName.setText(claim.getuserName());
+		    ClaimName.setText(claim.getSubmitterName());
 			ClaimTitle.setText(claim.getClaimName());
 					
 			if ( claim.getStartDate() != null ){
@@ -449,8 +421,7 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 			 */
 			@Override
 			public void onClick(View v) {
-				cancelcheck();
-				
+				cancelCheck(EditClaimActivity.this);				
 			}
 		});
 	    
@@ -466,16 +437,9 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 	    if (keyCode == KeyEvent.KEYCODE_BACK) {
 	        //do your stuff
-	    	cancelcheck();
+	    	cancelCheck(EditClaimActivity.this);
 	    }
 	    return super.onKeyDown(keyCode, event);
-	}
-	
-	
-	
-	public void showDatePickerDialog(View v, Calendar dateSelection) {
-	    DialogFragment dateFragment = new DatePickerFragment(v, dateSelection);
-	    dateFragment.show(getFragmentManager(), "datePicker");
 	}
 	
 	@Override
@@ -684,7 +648,7 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 		    }
 		}
 
-		claim.setuserName(this, claimUser);
+		claim.setSubmitterName(this, claimUser);
 		claim.setClaimName(this, Claim_title);
 
 		
@@ -865,40 +829,6 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 			destinationreason.add(destination_reason);
 		}
 		return destinationreason;
-	}
-	
-	/**
-	 * Cancelcheck.
-	 */
-	public void cancelcheck(){
-		AlertDialog.Builder helperBuilder = new AlertDialog.Builder(EditClaimActivity.this);
-		helperBuilder.setCancelable(false);
-		helperBuilder.setTitle("Warning");
-		helperBuilder.setMessage("Are you sure you want to exit before saving?");
-		helperBuilder.setPositiveButton("Proceed", new DialogInterface.OnClickListener(){
-			
-			/** make Cancel button clickable
-			 * @see android.content.DialogInterface.OnClickListener#onClick(android.content.DialogInterface, int)
-			 */
-			public void onClick(DialogInterface dialog, int which){
-								
-				Toast.makeText(EditClaimActivity.this, "Canceling", Toast.LENGTH_SHORT). show();
-				finish();
-				}
-			});
-						
-		helperBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener(){
-						
-			/** Do Nothing, return to EditClaimActivity
-			 * @see android.content.DialogInterface.OnClickListener#onClick(android.content.DialogInterface, int)
-			 */
-			@Override
-			public void onClick(DialogInterface dialog, int which){
-								
-				}
-			});
-		AlertDialog helpDialog = helperBuilder.create();
-		helpDialog.show();
 	}
 
 }

@@ -1,10 +1,11 @@
 package group5.trackerexpress.test;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.UUID;
 
 import group5.trackerexpress.Claim;
 import group5.trackerexpress.ClaimList;
-import group5.trackerexpress.Date;
 import group5.trackerexpress.MainActivity;
 import group5.trackerexpress.TestActivity;
 import android.content.Context;
@@ -82,10 +83,14 @@ public class ClaimListTest extends ActivityInstrumentationTestCase2<TestActivity
 		Claim c2 = new Claim("1");
 		Claim c3 = new Claim("2");
 		
+		Calendar d1 = Calendar.getInstance();
+		Calendar d2 = Calendar.getInstance();
+		Calendar d3 = Calendar.getInstance();
+
 		
-		Date d1 = new Date(1995, 12, 12);
-		Date d2 = new Date(1995, 1, 12);
-		Date d3 = new Date(1995, 2, 12);
+		d1.set(1995, 12, 12);
+		d2.set(1995, 1, 12);
+		d3.set(1995, 2, 12);
 		
 		c1.setStartDate(context, d1);
 		c2.setStartDate(context, d2);
