@@ -81,12 +81,12 @@ public class ExpenseListFragment extends Fragment implements TView {
 			@Override
 			public void onClick(View v) {
 				Expense exp = new Expense();
+				
 				claim.getExpenseList().addExpense(getActivity(), exp);
 
 				Intent intent = new Intent( getActivity(), EditExpenseActivity.class );
 				intent.putExtra("claimUUID", claim.getUuid());
 				intent.putExtra("expenseUUID", exp.getUuid());
-				intent.putExtra("isNewExpense", true);
 				
 				startActivity(intent);
 			}	
@@ -100,9 +100,8 @@ public class ExpenseListFragment extends Fragment implements TView {
 	 */
 	@Override
 	public void update(TModel model) {
-		lv_expense_list.setAdapter(
-				new ExpenseListAdapter( getActivity(), 
-						claim.getExpenseList().getExpenseList()));
+		lv_expense_list.setAdapter( new ExpenseListAdapter( getActivity(), 
+						claim.getExpenseList().getExpenseList() ) );
 	}
 
 }

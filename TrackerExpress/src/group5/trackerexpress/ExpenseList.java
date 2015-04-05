@@ -48,6 +48,7 @@ public class ExpenseList extends TModel{
 	public void addExpense(Context context, Expense expense) {
 		expenseList.add(expense);
 		expenseIds.add(expense.getUuid());
+		expense.addViews(this.views);
 	}
 	
 	/**
@@ -103,8 +104,10 @@ public class ExpenseList extends TModel{
 			if ( index != -1 ){
 				amounts.set(index, amounts.get(index) + e.getAmount() );
 			} else {
-				currencies.add(e.getCurrency() );
-				amounts.add(0.0);
+				if ( e.getCurrency() != null ){
+					currencies.add(e.getCurrency() );
+					amounts.add(0.0);
+				}
 			}
 		}
 		
