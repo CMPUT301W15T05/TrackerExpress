@@ -147,7 +147,8 @@ public class GlobalClaimsFragment extends Fragment implements TView {
 						}
 						update(null);
 						AlertDialog build = builder.create();
-						build.show();
+						if (item.getItemId() != R.id.op_view_global)
+							build.show();
 						return false;
 					}
 				});

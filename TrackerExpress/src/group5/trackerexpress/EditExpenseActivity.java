@@ -44,7 +44,6 @@ import android.widget.Toast;
  * @version Part 4
  */
 public class EditExpenseActivity extends EditableActivity implements DatePickerFragment.TheListener{
-	
 	/** The category and currency. */
 	private Spinner categorySpinner, currencySpinner;
 	
@@ -96,9 +95,10 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 	    expenseId = (UUID)intent.getSerializableExtra("expenseUUID");
 	    
 	    expense = Controller.getExpense(EditExpenseActivity.this, claimId, expenseId);
-		
+			    
 		initializeVariables();
 		
+		Log.i("myMessage", "Never  it");
 
 	    // The date button that shows a date dialog
 		dateButton.setOnClickListener(new Button.OnClickListener(){
@@ -167,7 +167,7 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 		if (expense.getTitle() != null){
 	    	description.setText(expense.getTitle().toString());
 	    }
-
+		
 	    if ( expense.getAmount() != null ){
 	    	amount.setText(Double.toString(expense.getAmount()));
 	    }
@@ -175,7 +175,7 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 	    if ( expense.getCurrency() != null ){
 	    	currencySpinner.setSelection(getIndex(currencySpinner, expense.getCurrency()));
 	    }
-	    
+
 	    if ( expense.getCategory() != null ){
 	    	categorySpinner.setSelection(getIndex(categorySpinner, expense.getCategory()));
 	    }
@@ -183,6 +183,7 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 	    if ( expense.getBitmap() != null ){
 	    	imgButton.setImageBitmap(expense.getBitmap());
 	    }
+	    
 	}
 	
 	@Override
@@ -214,8 +215,8 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 
 		Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 		intent.putExtra(MediaStore.EXTRA_OUTPUT, receiptUri);
-
-		startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);	
+		
+		startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
 	}
 
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -235,9 +236,7 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 	}
 	
     
-	public void editExpense(final Expense expense) {
-		
-		
+	public void editExpense(final Expense expense) {		
 		String title = description.getText().toString();
 	
 		expense.setTitle(this, title);
@@ -272,6 +271,7 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 			
 		finish();
 	}
+
 
 	/**
 	 * gets the index of a string in the spinner

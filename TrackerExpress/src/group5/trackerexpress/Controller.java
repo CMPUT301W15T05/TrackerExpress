@@ -7,6 +7,7 @@ import java.util.UUID;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.util.Log;
 
 /**
  * Holds all the static data members of the app.
@@ -107,9 +108,8 @@ public class Controller {
 	 * @param: context
 	 * @return: list of filtered Claims depending on tags selected
 	 */
-	public static Claim[] getFilteredClaims(Context context){
+	public static Claim[] getFilteredClaims(Context context){	
 		updateClaimsFromInternet(context);
-		
 		Claim[] listOfClaims = Controller.getClaimList(context).toList();		
 		ArrayList<Claim> filteredClaims = new ArrayList<Claim>();
 
@@ -143,15 +143,36 @@ public class Controller {
 	}
 
 	private static void updateClaimsFromInternet(Context context){
+
 		if ( isInternetConnected(context) ){
 			Claim[] localListOfClaims = Controller.getClaimList(context).toList();
 			Claim[] elasticListOfClaims = (new ElasticSearchEngine()).getClaims();
-			
 			for ( Claim c : localListOfClaims ){
-				if ( c.getStatus() == Claim.SUBMITTED ){
-					int index = Arrays.asList(elasticListOfClaims).indexOf(c);
+				Log.i("TESTING", c.getUuid().toString() + c.getClaimName());
+				if ( c.getStatus() != Claim.IN_PROGRESS){
+					int index = 0;
+					boolean found = false;
+					for (Claim g : elasticListOfClaims){
+						Log.i("GLOBALNAMES", g.getUuid() + " " + g.getClaimName());
+						if (g.getUuid().toString().equals(c.getUuid().toString())) {
+							Log.i("CLAIMNAME", g.getClaimName());
+							found = true;
+							break;
+						}
+						index++;	
+					}
+					if (!found)
+						continue;
 					if ( index != -1 && elasticListOfClaims[index].getStatus() != Claim.SUBMITTED) {
-						c.setStatus(context, elasticListOfClaims[index].getStatus());
+						Log.e("LOOP?", "HIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII");
+						Log.e("CLAIM: ",elasticListOfClaims[index].getClaimName());
+						Log.e("CONTEXT", context.toString());
+						if (elasticListOfClaims[index].getStatus() == Claim.SUBMITTED){
+							context = null;
+							claimList.getClaim(c.getUuid()).setStatusNoNotify(context, elasticListOfClaims[index].getStatus());
+						}
+						claimList.getClaim(c.getUuid()).setStatus(context, elasticListOfClaims[index].getStatus());
+						claimList.getClaim(c.getUuid()).setComments(elasticListOfClaims[index].getComments());
 					}
 				}
 			}

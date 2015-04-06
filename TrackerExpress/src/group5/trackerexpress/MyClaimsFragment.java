@@ -164,7 +164,6 @@ public class MyClaimsFragment extends Fragment implements TView {
 		Claim[] listOfClaims = Controller.getFilteredClaims(getActivity());
 
 		adapter= new MainClaimListAdapter(getActivity(), listOfClaims);
-
 		
 		lv_claim_list.setAdapter(adapter);
 		
