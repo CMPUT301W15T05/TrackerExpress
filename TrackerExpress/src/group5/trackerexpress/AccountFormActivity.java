@@ -107,7 +107,6 @@ public class AccountFormActivity extends Activity {
 	 * @return true, if email is valid
 	 */
 	protected boolean isEmailValid(String email) {
-		// TODO: Replace this with your own logic
 		boolean valid = true;
 		if (!email.contains("."))
 			valid = false;
