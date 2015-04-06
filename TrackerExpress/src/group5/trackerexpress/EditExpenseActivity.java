@@ -178,6 +178,10 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 	    	Drawable photo = Drawable.createFromPath(expense.getUriPath());
 			imgButton.setImageDrawable(photo);
 	    }
+	    
+	    if ( !expense.isComplete()){
+	    	statusCheckBox.setChecked(true);
+	    }
 	
 	}
 	

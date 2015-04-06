@@ -18,6 +18,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.text.Editable;
 import android.view.LayoutInflater;
@@ -746,21 +747,24 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-
+				Log.e("NEUTRAL", "NEUTRAL");
 				Intent intent = new Intent(EditClaimActivity.this, MapActivity.class);
 				
 				if (!desName.getText().toString().isEmpty()) {
 					System.out.println("Putting extra destination " + desName.getText().toString());
+					Log.e("DESTINATION", "Putting extra destination " + desName.getText().toString());
 					intent.putExtra("destination", desName.getText().toString());
 				}
 				
 				if (location != null) {
 					System.out.println("Putting extra location");
+					Log.e("LOC", "Putting extra location " + desName.getText().toString());
 					LatLng newlatlng = new LatLng(location.getLatitude(), location.getLongitude());
 					intent.putExtra("latlng", newlatlng);
 				}
 				
 				System.out.println("GOING IN");
+				Log.e("START", "GOING IN");
 		    	EditClaimActivity.this.startActivityForResult(intent, 1);
 			}
 			

@@ -82,6 +82,8 @@ public class GlobalClaimsFragment extends Fragment implements TView {
 				popup.getMenuInflater().inflate(R.menu.global_claims_popup,
 						popup.getMenu());
 				
+				onPrepareOptionsMenu(popup, c);
+				
 				
 				popup.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 
@@ -160,7 +162,7 @@ public class GlobalClaimsFragment extends Fragment implements TView {
 											e.printStackTrace();
 										}
 										c.setStatus(getActivity(), claim_status_use );
-										//update(null);
+										update(null);
 									}
 								}
 							});
@@ -173,6 +175,13 @@ public class GlobalClaimsFragment extends Fragment implements TView {
 					}
 				});
 				popup.show();
+			}
+
+			private void onPrepareOptionsMenu(PopupMenu popup, Claim c) {
+				if (c.getStatus() != Claim.SUBMITTED) {
+					popup.getMenu().findItem(R.id.op_approve).setVisible(false);
+					popup.getMenu().findItem(R.id.op_return).setVisible(false);
+				}	
 			}
 		}
 		);

@@ -39,7 +39,7 @@ public class Expense extends TModel{
 	private Double amount;
 
 	/** The status of the expense (incompleteness). */
-	private boolean complete; 
+	private boolean complete = true; 
 	
 	/**
 	 * Instantiates a new expense.
