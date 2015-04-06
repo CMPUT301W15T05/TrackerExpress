@@ -100,6 +100,11 @@ public class ElasticSearchEngine {
 		claim.setStatus(context, Claim.SUBMITTED);
 		claim.setSubmitterName(context, Controller.getUser(context).getName());
 		claim.setSubmitterEmail(context, Controller.getUser(context).getEmail());
+		
+		//convert UriBitmaps to actual bitmaps
+		for (Expense expense : claim.getExpenseList().toList()){
+			expense.getReceipt().switchToStoringActualBitmap();
+		}
 
 		final Claim claimFinal = claim;
 		
@@ -115,6 +120,18 @@ public class ElasticSearchEngine {
 		});
 
 		thread.start();
+		
+		try {
+			thread.join();
+		} catch (InterruptedException e) {
+			throw new RuntimeException();
+		}
+		
+		//switch back for saving:
+		for (Expense expense : claim.getExpenseList().toList()){
+			expense.getReceipt().stopStoringActualBitmap();
+		}		
+
 	}
 
 

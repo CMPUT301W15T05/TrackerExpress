@@ -164,7 +164,7 @@ public class GlobalClaimsFragment extends Fragment implements TView {
 	 */
 	@Override
 	public void update(TModel model) {
-		Claim[] listOfClaims = new ElasticSearchEngine().getClaims();
+		Claim[] listOfClaims = new ElasticSearchEngine().getClaimsForGlobalClaimList(getActivity());
 		if (listOfClaims == null ){
 			tv_global_error.setVisibility(View.VISIBLE);
 			return;

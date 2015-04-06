@@ -133,5 +133,15 @@ public class ExpenseList extends TModel{
 		for (Expense expense : expenseList)
 			expense.addView(view);
 	}
+
+	/**
+	 * @param expenseListFragment
+	 */
+	public void deleteView(TView view) {
+		super.deleteView(view);
+		for (Expense expense : expenseList){
+			expense.deleteView(view);
+		}
+	}
 	
 }
