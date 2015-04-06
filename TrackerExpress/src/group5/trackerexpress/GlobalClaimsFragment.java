@@ -6,7 +6,6 @@ import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -36,6 +35,9 @@ public class GlobalClaimsFragment extends Fragment implements TView {
 	/** The error notice xml item */
 	private TextView tv_global_error;
 	
+	/** Updates global claims once in a while */
+//	PeriodicTViewUpdater updater;
+	
 	/**
 	 * Instantiates a new global claims fragment.
 	 */
@@ -62,6 +64,12 @@ public class GlobalClaimsFragment extends Fragment implements TView {
 		
 		update(null);
 		
+		// UPDATER TESTED HERE ( Updater not practical for GlobalClaimsList atm
+		// 		b/c GlobalClaimsList is rescrolled to the top )
+		//updater = new PeriodicTViewUpdater();
+		//updater.addView(GlobalClaimsFragment.this);
+		//updater.startRepeatingTask();
+		
 		lv_global_list.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> a, View v,
@@ -74,13 +82,18 @@ public class GlobalClaimsFragment extends Fragment implements TView {
 				popup.getMenuInflater().inflate(R.menu.global_claims_popup,
 						popup.getMenu());
 				
+				onPrepareOptionsMenu(popup, c);
+				
+				
 				popup.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 
 					@Override
 					public boolean onMenuItemClick(MenuItem item) {
 						final AlertDialog.Builder builder = new AlertDialog.Builder(
 								getActivity());
+						
 						String message = "Enter comments";
+						
 						final EditText input = new EditText(getActivity());
 						builder.setMessage(message);
 						builder.setView(input);
@@ -92,68 +105,86 @@ public class GlobalClaimsFragment extends Fragment implements TView {
 										// Do Nothing
 									}
 								});
-
-						switch (item.getItemId()) {
-						case R.id.op_view_global:
+						
+						// Following 3 variables are to set up
+						// dialog box for if a claim is approved 
+						// or returned. 
+						String title_part = null;
+						String toast_part = null;
+						int claim_status = 0;
+						
+						final int itemId = item.getItemId();
+						
+						if ( itemId == R.id.op_view_global ){
 							Intent intent;
 							intent = new Intent(getActivity(),
 									ClaimInfoActivity.class);
 							intent.putExtra("claimUUID", c.getUuid());
 							startActivity(intent);
-							break;
-							
-						case R.id.op_approve:
-							builder.setTitle("Approve Claim");
-							builder.setPositiveButton("Approve",
-									new OnClickListener() {
-								
-										@Override
-										public void onClick(
-												DialogInterface dialog,
-												int which) {
-											if (input.getText().toString()
-													.equals("")) {
-												Toast.makeText(getActivity(),
-														"Comments Required",
-														Toast.LENGTH_LONG)
-														.show();
-											} else {
-												new ElasticSearchEngine().approveClaim(getActivity(), c.getUuid(), input.getText().toString());
-											}
-										}
-									});
-							break;
-						case R.id.op_return:
-							builder.setTitle("Return Claim");
-							builder.setPositiveButton("Return",
-									new OnClickListener() {
-
-										@Override
-										public void onClick(
-												DialogInterface dialog,
-												int which) {
-											if (input.getText().toString()
-													.equals("")) {
-												Toast.makeText(getActivity(),
-														"Comments Required",
-														Toast.LENGTH_LONG)
-														.show();
-											} else {
-												new ElasticSearchEngine().returnClaim(getActivity(), c.getUuid(), input.getText().toString());
-											}
-										}
-									});
-							break;
+						} else if ( itemId == R.id.op_approve ){
+							title_part = "Approve";
+							toast_part = "Approving";
+							claim_status = Claim.APPROVED;
+						} else {
+							title_part = "Return";
+							toast_part = "Returning";
+							claim_status = Claim.RETURNED;
 						}
-						update(null);
+						
+						
+
+						// Following builds the dialog box for return/approving a claim
+						if ( itemId == R.id.op_approve || itemId == R.id.op_return ){
+							// toast_part and claim_status must be constants to be used
+							// by the dialog box 
+							final String toast_part_use = toast_part;
+							final int claim_status_use = claim_status;
+							
+							builder.setTitle(title_part + " Claim");
+							builder.setPositiveButton(title_part, new OnClickListener() {
+								@Override
+								public void onClick( DialogInterface dialog, int which) {
+									if (input.getText().toString().equals("")) {
+										Toast.makeText(getActivity(), "Comments Required", Toast.LENGTH_LONG).show();
+									} else {
+										Toast.makeText(getActivity(), toast_part_use + " Claim", Toast.LENGTH_LONG).show();
+										
+										if ( itemId == R.id.op_approve ){
+											new ElasticSearchEngine().approveClaim(getActivity(), c.getUuid(), input.getText().toString());
+										} else {
+											new ElasticSearchEngine().returnClaim(getActivity(), c.getUuid(), input.getText().toString());
+										}
+										
+										try {
+											Thread.sleep(3000);
+										} catch (InterruptedException e) {
+											// TODO Auto-generated catch block
+											e.printStackTrace();
+										}
+										c.setStatus(getActivity(), claim_status_use );
+										update(null);
+									}
+								}
+							});
+						}
+						//update(null);
 						AlertDialog build = builder.create();
-						build.show();
+						if (item.getItemId() != R.id.op_view_global)
+							build.show();
 						return false;
 					}
 				});
 				popup.show();
 			}
-		});
+
+			private void onPrepareOptionsMenu(PopupMenu popup, Claim c) {
+				if (c.getStatus() != Claim.SUBMITTED) {
+					popup.getMenu().findItem(R.id.op_approve).setVisible(false);
+					popup.getMenu().findItem(R.id.op_return).setVisible(false);
+				}	
+			}
+		}
+		);
 		return rootView;
 	}
 

@@ -174,6 +174,11 @@ public class ElasticSearchEngine {
 		});
 
 		thread.start();
+		/*try {
+			thread.join();
+		} catch (InterruptedException e) {
+			throw new RuntimeException();
+		}*/
 	}
 
 
@@ -196,6 +201,11 @@ public class ElasticSearchEngine {
 		});
 
 		thread.start();
+		/*try {
+			thread.join();
+		} catch (InterruptedException e) {
+			throw new RuntimeException();
+		}*/
 	}
 
 

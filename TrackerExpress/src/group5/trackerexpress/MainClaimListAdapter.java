@@ -50,7 +50,8 @@ public class MainClaimListAdapter extends ArrayAdapter<Claim> {
 		super(context, R.layout.fragment_my_claims_item, claims);
 		this.claimList = claims;
 		this.context = context;
-		this.distanceOrderedClaims = new ArrayList<Claim>(Arrays.asList(claims)); // For testing purposes
+		this.distanceOrderedClaims = new ArrayList<Claim>( 
+				Arrays.asList(Controller.sortClaimsByLocation(context, claims)) ); 
 	}
 	
 	/**

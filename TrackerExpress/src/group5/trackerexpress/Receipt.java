@@ -7,6 +7,7 @@ import java.io.Serializable;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Path;
+import android.graphics.drawable.Drawable;
 import android.provider.MediaStore.Files;
 
 /**
@@ -102,6 +103,13 @@ public class Receipt extends TModel {
 	
 	private Bitmap getBitmapFromByteArray() {
 		return BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+	}
+
+	/**
+	 * @return
+	 */
+	public Drawable getDrawable() {
+		return Drawable.createFromPath(path);
 	}
 
 }

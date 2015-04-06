@@ -258,10 +258,6 @@ public class ElasticSearchEngineUnthreaded {
 		}
 	}	
 	
-	
-	
-	
-	
 	/**
 	 * get the http response and return json string
 	 */

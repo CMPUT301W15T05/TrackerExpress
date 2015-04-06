@@ -73,11 +73,7 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 	/** The Claim UUID and the Expense UUID. */
 	private UUID claimId, expenseId;
 	
-	private String curSymbol = null;
-	
 
-	private Calendar myCalendar = Calendar.getInstance();
-	
 	final String myFormat = "EEEE MMMM dd, yyyy"; //In which you need put here
 	final SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
 
@@ -98,8 +94,6 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 			    
 		initializeVariables();
 		
-		Log.i("myMessage", "Never  it");
-
 	    // The date button that shows a date dialog
 		dateButton.setOnClickListener(new Button.OnClickListener(){
 			public void onClick(View v) {
@@ -180,6 +174,13 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 	    	categorySpinner.setSelection(getIndex(categorySpinner, expense.getCategory()));
 	    }
 	    
+	    if ( expense.getReceipt() != null ){
+			imgButton.setImageDrawable(expense.getReceipt().getDrawable());
+	    }
+	    
+	    if ( !expense.isComplete()){
+	    	statusCheckBox.setChecked(true);
+	    }
 	
 	}
 	
@@ -258,9 +259,11 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 			complete = true;
 		}
 		
-		expense.setComplete(this, complete);
-		if (receiptUri != null)
+		if ( receiptUri != null ){
 			expense.setReceipt(this, new Receipt(receiptUri.getPath()));
+		}
+		
+		expense.setComplete(this, complete);
 		expense.setDate(this, dateSelection);
 		expense.setCategory(this, categorySelection);
 		expense.setCurrency(this, currencySelection);
@@ -302,5 +305,5 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
             width = (int) (height * bitmapRatio);
         }
         return Bitmap.createScaledBitmap(image, width, height, true);
-}
+	}
 }
