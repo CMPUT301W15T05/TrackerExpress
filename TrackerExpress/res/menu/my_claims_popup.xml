@@ -16,4 +16,11 @@
         android:id="@+id/op_submit_claim"
         android:title="@string/popup_submit" />
     
+    <item 
+        android:id="@+id/op_add_expense"
+        android:title="@string/popup_add_expense" />
+    
+    <item 
+        android:id="@+id/op_edit_tags"
+        android:title="@string/popup_edit_tags" />
 </menu>

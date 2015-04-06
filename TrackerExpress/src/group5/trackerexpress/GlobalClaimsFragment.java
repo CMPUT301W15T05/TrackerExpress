@@ -36,7 +36,7 @@ public class GlobalClaimsFragment extends Fragment implements TView {
 	private TextView tv_global_error;
 	
 	/** Updates global claims once in a while */
-	PeriodicTViewUpdater updater;
+//	PeriodicTViewUpdater updater;
 	
 	/**
 	 * Instantiates a new global claims fragment.
@@ -81,6 +81,8 @@ public class GlobalClaimsFragment extends Fragment implements TView {
 				final PopupMenu popup = new PopupMenu(getActivity(), v);
 				popup.getMenuInflater().inflate(R.menu.global_claims_popup,
 						popup.getMenu());
+				
+				onPrepareOptionsMenu(popup, c);
 				
 				
 				popup.setOnMenuItemClickListener(new OnMenuItemClickListener() {
@@ -160,7 +162,7 @@ public class GlobalClaimsFragment extends Fragment implements TView {
 											e.printStackTrace();
 										}
 										c.setStatus(getActivity(), claim_status_use );
-										//update(null);
+										update(null);
 									}
 								}
 							});
@@ -174,6 +176,13 @@ public class GlobalClaimsFragment extends Fragment implements TView {
 				});
 				popup.show();
 			}
+
+			private void onPrepareOptionsMenu(PopupMenu popup, Claim c) {
+				if (c.getStatus() != Claim.SUBMITTED) {
+					popup.getMenu().findItem(R.id.op_approve).setVisible(false);
+					popup.getMenu().findItem(R.id.op_return).setVisible(false);
+				}	
+			}
 		}
 		);
 		return rootView;
@@ -186,7 +195,7 @@ public class GlobalClaimsFragment extends Fragment implements TView {
 	 */
 	@Override
 	public void update(TModel model) {
-		Claim[] listOfClaims = new ElasticSearchEngine().getClaims();
+		Claim[] listOfClaims = new ElasticSearchEngine().getClaimsForGlobalClaimList(getActivity());
 		if (listOfClaims == null ){
 			tv_global_error.setVisibility(View.VISIBLE);
 			return;

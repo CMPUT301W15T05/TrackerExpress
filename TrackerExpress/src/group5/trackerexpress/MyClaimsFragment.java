@@ -33,7 +33,7 @@ public class MyClaimsFragment extends Fragment implements TView {
 	private TextView tv_has_internet;
 	
 	/** The menu items to hide in the options menu for clicked claims. */
-	private static final int[] submittedOrApprovedHiddenItems = {R.id.op_edit_claim, R.id.op_submit_claim, R.id.op_delete_claim};
+	private static final int[] submittedOrApprovedHiddenItems = {R.id.op_edit_claim, R.id.op_submit_claim, R.id.op_delete_claim, R.id.op_add_expense};
 	
 	/** Empty fragment constructor. */
 	public MyClaimsFragment() {
@@ -94,6 +94,7 @@ public class MyClaimsFragment extends Fragment implements TView {
                         case R.id.op_delete_claim: 
                         	Controller.getClaimList(getActivity()).deleteClaim(getActivity(), clickedOnClaim.getUuid());
                         	break;
+                        case R.id.op_edit_tags:
                         case R.id.op_edit_claim:
                         	intent = new Intent( getActivity(), EditClaimActivity.class );
                         	intent.putExtra( "isNewClaim", false );
@@ -116,6 +117,15 @@ public class MyClaimsFragment extends Fragment implements TView {
                         		
                         	}
                         	break;
+                        case R.id.op_add_expense:
+                        	Expense exp = new Expense();
+            				
+            				clickedOnClaim.getExpenseList().addExpense(getActivity(), exp);
+            				intent = new Intent( getActivity(), EditExpenseActivity.class );
+            				intent.putExtra("claimUUID", clickedOnClaim.getUuid());
+            				intent.putExtra("expenseUUID", exp.getUuid());
+            				
+            				startActivity(intent);
                         default: break;
                         }
                         
@@ -144,8 +154,10 @@ public class MyClaimsFragment extends Fragment implements TView {
 			for( int id : submittedOrApprovedHiddenItems ){
 				popup.getMenu().findItem(id).setVisible(false);
 			}
+			popup.getMenu().findItem(R.id.op_edit_tags).setVisible(true);
 			break;
 		default:
+			popup.getMenu().findItem(R.id.op_edit_tags).setVisible(false);
 			break;
 		}
 	}

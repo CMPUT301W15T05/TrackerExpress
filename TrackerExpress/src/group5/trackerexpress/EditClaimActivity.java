@@ -8,18 +8,18 @@ import java.util.HashSet;
 import java.util.Locale;
 import java.util.UUID;
 
-import com.google.android.gms.maps.model.LatLng;
-
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
-import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.location.Location;
 import android.os.Bundle;
-import android.view.KeyEvent;
 import android.text.Editable;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -33,6 +33,8 @@ import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.gms.maps.model.LatLng;
 
 /**
  * The Class EditClaimActivity.
@@ -105,7 +107,7 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 	
 	private Date endDate;
 	
-	/** The my calender. */
+	/** The my calendar. */
 	private Calendar myCalendar = Calendar.getInstance();
 	
 	private Calendar myCalendar2 = Calendar.getInstance();
@@ -357,6 +359,15 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 				
 				/** this procedure will check if the claim name is repeated */
 				boolean repeatedClaimName = false;
+/*				boolean bothdates = false;
+				
+				if (StartDateYear.getText().toString().length() > 0
+					&& EndDateYear.getText().toString().length() > 0){
+					myCalendar.set
+					myCalendar2
+					double i = myCalendar.compareTo(myCalendar2);
+				}
+*/	
 				Claim[] claims = Controller.getClaimList(EditClaimActivity.this).toList();
 				for ( Claim c : claims ){
 						if ( c.getClaimName().equals( ClaimTitle.getText().toString() )
@@ -380,7 +391,16 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 					EndDateYear.setError("End date is SMALLER than start date!");
 					EndDateYear.requestFocus();
 				}*/
+				myCalendar.set(Calendar.HOUR, 0);
+				myCalendar.set(Calendar.MINUTE, 0);
+				myCalendar.set(Calendar.SECOND, 0);
+				myCalendar.set(Calendar.MILLISECOND, 0);
+				myCalendar2.set(Calendar.HOUR, 0);
+				myCalendar2.set(Calendar.MINUTE, 0);
+				myCalendar2.set(Calendar.SECOND, 0);
+				myCalendar2.set(Calendar.MILLISECOND, 0);
 				if (repeatedClaimName || ClaimName.getText().toString().length() == 0 || ClaimTitle.getText().toString().length() == 0) {
+
 					if (repeatedClaimName){
 						ClaimTitle.setError( "Repeated claim name!" );
 						ClaimTitle.requestFocus();
@@ -393,8 +413,11 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 				    	ClaimTitle.setError( "Title is required!" );
 				    	ClaimTitle.requestFocus();
 				    }
+				
+				} else if (myCalendar.compareTo(myCalendar2) == 1) {
+					Toast.makeText(getApplicationContext(), "End Date cannot be before Start Date!", Toast.LENGTH_SHORT).show();
+
 				} else {
-					
 				/**
 				 *  Saves user input into claim class.(calling each method)
 				 */
@@ -426,8 +449,7 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 					/**
 					 *  launch MainClaimActivity.
 					 */
-					Intent intent = new Intent(EditClaimActivity.this, MainActivity.class);
-					startActivity(intent);
+					finish();
 				}
 			}
 		});
@@ -447,8 +469,28 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 				cancelCheck(EditClaimActivity.this);				
 			}
 		});
+	    if (claim != null){
+	    	if (claim.getStatus() == Claim.SUBMITTED || claim.getStatus() == Claim.APPROVED) {
+	    		ClaimName.setFocusable(false);
+	    		ClaimTitle.setFocusable(false);
+	    		StartDateYear.setClickable(false);
+	    		EndDateYear.setClickable(false);
+	    		Description.setFocusable(false);
+	    		desListView.setEnabled(false);
+	    		editDestinationButton.setClickable(false);
+	    		editDestinationButton.setVisibility(View.GONE);
+	    		//from http://stackoverflow.com/questions/4989545/make-edittext-behave-as-a-textview-in-code accessed 06/04/2015
+	    		ClaimName.setBackgroundResource(android.R.color.transparent);
+	    		ClaimTitle.setBackgroundResource(android.R.color.transparent);
+	    		Description.setBackgroundResource(android.R.color.transparent);
+	    		//from http://stackoverflow.com/questions/8743120/how-to-grey-out-a-button accessed 06/04/2015
+	    		StartDateYear.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.CLEAR);
+	    		EndDateYear.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.CLEAR);
+	    		done.setText("Edit Tags");
+	    	}
+	    }
 	    
-	}
+	   }
 	
 
 	/**
@@ -481,7 +523,7 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 	/** check if the claim is completed*/
 	private void checkCompleteness(Claim claim){
 		if (ClaimName.getText().toString().length() > 0 && ClaimTitle.getText().toString().length() > 0 &&
-				Description.getText().toString().length() > 0 && claim.getStartDate() != null && claim.getEndDate() != null
+				Description.getText().toString().length() > 0 && claim.getStartDate() != null /*&& claim.getEndDate() != null*/
 				&& claim.getDestinationList().size() >= 1){
 			claim.setIncomplete(this, false);
 		}else {
@@ -746,21 +788,24 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-
+				Log.e("NEUTRAL", "NEUTRAL");
 				Intent intent = new Intent(EditClaimActivity.this, MapActivity.class);
 				
 				if (!desName.getText().toString().isEmpty()) {
 					System.out.println("Putting extra destination " + desName.getText().toString());
+					Log.e("DESTINATION", "Putting extra destination " + desName.getText().toString());
 					intent.putExtra("destination", desName.getText().toString());
 				}
 				
 				if (location != null) {
 					System.out.println("Putting extra location");
+					Log.e("LOC", "Putting extra location " + desName.getText().toString());
 					LatLng newlatlng = new LatLng(location.getLatitude(), location.getLongitude());
 					intent.putExtra("latlng", newlatlng);
 				}
 				
 				System.out.println("GOING IN");
+				Log.e("START", "GOING IN");
 		    	EditClaimActivity.this.startActivityForResult(intent, 1);
 			}
 			

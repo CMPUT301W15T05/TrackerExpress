@@ -70,7 +70,7 @@ public class ExpenseListFragment extends Fragment implements TView {
 		lv_expense_list.setItemsCanFocus(true);
 		
 		update(null);
-		claim.addView(this);
+		claim.getExpenseList().addView(this);
 
 		b_add_expense = (Button) rootView.findViewById(R.id.b_add_expense);
 		if (claim.getStatus() == Claim.SUBMITTED || claim.getStatus() == Claim.APPROVED)
@@ -157,6 +157,12 @@ public class ExpenseListFragment extends Fragment implements TView {
 		if (claim.getExpenseList().size() > 0)
 			lv_expense_list.setAdapter( new ExpenseListAdapter(getActivity(), 
 						claim.getExpenseList().toList()));
+	}
+	
+	@Override
+	public void onDestroy(){
+		claim.getExpenseList().deleteView(this);
+		super.onDestroy();
 	}
 
 }

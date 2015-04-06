@@ -107,14 +107,12 @@ public class ExpenseListAdapter extends ArrayAdapter<Expense> {
 			String amountSpent = String.valueOf(e.getAmount());
 			holder.amount.setText(amountSpent + " " + e.getCurrency());
 		} 
+
+		if (e.getCategory() != null)
+			holder.category.setText(e.getCategory());
 		
-		holder.category.setText(e.getCategory());
-		
-		BitmapFactory.Options options = new BitmapFactory.Options();
-		options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-		Bitmap bitmap = BitmapFactory.decodeFile((e.getUriPath()), options);
-		
-		holder.receipt.setImageBitmap(bitmap);
+		if (e.getReceipt() != null)
+			holder.receipt.setImageBitmap(e.getReceipt().getBitmap());
 		
 		return v;
 	}

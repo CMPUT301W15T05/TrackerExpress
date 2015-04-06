@@ -29,8 +29,7 @@ public class Expense extends TModel{
 	/** The currency of the expense. */
 	private String currency;
 	
-	/** The receipt path. */
-	private String uriPath;
+	private Receipt receipt;
 	
 	/** The category of the expense. */
 	private String category;
@@ -39,7 +38,7 @@ public class Expense extends TModel{
 	private Double amount;
 
 	/** The status of the expense (incompleteness). */
-	private boolean complete; 
+	private boolean complete = true; 
 	
 	/**
 	 * Instantiates a new expense.
@@ -190,15 +189,22 @@ public class Expense extends TModel{
 		notifyViews(context);
 		
 	}
-	
 
-	
-	public String getUriPath(){
-		return uriPath;
+	/**
+	 * gets the receipt
+	 * @return
+	 */
+	public Receipt getReceipt(){
+		return receipt;
 	}
 	
-	public void setUri(Context context, String receiptUri){
-		this.uriPath = receiptUri;
+	/**
+	 * sets the reciept
+	 * @param context Needed for saving
+	 * @param receipt
+	 */
+	public void setReceipt(Context context, Receipt receipt){
+		this.receipt = receipt;
 		notifyViews(context);
 	}
 	
