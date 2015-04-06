@@ -49,6 +49,8 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 	
 	private TextWatcher currencyWatcher;
 	
+	private Button deleteImage;
+	
 	/** The image button. */
 	private ImageButton imgButton;
 	
@@ -107,6 +109,16 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 	    		takeAPhoto();
 		    }
 		});
+	    
+	    deleteImage.setOnClickListener(new Button.OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				deleteReceipt();
+				
+			}
+	    	
+	    });
 	
 	    
 	  //the cancel expense button
@@ -127,6 +139,14 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 	}
 
 	
+	protected void deleteReceipt() {
+		// TODO Auto-generated method stub
+		receiptUri = null;
+		imgButton.setImageResource(R.drawable.a);
+		
+	}
+
+
 	/**
 	 * Initialize variables.
 	 */
@@ -137,6 +157,7 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 		amount = (EditText) findViewById(R.id.editExpenseAmount);
 		imgButton = (ImageButton) findViewById(R.id.editExpenseTakeAPhoto);
 		dateButton = (Button) findViewById(R.id.tvExpenseDate);
+		deleteImage = (Button) findViewById(R.id.deleteImageButton);
 		
 		dateSelection = Calendar.getInstance();
 		dateButton.setText(sdf.format(dateSelection.getTime()));
@@ -176,6 +197,9 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 	    
 	    if ( expense.getReceipt() != null ){
 			imgButton.setImageDrawable(expense.getReceipt().getDrawable());
+			deleteImage.setVisibility(View.VISIBLE);
+	    }else{
+	    	deleteImage.setVisibility(View.GONE);
 	    }
 	    
 	    if ( !expense.isComplete()){
@@ -224,6 +248,7 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 				Toast.makeText(EditExpenseActivity.this, "Photo Set", Toast.LENGTH_SHORT).show(); 
 				Drawable photo = Drawable.createFromPath(receiptUri.getPath());
 				imgButton.setImageDrawable(photo);
+				deleteImage.setVisibility(View.VISIBLE);
 				//imgButton.setImageURI(receiptUri);
 			} else if (resultCode == RESULT_CANCELED){
 				Toast.makeText(EditExpenseActivity.this, "Canceled", Toast.LENGTH_SHORT).show();
@@ -261,6 +286,8 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 		
 		if ( receiptUri != null ){
 			expense.setReceipt(this, new Receipt(receiptUri.getPath()));
+		}else{
+			expense.setReceipt(this, null);
 		}
 		
 		expense.setComplete(this, complete);
