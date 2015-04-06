@@ -178,10 +178,7 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 	    	categorySpinner.setSelection(getIndex(categorySpinner, expense.getCategory()));
 	    }
 	    
-	    if ( expense.getBitmap() != null ){
-	    	imgButton.setImageBitmap(expense.getBitmap());
-	    }
-	    
+	
 	}
 	
 	@Override
@@ -260,7 +257,7 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 		}
 		
 		expense.setComplete(this, complete);
-		expense.setUri(this, receiptUri);
+		expense.setUri(this, receiptUri.getPath());
 		expense.setDate(this, dateSelection);
 		expense.setCategory(this, categorySelection);
 		expense.setCurrency(this, currencySelection);	
