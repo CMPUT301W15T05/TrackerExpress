@@ -272,7 +272,7 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 		finish();
 	}
 
-
+	
 	/**
 	 * gets the index of a string in the spinner
 	 * 

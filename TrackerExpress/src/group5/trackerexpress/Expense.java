@@ -45,7 +45,6 @@ public class Expense extends TModel{
 	 */
 	public Expense() {
 		uuid = UUID.randomUUID();
-		bitmap = new SerialBitmap();
 	}
 
 	/**
@@ -196,6 +195,9 @@ public class Expense extends TModel{
 	 * @return bitmap the receipt image
 	 */
 	public Bitmap getBitmap(){
+		if ( bitmap == null ){
+			return null;
+		}
 		return bitmap.getBitmap();
 	}
 	
@@ -207,7 +209,11 @@ public class Expense extends TModel{
 
 	public void setBitmap(Context context, Bitmap receipt) {
 		// TODO Auto-generated method stub
-		this.bitmap.setBitmap(receipt);
+		if ( bitmap == null ){
+			bitmap = new SerialBitmap( receipt );
+		} else {
+			this.bitmap.setBitmap(receipt);
+		}
 		notifyViews(context);
 	}
 	
