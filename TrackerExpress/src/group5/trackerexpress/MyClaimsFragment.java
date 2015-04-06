@@ -58,6 +58,7 @@ public class MyClaimsFragment extends Fragment implements TView {
 		b_add_claim = (Button) rootView.findViewById(R.id.b_add_claim);
 		tv_has_internet = (TextView) rootView.findViewById(R.id.tv_internet_status);
 		
+		Controller.updateClaimsFromInternet(getActivity());
 		update(null);
 		Controller.getClaimList(getActivity()).addView(this);
 		NetworkStateReceiver.addView(this);

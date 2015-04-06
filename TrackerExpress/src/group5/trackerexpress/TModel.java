@@ -83,15 +83,11 @@ public class TModel implements Serializable{
      */
     public void notifyViews(Context context) {
     	makeSureViewsIsntNull();
-    	Log.e("TRACE", "TRACE");
-    	Thread.getAllStackTraces();
     	if (context != null){
     		for (TView view : views) {
-    			Log.e("Views", views.size()+"");
     			view.update(this);
     		}
 
-        
         	Controller.getTagMap(context).saveData(context);
         	Controller.getClaimList(context).saveData(context);	
         	Controller.getUser(context).saveData(context);

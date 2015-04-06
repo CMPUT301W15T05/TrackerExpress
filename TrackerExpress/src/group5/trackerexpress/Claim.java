@@ -422,11 +422,6 @@ public class Claim extends TModel implements Comparable<Claim>{
 	 * @param context
 	 * @param comments
 	 */
-	public void markAsReturned(Context context, String comments){
-		this.status = Claim.RETURNED;
-		this.comments = comments;
-		Controller.getClaimList(context).saveData(context);	
-	}
 	
 	/**
 	 * Updates claim status and sets comments. Does NOT update views.
@@ -435,9 +430,8 @@ public class Claim extends TModel implements Comparable<Claim>{
 	 * @param context
 	 * @param comments
 	 */	
-	public void markAsApproved(Context context, String comments){
-		this.status = Claim.APPROVED;
-		this.comments = comments;
+	public void markAsSubmitted(Context context){
+		this.status = Claim.SUBMITTED;
 		Controller.getClaimList(context).saveData(context);	
 	}
 

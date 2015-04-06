@@ -109,7 +109,6 @@ public class Controller {
 	 * @return: list of filtered Claims depending on tags selected
 	 */
 	public static Claim[] getFilteredClaims(Context context){	
-		updateClaimsFromInternet(context);
 		Claim[] listOfClaims = Controller.getClaimList(context).toList();		
 		ArrayList<Claim> filteredClaims = new ArrayList<Claim>();
 
@@ -142,14 +141,14 @@ public class Controller {
 		return filteredClaims.toArray(new Claim[filteredClaims.size()]);
 	}
 
-	private static void updateClaimsFromInternet(Context context){
+	public static void updateClaimsFromInternet(Context context){
 
 		if ( isInternetConnected(context) ){
 			Claim[] localListOfClaims = Controller.getClaimList(context).toList();
 			Claim[] elasticListOfClaims = (new ElasticSearchEngine()).getClaims();
 			for ( Claim c : localListOfClaims ){
 				Log.i("TESTING", c.getUuid().toString() + c.getClaimName());
-				if ( c.getStatus() != Claim.IN_PROGRESS){
+				if ( c.getStatus() == Claim.SUBMITTED){
 					int index = 0;
 					boolean found = false;
 					for (Claim g : elasticListOfClaims){
@@ -164,15 +163,8 @@ public class Controller {
 					if (!found)
 						continue;
 					if ( index != -1 && elasticListOfClaims[index].getStatus() != Claim.SUBMITTED) {
-						Log.e("LOOP?", "HIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII");
-						Log.e("CLAIM: ",elasticListOfClaims[index].getClaimName());
-						Log.e("CONTEXT", context.toString());
-						if (elasticListOfClaims[index].getStatus() == Claim.SUBMITTED){
-							context = null;
-							claimList.getClaim(c.getUuid()).setStatusNoNotify(context, elasticListOfClaims[index].getStatus());
-						}
-						claimList.getClaim(c.getUuid()).setStatus(context, elasticListOfClaims[index].getStatus());
-						claimList.getClaim(c.getUuid()).setComments(elasticListOfClaims[index].getComments());
+							claimList.getClaim(c.getUuid()).setStatus(context, elasticListOfClaims[index].getStatus());
+							claimList.getClaim(c.getUuid()).setComments(elasticListOfClaims[index].getComments());
 					}
 				}
 			}
