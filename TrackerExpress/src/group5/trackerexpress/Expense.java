@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.net.Uri;
 
 /**
  * An expense item hold data for a signle purchase, as well as a photo and location.
@@ -27,6 +28,9 @@ public class Expense extends TModel{
 	
 	/** The currency of the expense. */
 	private String currency;
+	
+	/** The Receipt URI */
+	private Uri uri;
 	
 	/** The category of the expense. */
 	private String category;
@@ -214,6 +218,15 @@ public class Expense extends TModel{
 		} else {
 			this.bitmap.setBitmap(receipt);
 		}
+		notifyViews(context);
+	}
+	
+	public Uri getUri(){
+		return uri;
+	}
+	
+	public void setUri(Context context, Uri receiptUri){
+		this.uri = receiptUri;
 		notifyViews(context);
 	}
 	
