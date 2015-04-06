@@ -77,7 +77,7 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 	private Editable value;
 	
 	/** The tags of claim. */
-	private final HashSet<Tag> tagsOfClaim = new HashSet<Tag>();
+	final private HashSet<Tag> tagsOfClaim = new HashSet<Tag>();
 	
 	/** The check correctness. */
 	private Boolean checkCorrectness;
@@ -300,8 +300,11 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 	    if (isNewClaim == true){
 		    done.setText("Create Claim");
 		    DestinationListview(desListView,destination);
+		    updateTagListView(new ArrayList<Tag>(tagsOfClaim));
+		    
 		   		
 	    } else {
+	    	String tags = claim.toStringTags(this);
 		   	done.setText("Edit Claim");
 		   	destination = claim.getDestinationList();
 		    ClaimName.setText(claim.getSubmitterName());
@@ -323,13 +326,15 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 			Description.setText(String.valueOf(claim.getDescription()));
 			DestinationListview(desListView,destination);
 			
-			/** Saving new tags */
-			ArrayList<Tag> current = Controller.getTagMap(this).toList();
-			for ( Tag t : tagsOfClaim ){
-				if ( ! current.contains(t) ){
-					Controller.getTagMap(this).addTag(this, t);
-				}
+			try {
+				StringTagToArray(tags);
+			} catch (IllegalAccessException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
+			
+			updateTagListView(new ArrayList<Tag>(tagsOfClaim));
+			
 	    }
 	    
 	    /**
@@ -360,9 +365,9 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 						repeatedClaimName = true;
 					}
 				}
-				
+			
 				/** this statement checks if the text fields are valid or not and display error message.*/
-				if( ClaimName.getText().toString().length() == 0 || ClaimTitle.getText().toString().length() == 0 ){
+/*				if( ClaimName.getText().toString().length() == 0 || ClaimTitle.getText().toString().length() == 0 ){
 				    if ( ClaimName.getText().toString().length() == 0 ){
 				    	ClaimName.setError( "Name is required!" );
 				    	ClaimName.requestFocus();
@@ -372,19 +377,38 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 				    	ClaimTitle.requestFocus();
 				    }
 				}
-				if (myCalendar.compareTo(myCalendar2)==1){
+				if (myCalendar.compareTo(myCalendar2)>0){
 					EndDateYear.setError("End date is SMALLER than start date!");
 					EndDateYear.requestFocus();
-				}
-				if (repeatedClaimName) {
-					ClaimTitle.setError( "Repeated claim name!" );
-			    	ClaimTitle.requestFocus();
+				}*/
+				if (repeatedClaimName || ClaimName.getText().toString().length() == 0 || ClaimTitle.getText().toString().length() == 0) {
+					if (repeatedClaimName){
+						ClaimTitle.setError( "Repeated claim name!" );
+						ClaimTitle.requestFocus();
+					} 
+					else if ( ClaimName.getText().toString().length() == 0 ){
+				    	ClaimName.setError( "Name is required!" );
+				    	ClaimName.requestFocus();
+				    }
+				    else if ( ClaimTitle.getText().toString().length() == 0 ){
+				    	ClaimTitle.setError( "Title is required!" );
+				    	ClaimTitle.requestFocus();
+				    }
 				} else {
 					
 				/**
 				 *  Saves user input into claim class.(calling each method)
 				 */
 					Toast.makeText(EditClaimActivity.this, "Updating", Toast.LENGTH_SHORT). show();
+					
+					/** Saving new tags */
+					
+					ArrayList<Tag> current = Controller.getTagMap(EditClaimActivity.this).toList();
+					for ( Tag t : tagsOfClaim ){
+						if ( ! current.contains(t) ){
+							Controller.getTagMap(EditClaimActivity.this).addTag(EditClaimActivity.this, t);
+						}
+					}
 					
 					if (isNewClaim == true){
 						editclaim(newclaim);
@@ -521,16 +545,16 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 	        	value = input.getText();
 		    	if ( input.getText() != null ){
 		    		//Tag newTag = new Tag(input.getText().toString());
-		    		Tag newTag;
+		    		Tag newTag = null;
 					try {
 						newTag = Controller.getTagMap(getBaseContext()).
 								searchForTagByString(input.getText().toString());
 						tagsOfClaim.add(newTag);
 			    		updateTagListView(new ArrayList<Tag>(tagsOfClaim));
 					} catch (IllegalAccessException e) {
-			    		Toast.makeText(getApplicationContext(), "Tag does not exist.", Toast.LENGTH_SHORT).show();
-			    		value = null;
-			    		return;
+			    		Toast.makeText(getApplicationContext(), "New Tag", Toast.LENGTH_SHORT).show();
+			    		newTag = new Tag(value.toString());
+			    		tagsOfClaim.add(newTag);
 					}
 		    		boolean notInSet = true;
 		    		for ( Tag t : tagsOfClaim ){
@@ -654,6 +678,8 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 		
 		
 		claim.setDescription(this, Descrip);
+		
+		claim.getTagsIds(this).clear();
 		
 		for (Tag tag: tagsOfClaim)
 			claim.getTagsIds(this).add(tag.getUuid());
@@ -814,6 +840,19 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 		myListView.setAdapter(adapter2);
 	}
 	
+	
+	private void StringTagToArray(String stringTag) throws IllegalAccessException {
+		// TODO Auto-generated method stub
+		Tag newTag;
+		String[] part = stringTag.split(", ");
+		for (int i =0; i < part.length; i++){
+			newTag = Controller.getTagMap(getBaseContext()).
+					searchForTagByString(part[i]);
+			tagsOfClaim.add(newTag);
+		}
+	}
+
+
 	/**
 	 * Destination reason.
 	 *
