@@ -178,6 +178,10 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 	    	categorySpinner.setSelection(getIndex(categorySpinner, expense.getCategory()));
 	    }
 	    
+	    if ( expense.getUriPath() != null ){
+	    	Drawable photo = Drawable.createFromPath(expense.getUriPath());
+			imgButton.setImageDrawable(photo);
+	    }
 	
 	}
 	
@@ -298,5 +302,5 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
             width = (int) (height * bitmapRatio);
         }
         return Bitmap.createScaledBitmap(image, width, height, true);
-}
+	}
 }
