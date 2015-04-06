@@ -459,6 +459,7 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 	    	desListView.setEnabled(false);
 	    	editDestinationButton.setClickable(false);
 	    	editDestinationButton.setVisibility(View.GONE);
+	    	//from http://stackoverflow.com/questions/4989545/make-edittext-behave-as-a-textview-in-code accessed 06/04/2015
 	    	ClaimName.setBackgroundResource(android.R.color.transparent);
 	    	ClaimTitle.setBackgroundResource(android.R.color.transparent);
 	    	Description.setBackgroundResource(android.R.color.transparent);
@@ -466,7 +467,6 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 	    	StartDateYear.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.CLEAR);
 	    	EndDateYear.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.CLEAR);
 	    	done.setText("Edit Tags");
-
 	    }
 	    
 	}
