@@ -36,7 +36,7 @@ public class GlobalClaimsFragment extends Fragment implements TView {
 	private TextView tv_global_error;
 	
 	/** Updates global claims once in a while */
-//	PeriodicTViewUpdater updater;
+	PeriodicTViewUpdater updater;
 	
 	/**
 	 * Instantiates a new global claims fragment.
