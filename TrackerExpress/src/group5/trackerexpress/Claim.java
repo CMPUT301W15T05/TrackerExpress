@@ -445,7 +445,7 @@ public class Claim extends TModel implements Comparable<Claim>{
 		if (startDate == null){
 			return -1;
 		}
-		return startDate.compareTo(arg0.getStartDate());
+		return (startDate.compareTo(arg0.getStartDate()))*-1;
 	}
 
 	/**
