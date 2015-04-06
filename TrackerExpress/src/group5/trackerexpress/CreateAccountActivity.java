@@ -171,9 +171,7 @@ public class CreateAccountActivity extends AccountFormActivity {
 		@Override
 		protected Integer doInBackground(Void... params) {
 
-//			String[] credentials = new EmailElasticSearchEngine().getCredentials();
-			//FIXME: getting credentials doesn't work
-			String[] credentials = new String[0];
+			String[] credentials = new EmailElasticSearchEngine().getCredentials();
 
 			for (String credential : credentials) {
 				String[] pieces = credential.split(":");
@@ -190,7 +188,6 @@ public class CreateAccountActivity extends AccountFormActivity {
 			user.setName(CreateAccountActivity.this, mName);
 			user.setEmail(CreateAccountActivity.this, mEmail);
 			user.setPassword(CreateAccountActivity.this, mPassword);
-			// TODO: add user to the proper database
 			
 			return ACCOUNT_SUCCESS;
 		}

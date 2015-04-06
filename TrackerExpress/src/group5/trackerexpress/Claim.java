@@ -407,6 +407,32 @@ public class Claim extends TModel implements Comparable<Claim>{
 	public int getStatus() {
 		return status;
 	}
+	
+	/**
+	 * Updates claim status and sets comments. Does NOT update views.
+	 * Needed becuase this must be called from within an update method.
+	 * 
+	 * @param context
+	 * @param comments
+	 */
+	public void markAsReturned(Context context, String comments){
+		this.status = Claim.RETURNED;
+		this.comments = comments;
+		Controller.getClaimList(context).saveData(context);	
+	}
+	
+	/**
+	 * Updates claim status and sets comments. Does NOT update views.
+	 * Needed becuase this must be called from within an update method.
+	 * 
+	 * @param context
+	 * @param comments
+	 */	
+	public void markAsApproved(Context context, String comments){
+		this.status = Claim.APPROVED;
+		this.comments = comments;
+		Controller.getClaimList(context).saveData(context);	
+	}
 
 	/** 
 	 * compares the claim start date with the instance's start date
