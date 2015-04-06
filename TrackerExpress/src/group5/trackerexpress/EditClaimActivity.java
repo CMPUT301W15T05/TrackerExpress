@@ -358,6 +358,15 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 				
 				/** this procedure will check if the claim name is repeated */
 				boolean repeatedClaimName = false;
+/*				boolean bothdates = false;
+				
+				if (StartDateYear.getText().toString().length() > 0
+					&& EndDateYear.getText().toString().length() > 0){
+					myCalendar.set
+					myCalendar2
+					double i = myCalendar.compareTo(myCalendar2);
+				}
+*/	
 				Claim[] claims = Controller.getClaimList(EditClaimActivity.this).toList();
 				for ( Claim c : claims ){
 						if ( c.getClaimName().equals( ClaimTitle.getText().toString() )
@@ -381,7 +390,10 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 					EndDateYear.setError("End date is SMALLER than start date!");
 					EndDateYear.requestFocus();
 				}*/
-				if (repeatedClaimName || ClaimName.getText().toString().length() == 0 || ClaimTitle.getText().toString().length() == 0) {
+				if (repeatedClaimName || ClaimName.getText().toString().length() == 0 || 
+						ClaimTitle.getText().toString().length() == 0 /*|| ( StartDateYear.getText().toString().length()>0
+						&& EndDateYear.getText().toString().length() > 0 )*/) {
+					
 					if (repeatedClaimName){
 						ClaimTitle.setError( "Repeated claim name!" );
 						ClaimTitle.requestFocus();
@@ -393,9 +405,20 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 				    else if ( ClaimTitle.getText().toString().length() == 0 ){
 				    	ClaimTitle.setError( "Title is required!" );
 				    	ClaimTitle.requestFocus();
-				    }
+				    } /*
+				    else if (StartDateYear.getText().toString().length()>0
+							&& EndDateYear.getText().toString().length() > 0){
+				    	System.out.println("Calendar length is " + StartDateYear.getText().toString());
+				    	System.out.println("Calendar2 length is " + EndDateYear.getText().toString());
+				    	System.out.println("Calendar SIZE is " + myCalendar.getTime().compareTo(myCalendar2.getTime()));
+				    		double i = myCalendar.compareTo(myCalendar2);
+				    		if (i >0){
+				    			AlertDialog.Builder helperBuilder = new AlertDialog.Builder(EditClaimActivity.this);
+				    			helperBuilder.setMessage("End date is SMALLER than start date!");
+				    		}
+				    		
+				    }*/
 				} else {
-					
 				/**
 				 *  Saves user input into claim class.(calling each method)
 				 */
@@ -427,8 +450,7 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 					/**
 					 *  launch MainClaimActivity.
 					 */
-					Intent intent = new Intent(EditClaimActivity.this, MainActivity.class);
-					startActivity(intent);
+					finish();
 				}
 			}
 		});
@@ -449,7 +471,7 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 			}
 		});
 	    
-	}
+	   }
 	
 
 	/**
@@ -482,7 +504,7 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 	/** check if the claim is completed*/
 	private void checkCompleteness(Claim claim){
 		if (ClaimName.getText().toString().length() > 0 && ClaimTitle.getText().toString().length() > 0 &&
-				Description.getText().toString().length() > 0 && claim.getStartDate() != null && claim.getEndDate() != null
+				Description.getText().toString().length() > 0 && claim.getStartDate() != null /*&& claim.getEndDate() != null*/
 				&& claim.getDestinationList().size() >= 1){
 			claim.setIncomplete(this, false);
 		}else {
