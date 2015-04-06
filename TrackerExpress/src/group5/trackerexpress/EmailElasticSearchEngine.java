@@ -48,11 +48,15 @@ public class EmailElasticSearchEngine {
 		try {
 			HttpPost httpPost = new HttpPost(HTTP_PATH + UUID.randomUUID());
 			StringEntity stringentity = null;
-			stringentity = new StringEntity(gson.toJson(credential));
+//			stringentity = new StringEntity(gson.toJson(credential));
+			stringentity = new StringEntity(credential);
 			
 			httpPost.setHeader("Accept","application/json");
 			httpPost.setEntity(stringentity);
 			HttpResponse response = httpclient.execute(httpPost);
+			
+			String status = response.getStatusLine().toString();
+			System.out.println(status);
 			
 		} catch (UnsupportedEncodingException e1) {
 			e1.printStackTrace();

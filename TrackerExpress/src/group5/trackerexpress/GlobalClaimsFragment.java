@@ -118,7 +118,16 @@ public class GlobalClaimsFragment extends Fragment implements TView {
 														Toast.LENGTH_LONG)
 														.show();
 											} else {
+												Toast.makeText(getActivity(), "Returning Claim", Toast.LENGTH_LONG).show();
 												new ElasticSearchEngine().approveClaim(getActivity(), c.getUuid(), input.getText().toString());
+												try {
+													Thread.sleep(3000);
+												} catch (InterruptedException e) {
+													// TODO Auto-generated catch block
+													e.printStackTrace();
+												}
+												c.setStatus(getActivity(), Claim.APPROVED);
+												update(null);
 											}
 										}
 									});
@@ -139,7 +148,17 @@ public class GlobalClaimsFragment extends Fragment implements TView {
 														Toast.LENGTH_LONG)
 														.show();
 											} else {
+												Toast.makeText(getActivity(), "Returning Claim", Toast.LENGTH_LONG).show();
 												new ElasticSearchEngine().returnClaim(getActivity(), c.getUuid(), input.getText().toString());
+												try {
+													Thread.sleep(3000);
+												} catch (InterruptedException e) {
+													// TODO Auto-generated catch block
+													e.printStackTrace();
+												}
+												c.setStatus(getActivity(), Claim.RETURNED);
+												update(null);
+
 											}
 										}
 									});
@@ -147,7 +166,8 @@ public class GlobalClaimsFragment extends Fragment implements TView {
 						}
 						update(null);
 						AlertDialog build = builder.create();
-						build.show();
+						if (item.getItemId() != R.id.op_view_global)
+							build.show();
 						return false;
 					}
 				});
