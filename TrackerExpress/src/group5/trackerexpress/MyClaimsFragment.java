@@ -94,6 +94,7 @@ public class MyClaimsFragment extends Fragment implements TView {
                         case R.id.op_delete_claim: 
                         	Controller.getClaimList(getActivity()).deleteClaim(getActivity(), clickedOnClaim.getUuid());
                         	break;
+                        case R.id.op_edit_tags:
                         case R.id.op_edit_claim:
                         	intent = new Intent( getActivity(), EditClaimActivity.class );
                         	intent.putExtra( "isNewClaim", false );
@@ -152,8 +153,10 @@ public class MyClaimsFragment extends Fragment implements TView {
 			for( int id : submittedOrApprovedHiddenItems ){
 				popup.getMenu().findItem(id).setVisible(false);
 			}
+			popup.getMenu().findItem(R.id.op_edit_tags).setVisible(true);
 			break;
 		default:
+			popup.getMenu().findItem(R.id.op_edit_tags).setVisible(false);
 			break;
 		}
 	}

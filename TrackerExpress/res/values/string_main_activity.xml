@@ -11,6 +11,8 @@
     <string name="popup_view"> View </string>
     <string name="popup_submit"> Submit </string>
     <string name="popup_add_expense"> Add Expense </string>
+    <string name="popup_edit_tags"> Edit Tags </string>
+    
     
     <!-- strings for taglist tab -->
     <string name="button_add_tag" > Add Tag </string>
