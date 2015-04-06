@@ -51,7 +51,7 @@ public class MainClaimListAdapter extends ArrayAdapter<Claim> {
 		this.claimList = claims;
 		this.context = context;
 		this.distanceOrderedClaims = new ArrayList<Claim>( 
-				Arrays.asList(Controller.sortClaimsByLocation(context, claims)) ); 
+				Arrays.asList( ClaimList.sortClaimsByLocation(context, claims)) ); 
 	}
 	
 	/**
@@ -73,6 +73,9 @@ public class MainClaimListAdapter extends ArrayAdapter<Claim> {
 		
 		/** incompleteness of claim **/
 		public TextView isIncompleteStatus;
+		
+		/** incompleteness indicators on expenses indicater */
+		public TextView incompleteExpenses;
 		
 		/** official status of claim **/
 		public TextView status;
@@ -97,7 +100,6 @@ public class MainClaimListAdapter extends ArrayAdapter<Claim> {
 	 * @param convertView: view of item
 	 * @param parent: parent of item ( the listView )
 	**/
-	@SuppressWarnings("deprecation")
 	@Override
 	public View getView(final int position, View convertView, ViewGroup parent){
 		View v = convertView;
@@ -112,6 +114,7 @@ public class MainClaimListAdapter extends ArrayAdapter<Claim> {
 			holder.amounts = (TextView) v.findViewById(R.id.tv_main_claim_list_amounts);
 			holder.tags = (TextView) v.findViewById(R.id.tv_main_claim_list_tags);
 			holder.isIncompleteStatus = (TextView ) v.findViewById(R.id.tv_main_claim_list_isIncomplete);
+			holder.incompleteExpenses = (TextView) v.findViewById(R.id.tv_main_claim_list_incomplete_expenses);
 			holder.status = (TextView) v.findViewById(R.id.tv_main_claim_list_status);
 			holder.startDate = (TextView) v.findViewById(R.id.tv_main_claim_list_start);
 			holder.toDate = (TextView) v.findViewById(R.id.tv_main_claim_list_to);
@@ -139,6 +142,13 @@ public class MainClaimListAdapter extends ArrayAdapter<Claim> {
 			holder.isIncompleteStatus.setText(incompleteString);
 		} else {
 			holder.isIncompleteStatus.setText("");
+		}
+		
+		// Display if there are any incomplete expense
+		if ( c.hasIncompleteExpense() ){
+			holder.incompleteExpenses.setVisibility(View.VISIBLE);
+		} else {
+			holder.incompleteExpenses.setVisibility(View.GONE);
 		}
 		
 		// Print status
@@ -201,6 +211,8 @@ public class MainClaimListAdapter extends ArrayAdapter<Claim> {
 				holder.distanceView.setBackgroundColor(context.getResources().getColor(R.color.furthest));
 			}
 		}
+		
+		
 		
 		return v;
 	}

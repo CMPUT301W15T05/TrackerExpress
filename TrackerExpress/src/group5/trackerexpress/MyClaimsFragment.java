@@ -113,6 +113,7 @@ public class MyClaimsFragment extends Fragment implements TView {
                         	} else {
                         		//FIXME: Handle connectivity error
                         		new ElasticSearchEngine().submitClaim(getActivity(), clickedOnClaim);
+                        		
                         	}
                         	break;
                         default: break;
