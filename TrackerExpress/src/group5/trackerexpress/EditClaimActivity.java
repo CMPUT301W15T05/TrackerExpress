@@ -107,7 +107,7 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 	
 	private Date endDate;
 	
-	/** The my calender. */
+	/** The my calendar. */
 	private Calendar myCalendar = Calendar.getInstance();
 	
 	private Calendar myCalendar2 = Calendar.getInstance();
@@ -382,6 +382,14 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 					EndDateYear.setError("End date is SMALLER than start date!");
 					EndDateYear.requestFocus();
 				}*/
+				myCalendar.set(Calendar.HOUR, 0);
+				myCalendar.set(Calendar.MINUTE, 0);
+				myCalendar.set(Calendar.SECOND, 0);
+				myCalendar.set(Calendar.MILLISECOND, 0);
+				myCalendar2.set(Calendar.HOUR, 0);
+				myCalendar2.set(Calendar.MINUTE, 0);
+				myCalendar2.set(Calendar.SECOND, 0);
+				myCalendar2.set(Calendar.MILLISECOND, 0);
 				if (repeatedClaimName || ClaimName.getText().toString().length() == 0 || ClaimTitle.getText().toString().length() == 0) {
 					if (repeatedClaimName){
 						ClaimTitle.setError( "Repeated claim name!" );
@@ -395,6 +403,9 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 				    	ClaimTitle.setError( "Title is required!" );
 				    	ClaimTitle.requestFocus();
 				    }
+				
+				} else if (myCalendar.compareTo(myCalendar2) == 1) {
+					Toast.makeText(getApplicationContext(), "End Date cannot be before Start Date!", Toast.LENGTH_SHORT).show();
 				} else {
 					
 				/**
@@ -449,24 +460,25 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 				cancelCheck(EditClaimActivity.this);				
 			}
 		});
-	    
-	    if (claim.getStatus() == Claim.SUBMITTED || claim.getStatus() == Claim.APPROVED) {
-	    	ClaimName.setFocusable(false);
-	    	ClaimTitle.setFocusable(false);
-	    	StartDateYear.setClickable(false);
-	    	EndDateYear.setClickable(false);
-	    	Description.setFocusable(false);
-	    	desListView.setEnabled(false);
-	    	editDestinationButton.setClickable(false);
-	    	editDestinationButton.setVisibility(View.GONE);
-	    	//from http://stackoverflow.com/questions/4989545/make-edittext-behave-as-a-textview-in-code accessed 06/04/2015
-	    	ClaimName.setBackgroundResource(android.R.color.transparent);
-	    	ClaimTitle.setBackgroundResource(android.R.color.transparent);
-	    	Description.setBackgroundResource(android.R.color.transparent);
-	    	//from http://stackoverflow.com/questions/8743120/how-to-grey-out-a-button accessed 06/04/2015
-	    	StartDateYear.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.CLEAR);
-	    	EndDateYear.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.CLEAR);
-	    	done.setText("Edit Tags");
+	    if (claim != null){
+	    	if (claim.getStatus() == Claim.SUBMITTED || claim.getStatus() == Claim.APPROVED) {
+	    		ClaimName.setFocusable(false);
+	    		ClaimTitle.setFocusable(false);
+	    		StartDateYear.setClickable(false);
+	    		EndDateYear.setClickable(false);
+	    		Description.setFocusable(false);
+	    		desListView.setEnabled(false);
+	    		editDestinationButton.setClickable(false);
+	    		editDestinationButton.setVisibility(View.GONE);
+	    		//from http://stackoverflow.com/questions/4989545/make-edittext-behave-as-a-textview-in-code accessed 06/04/2015
+	    		ClaimName.setBackgroundResource(android.R.color.transparent);
+	    		ClaimTitle.setBackgroundResource(android.R.color.transparent);
+	    		Description.setBackgroundResource(android.R.color.transparent);
+	    		//from http://stackoverflow.com/questions/8743120/how-to-grey-out-a-button accessed 06/04/2015
+	    		StartDateYear.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.CLEAR);
+	    		EndDateYear.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.CLEAR);
+	    		done.setText("Edit Tags");
+	    	}
 	    }
 	    
 	}
