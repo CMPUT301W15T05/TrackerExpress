@@ -29,17 +29,14 @@ public class Expense extends TModel{
 	/** The currency of the expense. */
 	private String currency;
 	
-	/** The Receipt URI */
-	private Uri uri;
+	/** The receipt path. */
+	private String uriPath;
 	
 	/** The category of the expense. */
 	private String category;
 	
 	/** The amount of the expense. */
 	private Double amount;
-	
-	/** The image of the receipt for the expense. */
-	private SerialBitmap bitmap;
 
 	/** The status of the expense (incompleteness). */
 	private boolean complete; 
@@ -194,39 +191,14 @@ public class Expense extends TModel{
 		
 	}
 	
-	/**
-	 * Gets the receipt image
-	 * @return bitmap the receipt image
-	 */
-	public Bitmap getBitmap(){
-		if ( bitmap == null ){
-			return null;
-		}
-		return bitmap.getBitmap();
-	}
-	
-	/**
-	 * Sets the receipt image
-	 * @param context
-	 * @param bitmap
-	 */
 
-	public void setBitmap(Context context, Bitmap receipt) {
-		// TODO Auto-generated method stub
-		if ( bitmap == null ){
-			bitmap = new SerialBitmap( receipt );
-		} else {
-			this.bitmap.setBitmap(receipt);
-		}
-		notifyViews(context);
+	
+	public String getUriPath(){
+		return uriPath;
 	}
 	
-	public Uri getUri(){
-		return uri;
-	}
-	
-	public void setUri(Context context, Uri receiptUri){
-		this.uri = receiptUri;
+	public void setUri(Context context, String receiptUri){
+		this.uriPath = receiptUri;
 		notifyViews(context);
 	}
 	

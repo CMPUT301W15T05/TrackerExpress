@@ -112,7 +112,7 @@ public class ExpenseListAdapter extends ArrayAdapter<Expense> {
 		
 		BitmapFactory.Options options = new BitmapFactory.Options();
 		options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-		Bitmap bitmap = BitmapFactory.decodeFile((e.getUri()).getPath(), options);
+		Bitmap bitmap = BitmapFactory.decodeFile((e.getUriPath()), options);
 		
 		holder.receipt.setImageBitmap(bitmap);
 		
