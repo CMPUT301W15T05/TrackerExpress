@@ -8,11 +8,15 @@ import java.util.HashSet;
 import java.util.Locale;
 import java.util.UUID;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.text.Editable;
@@ -58,14 +62,12 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 	/** The Description. */
 	private EditText Description; 
 	
-	/** The Des name. */
-	private EditText DesName;
-	
-	/** The Des rea. */
-	private EditText DesRea;
+	EditText DesName;
+    EditText DesRea;
 	
 	/** The Tag name. */
 	private EditText TagName;
+	private Location location;
 	
 	/** The des list view. */
 	private ListView desListView;
@@ -93,6 +95,8 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 	
 	/** The edit destination. */
 	private final int editDestination = 2;
+	
+	private int clicked_destination = -1;
 	
 	/** The do nothing. */
 	private final int doNothing = 5;
@@ -266,9 +270,6 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 			});
 			
 		}
-		
-	    
-	    
 	    
 	    /**
 	     * On click listener for add destination button in EditClaimActivity.
@@ -282,12 +283,10 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 			@Override
 			public void onClick(View v) {
 				/** check if the user pressed create new claim or edit existing claim button from MainActivity.*/
-				if (isNewClaim == true){
-					createDestinationButton(isNewClaim,destination,newDestination,doNothing);
-				} else {
+				if (isNewClaim != true){
 					destination = claim.getDestinationList();
-					createDestinationButton(isNewClaim, destination,newDestination,doNothing);
 				}
+				createDestinationButton(destination,newDestination,doNothing);
 			}
 		});
 		
@@ -479,17 +478,6 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
     }
 	
 	
-	
-	/** Destroy this activity when done. 
-	 * @see android.app.Activity#onStop()
-	 */
-	@Override
-	public void onStop(){
-		super.onStop();
-		finish();
-	}
-	
-	
 	/** check if the claim is completed*/
 	private void checkCompleteness(Claim claim){
 		if (ClaimName.getText().toString().length() > 0 && ClaimTitle.getText().toString().length() > 0 &&
@@ -608,7 +596,7 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 				 * @see android.content.DialogInterface.OnClickListener#onClick(android.content.DialogInterface, int)
 				 */
 				public void onClick(DialogInterface dialog, int which){
-					createDestinationButton(false, destination,editDestination,position);
+					createDestinationButton(destination,editDestination,position);
 				}
 			});
 			
@@ -700,7 +688,7 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 	 * Create a popup window for entering and editing destination/reason then call save it into the dummy
 	 * 2d destination array.
 	 */
-	private void createDestinationButton( final boolean isNewClaim, final ArrayList<Destination> destination2, final int i,final int position) {
+	private void createDestinationButton(final ArrayList<Destination> destination2, final int i,final int position) {
 
 		/**
 		 *  http://www.androiddom.com/2011/06/displaying-android-pop-up-dialog_13.html 	2015-03-11
@@ -718,67 +706,115 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 		switch(i){	
 		/** for creating new destination */
 		case newDestination:
-			helperBuilder.setPositiveButton("Done", new DialogInterface.OnClickListener() {
-				
-				/** Once done, add destination into dummy destination
-				 * @see android.content.DialogInterface.OnClickListener#onClick(android.content.DialogInterface, int)
-				 */
-				public void onClick(DialogInterface dialog, int which) {
-					
-					String Des_Name = DesName.getText().toString();
-					String Des_Rea = DesRea.getText().toString();
-					editDummyDestination(EditClaimActivity.this, Des_Name, Des_Rea, doNothing, null, newDestination);
-				}
-			});
+			clicked_destination = -1;
+			dialog(helperBuilder,DesName, DesRea, location, doNothing, null, newDestination);
 			
-			helperBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-				
-				/** Return to EditClaimActivity doing nothing
-				 * @see android.content.DialogInterface.OnClickListener#onClick(android.content.DialogInterface, int)
-				 */
-				public void onClick(DialogInterface dialog, int which) {
-							
-				}
-			});
-					
-			AlertDialog helperDialog = helperBuilder.create();
-			helperDialog.show();
+			
 			break;
 			
 		/** for editing a existing destination */ 
 		case editDestination:
+			clicked_destination = position;
 			DesName.setText(destination2.get(position).getName());
 			DesRea.setText(destination2.get(position).getDescription());
 			final String oldDestination = destination2.get(position).toString();
-			
-			helperBuilder.setPositiveButton("Done", new DialogInterface.OnClickListener() {
-				
-				/** update destination dummy list
-				 * @see android.content.DialogInterface.OnClickListener#onClick(android.content.DialogInterface, int)
-				 */
-				public void onClick(DialogInterface dialog, int which) {
-					String Des_Name2 = DesName.getText().toString();
-					String Des_Rea2 = DesRea.getText().toString();
-					editDummyDestination(EditClaimActivity.this, Des_Name2, Des_Rea2, position, oldDestination,editDestination);
-				}
-			});
+			location = destination2.get(position).getLocation();
+			dialog(helperBuilder,DesName, DesRea, location,position, oldDestination, editDestination);
 			
 			
-			helperBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-				
-				/** Do nothing and return
-				 * @see android.content.DialogInterface.OnClickListener#onClick(android.content.DialogInterface, int)
-				 */
-				public void onClick(DialogInterface dialog, int which) {
-							
-				}
-			});
-					
-			AlertDialog helpDialog = helperBuilder.create();
-			helpDialog.show();
 			break;
 		}
 				
+	}
+	
+	private void dialog(Builder helperBuilder, final EditText desName, final EditText desRea, Location location2, final int position, final String oldDestination, final int editDestination2){
+		
+		helperBuilder.setPositiveButton("Done", new DialogInterface.OnClickListener() {
+			
+			/** Once done, add destination into dummy destination
+			 * @see android.content.DialogInterface.OnClickListener#onClick(android.content.DialogInterface, int)
+			 */
+			public void onClick(DialogInterface dialog, int which) {
+				
+				String Des_Name = desName.getText().toString();
+				String Des_Rea = desRea.getText().toString();
+				editDummyDestination(EditClaimActivity.this, Des_Name, Des_Rea, position, oldDestination, editDestination2);
+			}
+		});
+		
+		helperBuilder.setNeutralButton("Tag Location?", new DialogInterface.OnClickListener() {
+
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+
+				Intent intent = new Intent(EditClaimActivity.this, MapActivity.class);
+				
+				if (!desName.getText().toString().isEmpty()) {
+					System.out.println("Putting extra destination " + desName.getText().toString());
+					intent.putExtra("destination", desName.getText().toString());
+				}
+				
+				if (location != null) {
+					System.out.println("Putting extra location");
+					LatLng newlatlng = new LatLng(location.getLatitude(), location.getLongitude());
+					intent.putExtra("latlng", newlatlng);
+				}
+				
+				System.out.println("GOING IN");
+		    	EditClaimActivity.this.startActivityForResult(intent, 1);
+			}
+			
+		});
+		
+		helperBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+			
+			/** Return to EditClaimActivity doing nothing
+			 * @see android.content.DialogInterface.OnClickListener#onClick(android.content.DialogInterface, int)
+			 */
+			public void onClick(DialogInterface dialog, int which) {
+						
+			}
+		});
+				
+		AlertDialog helperDialog = helperBuilder.create();
+		helperDialog.show();
+	}
+	
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+	    if (requestCode == 1) {
+	    	String lastDest = DesName.getText().toString();
+	    	Location lastLoc = location;
+	        if (clicked_destination == -1) {
+		        createDestinationButton(destination, newDestination,clicked_destination);
+	        } else {
+		        createDestinationButton(destination, editDestination,clicked_destination);
+	        }
+	        
+	        if(resultCode == RESULT_OK){
+	            LatLng latLng = data.getParcelableExtra("resultLatLng");
+	            String title = data.getStringExtra("resultTitle");
+	            System.out.println("TITLE IS " + title);
+	            
+	            
+	            if (lastLoc != null) {
+	            	lastLoc.setLongitude(latLng.longitude);
+	            	lastLoc.setLatitude(latLng.latitude);
+	            	lastLoc.setProvider(title);
+	            }
+	            
+	            if (lastDest.isEmpty()) {
+	            	DesName.setText(title);
+	            }
+	            
+	        } else if (resultCode == RESULT_CANCELED) {
+	            //Write your code if there's no result
+	        }
+	        if (lastDest.isEmpty()) {
+            	DesName.setText(lastDest);
+	        }
+	    }
+	    
 	}
 	
 	/**
