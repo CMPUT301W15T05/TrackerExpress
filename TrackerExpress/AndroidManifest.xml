@@ -57,7 +57,7 @@
             android:name=".CreateAccountActivity"
             android:label="@string/title_activity_create_account" >
         </activity>
-        <activity android:name=".EditClaimActivity" />
+        <activity android:name=".EditClaimActivity"/>
         <activity android:name=".EditExpenseActivity" />
         <activity
             android:name=".SelectTagEditClaimActivity"

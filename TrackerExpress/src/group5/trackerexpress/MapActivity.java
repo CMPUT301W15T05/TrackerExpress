@@ -123,6 +123,7 @@ public class MapActivity extends FragmentActivity
 
         Intent intent = this.getIntent();
 	    intentDestination = intent.getStringExtra("destination");
+	    System.out.println("Recieving destination: " + intentDestination);
 	    intentLatLng = intent.getParcelableExtra("latlng");
         
         // Set up the Google API Client if it has not been initialized yet.
@@ -397,20 +398,26 @@ public class MapActivity extends FragmentActivity
     public void onConnected(Bundle bundle) {
         // Successfully connected to the API client. Pass it to the adapter to enable API access.
         mAdapter.setGoogleApiClient(mGoogleApiClient);
-        
+
+		System.out.println("CONNECTED " + intentDestination);
         // User already selected a location; abort
-		if (lastMarker == null) {
+		if (lastMarker != null) {
+			System.out.println("LAST MARKER IS NULL");
 			return;
 		}
 		
         if (intentLatLng != null) {
 			makeLatLngMarker(intentLatLng);
 		} else if (intentDestination != null) {
+			System.out.println("ATTEMPTING SEARCH");
 			mAutocompleteView.setText(intentDestination);
+			System.out.println("TEXT SET");
 			
 			if (intentDestination.length() > 1) {
+				System.out.println("GREATER THAN ONE, STARTING FILTER");
 				mAdapter.getFilter().filter(intentDestination, new Filter.FilterListener() {
 	                public void onFilterComplete(int count) {
+	        			System.out.println("FILTER COUNT: " + count);
 	                	if (count > 0) {
 	                		getAutocompleteResult(0);
 	                	}
@@ -420,8 +427,10 @@ public class MapActivity extends FragmentActivity
 		} else {
 			LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 			Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-			LatLng locLatLng = new LatLng(location.getLatitude(), location.getLongitude());
-			goToLocation(locLatLng, MAX_AUTO_ZOOM);
+			if (location != null) {
+				LatLng locLatLng = new LatLng(location.getLatitude(), location.getLongitude());
+				goToLocation(locLatLng, MAX_AUTO_ZOOM);
+			}
 		}
     }
 
