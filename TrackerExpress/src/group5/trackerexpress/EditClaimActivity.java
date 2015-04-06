@@ -8,19 +8,18 @@ import java.util.HashSet;
 import java.util.Locale;
 import java.util.UUID;
 
-import com.google.android.gms.maps.model.LatLng;
-
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
-import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.location.Location;
 import android.os.Bundle;
+import android.text.Editable;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.text.Editable;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -34,6 +33,8 @@ import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.gms.maps.model.LatLng;
 
 /**
  * The Class EditClaimActivity.
@@ -448,6 +449,25 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 				cancelCheck(EditClaimActivity.this);				
 			}
 		});
+	    
+	    if (claim.getStatus() == Claim.SUBMITTED || claim.getStatus() == Claim.APPROVED) {
+	    	ClaimName.setFocusable(false);
+	    	ClaimTitle.setFocusable(false);
+	    	StartDateYear.setClickable(false);
+	    	EndDateYear.setClickable(false);
+	    	Description.setFocusable(false);
+	    	desListView.setEnabled(false);
+	    	editDestinationButton.setClickable(false);
+	    	editDestinationButton.setVisibility(View.GONE);
+	    	ClaimName.setBackgroundResource(android.R.color.transparent);
+	    	ClaimTitle.setBackgroundResource(android.R.color.transparent);
+	    	Description.setBackgroundResource(android.R.color.transparent);
+	    	//from http://stackoverflow.com/questions/8743120/how-to-grey-out-a-button accessed 06/04/2015
+	    	StartDateYear.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.CLEAR);
+	    	EndDateYear.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.CLEAR);
+	    	done.setText("Edit Tags");
+
+	    }
 	    
 	}
 	
