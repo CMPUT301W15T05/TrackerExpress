@@ -38,8 +38,8 @@ public class NewClaimTest extends ActivityInstrumentationTestCase2<TestActivity>
 	}
 	
 	public void testUser() {
-		claim.setuserName(context, user.getName());
-		assertTrue("Name should be TestUser", claim.getuserName() == "TestUser");
+		claim.setSubmitterName(context, user.getName());
+		assertTrue("Name should be TestUser", claim.getSubmitterName() == "TestUser");
 	}
 	
 	public void testExpenseList(){

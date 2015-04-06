@@ -12,6 +12,7 @@ import android.content.DialogInterface;
 import android.text.Editable;
 import android.text.Html;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnFocusChangeListener;
 import android.widget.EditText;
@@ -83,7 +84,6 @@ public class EditableActivity extends Activity implements DatePickerFragment.The
 		{
 		    entry.getKey().removeTextChangedListener(entry.getValue());
 		}
-		
 		viewMap.clear();
 	}
 	

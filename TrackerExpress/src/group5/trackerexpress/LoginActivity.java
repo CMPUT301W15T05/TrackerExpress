@@ -233,16 +233,10 @@ public class LoginActivity extends AccountFormActivity {//implements LoaderCallb
 		 */
 		@Override
 		protected Integer doInBackground(Void... params) {
-			// TODO: attempt authentication against a network service.
 
-			try {
-				// Simulate network access.
-				Thread.sleep(0); //Thread.sleep(2000);
-			} catch (InterruptedException e) {
-				return NETWORK_ERROR;
-			}
-
-			for (String credential : DUMMY_CREDENTIALS) {
+			String[] credentials = new EmailElasticSearchEngine().getCredentials();
+			
+			for (String credential : credentials) {
 				String[] pieces = credential.split(":");
 				
 				// Account exists

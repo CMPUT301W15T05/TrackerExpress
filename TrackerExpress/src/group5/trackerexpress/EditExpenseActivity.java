@@ -180,10 +180,7 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 	    	categorySpinner.setSelection(getIndex(categorySpinner, expense.getCategory()));
 	    }
 	    
-	    if ( expense.getBitmap() != null ){
-	    	imgButton.setImageBitmap(expense.getBitmap());
-	    }
-	    
+	
 	}
 	
 	@Override
@@ -254,8 +251,6 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 		String categorySelection = categorySpinner.getSelectedItem().toString();
 		String currencySelection = currencySpinner.getSelectedItem().toString();
 		
-		BitmapDrawable photo = (BitmapDrawable) imgButton.getDrawable();
-		Bitmap receipt = photo.getBitmap();
 	
 		if(statusCheckBox.isChecked()){
 			complete = false;
@@ -264,15 +259,14 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 		}
 		
 		expense.setComplete(this, complete);
-		expense.setBitmap(this, receipt);
+		expense.setUri(this, receiptUri.getPath());
 		expense.setDate(this, dateSelection);
 		expense.setCategory(this, categorySelection);
-		expense.setCurrency(this, currencySelection);
-			
+		expense.setCurrency(this, currencySelection);	
 		finish();
 	}
 
-
+	
 	/**
 	 * gets the index of a string in the spinner
 	 * 
@@ -290,4 +284,21 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 		}
 		return index;
 	} 
+	
+	
+	/** resizes the receipt bitmap */
+	public Bitmap getResizedBitmap(Bitmap image, int maxSize) {
+        int width = image.getWidth();
+        int height = image.getHeight();
+
+        float bitmapRatio = (float)width / (float) height;
+        if (bitmapRatio > 1) {
+            width = maxSize;
+            height = (int) (width / bitmapRatio);
+        } else {
+            height = maxSize;
+            width = (int) (height * bitmapRatio);
+        }
+        return Bitmap.createScaledBitmap(image, width, height, true);
+}
 }
