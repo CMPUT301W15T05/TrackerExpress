@@ -260,8 +260,11 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 			complete = true;
 		}
 		
+		if ( receiptUri != null ){
+			expense.setUri(this, receiptUri.getPath());
+		}
+		
 		expense.setComplete(this, complete);
-		expense.setUri(this, receiptUri.getPath());
 		expense.setDate(this, dateSelection);
 		expense.setCategory(this, categorySelection);
 		expense.setCurrency(this, currencySelection);	
