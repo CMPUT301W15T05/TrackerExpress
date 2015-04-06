@@ -98,8 +98,6 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 			    
 		initializeVariables();
 		
-		Log.i("myMessage", "Never  it");
-
 	    // The date button that shows a date dialog
 		dateButton.setOnClickListener(new Button.OnClickListener(){
 			public void onClick(View v) {
