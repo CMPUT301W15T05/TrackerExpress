@@ -70,10 +70,6 @@
         
         <activity 
             android:name=".MapTestActivity" > 
-<<<<<<< HEAD
-            
-=======
->>>>>>> ce70ac00a8d3907a8a39238f7ddf2bc402955ee1
         </activity>
             
         <activity android:name=".TestActivity" >
