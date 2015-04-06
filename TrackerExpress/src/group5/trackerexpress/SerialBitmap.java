@@ -6,6 +6,7 @@ import java.io.Serializable;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Base64;
 
 public class SerialBitmap implements Serializable {
 
@@ -32,9 +33,12 @@ public class SerialBitmap implements Serializable {
         // Converts the Bitmap into a byte array for serialization
         private void writeObject(java.io.ObjectOutputStream out) throws IOException {
         	ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.PNG, 0, byteStream);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 0, byteStream);
             byte bitmapBytes[] = byteStream.toByteArray();
-            out.write(bitmapBytes, 0, bitmapBytes.length);
+        	String encoded = Base64.encodeToString(bitmapBytes, Base64.DEFAULT);
+
+//      	out.write(bitmapBytes, 0, bitmapBytes.length);
+            out.writeChars(encoded);
         }
 
         // Deserializes a byte array representing the Bitmap and decodes it

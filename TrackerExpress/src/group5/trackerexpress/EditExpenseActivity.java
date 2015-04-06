@@ -174,9 +174,8 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 	    	categorySpinner.setSelection(getIndex(categorySpinner, expense.getCategory()));
 	    }
 	    
-	    if ( expense.getUriPath() != null ){
-	    	Drawable photo = Drawable.createFromPath(expense.getUriPath());
-			imgButton.setImageDrawable(photo);
+	    if ( expense.getReceipt() != null ){
+			imgButton.setImageDrawable(expense.getReceipt().getDrawable());
 	    }
 	    
 	    if ( !expense.isComplete()){
@@ -261,13 +260,14 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 		}
 		
 		if ( receiptUri != null ){
-			expense.setUri(this, receiptUri.getPath());
+			expense.setReceipt(this, new Receipt(receiptUri.getPath()));
 		}
 		
 		expense.setComplete(this, complete);
 		expense.setDate(this, dateSelection);
 		expense.setCategory(this, categorySelection);
-		expense.setCurrency(this, currencySelection);	
+		expense.setCurrency(this, currencySelection);
+		
 		finish();
 	}
 
