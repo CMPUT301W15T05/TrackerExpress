@@ -107,9 +107,7 @@ public class Controller {
 	 * @param: context
 	 * @return: list of filtered Claims depending on tags selected
 	 */
-	public static Claim[] getFilteredClaims(Context context){
-		updateClaimsFromInternet(context);
-		
+	public static Claim[] getFilteredClaims(Context context){		
 		Claim[] listOfClaims = Controller.getClaimList(context).toList();		
 		ArrayList<Claim> filteredClaims = new ArrayList<Claim>();
 
