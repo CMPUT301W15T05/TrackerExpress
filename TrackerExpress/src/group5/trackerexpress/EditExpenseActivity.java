@@ -73,11 +73,7 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 	/** The Claim UUID and the Expense UUID. */
 	private UUID claimId, expenseId;
 	
-	private String curSymbol = null;
-	
 
-	private Calendar myCalendar = Calendar.getInstance();
-	
 	final String myFormat = "EEEE MMMM dd, yyyy"; //In which you need put here
 	final SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
 

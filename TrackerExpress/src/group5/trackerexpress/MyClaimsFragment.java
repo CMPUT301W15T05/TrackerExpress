@@ -1,8 +1,5 @@
 package group5.trackerexpress;
 
-import java.util.ArrayList;
-import java.util.UUID;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;

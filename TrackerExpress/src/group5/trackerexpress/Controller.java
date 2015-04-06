@@ -2,9 +2,11 @@ package group5.trackerexpress;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.UUID;
 
 import android.content.Context;
+import android.location.Location;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
@@ -141,6 +143,52 @@ public class Controller {
 		return filteredClaims.toArray(new Claim[filteredClaims.size()]);
 	}
 
+	/** Sorts the passed list of claims by how far they are from the user's location */
+	public static Claim[] sortClaimsByLocation(Context context, Claim[] claimList){
+		Claim[] ret = claimList.clone();
+		
+		final Location userLoc = getUser(context).getLocation();
+
+		// This is for testing purposes
+		if ( userLoc == null ){
+			return ret;
+		}
+		
+		Arrays.sort(claimList, new Comparator<Claim>() {
+
+			@Override
+			public int compare(Claim lhs, Claim rhs) {
+				// TODO Auto-generated method stub
+				if ( lhs.getDestinationList() == null ){
+					return -1;
+				} else if ( rhs.getDestinationList() == null ){
+					return 1;
+				}
+				
+				ArrayList<Destination> lDesList = lhs.getDestinationList();
+				ArrayList<Destination> rDesList = rhs.getDestinationList();
+				
+				if ( lDesList.size() == 0 || lDesList.get(0).getLocation() == null ){
+					return -1;
+				} else if ( rDesList.size() == 0 || rDesList.get(0).getLocation() == null ){
+					return 1;
+				}
+				
+				Location lLoc = lDesList.get(0).getLocation();
+				Location rLoc = rDesList.get(0).getLocation();
+				
+				if ( userLoc.distanceTo(lLoc) < userLoc.distanceTo(rLoc) ){
+					return -1;
+				} else {
+					return 1;
+				}
+			}
+			
+		});
+		
+		return ret;
+	}
+	
 	public static void updateClaimsFromInternet(Context context){
 
 		if ( isInternetConnected(context) ){

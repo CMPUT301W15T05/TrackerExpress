@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import android.content.Context;
+import android.location.Location;
 
 /**
  * Stores data about the current user. Only a single user may exist on a phone. 
@@ -31,6 +32,9 @@ public class User extends TModel{
 	
 	/** The Constant FILENAME for saving. */
 	private static final String FILENAME = "user.sav";
+	
+	/** The location of the user */
+	private Location location;
 	
 	/**
 	 * Instantiates a new user.
@@ -159,6 +163,14 @@ public class User extends TModel{
 	 */
 	public boolean isSignedIn() {
 		return SIGNED_IN;
+	}
+
+	public Location getLocation() {
+		return location;
+	}
+
+	public void setLocation(Location location) {
+		this.location = location;
 	}
 
 }
