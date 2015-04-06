@@ -43,7 +43,6 @@ public class ViewClaimFragment extends Fragment implements TView {
 	}
 	
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {

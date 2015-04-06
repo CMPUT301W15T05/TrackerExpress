@@ -101,10 +101,10 @@ public class ExpenseList extends TModel{
 		
 		for ( Expense e: expenseList ){
 			int index = currencies.indexOf( e.getCurrency() );
-			if ( index != -1 ){
+			if ( index != -1 && e.getAmount() != null ){
 				amounts.set(index, amounts.get(index) + e.getAmount() );
 			} else {
-				if ( e.getCurrency() != null ){
+				if ( e.getCurrency() != null && e.getAmount() != null ){
 					currencies.add(e.getCurrency() );
 					amounts.add(e.getAmount());
 				}

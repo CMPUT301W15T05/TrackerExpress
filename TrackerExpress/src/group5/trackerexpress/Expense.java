@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.net.Uri;
 
 /**
  * An expense item hold data for a signle purchase, as well as a photo and location.
@@ -28,17 +29,17 @@ public class Expense extends TModel{
 	/** The currency of the expense. */
 	private String currency;
 	
+	/** The receipt path. */
+	private String uriPath;
+	
 	/** The category of the expense. */
 	private String category;
 	
 	/** The amount of the expense. */
 	private Double amount;
-	
-	/** The image of the receipt for the expense. */
-	private Bitmap bitmap;
 
 	/** The status of the expense (incompleteness). */
-	private boolean complete; 
+	private boolean complete = true; 
 	
 	/**
 	 * Instantiates a new expense.
@@ -53,8 +54,8 @@ public class Expense extends TModel{
 	 * @param string the string
 	 */
 	public Expense(String string) {
+		this();
 		this.title = string;
-		uuid = UUID.randomUUID();
 	}
     
 	/**
@@ -190,23 +191,14 @@ public class Expense extends TModel{
 		
 	}
 	
-	/**
-	 * Gets the receipt image
-	 * @return bitmap the receipt image
-	 */
-	public Bitmap getBitmap(){
-		return bitmap;
+
+	
+	public String getUriPath(){
+		return uriPath;
 	}
 	
-	/**
-	 * Sets the receipt image
-	 * @param context
-	 * @param bitmap
-	 */
-
-	public void setBitmap(Context context, Bitmap receipt) {
-		// TODO Auto-generated method stub
-		this.bitmap = receipt;
+	public void setUri(Context context, String receiptUri){
+		this.uriPath = receiptUri;
 		notifyViews(context);
 	}
 	

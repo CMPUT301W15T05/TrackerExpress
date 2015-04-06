@@ -25,9 +25,7 @@ public class Destination {
 	private String description;
 	
 	/** Constructor to make an empty destination */
-	public Destination(){
-		location = new Location("");
-	}
+	public Destination(){}
 	
 	/** 
 	 * gets the name of the destination

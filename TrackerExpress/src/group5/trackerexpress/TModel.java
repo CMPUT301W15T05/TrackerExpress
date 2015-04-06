@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
+import android.util.Log;
 
 /**
  * TModel is the parent of all models in our app. It allows models to
@@ -82,18 +83,16 @@ public class TModel implements Serializable{
      */
     public void notifyViews(Context context) {
     	makeSureViewsIsntNull();
+    	if (context != null){
+    		for (TView view : views) {
+    			view.update(this);
+    		}
 
-        for (TView view : views) {
-        	view.update(this);
-        }
-
-        if (context != null){
         	Controller.getTagMap(context).saveData(context);
         	Controller.getClaimList(context).saveData(context);	
         	Controller.getUser(context).saveData(context);
         }
     }
-    
     /*
     private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
         in.defaultReadObject();

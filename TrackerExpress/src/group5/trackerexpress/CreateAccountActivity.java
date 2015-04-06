@@ -172,7 +172,6 @@ public class CreateAccountActivity extends AccountFormActivity {
 		protected Integer doInBackground(Void... params) {
 
 //			String[] credentials = new EmailElasticSearchEngine().getCredentials();
-			//FIXME: getting credentials doesn't work
 			String[] credentials = new String[0];
 
 			for (String credential : credentials) {
@@ -184,13 +183,13 @@ public class CreateAccountActivity extends AccountFormActivity {
 				}
 			}
 
-			new EmailElasticSearchEngine().addCredential(mEmail + ":" + mPassword);
+//			new EmailElasticSearchEngine().addCredential(mEmail + ":" + mPassword);
+			
 
 			User user = Controller.getUser(CreateAccountActivity.this);
 			user.setName(CreateAccountActivity.this, mName);
 			user.setEmail(CreateAccountActivity.this, mEmail);
 			user.setPassword(CreateAccountActivity.this, mPassword);
-			// TODO: add user to the proper database
 			
 			return ACCOUNT_SUCCESS;
 		}

@@ -2,11 +2,14 @@ package group5.trackerexpress;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.UUID;
 
 import android.content.Context;
+import android.location.Location;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.util.Log;
 
 /**
  * Holds all the static data members of the app.
@@ -107,9 +110,7 @@ public class Controller {
 	 * @param: context
 	 * @return: list of filtered Claims depending on tags selected
 	 */
-	public static Claim[] getFilteredClaims(Context context){
-		updateClaimsFromInternet(context);
-		
+	public static Claim[] getFilteredClaims(Context context){	
 		Claim[] listOfClaims = Controller.getClaimList(context).toList();		
 		ArrayList<Claim> filteredClaims = new ArrayList<Claim>();
 
@@ -142,16 +143,76 @@ public class Controller {
 		return filteredClaims.toArray(new Claim[filteredClaims.size()]);
 	}
 
-	private static void updateClaimsFromInternet(Context context){
+	/** Sorts the passed list of claims by how far they are from the user's location */
+	public static Claim[] sortClaimsByLocation(Context context, Claim[] claimList){
+		Claim[] ret = claimList.clone();
+		
+		final Location userLoc = getUser(context).getLocation();
+
+		// This is for testing purposes
+		if ( userLoc == null ){
+			return ret;
+		}
+		
+		Arrays.sort(claimList, new Comparator<Claim>() {
+
+			@Override
+			public int compare(Claim lhs, Claim rhs) {
+				// TODO Auto-generated method stub
+				if ( lhs.getDestinationList() == null ){
+					return -1;
+				} else if ( rhs.getDestinationList() == null ){
+					return 1;
+				}
+				
+				ArrayList<Destination> lDesList = lhs.getDestinationList();
+				ArrayList<Destination> rDesList = rhs.getDestinationList();
+				
+				if ( lDesList.size() == 0 || lDesList.get(0).getLocation() == null ){
+					return -1;
+				} else if ( rDesList.size() == 0 || rDesList.get(0).getLocation() == null ){
+					return 1;
+				}
+				
+				Location lLoc = lDesList.get(0).getLocation();
+				Location rLoc = rDesList.get(0).getLocation();
+				
+				if ( userLoc.distanceTo(lLoc) < userLoc.distanceTo(rLoc) ){
+					return -1;
+				} else {
+					return 1;
+				}
+			}
+			
+		});
+		
+		return ret;
+	}
+	
+	public static void updateClaimsFromInternet(Context context){
+
 		if ( isInternetConnected(context) ){
 			Claim[] localListOfClaims = Controller.getClaimList(context).toList();
 			Claim[] elasticListOfClaims = (new ElasticSearchEngine()).getClaims();
-			
 			for ( Claim c : localListOfClaims ){
-				if ( c.getStatus() == Claim.SUBMITTED ){
-					int index = Arrays.asList(elasticListOfClaims).indexOf(c);
+				Log.i("TESTING", c.getUuid().toString() + c.getClaimName());
+				if ( c.getStatus() == Claim.SUBMITTED){
+					int index = 0;
+					boolean found = false;
+					for (Claim g : elasticListOfClaims){
+						Log.i("GLOBALNAMES", g.getUuid() + " " + g.getClaimName());
+						if (g.getUuid().toString().equals(c.getUuid().toString())) {
+							Log.i("CLAIMNAME", g.getClaimName());
+							found = true;
+							break;
+						}
+						index++;	
+					}
+					if (!found)
+						continue;
 					if ( index != -1 && elasticListOfClaims[index].getStatus() != Claim.SUBMITTED) {
-						c.setStatus(context, elasticListOfClaims[index].getStatus());
+							claimList.getClaim(c.getUuid()).setStatus(context, elasticListOfClaims[index].getStatus());
+							claimList.getClaim(c.getUuid()).setComments(elasticListOfClaims[index].getComments());
 					}
 				}
 			}

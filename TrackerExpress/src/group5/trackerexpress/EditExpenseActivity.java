@@ -44,7 +44,6 @@ import android.widget.Toast;
  * @version Part 4
  */
 public class EditExpenseActivity extends EditableActivity implements DatePickerFragment.TheListener{
-	
 	/** The category and currency. */
 	private Spinner categorySpinner, currencySpinner;
 	
@@ -74,11 +73,7 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 	/** The Claim UUID and the Expense UUID. */
 	private UUID claimId, expenseId;
 	
-	private String curSymbol = null;
-	
 
-	private Calendar myCalendar = Calendar.getInstance();
-	
 	final String myFormat = "EEEE MMMM dd, yyyy"; //In which you need put here
 	final SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
 
@@ -96,10 +91,9 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 	    expenseId = (UUID)intent.getSerializableExtra("expenseUUID");
 	    
 	    expense = Controller.getExpense(EditExpenseActivity.this, claimId, expenseId);
-		
+			    
 		initializeVariables();
 		
-
 	    // The date button that shows a date dialog
 		dateButton.setOnClickListener(new Button.OnClickListener(){
 			public void onClick(View v) {
@@ -167,7 +161,7 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 		if (expense.getTitle() != null){
 	    	description.setText(expense.getTitle().toString());
 	    }
-
+		
 	    if ( expense.getAmount() != null ){
 	    	amount.setText(Double.toString(expense.getAmount()));
 	    }
@@ -175,14 +169,20 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 	    if ( expense.getCurrency() != null ){
 	    	currencySpinner.setSelection(getIndex(currencySpinner, expense.getCurrency()));
 	    }
-	    
+
 	    if ( expense.getCategory() != null ){
 	    	categorySpinner.setSelection(getIndex(categorySpinner, expense.getCategory()));
 	    }
 	    
-	    if ( expense.getBitmap() != null ){
-	    	imgButton.setImageBitmap(expense.getBitmap());
+	    if ( expense.getUriPath() != null ){
+	    	Drawable photo = Drawable.createFromPath(expense.getUriPath());
+			imgButton.setImageDrawable(photo);
 	    }
+	    
+	    if ( !expense.isComplete()){
+	    	statusCheckBox.setChecked(true);
+	    }
+	
 	}
 	
 	@Override
@@ -214,8 +214,8 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 
 		Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 		intent.putExtra(MediaStore.EXTRA_OUTPUT, receiptUri);
-
-		startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);	
+		
+		startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
 	}
 
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -235,9 +235,7 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 	}
 	
     
-	public void editExpense(final Expense expense) {
-		
-		
+	public void editExpense(final Expense expense) {		
 		String title = description.getText().toString();
 	
 		expense.setTitle(this, title);
@@ -255,8 +253,6 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 		String categorySelection = categorySpinner.getSelectedItem().toString();
 		String currencySelection = currencySpinner.getSelectedItem().toString();
 		
-		BitmapDrawable photo = (BitmapDrawable) imgButton.getDrawable();
-		Bitmap receipt = photo.getBitmap();
 	
 		if(statusCheckBox.isChecked()){
 			complete = false;
@@ -264,15 +260,18 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 			complete = true;
 		}
 		
+		if ( receiptUri != null ){
+			expense.setUri(this, receiptUri.getPath());
+		}
+		
 		expense.setComplete(this, complete);
-		expense.setBitmap(this, receipt);
 		expense.setDate(this, dateSelection);
 		expense.setCategory(this, categorySelection);
-		expense.setCurrency(this, currencySelection);
-			
+		expense.setCurrency(this, currencySelection);	
 		finish();
 	}
 
+	
 	/**
 	 * gets the index of a string in the spinner
 	 * 
@@ -290,4 +289,21 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 		}
 		return index;
 	} 
+	
+	
+	/** resizes the receipt bitmap */
+	public Bitmap getResizedBitmap(Bitmap image, int maxSize) {
+        int width = image.getWidth();
+        int height = image.getHeight();
+
+        float bitmapRatio = (float)width / (float) height;
+        if (bitmapRatio > 1) {
+            width = maxSize;
+            height = (int) (width / bitmapRatio);
+        } else {
+            height = maxSize;
+            width = (int) (height * bitmapRatio);
+        }
+        return Bitmap.createScaledBitmap(image, width, height, true);
+	}
 }

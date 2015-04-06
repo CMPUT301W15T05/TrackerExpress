@@ -399,6 +399,13 @@ public class Claim extends TModel implements Comparable<Claim>{
 		notifyViews(context);
 	}
 	
+	public void setStatusNoNotify(Context context, int status) {
+		this.status = status;
+		Controller.getTagMap(context).saveData(context);
+    	Controller.getClaimList(context).saveData(context);	
+    	Controller.getUser(context).saveData(context);
+	}
+	
 	/**
 	 * Gets the status.
 	 *
@@ -406,6 +413,26 @@ public class Claim extends TModel implements Comparable<Claim>{
 	 */
 	public int getStatus() {
 		return status;
+	}
+	
+	/**
+	 * Updates claim status and sets comments. Does NOT update views.
+	 * Needed becuase this must be called from within an update method.
+	 * 
+	 * @param context
+	 * @param comments
+	 */
+	
+	/**
+	 * Updates claim status and sets comments. Does NOT update views.
+	 * Needed becuase this must be called from within an update method.
+	 * 
+	 * @param context
+	 * @param comments
+	 */	
+	public void markAsSubmitted(Context context){
+		this.status = Claim.SUBMITTED;
+		Controller.getClaimList(context).saveData(context);	
 	}
 
 	/** 
