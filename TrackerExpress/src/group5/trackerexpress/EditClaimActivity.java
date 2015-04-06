@@ -300,6 +300,7 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 	    if (isNewClaim == true){
 		    done.setText("Create Claim");
 		    DestinationListview(desListView,destination);
+		    updateTagListView(new ArrayList<Tag>(tagsOfClaim));
 		    
 		   		
 	    } else {
@@ -401,6 +402,7 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 					Toast.makeText(EditClaimActivity.this, "Updating", Toast.LENGTH_SHORT). show();
 					
 					/** Saving new tags */
+					
 					ArrayList<Tag> current = Controller.getTagMap(EditClaimActivity.this).toList();
 					for ( Tag t : tagsOfClaim ){
 						if ( ! current.contains(t) ){
@@ -550,7 +552,7 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 						tagsOfClaim.add(newTag);
 			    		updateTagListView(new ArrayList<Tag>(tagsOfClaim));
 					} catch (IllegalAccessException e) {
-			    		Toast.makeText(getApplicationContext(), "Adding New Tag", Toast.LENGTH_SHORT).show();
+			    		Toast.makeText(getApplicationContext(), "New Tag", Toast.LENGTH_SHORT).show();
 			    		newTag = new Tag(value.toString());
 			    		tagsOfClaim.add(newTag);
 					}
