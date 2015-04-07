@@ -69,7 +69,6 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 	/** checks if the claim is new and cancel's appropriately */
 	private boolean isNewClaim;
 
-
 	/** checks if the claim has been saved and cancel's appropriately */
 	private boolean isSaved;
 	
@@ -81,7 +80,6 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 	
 	/** The claim of the expense in question */
 	private Claim claim;
-
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -210,11 +208,6 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 	    
 	    statusCheckBox.setChecked(! expense.isComplete());
 	    
-	}
-	
-	@Override
-	public void onStop(){
-		super.onStop();
 	}
 	
 	@Override
