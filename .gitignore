@@ -27,7 +27,4 @@ proguard/
 # Log Files
 *.log
 
-# Keystore for maps
-*.keystore
-
 .classpath
