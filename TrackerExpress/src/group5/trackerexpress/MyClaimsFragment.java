@@ -1,5 +1,7 @@
 package group5.trackerexpress;
 
+import java.io.IOException;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -111,7 +113,11 @@ public class MyClaimsFragment extends Fragment implements TView {
             					Toast.makeText(getActivity(), "Can't submit, claim is incomplete.", Toast.LENGTH_SHORT). show();
                         	} else {
                         		//FIXME: Handle connectivity error
-                        		new ElasticSearchEngine().submitClaim(getActivity(), clickedOnClaim);
+                        		try {
+									new ElasticSearchEngine().submitClaim(getActivity(), clickedOnClaim);
+								} catch (IOException e) {
+									e.printStackTrace();
+								}
                         		
                         	}
                         	break;

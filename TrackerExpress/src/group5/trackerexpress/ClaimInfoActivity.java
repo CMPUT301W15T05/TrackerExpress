@@ -1,5 +1,6 @@
 package group5.trackerexpress;
 
+import java.io.IOException;
 import java.util.Locale;
 import java.util.UUID;
 
@@ -57,8 +58,14 @@ public class ClaimInfoActivity extends ActionBarActivity {
 	    	claim = Controller.getClaim(this, serializedId);
 		} else {
 			// FIXME: This junk can be moved somewhere else
-			// It gets the claim from elastic search rather than the myclaimlist
-			Claim[] claims = (new ElasticSearchEngine()).getClaims();
+			Claim[] claims;
+			try {
+				claims = (new ElasticSearchEngine()).getClaims(this);
+			} catch (IOException e) {
+				//FIXME: Notify user of elastic search fail
+				e.printStackTrace();
+				claims = new Claim[0];
+			}
 			for ( Claim c : claims ){
 				if ( c.getUuid().equals( serializedId ) ){
 					claim = c;
