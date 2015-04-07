@@ -1,5 +1,6 @@
 package group5.trackerexpress;
 
+import java.io.IOException;
 import java.util.Locale;
 import java.util.UUID;
 
@@ -57,8 +58,11 @@ public class ClaimInfoActivity extends ActionBarActivity {
 	    	claim = Controller.getClaim(this, serializedId);
 		} else {
 			// Get claim from Elastic Search if GlobalClaims tab called
-			claim = (new ElasticSearchEngine()).getClaim(serializedId);
-			
+			try {
+				claim = (new ElasticSearchEngine()).getClaim(ClaimInfoActivity.this, serializedId);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}			
 		}
 	    
 		// Create the adapter that will return a fragment for each of the three
@@ -69,15 +73,6 @@ public class ClaimInfoActivity extends ActionBarActivity {
 		setUpActionBar(mSectionsPagerAdapter, R.id.pager_activity_claim_info);
 	}
 
-	/**
-	 * Inflate the menu
-	 */
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.claim_info, menu);
-		return true;
-	}
 
 	/**
 	 * A {@link FragmentPagerAdapter} that returns a fragment corresponding to

@@ -3,8 +3,6 @@ package group5.trackerexpress;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.HashSet;
 import java.util.Locale;
 import java.util.UUID;
 import android.app.AlertDialog;
@@ -17,6 +15,7 @@ import android.graphics.PorterDuff;
 import android.location.Location;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.InputType;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -48,19 +47,19 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 	final SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
 	
 	/** The Claim name. */
-	private EditText ClaimName;
+	private EditText claimNameView;
 	
 	/** The Claim title. */
-	private EditText ClaimTitle;
+	private EditText claimTitleView;
 	
 	/** The Start date year. */
-	private Button StartDateYear;
+	private Button startDateButton;
 	
 	/** The End date year. */
-	private Button EndDateYear;
+	private Button endDateButton;
 	
 	/** The Description. */
-	private EditText Description; 
+	private EditText descriptionView; 
 	
 	EditText DesName;
     EditText DesRea;
@@ -74,11 +73,8 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 	/** The tag list view. */
 	private ListView tagListView;
 	
-	/** The value. */
-	private Editable value;
-	
 	/** The tags of claim. */
-	final private HashSet<Tag> tagsOfClaim = new HashSet<Tag>();
+	final private ArrayList<Tag> tagsOfClaim = new ArrayList<Tag>();
 	
 	/** The check correctness. */
 	private Boolean comingFromMap = false;
@@ -127,19 +123,17 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 		 *  Assign each EditText to a variable.
 		 */
 		
-		ClaimName = (EditText) findViewById(R.id.editClaimName);	
-		limitLength(ClaimName, 20);
-		ClaimName.requestFocus();
+		claimNameView = (EditText) findViewById(R.id.editClaimName);	
+		limitLength(claimNameView, 20);
+		claimNameView.requestFocus();
 		
-		ClaimTitle = (EditText) findViewById(R.id.editClaimTitle);
-		limitLength(ClaimTitle, 20);
+		claimTitleView = (EditText) findViewById(R.id.editClaimTitle);
+		limitLength(claimTitleView, 20);
 		
+		startDateButton = (Button) findViewById(R.id.editClaimStartDateYear);
 
-		StartDateYear = (Button) findViewById(R.id.editClaimStartDateYear);
-
-		EndDateYear = (Button) findViewById(R.id.editClaimEndDateYear);
-
-		Description = (EditText) findViewById(R.id.editClaimDescription);
+		endDateButton = (Button) findViewById(R.id.editClaimEndDateYear);
+		descriptionView = (EditText) findViewById(R.id.editClaimDescription);
 		
 		desListView = (ListView) findViewById(R.id.listViewDestinations);
 		tagListView = (ListView) findViewById(R.id.listViewTagsEditClaim);
@@ -158,7 +152,7 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 		     */
 		    public void onClick(View v) {
 		    	
-		    	getAndSetTag();
+		    	showTagPopUp();
 		    }
 		});
 		
@@ -220,13 +214,14 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 		 */
 
 		if (isNewClaim == true){
-			StartDateYear.setOnClickListener(new TextView.OnClickListener(){
+			
+			startDateButton.setOnClickListener(new TextView.OnClickListener(){
 				public void onClick(View v) {
 					showDatePickerDialog(v, myCalendar);
 				}
 			});
 		
-			EndDateYear.setOnClickListener(new TextView.OnClickListener(){
+			endDateButton.setOnClickListener(new TextView.OnClickListener(){
 				public void onClick(View v) {
 					showDatePickerDialog(v, myCalendar2);
 				}
@@ -252,13 +247,13 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 			}
 			
 			
-			StartDateYear.setOnClickListener(new TextView.OnClickListener(){
+			startDateButton.setOnClickListener(new TextView.OnClickListener(){
 				public void onClick(View v) {
 					showDatePickerDialog(v, myCalendar);
 				}
 			});
 		
-			EndDateYear.setOnClickListener(new TextView.OnClickListener(){
+			endDateButton.setOnClickListener(new TextView.OnClickListener(){
 				public void onClick(View v) {
 					showDatePickerDialog(v, myCalendar2);
 				}
@@ -296,30 +291,30 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 		    DestinationListview(desListView,destination);
 		    updateTagListView(new ArrayList<Tag>(tagsOfClaim));
 		    if (Controller.getUser(EditClaimActivity.this).getName().toString()!=null){
-		    	ClaimName.setText(Controller.getUser(EditClaimActivity.this).getName().toString());
+		    	claimNameView.setText(Controller.getUser(EditClaimActivity.this).getName().toString());
 		    }
 		   		
 	    } else {
 	    	String tags = claim.toStringTags(this);
 		   	done.setText("Edit Claim");
 		   	destination = claim.getDestinationList();
-		    ClaimName.setText(claim.getSubmitterName());
-			ClaimTitle.setText(claim.getClaimName());
+		    claimNameView.setText(claim.getSubmitterName());
+			claimTitleView.setText(claim.getClaimName());
 					
 			if ( claim.getStartDate() != null ){
-				StartDateYear.setText(sdf.format(claim.getStartDate().getTime()));
+				startDateButton.setText(sdf.format(claim.getStartDate().getTime()));
 /*				StartDateMonth.setText(String.valueOf(claim.getStartDate().getMM()));
 				StartDateDay.setText(String.valueOf(claim.getStartDate().getDD()));
 				*/
 			}
 					
 			if ( claim.getEndDate() != null ){
-				EndDateYear.setText(sdf.format(claim.getEndDate().getTime()));
+				endDateButton.setText(sdf.format(claim.getEndDate().getTime()));
 /*				EndDateMonth.setText(String.valueOf(claim.getEndDate().getMM()));
 				EndDateDay.setText(String.valueOf(claim.getEndDate().getDD()));
 				*/
 			}
-			Description.setText(String.valueOf(claim.getDescription()));
+			descriptionView.setText(String.valueOf(claim.getDescription()));
 			DestinationListview(desListView,destination);
 			
 			try {
@@ -365,7 +360,7 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 */	
 				Claim[] claims = Controller.getClaimList(EditClaimActivity.this).toList();
 				for ( Claim c : claims ){
-						if ( c.getClaimName().equals( ClaimTitle.getText().toString() )
+						if ( c.getClaimName().equals( claimTitleView.getText().toString() )
 							&& ( isNewClaim || ! c.getUuid().equals(claim.getUuid())) ){
 						repeatedClaimName = true;
 					}
@@ -386,6 +381,7 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 					EndDateYear.setError("End date is SMALLER than start date!");
 					EndDateYear.requestFocus();
 				}*/
+
 				myCalendar.set(Calendar.HOUR, 0);
 				myCalendar.set(Calendar.MINUTE, 0);
 				myCalendar.set(Calendar.SECOND, 0);
@@ -394,19 +390,20 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 				myCalendar2.set(Calendar.MINUTE, 0);
 				myCalendar2.set(Calendar.SECOND, 0);
 				myCalendar2.set(Calendar.MILLISECOND, 0);
-				if (repeatedClaimName || ClaimName.getText().toString().length() == 0 || ClaimTitle.getText().toString().length() == 0) {
-
+				
+				if (repeatedClaimName || claimNameView.getText().toString().length() == 0 || claimTitleView.getText().toString().length() == 0) {
+				
 					if (repeatedClaimName){
-						ClaimTitle.setError( "Repeated claim name!" );
-						ClaimTitle.requestFocus();
+						claimTitleView.setError( "Repeated claim name!" );
+						claimTitleView.requestFocus();
 					} 
-					else if ( ClaimName.getText().toString().length() == 0 ){
-				    	ClaimName.setError( "Name is required!" );
-				    	ClaimName.requestFocus();
+					else if ( claimNameView.getText().toString().length() == 0 ){
+				    	claimNameView.setError( "Name is required!" );
+				    	claimNameView.requestFocus();
 				    }
-				    else if ( ClaimTitle.getText().toString().length() == 0 ){
-				    	ClaimTitle.setError( "Title is required!" );
-				    	ClaimTitle.requestFocus();
+				    else if ( claimTitleView.getText().toString().length() == 0 ){
+				    	claimTitleView.setError( "Title is required!" );
+				    	claimTitleView.requestFocus();
 				    }
 				
 				} else if (myCalendar.compareTo(myCalendar2) == 1) {
@@ -420,10 +417,12 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 					
 					/** Saving new tags */
 					
-					ArrayList<Tag> current = Controller.getTagMap(EditClaimActivity.this).toList();
+					TagMap tagMap = Controller.getTagMap(EditClaimActivity.this);
+					ArrayList<Tag> current = tagMap.toList();
+					
 					for ( Tag t : tagsOfClaim ){
 						if ( ! current.contains(t) ){
-							Controller.getTagMap(EditClaimActivity.this).addTag(EditClaimActivity.this, t);
+							tagMap.addTag(EditClaimActivity.this, t);
 						}
 					}
 					
@@ -464,28 +463,27 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 				cancelCheck(EditClaimActivity.this);				
 			}
 		});
-	    if (claim != null){
-	    	if (claim.getStatus() == Claim.SUBMITTED || claim.getStatus() == Claim.APPROVED) {
-	    		ClaimName.setFocusable(false);
-	    		ClaimTitle.setFocusable(false);
-	    		StartDateYear.setClickable(false);
-	    		EndDateYear.setClickable(false);
-	    		Description.setFocusable(false);
-	    		desListView.setEnabled(false);
-	    		editDestinationButton.setClickable(false);
-	    		editDestinationButton.setVisibility(View.GONE);
-	    		//from http://stackoverflow.com/questions/4989545/make-edittext-behave-as-a-textview-in-code accessed 06/04/2015
-	    		ClaimName.setBackgroundResource(android.R.color.transparent);
-	    		ClaimTitle.setBackgroundResource(android.R.color.transparent);
-	    		Description.setBackgroundResource(android.R.color.transparent);
-	    		//from http://stackoverflow.com/questions/8743120/how-to-grey-out-a-button accessed 06/04/2015
-	    		StartDateYear.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.CLEAR);
-	    		EndDateYear.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.CLEAR);
-	    		done.setText("Edit Tags");
-	    	}
+	    
+	    if (!isNewClaim && (claim.getStatus() == Claim.SUBMITTED || claim.getStatus() == Claim.APPROVED)) {
+	    	claimNameView.setFocusable(false);
+	    	claimTitleView.setFocusable(false);
+	    	startDateButton.setClickable(false);
+	    	endDateButton.setClickable(false);
+	    	descriptionView.setFocusable(false);
+	    	desListView.setEnabled(false);
+	    	editDestinationButton.setClickable(false);
+	    	editDestinationButton.setVisibility(View.GONE);
+	    	//from http://stackoverflow.com/questions/4989545/make-edittext-behave-as-a-textview-in-code accessed 06/04/2015
+	    	claimNameView.setBackgroundResource(android.R.color.transparent);
+	    	claimTitleView.setBackgroundResource(android.R.color.transparent);
+	    	descriptionView.setBackgroundResource(android.R.color.transparent);
+	    	//from http://stackoverflow.com/questions/8743120/how-to-grey-out-a-button accessed 06/04/2015
+	    	startDateButton.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.CLEAR);
+	    	endDateButton.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.CLEAR);
+	    	done.setText("Edit Tags");
 	    }
 	    
-	   }
+	}
 	
 
 	/**
@@ -504,11 +502,11 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 	
 	@Override
 	public void returnDate(View view, Calendar date) {
-		if (view == StartDateYear) {
-			StartDateYear.setText(sdf.format(date.getTime()));
+		if (view == startDateButton) {
+			startDateButton.setText(sdf.format(date.getTime()));
 			myCalendar = date;
-		} else if (view == EndDateYear) {
-				EndDateYear.setText(sdf.format(date.getTime()));
+		} else if (view == endDateButton) {
+				endDateButton.setText(sdf.format(date.getTime()));
 				myCalendar2 = date;
 			}
 		
@@ -517,8 +515,10 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 	
 	/** check if the claim is completed*/
 	private void checkCompleteness(Claim claim){
-		if (ClaimName.getText().toString().length() > 0 && ClaimTitle.getText().toString().length() > 0 &&
-				Description.getText().toString().length() > 0 && claim.getStartDate() != null /*&& claim.getEndDate() != null*/
+
+		if (claimNameView.getText().toString().length() > 0 && claimTitleView.getText().toString().length() > 0 &&
+				descriptionView.getText().toString().length() > 0 && claim.getStartDate() != null /*&& claim.getEndDate() != null*/
+
 				&& claim.getDestinationList().size() >= 1){
 			claim.setIncomplete(this, false);
 		}else {
@@ -528,91 +528,92 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 	
 	/**
 	 * Gets the and set tag.
-	 * displays a popup autocomplete text view so the user can enter
+	 * Displays a popup autocomplete text view so the user can enter
 	 * a tag name, and then updates the list view
 	 * @return the and set tag
 	 */
-	private void getAndSetTag(){
-		String message = "Enter a new name";
+	private void showTagPopUp() {
+		
+		AlertDialog.Builder helpBuilder = new AlertDialog.Builder(this);
+		
+		helpBuilder.setTitle("Create Tag");
+	    helpBuilder.setMessage("Enter a new name");
+		
+	    // Create the AutoComplete input
 		final AutoCompleteTextView input = new AutoCompleteTextView(EditClaimActivity.this);
 
-		ArrayList<Tag> tagList = Controller.getTagMap(EditClaimActivity.this).toList();
-		ArrayList<String> tags = new ArrayList<String>();
-		
-		for ( int i = 0; i < tagList.size(); i++ ){
-			tags.add(tagList.get(i).toString());
-		}
+		final TagMap tagMap = Controller.getTagMap(EditClaimActivity.this);
+		ArrayList<String> tags = tagMap.getTagStrings(tagsOfClaim);
 		
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(EditClaimActivity.this, R.layout.edit_claim_drop_down_item, tags);
 		input.setAdapter(adapter);
 		input.setThreshold(1);
+		input.setMaxLines(1);
+		input.setInputType(InputType.TYPE_CLASS_TEXT);
+		
 		input.setOnFocusChangeListener(new View.OnFocusChangeListener() {
 			/**
 			 * @see android.view.View.OnFocusChangeListener#onFocusChange(android.view.View, boolean)
 			 */
 			@Override
 			  public void onFocusChange(View view, boolean hasFocus) {
-				  if(hasFocus){
+				  if(hasFocus && !input.getText().toString().isEmpty()){
 					  input.showDropDown();
 				  }
 			  }
 		});
 		
-		new AlertDialog.Builder(this)
-	    .setTitle("Create Tag")
-	    .setMessage(message)
-	    .setView(input)
-	    .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-	        /**
-	         * @see android.content.DialogInterface.OnClickListener#onClick(android.content.DialogInterface, int)
-	         */
-	        public void onClick(DialogInterface dialog, int whichButton) {       		
-	        	value = input.getText();
-		    	if ( input.getText() != null ){
-		    		//Tag newTag = new Tag(input.getText().toString());
-		    		Tag newTag = null;
-					try {
-						newTag = Controller.getTagMap(getBaseContext()).
-								searchForTagByString(input.getText().toString());
-						tagsOfClaim.add(newTag);
-			    		updateTagListView(new ArrayList<Tag>(tagsOfClaim));
-					} catch (IllegalAccessException e) {
-			    		Toast.makeText(getApplicationContext(), "New Tag", Toast.LENGTH_SHORT).show();
-			    		newTag = new Tag(value.toString());
-			    		tagsOfClaim.add(newTag);
-					}
-		    		boolean notInSet = true;
-		    		for ( Tag t : tagsOfClaim ){
-		    			if ( t.toString().equals(newTag.toString()) ){
-		    				notInSet = false;
-		    			}
-		    		}
-		    		if ( notInSet ){
-		    			tagsOfClaim.add(newTag);
-		    		}
-		    		updateTagListView(new ArrayList<Tag>(tagsOfClaim));
-		    	}
-		    	
-		    	
-/*		    	if (input.getText() == null){
-		    		.setError( "Name is required!" );
-		    	}
-		    	
-*/
-		    	value = null;
-	        }
-	    }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-	    	
-	        /** 
-	         * @see android.content.DialogInterface.OnClickListener#onClick(android.content.DialogInterface, int)
-	         */
-	        public void onClick(DialogInterface dialog, int whichButton) {
-	            /** Do nothing */
-	        }
-	    }).show();
-		
-	}
+	    helpBuilder.setView(input);
+	    
+	    helpBuilder.setPositiveButton("Ok", doNothingClicker);
+	    helpBuilder.setNegativeButton("Cancel", doNothingClicker);
+	    
+	    final AlertDialog helpDialog = helpBuilder.create();
+	    
+	    helpDialog.setOnShowListener(new DialogInterface.OnShowListener() {
 
+	        @Override
+	        public void onShow(DialogInterface dialog) {
+
+	            Button b = helpDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+	            b.setOnClickListener(new View.OnClickListener() {
+
+	                @Override
+	                public void onClick(View view) {
+	                	String sInput = input.getText().toString();
+
+	                	if (sInput.isEmpty()) {
+	                		input.setError("Enter a tag name");
+	                		return;
+	                	}
+	                	
+	                	// Tag has already been added
+	                	for (Tag t : tagsOfClaim) {
+	                		if (t.toString().equals(sInput)) {
+		                		input.setError("Tag already added to claim");
+	                			return;
+	                		}
+	                	}
+	                	
+	                	Tag newTag;
+	    	        	try {
+	    	        		newTag = tagMap.searchForTagByString(sInput);
+	    	        	} catch (IllegalAccessException e) {
+	    	        		Toast.makeText(getApplicationContext(), "New Tag", Toast.LENGTH_SHORT).show();
+	    	        		newTag = new Tag(sInput);
+	    	        	}
+	    	        	
+	    	        	tagsOfClaim.add(newTag);
+			    		updateTagListView(tagsOfClaim);
+	                	
+	                    helpDialog.dismiss();
+	                }
+	            });
+	        }
+	    });
+
+	    helpDialog.show();
+	}
 
 	/**
 	 * Make the items in destination ListView clickable and generate 
@@ -674,15 +675,15 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 	 */
 	private void editclaim(final Claim claim) {
 		// TODO Auto-generated method stub
-		String aftermath = StartDateYear.getText().toString();
-		String aftermath2 = EndDateYear.getText().toString();
+		String aftermath = startDateButton.getText().toString();
+		String aftermath2 = endDateButton.getText().toString();
 
 		Calendar d2 = Calendar.getInstance();
 		Calendar d1 = Calendar.getInstance();
-		String claimUser = ClaimName.getText().toString();
-		String Claim_title = ClaimTitle.getText().toString();
+		String claimUser = claimNameView.getText().toString();
+		String Claim_title = claimTitleView.getText().toString();
 		
-		String Descrip = Description.getText().toString();
+		String Descrip = descriptionView.getText().toString();
 		
 		d2=myCalendar2;
 		

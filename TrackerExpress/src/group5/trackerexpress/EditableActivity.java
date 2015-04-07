@@ -42,6 +42,15 @@ public class EditableActivity extends Activity implements DatePickerFragment.The
 	/**
 	 * Watcher class for each of the TextViews
 	 */
+	public static DialogInterface.OnClickListener doNothingClicker = new DialogInterface.OnClickListener() {
+        /**
+         * @see android.content.DialogInterface.OnClickListener#onClick(android.content.DialogInterface, int)
+         */
+        public void onClick(DialogInterface dialog, int whichButton) {
+        	// Do Nothing
+        }
+    };
+	
 	public abstract class basicWatcher implements TextWatcher {
 		@Override
 		public void onTextChanged(CharSequence s, int start, int before, int count) {}

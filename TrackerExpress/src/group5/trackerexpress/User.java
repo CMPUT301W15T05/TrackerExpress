@@ -28,7 +28,7 @@ public class User extends TModel{
 	private String name;
 	
 	/** The SIGNED_IN boolean to check if user is signed in. */
-	private boolean SIGNED_IN; // true if the user was signed in
+	private Boolean SIGNED_IN; // true if the user was signed in
 	
 	/** The Constant FILENAME for saving. */
 	private static final String FILENAME = "user.sav";
@@ -43,6 +43,7 @@ public class User extends TModel{
 	 */
 	public User(Context context) {
 		loadData(context);
+		System.out.println("Getting the new user");
 	}
 	
 	/**
@@ -117,7 +118,7 @@ public class User extends TModel{
 		try {
 			new FileCourrier<User>(this).saveFile(context, FILENAME, this);
 		} catch (IOException e) {
-			System.err.println ("Could not save claims.");
+			System.err.println ("Could not save user.");
 			throw new RuntimeException();
 		}
 	}
@@ -137,11 +138,13 @@ public class User extends TModel{
 			this.email = user.getEmail();
 			this.password = user.getPassword();
 			this.name = user.getName();
+			this.SIGNED_IN = user.isSignedIn();
 		} catch (FileNotFoundException e) {
 			System.err.println ("File doesnt exist.");
 			this.email = "em2@example.com";
 			this.password = "password";
 			this.name = "Em2";
+			this.SIGNED_IN = true;
 		} catch (IOException e) {
 			throw new RuntimeException();
 		}
@@ -152,8 +155,9 @@ public class User extends TModel{
 	 *
 	 * @param signedIn the new signed in
 	 */
-	public void setSignedIn(boolean signedIn) {
+	public void setSignedIn(Context context, boolean signedIn) {
 		this.SIGNED_IN = signedIn;
+		notifyViews(context);
 	}
 	
 	/**

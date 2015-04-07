@@ -145,8 +145,7 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 	    createExpenseButton.setOnClickListener(new Button.OnClickListener(){
 			public void onClick(View v) {
 	    		if ( ! statusCheckBox.isChecked() && ( description.getText().toString().length() == 0 || 
-	    									amount.getText().toString().length() == 0 || 
-	    									receiptUri == null) ) {
+	    									amount.getText().toString().length() == 0)) {
 	    			AlertDialog.Builder alertDialog = new AlertDialog.Builder(EditExpenseActivity.this);
 	    			alertDialog.setTitle("Warning");
 	    			alertDialog.setMessage("You are adding an incomplete expense that isn't flagged as incomplete.");
@@ -318,6 +317,7 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 		if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE){
 			if (resultCode == RESULT_OK){
 				Toast.makeText(EditExpenseActivity.this, "Photo Set", Toast.LENGTH_SHORT).show(); 
+				Log.e("STRING", "PHOTO TAKEN");
 				Drawable photo = Drawable.createFromPath(receiptUri.getPath());
 				Bitmap sourceBitmap = ((BitmapDrawable)photo).getBitmap();
 				Bitmap rotatedBitmap = editBitmap.rotateBitmap(sourceBitmap);

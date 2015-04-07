@@ -38,12 +38,12 @@ import junit.framework.TestCase;
  */
 public class ElasticSearchEngineTest extends ActivityInstrumentationTestCase2<TestActivity> {
 
-	
+
 	private ElasticSearchEngine elasticSearchEngine;
 	private Claim claim;
 	private User user;
 	private UUID id;
-	
+
 	/**
 	 * @param activityClass
 	 */
@@ -62,103 +62,110 @@ public class ElasticSearchEngineTest extends ActivityInstrumentationTestCase2<Te
 
 	public void testSubmitAndGet(){
 
-		elasticSearchEngine.submitClaim(getActivity(), claim);
-
 		try {
-			Thread.sleep(2000);
-		} catch(InterruptedException ex) {
-			Thread.currentThread().interrupt();
-		}
+			elasticSearchEngine.submitClaim(getActivity(), claim);
 
-		assertTrue(elasticSearchEngine.getClaim(claim.getUuid()).getClaimName().equals("Name"));
-		
-		elasticSearchEngine.deleteClaim(claim.getUuid());
+			assertTrue(elasticSearchEngine.getClaim(getActivity(), claim.getUuid()).getClaimName().equals("Name"));
+
+			elasticSearchEngine.deleteClaim(getActivity(), claim.getUuid());
+
+		} catch (IOException e) {
+			fail("IO Exception.");
+		}
 	}
-	
+
 	public void testDelete(){
 
-		Claim[] claims = elasticSearchEngine.getClaims();
-		int sizeBefore = claims.length;
-		
-		elasticSearchEngine.submitClaim(getActivity(), claim);
-
 		try {
+			Claim[] claims = elasticSearchEngine.getClaims(getActivity());
+			int sizeBefore = claims.length;
+
+			elasticSearchEngine.submitClaim(getActivity(), claim);
+
 			Thread.sleep(2000);
-		} catch(InterruptedException ex) {
-			Thread.currentThread().interrupt();
-		}
 
-		elasticSearchEngine.deleteClaim(claim.getUuid());
-		
-		try {
+
+			elasticSearchEngine.deleteClaim(getActivity(), claim.getUuid());
+
 			Thread.sleep(1000);
-		} catch (InterruptedException e) {}
-		
-		
-		claims = elasticSearchEngine.getClaims();
-		assertEquals(sizeBefore, claims.length);
+
+			claims = elasticSearchEngine.getClaims(getActivity());
+			assertEquals(sizeBefore, claims.length);
+		} catch (IOException e) {
+			fail("IO Exception.");
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
-	
-	
+
+
 	public void testApprove(){
-		elasticSearchEngine.submitClaim(getActivity(), claim);
 
 		try {
+			elasticSearchEngine.submitClaim(getActivity(), claim);
+
 			Thread.sleep(2000);
-		} catch(InterruptedException ex) {
-			Thread.currentThread().interrupt();
-		}
 
-		elasticSearchEngine.approveClaim(getActivity(), claim.getUuid(), "Comment");
-		
-		try {
+
+			elasticSearchEngine.approveClaim(getActivity(), claim.getUuid(), "Comment");
+
 			Thread.sleep(1000);
-		} catch (InterruptedException e) {}
 
 
-		Claim[]claims = elasticSearchEngine.getClaims();
+			Claim[]claims = elasticSearchEngine.getClaims(getActivity());
 
-		for (Claim claimElement : claims){
-			if (claimElement.getUuid().equals(claim.getUuid())){
-				assertEquals("Claim status was not chagned to approved.", Claim.APPROVED, claimElement.getStatus());
-				elasticSearchEngine.deleteClaim(claim.getUuid());
-				return;
+			for (Claim claimElement : claims){
+				if (claimElement.getUuid().equals(claim.getUuid())){
+					assertEquals("Claim status was not chagned to approved.", Claim.APPROVED, claimElement.getStatus());
+					elasticSearchEngine.deleteClaim(getActivity(), claim.getUuid());
+					return;
+				}
 			}
+
+			fail("Claim couldn't be added or retrived.");
+		} catch (IOException e) {
+			fail("IO Exception.");
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		
-		fail("Claim couldn't be added or retrived.");
 	}
-	
-	
+
+
 	public void testReturn(){
-		elasticSearchEngine.submitClaim(getActivity(), claim);
+
 
 		try {
+
+			elasticSearchEngine.submitClaim(getActivity(), claim);
+
 			Thread.sleep(1000);
-		} catch(InterruptedException ex) {
-			Thread.currentThread().interrupt();
-		}
 
-		elasticSearchEngine.returnClaim(getActivity(), claim.getUuid(), "test comment");
-		
-		try {
+
+			elasticSearchEngine.returnClaim(getActivity(), claim.getUuid(), "test comment");
+
 			Thread.sleep(1000);
-		} catch (InterruptedException e) {}
 
 
-		Claim[] claims = elasticSearchEngine.getClaims();
+			Claim[] claims = elasticSearchEngine.getClaims(getActivity());
 
-		for (Claim claimElement : claims){
-			if (claimElement.getUuid().equals(claim.getUuid())){
-				assertEquals("Claim status was not chagned to returned.", Claim.RETURNED, claimElement.getStatus());
-				assertTrue("Claim comment wasn't added correctly.", "test comment".equals(claimElement.getComments()));
-				elasticSearchEngine.deleteClaim(claim.getUuid());
-				return;
+			for (Claim claimElement : claims){
+				if (claimElement.getUuid().equals(claim.getUuid())){
+					assertEquals("Claim status was not chagned to returned.", Claim.RETURNED, claimElement.getStatus());
+					assertTrue("Claim comment wasn't added correctly.", "test comment".equals(claimElement.getComments()));
+					elasticSearchEngine.deleteClaim(getActivity(), claim.getUuid());
+					return;
+				}
 			}
+
+			fail("Claim couldn't be added or retrived.");
+		} catch (IOException e) {
+			fail("IO Exception.");
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		
-		fail("Claim couldn't be added or retrived.");
+
 	}
-	
-	
 }

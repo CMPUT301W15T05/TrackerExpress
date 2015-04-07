@@ -1,11 +1,14 @@
 package group5.trackerexpress;
 
+import java.io.IOException;
+
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -148,11 +151,24 @@ public class GlobalClaimsFragment extends Fragment implements TView {
 										Toast.makeText(getActivity(), "Comments Required", Toast.LENGTH_LONG).show();
 									} else {
 										Toast.makeText(getActivity(), toast_part_use + " Claim", Toast.LENGTH_LONG).show();
-										
-										if ( itemId == R.id.op_approve ){
-											new ElasticSearchEngine().approveClaim(getActivity(), c.getUuid(), input.getText().toString());
-										} else {
-											new ElasticSearchEngine().returnClaim(getActivity(), c.getUuid(), input.getText().toString());
+										c.setComments(c.getComments() + '\n' + input.getText().toString());
+										//int old_status = c.getStatus();
+										try {
+											//c.setStatus(getActivity(), claim_status_use );
+											//if ( itemId == R.id.op_approve ){
+											Log.e("PRE", "PREREV");
+											c.setStatus(getActivity(), claim_status_use);
+											Log.e("prestatus", c.getStatus() + "");
+											new ElasticSearchEngine().reviewClaim(getActivity(), c.getUuid(), c.getComments(), claim_status_use);
+											Log.e("poststatus", c.getStatus() + "");
+											Log.e("POST", "POSTREV");
+											//} else {
+												//new ElasticSearchEngine().returnClaim(getActivity(), c.getUuid(), c.getComments());
+											//}
+										} catch(IOException e) {
+											//FIXME: Do something about elastic search fail
+											//c.setStatus(getActivity(), old_status);
+											Log.e("EXCPET", "EXCEPT");
 										}
 										
 										try {
@@ -161,7 +177,6 @@ public class GlobalClaimsFragment extends Fragment implements TView {
 											// TODO Auto-generated catch block
 											e.printStackTrace();
 										}
-										c.setStatus(getActivity(), claim_status_use );
 										update(null);
 									}
 								}
@@ -195,7 +210,14 @@ public class GlobalClaimsFragment extends Fragment implements TView {
 	 */
 	@Override
 	public void update(TModel model) {
-		Claim[] listOfClaims = new ElasticSearchEngine().getClaimsForGlobalClaimList(getActivity());
+		Claim[] listOfClaims;
+		try {
+			listOfClaims = new ElasticSearchEngine().getClaimsForGlobalClaimList(getActivity());
+		} catch (IOException e) {
+			//FIXME: Do something about elastic search fail
+			e.printStackTrace();
+			listOfClaims = null;
+		}
 		if (listOfClaims == null ){
 			tv_global_error.setVisibility(View.VISIBLE);
 			return;

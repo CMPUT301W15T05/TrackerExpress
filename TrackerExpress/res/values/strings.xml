@@ -2,9 +2,10 @@
 <resources>
     
     <string name="app_name">TrackerExpress</string>
-    <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
     <string name="place_autocomplete_hint">Enter a place name or address</string>
     <string name="confirm_geolocation">OK</string>
+    <string name="action_bar_sign_out">Sign Out</string>
+    <string name="action_bar_edit_account">Edit Account</string>
     
 </resources>

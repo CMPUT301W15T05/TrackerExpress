@@ -1,5 +1,7 @@
 package group5.trackerexpress;
 
+
+import java.io.IOException;
 import java.util.UUID;
 import android.content.Context;
 import android.net.ConnectivityManager;
@@ -109,7 +111,14 @@ public class Controller {
 		// updates the claims from the internet if it is connected
 		if ( isInternetConnected(context) ){
 			Claim[] localListOfClaims = Controller.getClaimList(context).toList();
-			Claim[] elasticListOfClaims = (new ElasticSearchEngine()).getClaims();
+			Claim[] elasticListOfClaims;
+			try {
+				elasticListOfClaims = (new ElasticSearchEngine()).getClaims(context);
+			} catch (IOException e) {
+				//FIXME: Notify user of elastic search fail
+				e.printStackTrace();
+				elasticListOfClaims = new Claim[0];
+			}
 			for ( Claim c : localListOfClaims ){
 				Log.i("TESTING", c.getUuid().toString() + c.getClaimName());
 				if ( c.getStatus() == Claim.SUBMITTED){
