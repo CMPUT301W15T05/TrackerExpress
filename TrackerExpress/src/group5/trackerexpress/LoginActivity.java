@@ -185,6 +185,7 @@ public class LoginActivity extends AccountFormActivity {//implements LoaderCallb
 				if (user.getEmail().equals(mEmail)) {
 					if (user.getPassword().equals(mPassword)) {
 						// Return here if the password matches.
+						Controller.setUser(LoginActivity.this, user);
 						return SIGN_IN_SUCCESS;
 					}
 					else {
