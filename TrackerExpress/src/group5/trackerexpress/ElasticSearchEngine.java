@@ -3,6 +3,8 @@
  */
 package group5.trackerexpress;
 
+import java.io.IOException;
+import java.lang.Thread.UncaughtExceptionHandler;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -22,8 +24,28 @@ public class ElasticSearchEngine {
 	
 	private final ElasticSearchEngineUnthreaded elasicSearchEngineUnthreaded = new ElasticSearchEngineUnthreaded();
 	
+	
+	private UncaughtExceptionHandler uncaughtExceptionHandler = new UncaughtExceptionHandler() {
+		
+		@Override
+		public void uncaughtException(Thread thread, Throwable ex) {
+			threadException = ex;
+			try {
+				Thread.sleep(3000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	};
+	
+	volatile Throwable threadException;
+	
 
-	public Claim[] getClaims() {
+	public Claim[] getClaims(Context context) throws IOException {
+		
+		if (!Controller.isInternetConnected(context))
+			throw new IOException();
 		
 		final Claim[][] claims = new Claim[1][];
 
@@ -34,12 +56,20 @@ public class ElasticSearchEngine {
 			}
 		});
 
+		
+		threadException = null;
+		
 		thread.start();
 		try {
 			thread.join();
 		} catch (InterruptedException e) {
-			throw new RuntimeException();
+			throw new IOException();
 		}
+		
+		if (threadException != null){
+			throw new IOException();
+		}
+		
 		return claims[0];
 	}
 	
@@ -49,16 +79,15 @@ public class ElasticSearchEngine {
 	 * were not submitted by the current user, and are not in returned or approved state.
 	 * @return filtered claims list
 	 */
-	public Claim[] getClaimsForGlobalClaimList(Context context) {
+	public Claim[] getClaimsForGlobalClaimList(Context context) throws IOException {
 		
-		Claim[] claimsUnfiltered = getClaims();
+		if (!Controller.isInternetConnected(context))
+			throw new IOException();
+		
+		Claim[] claimsUnfiltered = getClaims(context);
 		List<Claim> claims = new ArrayList<Claim>();
 		Log.e("USER", Controller.getUser(context).getEmail().toString());
 		for (Claim claim : claimsUnfiltered){
-			Log.e(claim.getClaimName(), claim.getSubmitterEmail());
-			try{
-			Log.e(claim.getClaimName(), claim.getApproverEmail());
-			} catch (NullPointerException e) {Log.e(claim.getClaimName(), "NULL APPROVER");}
 			if (    !claim.getSubmitterEmail().equals(Controller.getUser(context).getEmail()) &&
 					(claim.getApproverEmail() == null || claim.getApproverEmail().equals(Controller.getUser(context).getEmail())) &&
 					 claim.getStatus() != Claim.IN_PROGRESS){
@@ -72,7 +101,10 @@ public class ElasticSearchEngine {
 	
 	
 	
-	public Claim getClaim(UUID id) {
+	public Claim getClaim(Context context, UUID id) throws IOException {
+		
+		if (!Controller.isInternetConnected(context))
+			throw new IOException();
 		
 		final Claim[] claim = new Claim[1];
 		final UUID idFinal = id;
@@ -100,9 +132,11 @@ public class ElasticSearchEngine {
 
 
 
-	public void submitClaim(Context context, Claim claim) {
+	public void submitClaim(Context context, Claim claim) throws IOException {
 		
-		claim.setStatus(context, Claim.SUBMITTED);
+		if (!Controller.isInternetConnected(context))
+			throw new IOException();
+		
 		claim.setSubmitterName(context, Controller.getUser(context).getName());
 		claim.setSubmitterEmail(context, Controller.getUser(context).getEmail());
 		
@@ -114,7 +148,6 @@ public class ElasticSearchEngine {
 			} catch (NullPointerException e) {}
 
 		}
-
 		final Claim claimFinal = claim;
 		
 		Thread thread = new Thread(new Runnable(){
@@ -138,7 +171,9 @@ public class ElasticSearchEngine {
 		
 		//switch back for saving:
 		for (Expense expense : claim.getExpenseList().toList()){
-			expense.getReceipt().stopStoringActualBitmap();
+			try {
+				expense.getReceipt().stopStoringActualBitmap();
+			} catch (NullPointerException e) {}
 		}		
 
 	}
@@ -148,13 +183,16 @@ public class ElasticSearchEngine {
 		Claim[] claims = elasicSearchEngineUnthreaded.getClaims();
 		
 		for (Claim claim : claims) {
-			deleteClaim(claim.getUuid());
+			elasicSearchEngineUnthreaded.deleteClaim(claim.getUuid());
 		}
 	}
 
 
-	public void deleteClaim(UUID id){
+	public void deleteClaim(Context context, UUID id) throws IOException {
 		final UUID idFinal = id;
+		
+		if (!Controller.isInternetConnected(context))
+			throw new IOException();
 
 		Thread thread = new Thread(new Runnable(){
 			@Override
@@ -172,7 +210,10 @@ public class ElasticSearchEngine {
 
 
 
-	public void approveClaim(Context context, UUID id, String comments){
+	public void reviewClaim(Context context, UUID id, String comments, final int status) throws IOException {
+		
+		if (!Controller.isInternetConnected(context))
+			throw new IOException();
 		
 		final UUID idFinal = id;
 		final String commentsFinal = comments;
@@ -183,7 +224,7 @@ public class ElasticSearchEngine {
 			@Override
 			public void run() {
 				try {
-					elasicSearchEngineUnthreaded.approveClaim(idFinal, commentsFinal, approverName, approverEmail);
+					elasicSearchEngineUnthreaded.reviewClaim(idFinal, commentsFinal, approverName, approverEmail, status);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -199,7 +240,10 @@ public class ElasticSearchEngine {
 	}
 
 
-	public void returnClaim(Context context, UUID id, String comments){
+	/*public void returnClaim(Context context, UUID id, String comments) throws IOException {
+		
+		if (!Controller.isInternetConnected(context))
+			throw new IOException();
 		
 		final UUID idFinal = id;
 		final String commentsFinal = comments;
@@ -216,14 +260,16 @@ public class ElasticSearchEngine {
 				}
 			}
 		});
+		
+		thread.setUncaughtExceptionHandler(uncaughtExceptionHandler);
 
 		thread.start();
-		/*try {
+		try {
 			thread.join();
 		} catch (InterruptedException e) {
 			throw new RuntimeException();
-		}*/
-	}
+		}
+	}*/
 
 
 }

@@ -7,14 +7,19 @@ import java.util.Locale;
 import java.util.UUID;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * Fragment that handles the tab that displays claim properties in the view claim activity.
@@ -24,6 +29,7 @@ import android.widget.TextView;
 @SuppressLint("ValidFragment")
 public class ViewClaimFragment extends Fragment implements TView {
 	
+	Button viewComments;
 	
 	final String myFormat = "MM/dd/yyyy"; //In which you need put here
 	final SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
@@ -129,6 +135,26 @@ public class ViewClaimFragment extends Fragment implements TView {
 			}
 			
 		}
+		viewComments = (Button) rootView.findViewById(R.id.viewComments);
+		if (claim.getComments() == "")
+			viewComments.setVisibility(View.GONE);
+		
+		viewComments.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
+    			alertDialog.setTitle("Comments from: " + claim.getApproverName());
+    			alertDialog.setMessage(claim.getComments());
+    			alertDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+    				public void onClick(DialogInterface dialog, int which) {
+    					
+    				}
+    			});
+    			alertDialog.show();
+			}
+		});
 		
 		
 		return rootView;
