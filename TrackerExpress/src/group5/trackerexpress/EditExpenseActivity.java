@@ -254,7 +254,6 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 				Bitmap resizedBitmap = editBitmap.resizeBitmap(rotatedBitmap, 640);
 				imgButton.setImageBitmap(resizedBitmap);
 				deleteImage.setVisibility(View.VISIBLE);
-				//imgButton.setImageURI(receiptUri);
 
 			} else if (resultCode == RESULT_CANCELED){
 				Toast.makeText(EditExpenseActivity.this, "Canceled", Toast.LENGTH_SHORT).show();
