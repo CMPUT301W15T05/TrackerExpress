@@ -4,9 +4,12 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Locale;
 
+import com.google.android.gms.R.color;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -107,8 +110,10 @@ public class ExpenseListAdapter extends ArrayAdapter<Expense> {
 		
 		if(e.getLocation() != null){
 			holder.geolocation.setText("LOCATION SET");
+			holder.geolocation.setTextColor(Color.GREEN);
 		}else{
 			holder.geolocation.setText("LOCATION NOT SET");
+			holder.geolocation.setTextColor(Color.RED);
 		}
 		
 		if (e.getDate() != null) {
