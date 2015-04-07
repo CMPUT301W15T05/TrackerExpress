@@ -3,14 +3,12 @@ package group5.trackerexpress;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Locale;
 import java.util.UUID;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,6 +51,8 @@ public class ViewClaimFragment extends Fragment implements TView {
 		TextView title = (TextView) rootView.findViewById(R.id.viewClaimTitle);
 
 		title.setText(claim.getClaimName());
+		
+		claim.addView(ViewClaimFragment.this);
 		
 		// User name
 		TextView nameInfo = (TextView) rootView.findViewById(R.id.viewClaimNameInfo);

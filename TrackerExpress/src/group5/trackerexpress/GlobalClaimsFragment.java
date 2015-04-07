@@ -1,5 +1,7 @@
 package group5.trackerexpress;
 
+import java.io.IOException;
+
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
@@ -149,10 +151,14 @@ public class GlobalClaimsFragment extends Fragment implements TView {
 									} else {
 										Toast.makeText(getActivity(), toast_part_use + " Claim", Toast.LENGTH_LONG).show();
 										
-										if ( itemId == R.id.op_approve ){
-											new ElasticSearchEngine().approveClaim(getActivity(), c.getUuid(), input.getText().toString());
-										} else {
-											new ElasticSearchEngine().returnClaim(getActivity(), c.getUuid(), input.getText().toString());
+										try {
+											if ( itemId == R.id.op_approve ){
+												new ElasticSearchEngine().approveClaim(getActivity(), c.getUuid(), input.getText().toString());
+											} else {
+												new ElasticSearchEngine().returnClaim(getActivity(), c.getUuid(), input.getText().toString());
+											}
+										} catch(IOException e) {
+											//FIXME: Do something about elastic search fail
 										}
 										
 										try {
@@ -195,7 +201,14 @@ public class GlobalClaimsFragment extends Fragment implements TView {
 	 */
 	@Override
 	public void update(TModel model) {
-		Claim[] listOfClaims = new ElasticSearchEngine().getClaimsForGlobalClaimList(getActivity());
+		Claim[] listOfClaims;
+		try {
+			listOfClaims = new ElasticSearchEngine().getClaimsForGlobalClaimList(getActivity());
+		} catch (IOException e) {
+			//FIXME: Do something about elastic search fail
+			e.printStackTrace();
+			listOfClaims = null;
+		}
 		if (listOfClaims == null ){
 			tv_global_error.setVisibility(View.VISIBLE);
 			return;

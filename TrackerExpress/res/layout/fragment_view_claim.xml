@@ -31,7 +31,7 @@
 	<ScrollView
 	    android:id="@+id/viewClaimScrollView"
 	    android:layout_width="fill_parent"
-	    android:layout_height="fill_parent"
+	    android:layout_height="wrap_content"
 	    android:layout_alignStart="@+id/viewClaimFancyLine"
 	    android:layout_below="@+id/viewClaimTitle"
 	    android:layout_marginTop="12dp" >
@@ -96,5 +96,13 @@
 
 		</TableLayout>
 	</ScrollView>
+
+	<Button
+	    android:id="@+id/viewComments"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentBottom="true"
+	    android:layout_centerHorizontal="true"
+	    android:text="ViewComments" />
     
 </RelativeLayout>

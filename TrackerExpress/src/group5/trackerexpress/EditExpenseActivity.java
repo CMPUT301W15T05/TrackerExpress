@@ -318,6 +318,7 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 		if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE){
 			if (resultCode == RESULT_OK){
 				Toast.makeText(EditExpenseActivity.this, "Photo Set", Toast.LENGTH_SHORT).show(); 
+				Log.e("STRING", "PHOTO TAKEN");
 				Drawable photo = Drawable.createFromPath(receiptUri.getPath());
 				Bitmap sourceBitmap = ((BitmapDrawable)photo).getBitmap();
 				Bitmap rotatedBitmap = editBitmap.rotateBitmap(sourceBitmap);
