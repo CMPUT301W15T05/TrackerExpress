@@ -110,7 +110,7 @@ public class ExpenseListAdapter extends ArrayAdapter<Expense> {
 		
 		if(e.getLocation() != null){
 			holder.geolocation.setText("LOCATION SET");
-			holder.geolocation.setTextColor(Color.GREEN);
+			holder.geolocation.setTextColor(context.getResources().getColor(R.color.locSet));
 		}else{
 			holder.geolocation.setText("LOCATION NOT SET");
 			holder.geolocation.setTextColor(Color.RED);

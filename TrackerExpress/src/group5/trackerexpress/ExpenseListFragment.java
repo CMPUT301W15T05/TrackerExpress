@@ -101,7 +101,7 @@ public class ExpenseListFragment extends Fragment implements TView {
 				popup.getMenuInflater().inflate(R.menu.expense_list_popup, popup.getMenu());
 				
 				onPrepareOptionsMenu(popup);
-				if (!clickedOnExpense.isHasLocation() || myClaimListVersion)
+				if (!clickedOnExpense.isHasLocation())
 					popup.getMenu().findItem(R.id.op_view_location).setVisible(false);
 				// Popup menu item click listener
 				popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
@@ -122,7 +122,7 @@ public class ExpenseListFragment extends Fragment implements TView {
 
                         case R.id.op_view_location:
                         	LatLng latlng = new LatLng(clickedOnExpense.getLatitude(), clickedOnExpense.getLongitude());
-                        	intent = new Intent (getActivity(), InteractiveMapActivity.class);
+                        	intent = new Intent (getActivity(), BasicMapActivity.class);
                         	intent.putExtra("latlng", latlng);
                         	break;
                         	

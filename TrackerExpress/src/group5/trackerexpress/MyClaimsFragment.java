@@ -3,6 +3,7 @@ package group5.trackerexpress;
 import java.io.IOException;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -129,7 +130,7 @@ public class MyClaimsFragment extends Fragment implements TView {
         									clickedOnClaim.setStatus(getActivity(), old_status);
         									throw new RuntimeException();
         								}
-                                		Toast.makeText(getActivity(), "Submitting", Toast.LENGTH_LONG).show();*/
+                                		Toast.makeText(getActivity(), "Submitting", Toast.LENGTH_LONG).show();
             	    					int old_status = clickedOnClaim.getStatus();
                                 		try {
                                 			clickedOnClaim.setStatus(getActivity(), Claim.SUBMITTED);
@@ -139,15 +140,20 @@ public class MyClaimsFragment extends Fragment implements TView {
         									throw new RuntimeException();
         								}
                                 		Toast.makeText(getActivity(), "Submitting", Toast.LENGTH_LONG).show();
-            	    				}
-            	    			});
+            	    				}*/
+            	    				attemptSubmit(getActivity(), clickedOnClaim);
+            	    			}});
                         		incBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-							// Do nothing
-						}
-					});
-                    incBuilder.show();
+                        			@Override
+                        			public void onClick(DialogInterface dialog, int which) {
+                        				// Do nothing
+                        			}
+                        		});
+                        		if (clickedOnClaim.hasIncompleteExpense())
+                        			incBuilder.show();
+                        		else {
+            	    				attemptSubmit(getActivity(), clickedOnClaim);
+                        		}
                         		
                         	}
                         	break;
@@ -197,6 +203,18 @@ public class MyClaimsFragment extends Fragment implements TView {
 			}
 			break;
 		}
+	}
+	
+	public void attemptSubmit (Context context, Claim clickedOnClaim){
+		int old_status = clickedOnClaim.getStatus();
+		try {
+			clickedOnClaim.setStatus(getActivity(), Claim.SUBMITTED);
+			new ElasticSearchEngineClaims().submitClaim(getActivity(), clickedOnClaim);
+		} catch (IOException e) {
+			clickedOnClaim.setStatus(getActivity(), old_status);
+			throw new RuntimeException();
+		}
+		Toast.makeText(getActivity(), "Submitting", Toast.LENGTH_LONG).show();
 	}
 
 	/** 

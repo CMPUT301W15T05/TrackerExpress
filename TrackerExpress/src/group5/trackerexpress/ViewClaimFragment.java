@@ -136,7 +136,7 @@ public class ViewClaimFragment extends Fragment implements TView {
 			
 		}
 		viewComments = (Button) rootView.findViewById(R.id.viewComments);
-		if (claim.getComments() == "")
+		if (claim.getComments() == "" || claim.getComments() == null)
 			viewComments.setVisibility(View.GONE);
 		
 		viewComments.setOnClickListener(new OnClickListener() {

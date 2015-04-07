@@ -354,7 +354,7 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 	            System.out.println("TITLE IS " + title + " " + latLng.latitude);
 	            
 	            if (location == null) {
-	            	location = new Location("");
+	            	location = new Location(title);
 	            }
 	            
 	            location.setLongitude(latLng.longitude);
