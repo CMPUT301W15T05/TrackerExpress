@@ -144,11 +144,13 @@ public class ElasticSearchEngineUnthreaded {
 			stringentity = new StringEntity(gson.toJson(claim));
 
 			httpPost.setHeader("Accept","application/json");
-
+			Log.e("SetingEnttity", "SettingEntity");
 			httpPost.setEntity(stringentity);
 			HttpResponse response = null;
-
+			Log.e("ABOUT", "About to execute");
 			response = httpclient.execute(httpPost);
+			Log.e("AFTER", "Executed");
+
 
 			//Response code:
 			String status = response.getStatusLine().toString();

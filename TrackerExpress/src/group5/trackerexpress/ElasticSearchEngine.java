@@ -105,6 +105,7 @@ public class ElasticSearchEngine {
 		claim.setStatus(context, Claim.SUBMITTED);
 		claim.setSubmitterName(context, Controller.getUser(context).getName());
 		claim.setSubmitterEmail(context, Controller.getUser(context).getEmail());
+		Log.e("RECEIPTSUBMIT", "Submitting Receipt");
 		
 		//convert UriBitmaps to actual bitmaps
 		for (Expense expense : claim.getExpenseList().toList()){
@@ -114,7 +115,7 @@ public class ElasticSearchEngine {
 			} catch (NullPointerException e) {}
 
 		}
-
+		Log.e("RECEIPTSTORED", "Submitted RECEIPT!!!!!!");
 		final Claim claimFinal = claim;
 		
 		Thread thread = new Thread(new Runnable(){
