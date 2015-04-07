@@ -152,7 +152,7 @@ public class User extends TModel{
 			this.email = "em2@example.com";
 			this.password = "password";
 			this.name = "Em2";
-			this.SIGNED_IN = true;
+			this.SIGNED_IN = false;
 		} catch (IOException e) {
 			throw new RuntimeException();
 		}
