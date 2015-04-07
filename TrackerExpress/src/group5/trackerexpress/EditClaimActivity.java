@@ -17,7 +17,6 @@ import android.location.Location;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.text.Editable;
 import android.text.InputType;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -278,9 +277,13 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 			public void onClick(View v) {
 				
 				
-				/** check if the user pressed create new claim or edit existing claim button from MainActivity.*/
+				/**
+				 * The if statement checks for network connectivity, if network is connected, 
+				 * add destination button willwork. If not message will be displayed to remind user.
+				 */
 				
 				if (isOnline()){
+					/** check if the user pressed create new claim or edit existing claim button from MainActivity.*/
 					if (isNewClaim != true){
 						destination = claim.getDestinationList();
 					}
@@ -315,16 +318,12 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 					
 			if ( claim.getStartDate() != null ){
 				startDateButton.setText(sdf.format(claim.getStartDate().getTime()));
-/*				StartDateMonth.setText(String.valueOf(claim.getStartDate().getMM()));
-				StartDateDay.setText(String.valueOf(claim.getStartDate().getDD()));
-				*/
+
 			}
 					
 			if ( claim.getEndDate() != null ){
 				endDateButton.setText(sdf.format(claim.getEndDate().getTime()));
-/*				EndDateMonth.setText(String.valueOf(claim.getEndDate().getMM()));
-				EndDateDay.setText(String.valueOf(claim.getEndDate().getDD()));
-				*/
+
 			}
 			descriptionView.setText(String.valueOf(claim.getDescription()));
 			DestinationListview(desListView,destination);
@@ -361,15 +360,7 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 				
 				/** this procedure will check if the claim name is repeated */
 				boolean repeatedClaimName = false;
-/*				boolean bothdates = false;
-				
-				if (StartDateYear.getText().toString().length() > 0
-					&& EndDateYear.getText().toString().length() > 0){
-					myCalendar.set
-					myCalendar2
-					double i = myCalendar.compareTo(myCalendar2);
-				}
-*/	
+
 				Claim[] claims = Controller.getClaimList(EditClaimActivity.this).toList();
 				for ( Claim c : claims ){
 						if ( c.getClaimName().equals( claimTitleView.getText().toString() )
@@ -377,22 +368,6 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 						repeatedClaimName = true;
 					}
 				}
-			
-				/** this statement checks if the text fields are valid or not and display error message.*/
-/*				if( ClaimName.getText().toString().length() == 0 || ClaimTitle.getText().toString().length() == 0 ){
-				    if ( ClaimName.getText().toString().length() == 0 ){
-				    	ClaimName.setError( "Name is required!" );
-				    	ClaimName.requestFocus();
-				    }
-				    else if ( ClaimTitle.getText().toString().length() == 0 ){
-				    	ClaimTitle.setError( "Title is required!" );
-				    	ClaimTitle.requestFocus();
-				    }
-				}
-				if (myCalendar.compareTo(myCalendar2)>0){
-					EndDateYear.setError("End date is SMALLER than start date!");
-					EndDateYear.requestFocus();
-				}*/
 
 				myCalendar.set(Calendar.HOUR, 0);
 				myCalendar.set(Calendar.MINUTE, 0);
@@ -497,7 +472,11 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 	    
 	}
 	
-
+	/**
+	 * This function will check for network connectivity for add destination button 
+	 * since every destination requires geolocation and geolocation map requires network to function.
+	 * @return
+	 */
 	protected boolean isOnline() {
 		ConnectivityManager cm =
 		        (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
