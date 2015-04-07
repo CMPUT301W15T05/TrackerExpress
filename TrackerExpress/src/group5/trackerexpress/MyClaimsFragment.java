@@ -111,6 +111,7 @@ public class MyClaimsFragment extends Fragment implements TView {
             					Toast.makeText(getActivity(), "Can't submit, claim is incomplete.", Toast.LENGTH_SHORT). show();
                         	} else {
                         		//FIXME: Handle connectivity error
+                        		Toast.makeText(getActivity(), "Submitting", Toast.LENGTH_LONG).show();
                         		new ElasticSearchEngine().submitClaim(getActivity(), clickedOnClaim);
                         		
                         	}
