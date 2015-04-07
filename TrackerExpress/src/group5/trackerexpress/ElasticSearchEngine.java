@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.UUID;
 
 import android.content.Context;
+import android.util.Log;
 
 /**
  * Performs elastic search operations needed by this app.
@@ -52,8 +53,12 @@ public class ElasticSearchEngine {
 		
 		Claim[] claimsUnfiltered = getClaims();
 		List<Claim> claims = new ArrayList<Claim>();
-		
+		Log.e("USER", Controller.getUser(context).getEmail().toString());
 		for (Claim claim : claimsUnfiltered){
+			Log.e(claim.getClaimName(), claim.getSubmitterEmail());
+			try{
+			Log.e(claim.getClaimName(), claim.getApproverEmail());
+			} catch (NullPointerException e) {Log.e(claim.getClaimName(), "NULL APPROVER");}
 			if (    !claim.getSubmitterEmail().equals(Controller.getUser(context).getEmail()) &&
 					(claim.getApproverEmail() == null || claim.getApproverEmail().equals(Controller.getUser(context).getEmail())) &&
 					 claim.getStatus() != Claim.IN_PROGRESS){
@@ -103,9 +108,11 @@ public class ElasticSearchEngine {
 		
 		//convert UriBitmaps to actual bitmaps
 		for (Expense expense : claim.getExpenseList().toList()){
-			if ( expense.getReceipt() != null ){
+
+			try {
 				expense.getReceipt().switchToStoringActualBitmap();
-			}
+			} catch (NullPointerException e) {}
+
 		}
 
 		final Claim claimFinal = claim;

@@ -34,14 +34,14 @@
             android:layout_gravity="bottom"
             android:orientation="vertical" >
 
-            <TextView
-                android:id="@+id/logoPlaceholderText"
+            <ImageView
+                android:id="@+id/logo"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="240dp"
                 android:layout_gravity="top"
                 android:gravity="center"
-                android:paddingBottom="170dp"
-                android:text="Logo Placeholder" />
+                
+        		android:src="@drawable/ic_login"  />
             
             <AutoCompleteTextView
                 android:id="@+id/logInEmailText"
