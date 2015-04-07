@@ -45,7 +45,6 @@ public class ViewImageDialog extends Activity {
         
         Bitmap rotatedBitmap = editBitmap.rotateBitmap(bitmap);
         receiptImageView.setImageBitmap(rotatedBitmap);
-        
         receiptImageView.setClickable(true);
 
 

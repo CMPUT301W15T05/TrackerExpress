@@ -7,4 +7,7 @@
 	<color name="close">#476DD5</color>
 	<color name="far">#133CAC</color>
 	<color name="furthest">#062270</color>
+	
+	<!-- Color for Location set -->
+	<color name="locSet">#33CC66</color>
 </resources>

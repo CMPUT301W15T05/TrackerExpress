@@ -46,11 +46,17 @@ public class MainClaimListAdapter extends ArrayAdapter<Claim> {
 	 * @param claims the claims
 	 */
 	public MainClaimListAdapter(Context context, Claim[] claims){
-		super(context, R.layout.fragment_my_claims_item, claims);
+		super(Controller.getContext(),R.layout.fragment_my_claims_item, claims);
 		this.claimList = claims;
 		this.context = context;
-		this.distanceOrderedClaims = new ArrayList<Claim>( 
-				Arrays.asList( ClaimList.sortClaimsByLocation(context, claims)) ); 
+		Claim[] claimList = ClaimList.sortClaimsByLocation(context, claims);
+		
+		if (claimList != null) {
+			this.distanceOrderedClaims = new ArrayList<Claim>( 
+					Arrays.asList( claimList) );
+		} else {
+			this.distanceOrderedClaims = null;
+		}
 	}
 	
 	/**
@@ -192,7 +198,8 @@ public class MainClaimListAdapter extends ArrayAdapter<Claim> {
 		int destinationSize = c.getDestinationList().size();
 		if ( destinationSize == 0 ){
 			holder.distanceView.setVisibility( View.GONE );
-		} else {
+		} else if (distanceOrderedClaims != null) {
+			
 			holder.distanceView.setVisibility( View.VISIBLE );
 
 			DisplayMetrics metrics = context.getResources().getDisplayMetrics();

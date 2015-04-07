@@ -25,6 +25,8 @@ public class Controller {
 	/** the user of the application */
 	private static User user;
 	
+	/** The context of the Base Activity*/
+	private static Context context;
 	/**
 	 * Gets the static claim list, newing it if necessary
 	 *
@@ -102,9 +104,13 @@ public class Controller {
 	 * @return true if internet is connected
 	 * 			false if internet is disconnected
 	 */
-	public static boolean isInternetConnected(Context context){
-		ConnectivityManager cm =
-		        (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+	public static boolean isInternetConnected(Context contextIn){
+		ConnectivityManager cm;
+		try {
+			cm = (ConnectivityManager) contextIn.getSystemService(Context.CONNECTIVITY_SERVICE);
+		} catch (Exception e) {
+			cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+		}
 		 
 		NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
 		boolean isConnected = activeNetwork != null &&
@@ -150,6 +156,14 @@ public class Controller {
 				}
 			}
 		}
+	}
+
+	public static Context getContext() {
+		return context;
+	}
+
+	public static void setContext(Context context) {
+		Controller.context = context;
 	}
 
 }
