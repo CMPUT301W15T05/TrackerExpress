@@ -35,6 +35,7 @@ public class MainTagListAdapter extends ArrayAdapter<Tag> {
 	 */
 	public MainTagListAdapter(Context context, ArrayList<Tag> tags){
 		super(context, R.layout.fragment_tags_list_item, tags);
+		
 		this.tagList = tags;
 		this.context = context;
 

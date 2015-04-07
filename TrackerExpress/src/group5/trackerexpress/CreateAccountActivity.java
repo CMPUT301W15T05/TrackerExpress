@@ -14,7 +14,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 /**
@@ -217,6 +216,7 @@ public class CreateAccountActivity extends AccountFormActivity {
 			if (success == ACCOUNT_SUCCESS) {
 				User user = Controller.getUser(CreateAccountActivity.this);
 				user.setSignedIn(CreateAccountActivity.this, true);
+				setVisibility(getProgressView(), false);
 				mapPopUp();
 			} else if (success == EMAIL_TAKEN) {
 				showProgress(false);
@@ -243,14 +243,14 @@ public class CreateAccountActivity extends AccountFormActivity {
 	
 	private void mapPopUp() {
 		AlertDialog.Builder builder = new AlertDialog.Builder(CreateAccountActivity.this);
-		builder.setTitle("Home Location");
-		builder.setMessage("Would you like to add a location to your profile?");
+		builder.setTitle("Success");
+		builder.setMessage("Would you like to add a home location to your profile?");
 		
 		builder.setPositiveButton("Add location", new DialogInterface.OnClickListener() {
 
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-				Intent intent = new Intent(CreateAccountActivity.this, MapActivity.class);
+				Intent intent = new Intent(CreateAccountActivity.this, InteractiveMapActivity.class);
 				startActivityForResult(intent, 1);
 			}
 			
@@ -266,6 +266,9 @@ public class CreateAccountActivity extends AccountFormActivity {
 			}
 			
 		});
+		
+		AlertDialog dialog = builder.create();
+		dialog.show();
 	}
 	
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -274,9 +277,6 @@ public class CreateAccountActivity extends AccountFormActivity {
 	        if (resultCode == RESULT_OK){
 	            LatLng latLng = data.getParcelableExtra("resultLatLng");
 	            String title = data.getStringExtra("resultTitle");
-	            
-	            System.out.println("GOT " + title);
-	            System.out.println("GOT" + latLng.latitude + " " + latLng.longitude);
 	            
 	            Location location = new Location(title);
 	            

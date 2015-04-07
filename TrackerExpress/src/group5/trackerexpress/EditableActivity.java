@@ -148,12 +148,7 @@ public class EditableActivity extends Activity implements DatePickerFragment.The
 				}
 			});
 			
-		helperBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener(){
-			// Return the edit Activity if that is what the user wishes
-			@Override
-			public void onClick(DialogInterface dialog, int which){
-				}
-			});
+		helperBuilder.setNegativeButton("Cancel", doNothingClicker);
 		AlertDialog helpDialog = helperBuilder.create();
 		helpDialog.show();
 	}

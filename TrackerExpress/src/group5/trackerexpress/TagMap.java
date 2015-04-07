@@ -18,7 +18,7 @@ import android.content.Context;
  * @version Part 4
  * @see Tag
  */
-public class TagMap extends TModel{
+public class TagMap extends TModel {
 	
 	/**
 	 * generate serial number for Serializable type
@@ -154,6 +154,43 @@ public class TagMap extends TModel{
 	 */
 	public ArrayList<Tag> toList() {
 		return new ArrayList<Tag>(tags.values());
+	}
+	
+	/**
+	 * Gets the number of checked tags.
+	 *
+	 * @return the number of checked tags
+	 */
+	public int numChecked() {
+		int checked = 0;
+		
+		ArrayList<Tag> tags = toList();
+		for (Tag t : tags) {
+			if (t.isSelected()) {
+				checked++;
+			}
+		}
+		return checked;
+	}
+	
+	/**
+	 * Efficiently sets all tags to selected or deselected
+	 *
+	 * @param context Needed for file IO
+	 * @param selected Set all tags to [selected]
+	 * 
+	 * @return the number of checked tags
+	 */
+	public void selectAll(Context context, boolean selected) {
+		ArrayList<Tag> tags = toList();
+		
+		for (Tag t : tags) {
+			if (t.isSelected() != selected) {
+				t.setSecretSelected(selected);
+			}
+		}
+		
+		notifyViews(context);
 	}
 	
 	/**

@@ -87,5 +87,15 @@ public class Tag extends TModel {
 		notifyViews(context);
 	}
 	
+	/**
+	 * Sets the selected tag secretly, then calls update. 
+	 * This saves on calling notify views more than needed
+	 *
+	 * @param selected the selected
+	 */
+	public void setSecretSelected(boolean selected) {
+		this.selected = selected;
+	}
+	
 
 }
