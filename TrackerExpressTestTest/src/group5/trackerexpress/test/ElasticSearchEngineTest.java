@@ -65,9 +65,9 @@ public class ElasticSearchEngineTest extends ActivityInstrumentationTestCase2<Te
 		try {
 			elasticSearchEngine.submitClaim(getActivity(), claim);
 
-			assertTrue(elasticSearchEngine.getClaim(claim.getUuid()).getClaimName().equals("Name"));
+			assertTrue(elasticSearchEngine.getClaim(getActivity(), claim.getUuid()).getClaimName().equals("Name"));
 
-			elasticSearchEngine.deleteClaim(claim.getUuid());
+			elasticSearchEngine.deleteClaim(getActivity(), claim.getUuid());
 
 		} catch (IOException e) {
 			fail("IO Exception.");
@@ -85,11 +85,11 @@ public class ElasticSearchEngineTest extends ActivityInstrumentationTestCase2<Te
 			Thread.sleep(2000);
 
 
-			elasticSearchEngine.deleteClaim(claim.getUuid());
+			elasticSearchEngine.deleteClaim(getActivity(), claim.getUuid());
 
 			Thread.sleep(1000);
 
-			claims = elasticSearchEngine.getClaims();
+			claims = elasticSearchEngine.getClaims(getActivity());
 			assertEquals(sizeBefore, claims.length);
 		} catch (IOException e) {
 			fail("IO Exception.");
@@ -113,12 +113,12 @@ public class ElasticSearchEngineTest extends ActivityInstrumentationTestCase2<Te
 			Thread.sleep(1000);
 
 
-			Claim[]claims = elasticSearchEngine.getClaims();
+			Claim[]claims = elasticSearchEngine.getClaims(getActivity());
 
 			for (Claim claimElement : claims){
 				if (claimElement.getUuid().equals(claim.getUuid())){
 					assertEquals("Claim status was not chagned to approved.", Claim.APPROVED, claimElement.getStatus());
-					elasticSearchEngine.deleteClaim(claim.getUuid());
+					elasticSearchEngine.deleteClaim(getActivity(), claim.getUuid());
 					return;
 				}
 			}
@@ -148,13 +148,13 @@ public class ElasticSearchEngineTest extends ActivityInstrumentationTestCase2<Te
 			Thread.sleep(1000);
 
 
-			Claim[] claims = elasticSearchEngine.getClaims();
+			Claim[] claims = elasticSearchEngine.getClaims(getActivity());
 
 			for (Claim claimElement : claims){
 				if (claimElement.getUuid().equals(claim.getUuid())){
 					assertEquals("Claim status was not chagned to returned.", Claim.RETURNED, claimElement.getStatus());
 					assertTrue("Claim comment wasn't added correctly.", "test comment".equals(claimElement.getComments()));
-					elasticSearchEngine.deleteClaim(claim.getUuid());
+					elasticSearchEngine.deleteClaim(getActivity(), claim.getUuid());
 					return;
 				}
 			}

@@ -109,13 +109,13 @@ public class GlobalClaimsListAdapter extends ArrayAdapter<Claim> {
 		holder.amounts.setText("Currency Totals: " + c.getExpenseList().toStringTotalCurrencies());
 		switch(c.getStatus()){
 		case Claim.APPROVED:
-			holder.status.setText(approvedStatus);
+			holder.status.setText(approvedStatus + " BY: " + c.getApproverName());
 			break;
 		case Claim.RETURNED:
-			holder.status.setText(returnedStatus);
+			holder.status.setText(returnedStatus + " BY: " + c.getApproverName());
 			break;
 		case Claim.SUBMITTED:
-			holder.status.setText(submittedStatus);
+			holder.status.setText(submittedStatus + " BY: " + c.getSubmitterName());
 			break;
 		}
 		
