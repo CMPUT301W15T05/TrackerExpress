@@ -12,6 +12,8 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
@@ -174,30 +176,36 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				Log.e("GetLocation", "GetLocation");
-				Claim c = Controller.getClaimList(getApplication()).getClaim(claimId);
-				LatLng newlatlng;
-				String destination;
-				try {
-					newlatlng = new LatLng(location.getLatitude(), location.getLongitude());
-					destination = location.getProvider();
-				} catch (Exception e) {
+				if (Controller.isInternetConnected(getApplicationContext())){
+
+					Log.e("GetLocation", "GetLocation");
+					Claim c = Controller.getClaimList(getApplication()).getClaim(claimId);
+					LatLng newlatlng;
+					String destination;
 					try {
-						Location l = c.getDestinationList().get(0).getLocation();
-						newlatlng = new LatLng(l.getLatitude(), l.getLongitude());
-						destination = l.getProvider();
-					} catch (Exception e1) {
-						newlatlng = null;
-						destination = null;
+						newlatlng = new LatLng(location.getLatitude(), location.getLongitude());
+						destination = location.getProvider();
+					} catch (Exception e) {
+						try {
+							Location l = c.getDestinationList().get(0).getLocation();
+							newlatlng = new LatLng(l.getLatitude(), l.getLongitude());
+							destination = l.getProvider();
+						} catch (Exception e1) {
+							newlatlng = null;
+							destination = null;
+						}
 					}
+					
+					Intent intentLoc = new Intent(EditExpenseActivity.this, InteractiveMapActivity.class);
+					intentLoc.putExtra("latlng", newlatlng);
+					intentLoc.putExtra("destination", destination);
+					System.out.println("GOING IN");
+					Log.e("START", "GOING IN");
+			    	EditExpenseActivity.this.startActivityForResult(intentLoc, 1);
+				}else{
+					b_getlocation.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.MULTIPLY);
+					Toast.makeText(getApplicationContext(), "This function requires a network!", Toast.LENGTH_SHORT).show();
 				}
-				
-				Intent intentLoc = new Intent(EditExpenseActivity.this, InteractiveMapActivity.class);
-				intentLoc.putExtra("latlng", newlatlng);
-				intentLoc.putExtra("destination", destination);
-				System.out.println("GOING IN");
-				Log.e("START", "GOING IN");
-		    	EditExpenseActivity.this.startActivityForResult(intentLoc, 1);
 			}
 		});
 	}
@@ -343,8 +351,11 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 	            LatLng latLng = data.getParcelableExtra("resultLatLng");
 	            String title = data.getStringExtra("resultTitle");
 	            Toast.makeText(getApplication(), latLng.toString(), Toast.LENGTH_LONG).show();
-	            System.out.println("TITLE IS " + title);
-	            location.setProvider(title);
+	            System.out.println("TITLE IS " + title + " " + latLng.latitude);
+	            
+	            if (location == null) {
+	            	location = new Location("");
+	            }
 	            
 	            location.setLongitude(latLng.longitude);
 	            location.setLatitude(latLng.latitude);

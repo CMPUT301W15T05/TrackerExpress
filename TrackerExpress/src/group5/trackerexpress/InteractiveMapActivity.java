@@ -113,6 +113,7 @@ public class InteractiveMapActivity extends BasicMapActivity
 				if (lastMarker != null) {
 					returnIntent.putExtra("resultLatLng", lastMarker.getPosition());
 					returnIntent.putExtra("resultTitle", lastMarker.getTitle());
+					System.out.println("Result ok");
 					setResult(RESULT_OK, returnIntent);
 				} else {
 					setResult(RESULT_CANCELED, returnIntent);

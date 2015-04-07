@@ -167,6 +167,9 @@ public class MyClaimsFragment extends Fragment implements TView {
 			break;
 		default:
 			popup.getMenu().findItem(R.id.op_edit_tags).setVisible(false);
+			if (!Controller.isInternetConnected(getActivity())) {
+				popup.getMenu().findItem(R.id.op_submit_claim).setVisible(false);
+			}
 			break;
 		}
 	}
@@ -182,7 +185,7 @@ public class MyClaimsFragment extends Fragment implements TView {
 
 		MainClaimListAdapter adapter;
 		Claim[] listOfClaims = ClaimList.getFilteredClaims(getActivity());
-
+		System.out.println("Context: " + getActivity().toString());
 		adapter= new MainClaimListAdapter(getActivity(), listOfClaims);
 		
 		lv_claim_list.setAdapter(adapter);
