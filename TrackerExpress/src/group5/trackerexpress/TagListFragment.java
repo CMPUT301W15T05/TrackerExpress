@@ -8,15 +8,19 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.PopupMenu;
+import android.widget.Toast;
 import android.widget.AdapterView.OnItemLongClickListener;
 
 /**
@@ -65,7 +69,6 @@ public class TagListFragment extends Fragment implements TView {
 		this.update(null);
 
 		final TagMap mapOfTags = getTagMap(getActivity());
-		ArrayList<Tag> listOfTags = mapOfTags.toList();
 
 		mapOfTags.addView(this);
 		getTagMap(getActivity()).addView(this);
@@ -75,8 +78,7 @@ public class TagListFragment extends Fragment implements TView {
 		
 		b_add_tag.setOnClickListener(new Button.OnClickListener() {
 			public void onClick(View v) {
-				Tag t = new Tag("");
-				getName(t, false);
+				getName(new Tag(""));
 			}
 		});
 		
@@ -91,47 +93,60 @@ public class TagListFragment extends Fragment implements TView {
 			}
 			
 		});
-
-		// Item click listener
+		
+		
 		lv_tag_list.setOnItemLongClickListener(new OnItemLongClickListener() {
 			@Override
 			public boolean onItemLongClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				// Perform same actions as regular click listener
+				OnTagClick(view, mapOfTags, position);
+				return true;
+			}
+		});
+
+		// Item click listener
+		lv_tag_list.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
 					final int position, long id) {
-
-				PopupMenu popup = new PopupMenu(getActivity(), view);
-				popup.getMenuInflater().inflate(R.menu.tag_list_popup,
-						popup.getMenu());
-
-				// Popup menu item click listener
-				popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-					public boolean onMenuItemClick(MenuItem item) {
-						Tag t = (Tag) lv_tag_list.getAdapter()
-								.getItem(position);
-
-						switch (item.getItemId()) {
-						case R.id.op_delete_tag:
-							mapOfTags.deleteTag(getActivity(), t.getUuid());
-							break;
-						case R.id.op_edit_tag:
-							getName(t, true);
-							value = null;
-							break;
-						default:
-							break;
-						}
-
-						return true;
-					}
-				});
-
-				popup.show();
-				return false;
+				OnTagClick(view, mapOfTags, position);
 			}
 		});
 
 		return rootView;
 	}
 
+	private void OnTagClick(View view, final TagMap tagMap, final int position) {
+		PopupMenu popup = new PopupMenu(getActivity(), view);
+		popup.getMenuInflater().inflate(R.menu.tag_list_popup,
+				popup.getMenu());
+
+		// Popup menu item click listener
+		popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+			public boolean onMenuItemClick(MenuItem item) {
+				Tag t = (Tag) lv_tag_list.getAdapter()
+						.getItem(position);
+
+				switch (item.getItemId()) {
+				case R.id.op_delete_tag:
+					tagMap.deleteTag(getActivity(), t.getUuid());
+					break;
+				case R.id.op_edit_tag:
+					getName(t);
+					value = null;
+					break;
+				default:
+					break;
+				}
+
+				return true;
+			}
+		});
+
+		popup.show();
+	}
+	
 	/**
 	 * Gets the tag map.
 	 *
@@ -148,42 +163,68 @@ public class TagListFragment extends Fragment implements TView {
 	 *
 	 * @return the name
 	 */
-	private void getName(final Tag t, final boolean edit) {
-		String message = "Enter a new name";
-		final AutoCompleteTextView input = new AutoCompleteTextView(
-				getActivity());
-
-		ArrayList<String> tags = new ArrayList<String>();
+	private void getName(final Tag t) {
+		final Boolean edit = !t.toString().isEmpty();
 
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+		builder.setMessage("Enter a new name");
+		
 		if (edit)
 			builder.setTitle("Edit Tag");
 		else
 			builder.setTitle("Create Tag");
-		builder.setMessage(message);
+
+		final EditText input = new EditText(getActivity());
+		input.setMaxLines(1);
+		input.setInputType(InputType.TYPE_CLASS_TEXT);
+		input.setText(t.toString());
+		
 		builder.setView(input);
-		builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int whichButton) {
-				value = input.getText();
-				if (input.getText() != null) {
-					if (!edit) {
-						Tag newTag = new Tag(input.getText().toString());
-						getTagMap(getActivity()).addTag(getActivity(), newTag);
-						// listOfTags.add(newTag);
-					} else
-						t.rename(getActivity(), input.getText().toString());
+		
+		builder.setPositiveButton("Ok", EditableActivity.doNothingClicker);
+		builder.setNegativeButton("Cancel", EditableActivity.doNothingClicker);
+		final AlertDialog aDialog = builder.create();
+		
+		aDialog.setOnShowListener(new DialogInterface.OnShowListener() {
 
-				}
+	        @Override
+	        public void onShow(DialogInterface dialog) {
 
-				value = null;
-			}
-		}).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int whichButton) {
-				// Do nothing.
-			}
-		});
-		AlertDialog build = builder.create();
-		build.show();
+	            Button b = aDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+	            b.setOnClickListener(new View.OnClickListener() {
+
+	                @Override
+	                public void onClick(View view) {
+	                	String sInput = input.getText().toString();
+
+	                	if (sInput.isEmpty()) {
+	                		input.setError("Enter a tag name");
+	                		return;
+	                	}
+	                	
+	                	TagMap tagMap = getTagMap(getActivity());
+	                	
+	    	        	try {
+	    	        		tagMap.searchForTagByString(sInput);
+	                		input.setError("Tag already exists");
+	    	        		return;
+	    	        	} catch (IllegalAccessException e) {
+	    	        		Toast.makeText(getActivity(), "New Tag", Toast.LENGTH_SHORT).show();
+
+		    	        	if (edit) {
+		    	        		t.rename(getActivity(), sInput);
+		    	        	} else {
+		    	        		tagMap.addTag(getActivity(), new Tag(sInput));
+		    	        	}
+	    	        	}
+	                	
+	                    aDialog.dismiss();
+	                }
+	            });
+	        }
+	    });
+		
+		aDialog.show();
 	}
 
 	/*

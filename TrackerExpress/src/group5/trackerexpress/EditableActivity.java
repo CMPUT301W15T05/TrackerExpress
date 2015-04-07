@@ -28,6 +28,15 @@ public class EditableActivity extends Activity implements DatePickerFragment.The
 		limitLength(view, length, "Only up to " + length + " chars");
 	}
 	
+	public static DialogInterface.OnClickListener doNothingClicker = new DialogInterface.OnClickListener() {
+        /**
+         * @see android.content.DialogInterface.OnClickListener#onClick(android.content.DialogInterface, int)
+         */
+        public void onClick(DialogInterface dialog, int whichButton) {
+        	// Do Nothing
+        }
+    };
+	
 	public abstract class basicWatcher implements TextWatcher {
 		
 		@Override
