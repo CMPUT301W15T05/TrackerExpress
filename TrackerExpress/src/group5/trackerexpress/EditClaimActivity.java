@@ -92,6 +92,8 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 	/** The adapter2. */
 	private ArrayAdapter<String> adapter2;
 	
+	private ArrayAdapter<Tag> adapter;
+	
 	/** The new destination. */
 	private final int newDestination = 1;
 	
@@ -871,7 +873,10 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 		if ( tagList == null ){
 			tagList = Controller.getTagMap(this).toList();
 		}
-		MainTagListAdapter adapter = new MainTagListAdapter(this, tagList);
+
+		adapter = new ArrayAdapter<Tag>(this,  
+		          R.layout.edit_claim_listview, 
+		          tagList);
 		tagListView.setAdapter(adapter);
 	}
 	
