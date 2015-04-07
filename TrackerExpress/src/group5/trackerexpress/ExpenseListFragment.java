@@ -76,14 +76,9 @@ public class ExpenseListFragment extends Fragment implements TView {
 		b_add_expense.setOnClickListener(new Button.OnClickListener(){
 			@Override
 			public void onClick(View v) {
-				Expense exp = new Expense();
-				
-				claim.getExpenseList().addExpense(getActivity(), exp);
-
 				Intent intent = new Intent( getActivity(), EditExpenseActivity.class );
 				intent.putExtra("claimUUID", claim.getUuid());
-				intent.putExtra("expenseUUID", exp.getUuid());
-            	intent.putExtra("isNewClaim", true);
+            	intent.putExtra("isNewExpense", true);
 				
 				startActivity(intent);
 			}	
@@ -120,10 +115,13 @@ public class ExpenseListFragment extends Fragment implements TView {
                         	intent.putExtra("expenseUUID", clickedOnExpense.getUuid());
                         	startActivity(intent);
                         	break;
+
                         case R.id.op_view_location:
                         	LatLng latlng = new LatLng(clickedOnExpense.getLatitude(), clickedOnExpense.getLongitude());
                         	intent = new Intent (getActivity(), MapActivity.class);
                         	intent.putExtra("latlng", latlng);
+                        case R.id.op_view_image:
+
                         default: break;
                         }
                         

@@ -28,6 +28,6 @@ proguard/
 *.log
 
 # Keystore for maps
-debug.keystore
+*.keystore
 
 .classpath
