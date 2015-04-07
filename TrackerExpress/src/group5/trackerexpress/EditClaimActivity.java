@@ -69,7 +69,6 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 	
 	/** The Tag name. */
 	private EditText TagName;
-	
 	private Location location;
 	
 	/** The des list view. */
@@ -112,9 +111,9 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 	private Date endDate;
 	
 	/** The my calendar. */
-	private Calendar myCalendar;
+	private Calendar myCalendar = Calendar.getInstance();
 	
-	private Calendar myCalendar2;
+	private Calendar myCalendar2 = Calendar.getInstance();
 	
 	/**
 	 * @see android.app.Activity#onCreate(android.os.Bundle)
@@ -134,9 +133,6 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 		/**
 		 *  Assign each EditText to a variable.
 		 */
-		
-		myCalendar = Calendar.getInstance();
-		myCalendar2 = Calendar.getInstance();
 		
 		ClaimName = (EditText) findViewById(R.id.editClaimName);	
 		limitLength(ClaimName, 20);
@@ -420,8 +416,9 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 				    	ClaimTitle.requestFocus();
 				    }
 				
-				} else if ( myCalendar.compareTo(myCalendar2) == 1 ){
+				} else if (myCalendar.compareTo(myCalendar2) == 1) {
 					Toast.makeText(getApplicationContext(), "End Date cannot be before Start Date!", Toast.LENGTH_SHORT).show();
+
 				} else {
 				/**
 				 *  Saves user input into claim class.(calling each method)
@@ -445,7 +442,6 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 						
 						
 					} else{
-						Log.i("myMessage", "2");
 						editclaim(claim);
 						claim.setDestinationList(EditClaimActivity.this, destination);
 						checkCompleteness(claim);
@@ -695,16 +691,14 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 		
 		String Descrip = Description.getText().toString();
 		
-		d2 = myCalendar2;
+		d2=myCalendar2;
 		
-		d1 = myCalendar;
+		d1=myCalendar;
 			
 		if (aftermath.length() > 0 || aftermath2.length() > 0){
 			if ( aftermath.length() > 0 ){
-				Log.i("myMessage", "1");
 		    	claim.setStartDate(this, d1);
-		    	Log.i("myMessage", "1.2");
-		    }
+			}
 		    if ( aftermath2.length() > 0 ){
 		    	claim.setEndDate(this, d2);
 		    }
@@ -767,7 +761,6 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 			clicked_destination = position;
 			
 			if (!comingFromMap) {
-				System.out.println("Latitude was set as " + destination.get(position).getLatitude());
 				System.out.println("Not coming from map");
 				DesName.setText(destination2.get(position).getName());
 				DesRea.setText(destination2.get(position).getDescription());
@@ -836,7 +829,6 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 			 * @see android.content.DialogInterface.OnClickListener#onClick(android.content.DialogInterface, int)
 			 */
 			public void onClick(DialogInterface dialog, int which) {
-				System.out.println("Latitude set as " + destination.get(position).getLatitude());
 				location = null;
 			}
 		});
