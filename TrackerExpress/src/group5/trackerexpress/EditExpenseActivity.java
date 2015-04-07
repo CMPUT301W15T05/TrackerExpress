@@ -8,6 +8,8 @@ import java.util.Locale;
 import java.util.UUID;
 
 import group5.trackerexpress.EditBitmap;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -131,7 +133,6 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 	    //the create expense button
 	    createExpenseButton.setOnClickListener(new Button.OnClickListener(){
 	    	public void onClick(View v) {
-	    		Toast.makeText(EditExpenseActivity.this, "Updating", Toast.LENGTH_SHORT). show();
 	    	    editExpense(expense);
 		    }
 		});
@@ -264,6 +265,7 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 	}
 	
     
+	@SuppressWarnings("deprecation")
 	public void editExpense(final Expense expense) {		
 		String title = description.getText().toString();
 	
@@ -302,7 +304,21 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 		
 		isSaved = true;
 		
-		finish();
+		if (complete == true && ( title.length() == 0 || amt.length() == 0 || receiptUri == null)) {
+			AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+			alertDialog.setTitle("Warning");
+			alertDialog.setMessage("You are adding an incomplete expense that isn't flagged as incomplete.");
+			alertDialog.setButton("OK", new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int which) {
+					Toast.makeText(EditExpenseActivity.this, "Updating", Toast.LENGTH_SHORT). show();
+					finish();
+				}
+			});
+			alertDialog.show();
+		}else{
+			Toast.makeText(EditExpenseActivity.this, "Updating", Toast.LENGTH_SHORT). show();
+			finish();
+		}
 	}
 
 	
@@ -322,5 +338,6 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 			}
 		}
 		return index;
-	} 	
+	} 
+	
 }
