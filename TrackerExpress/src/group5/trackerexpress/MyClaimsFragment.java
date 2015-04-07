@@ -121,10 +121,19 @@ public class MyClaimsFragment extends Fragment implements TView {
                         		incBuilder.setMessage("You are submitting a claim with incomplete expenses. Do you wish to continue?");
                         		incBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             	    				public void onClick(DialogInterface dialog, int which) {
+            	    					/*int old_status = clickedOnClaim.getStatus();
+                                		try {
+                                			clickedOnClaim.setStatus(getActivity(), Claim.SUBMITTED);
+                                			new ElasticSearchEngineClaims().submitClaim(getActivity(), clickedOnClaim);
+        								} catch (IOException e) {
+        									clickedOnClaim.setStatus(getActivity(), old_status);
+        									throw new RuntimeException();
+        								}
+                                		Toast.makeText(getActivity(), "Submitting", Toast.LENGTH_LONG).show();*/
             	    					int old_status = clickedOnClaim.getStatus();
                                 		try {
                                 			clickedOnClaim.setStatus(getActivity(), Claim.SUBMITTED);
-                                			new ElasticSearchEngine().submitClaim(getActivity(), clickedOnClaim);
+                                			new ElasticSearchEngineClaims().submitClaim(getActivity(), clickedOnClaim);
         								} catch (IOException e) {
         									clickedOnClaim.setStatus(getActivity(), old_status);
         									throw new RuntimeException();
@@ -139,7 +148,6 @@ public class MyClaimsFragment extends Fragment implements TView {
 						}
 					});
                     incBuilder.show();
-                        		
                         		
                         	}
                         	break;
@@ -184,6 +192,9 @@ public class MyClaimsFragment extends Fragment implements TView {
 			break;
 		default:
 			popup.getMenu().findItem(R.id.op_edit_tags).setVisible(false);
+			if (!Controller.isInternetConnected(getActivity())) {
+				popup.getMenu().findItem(R.id.op_submit_claim).setVisible(false);
+			}
 			break;
 		}
 	}
@@ -199,7 +210,7 @@ public class MyClaimsFragment extends Fragment implements TView {
 
 		MainClaimListAdapter adapter;
 		Claim[] listOfClaims = ClaimList.getFilteredClaims(getActivity());
-
+		System.out.println("Context: " + getActivity().toString());
 		adapter= new MainClaimListAdapter(getActivity(), listOfClaims);
 		
 		lv_claim_list.setAdapter(adapter);

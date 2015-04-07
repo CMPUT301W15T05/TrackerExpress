@@ -113,7 +113,7 @@ public class Controller {
 			Claim[] localListOfClaims = Controller.getClaimList(context).toList();
 			Claim[] elasticListOfClaims;
 			try {
-				elasticListOfClaims = (new ElasticSearchEngine()).getClaims(context);
+				elasticListOfClaims = (new ElasticSearchEngineClaims()).getClaims(context);
 			} catch (IOException e) {
 				//FIXME: Notify user of elastic search fail
 				e.printStackTrace();
