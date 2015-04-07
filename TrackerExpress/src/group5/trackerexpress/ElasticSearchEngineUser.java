@@ -4,13 +4,8 @@
 package group5.trackerexpress;
 
 import java.io.IOException;
-import java.lang.Thread.UncaughtExceptionHandler;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
 
 import android.content.Context;
-import android.util.Log;
 
 /**
  * Performs elastic search operations needed for user 

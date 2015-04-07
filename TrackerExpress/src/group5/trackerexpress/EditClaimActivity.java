@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
 import java.util.UUID;
-
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.Context;
@@ -14,11 +14,8 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.location.Location;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.text.InputType;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -33,7 +30,6 @@ import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.google.android.gms.maps.model.LatLng;
 
 /**
@@ -290,7 +286,7 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 			try {
 				StringTagToArray(claim.toStringTags(this));
 			} catch (IllegalAccessException e) {
-				e.printStackTrace();
+
 			}
 			
 			updateTagListView(tagList);
@@ -589,16 +585,7 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 				}
 			});
 			
-			helperBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-
-				/** Back out the activity without doing anything
-				 * @see android.content.DialogInterface.OnClickListener#onClick(android.content.DialogInterface, int)
-				 */
-				@Override
-				  public void onClick(DialogInterface dialog, int which) {
-				   /** Do nothing */
-				  }
-			});
+			helperBuilder.setNegativeButton("Cancel", doNothingClicker);
 			
 			
 			AlertDialog helpDialog = helperBuilder.create();
@@ -612,7 +599,6 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 	 * @param claim the claim
 	 */
 	private void editclaim(final Claim claim) {
-		// TODO Auto-generated method stub
 		String aftermath = startDateButton.getText().toString();
 		String aftermath2 = endDateButton.getText().toString();
 
@@ -664,6 +650,7 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 	 * Create a popup window for entering and editing destination/reason then call save it into the dummy
 	 * 2d destination array.
 	 */
+	@SuppressLint("InflateParams")
 	private void createDestinationButton(final ArrayList<Destination> destination2, final int i,final int position) {
 
 		/**
@@ -693,7 +680,7 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 			clicked_destination = position;
 			
 			if (!comingFromMap) {
-				System.out.println("Not coming from map");
+
 				DesName.setText(destination2.get(position).getName());
 				DesRea.setText(destination2.get(position).getDescription());
 				location = destination2.get(position).getLocation();
@@ -737,29 +724,19 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-				Log.e("NEUTRAL", "NEUTRAL");
+				
 				Intent intent = new Intent(EditClaimActivity.this, InteractiveMapActivity.class);
 				
 				if (location != null) {
-					System.out.println("Putting extra location");
-					Log.e("LOC", "Putting extra location " + desName.getText().toString());
+
 					LatLng newlatlng = new LatLng(location.getLatitude(), location.getLongitude());
 					intent.putExtra("latlng", newlatlng);
 					intent.putExtra("destination", location.getProvider());
 				} else if (!desName.getText().toString().isEmpty()) {
-					System.out.println("Putting extra destination " + desName.getText().toString());
-					Log.e("DESTINATION", "Putting extra destination " + desName.getText().toString());
+
 					intent.putExtra("destination", desName.getText().toString());
 				}
 				
-				System.out.println("GOING IN");
-				Log.e("START", "GOING IN");
-				if (location != null) {
-					System.out.println("LOCATION IS 5: " + location.getLatitude() + " " + location.getLongitude());
-				} else {
-					System.out.println("LOCATION IS NULL 5");
-					
-				}
 		    	EditClaimActivity.this.startActivityForResult(intent, 1);
 			}
 			
@@ -798,7 +775,6 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 	        if(resultCode == RESULT_OK){
 	            LatLng latLng = data.getParcelableExtra("resultLatLng");
 	            String title = data.getStringExtra("resultTitle");
-	            System.out.println("TITLE IS " + title);
 	            
 	            if (location == null) {
 	            	location = new Location("");
@@ -810,7 +786,7 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 	            
 	            
 	            if (lastDest.isEmpty()) {
-	            	System.out.println("Des is empty " + title);
+
 	            	DesName.setText(title);
 	            }
 	            
@@ -860,7 +836,7 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 		Destination travelInfo = new Destination();
 		travelInfo.setName(place);
 		travelInfo.setDescription(reason); 
-		System.out.println("HEREEREJHASJKDHJKASHD");
+
 		travelInfo.setLocation(location);
 		location = null;
 		switch(i){
@@ -903,7 +879,6 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 	 * @throws IllegalAccessException
 	 */
 	private void StringTagToArray(String stringTag) throws IllegalAccessException {
-		// TODO Auto-generated method stub
 		Tag newTag;
 		String[] part = stringTag.split(", ");
 		for (int i =0; i < part.length; i++){

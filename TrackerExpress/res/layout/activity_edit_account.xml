@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <Button
+        android:id="@+id/edit_account_add_geolocation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/edit_account_change_password"
+        android:layout_centerHorizontal="true"
+        android:text="Change Home Location" />
+
+    <Button
+        android:id="@+id/edit_account_change_password"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="28dp"
+        android:text="Change Password" />
+
+    <TextView
+        android:id="@+id/edit_account_user_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/edit_account_user_email"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="31dp"
+        android:text="John" />
+
+    <TextView
+        android:id="@+id/edit_account_user_email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="94dp"
+        android:gravity="left"
+        android:text="a@a.a" />
+
+    <TextView
+        android:id="@+id/edit_account_geolocation_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/edit_account_user_name"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="42dp" />
+
+    <TextView
+        android:id="@+id/edit_account_geolocation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/edit_account_geolocation_text"
+        android:layout_below="@+id/edit_account_geolocation_text"
+        android:layout_marginTop="19dp" />
+
+    <TextView
+        android:id="@+id/edit_account_geolocation_latlng"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/edit_account_geolocation"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="18dp" />
+
+</RelativeLayout>

@@ -127,6 +127,7 @@ public class AccountFormActivity extends Activity {
 	 * @return true, if is password valid
 	 */
 	protected boolean isPasswordValid(String password) {
+		System.out.println(password.length());
 		return password.length() > 4;
 	}
 	

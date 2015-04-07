@@ -144,14 +144,12 @@ public class PlaceAutocompleteAdapter
             protected FilterResults performFiltering(CharSequence constraint) {
                 FilterResults results = new FilterResults();
                 // Skip the autocomplete query if no constraints are given.
-            	System.out.println("GOOD 1 " + constraint);
                 if (constraint != null) {
-                	System.out.println("GOOD 2");
+
                     // Query the autocomplete API for the (constraint) search string.
                     mResultList = getAutocomplete(constraint);
                     if (mResultList != null) {
 
-                    	System.out.println("GOOD 3");
                         // The API successfully returned results.
                         results.values = mResultList;
                         results.count = mResultList.size();
@@ -207,8 +205,7 @@ public class PlaceAutocompleteAdapter
             // Confirm that the query completed successfully, otherwise return null
             final Status status = autocompletePredictions.getStatus();
             if (!status.isSuccess()) {
-                Toast.makeText(getContext(), "Error contacting API: " + status.toString(),
-                        Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Error contacting API", Toast.LENGTH_SHORT).show();
                 autocompletePredictions.release();
                 return null;
             }

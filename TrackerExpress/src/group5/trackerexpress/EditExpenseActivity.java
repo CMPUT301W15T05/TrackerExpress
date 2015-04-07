@@ -21,7 +21,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
@@ -175,10 +174,8 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 			
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				if (Controller.isInternetConnected(getApplicationContext())){
 
-					Log.e("GetLocation", "GetLocation");
 					Claim c = Controller.getClaimList(getApplication()).getClaim(claimId);
 					LatLng newlatlng;
 					String destination;
@@ -199,8 +196,7 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 					Intent intentLoc = new Intent(EditExpenseActivity.this, InteractiveMapActivity.class);
 					intentLoc.putExtra("latlng", newlatlng);
 					intentLoc.putExtra("destination", destination);
-					System.out.println("GOING IN");
-					Log.e("START", "GOING IN");
+					
 			    	EditExpenseActivity.this.startActivityForResult(intentLoc, 1);
 				}else{
 					b_getlocation.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.MULTIPLY);
@@ -211,7 +207,6 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 	}
 	
 	protected void deleteReceipt() {
-		// TODO Auto-generated method stub
 		receiptUri = null;
 		imgButton.setImageResource(R.drawable.image_button_hint);
 		deleteImage.setVisibility(View.GONE);
@@ -331,13 +326,14 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 	 * Handles termination of activities
 	 */
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		// TODO Auto-generated method stub
+		
 		if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE){
 			if (resultCode == RESULT_OK){
 				Toast.makeText(EditExpenseActivity.this, "Photo Set", Toast.LENGTH_SHORT).show(); 
-				Log.e("STRING", "PHOTO TAKEN");
+
 				Drawable photo = Drawable.createFromPath(receiptUri.getPath());
 				Bitmap sourceBitmap = ((BitmapDrawable)photo).getBitmap();
+				
 				//KNOWN ISSUE: Photo needs to be rotated on emulator, but not on actual phone.
 				Bitmap rotatedBitmap = editBitmap.rotateBitmap(sourceBitmap);
 				Bitmap resizedBitmap = editBitmap.resizeBitmap(rotatedBitmap, 640);
@@ -353,8 +349,6 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 	        if(resultCode == RESULT_OK){
 	            LatLng latLng = data.getParcelableExtra("resultLatLng");
 	            String title = data.getStringExtra("resultTitle");
-	            Toast.makeText(getApplication(), latLng.toString(), Toast.LENGTH_LONG).show();
-	            System.out.println("TITLE IS " + title + " " + latLng.latitude);
 	            
 	            if (location == null) {
 	            	location = new Location(title);

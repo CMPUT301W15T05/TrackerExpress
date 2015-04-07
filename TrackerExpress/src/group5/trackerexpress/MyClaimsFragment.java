@@ -8,7 +8,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -68,7 +67,6 @@ public class MyClaimsFragment extends Fragment implements TView {
 		b_add_claim.setOnClickListener(new Button.OnClickListener(){
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				Intent intent = new Intent( getActivity(), EditClaimActivity.class );
 				intent.putExtra("isNewClaim", true);
 				startActivity(intent);
@@ -79,8 +77,7 @@ public class MyClaimsFragment extends Fragment implements TView {
 
 			@Override
 			public void onItemClick(AdapterView<?> a, View v,
-					final int position, long arg3) {
-				// TODO Auto-generated method stub
+					final int position, long rowID) {
 				
 				final Claim clickedOnClaim = (Claim) lv_claim_list.getAdapter().getItem(position);
 				
@@ -116,39 +113,15 @@ public class MyClaimsFragment extends Fragment implements TView {
                         	if ( clickedOnClaim.isIncomplete() ){
             					Toast.makeText(getActivity(), "Can't submit, claim is incomplete.", Toast.LENGTH_SHORT). show();
                         	} else {
-                        		//FIXME: Handle connectivity error
                         		AlertDialog.Builder incBuilder = new AlertDialog.Builder(getActivity());
-                        		incBuilder.setMessage("Warning");
+                        		incBuilder.setTitle("Warning");
                         		incBuilder.setMessage("You are submitting a claim with incomplete expenses. Do you wish to continue?");
                         		incBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             	    				public void onClick(DialogInterface dialog, int which) {
-            	    					/*int old_status = clickedOnClaim.getStatus();
-                                		try {
-                                			clickedOnClaim.setStatus(getActivity(), Claim.SUBMITTED);
-                                			new ElasticSearchEngineClaims().submitClaim(getActivity(), clickedOnClaim);
-        								} catch (IOException e) {
-        									clickedOnClaim.setStatus(getActivity(), old_status);
-        									throw new RuntimeException();
-        								}
-                                		Toast.makeText(getActivity(), "Submitting", Toast.LENGTH_LONG).show();
-            	    					int old_status = clickedOnClaim.getStatus();
-                                		try {
-                                			clickedOnClaim.setStatus(getActivity(), Claim.SUBMITTED);
-                                			new ElasticSearchEngineClaims().submitClaim(getActivity(), clickedOnClaim);
-        								} catch (IOException e) {
-        									clickedOnClaim.setStatus(getActivity(), old_status);
-        									throw new RuntimeException();
-        								}
-                                		Toast.makeText(getActivity(), "Submitting", Toast.LENGTH_LONG).show();
-            	    				}*/
             	    				attemptSubmit(getActivity(), clickedOnClaim);
             	    			}});
-                        		incBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                        			@Override
-                        			public void onClick(DialogInterface dialog, int which) {
-                        				// Do nothing
-                        			}
-                        		});
+                        		incBuilder.setNegativeButton("Cancel", EditableActivity.doNothingClicker);
+                        		
                         		if (clickedOnClaim.hasIncompleteExpense())
                         			incBuilder.show();
                         		else {
@@ -224,21 +197,13 @@ public class MyClaimsFragment extends Fragment implements TView {
 	 **/
 	@Override
 	public void update(TModel model) {
-		// TODO Auto-generated method stub
 
 		MainClaimListAdapter adapter;
 		Claim[] listOfClaims = ClaimList.getFilteredClaims(getActivity());
 		
-		if (getActivity() != null) {
-			System.out.println("Context: " + getActivity().toString());
-		} else {
-			System.out.println("Its null!");
-		}
 		try {
 			Thread.sleep(200);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 		adapter= new MainClaimListAdapter(getActivity(), listOfClaims);
 		

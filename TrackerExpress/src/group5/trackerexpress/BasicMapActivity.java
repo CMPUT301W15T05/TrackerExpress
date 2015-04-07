@@ -98,7 +98,7 @@ public class BasicMapActivity extends FragmentActivity implements OnMapReadyCall
         mapFragment.getMapAsync(this);
 	}
 	
-    public String latLngFormat(LatLng latLng) {
+    public static String latLngFormat(LatLng latLng) {
     	return String.format(Locale.US, "Lat: %.4f Lng: %.4f", latLng.latitude, latLng.longitude);
     }
 	

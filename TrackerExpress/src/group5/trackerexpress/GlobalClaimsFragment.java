@@ -8,7 +8,6 @@ import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -38,8 +37,6 @@ public class GlobalClaimsFragment extends Fragment implements TView {
 	/** The error notice xml item */
 	private TextView tv_global_error;
 	
-	/** Updates global claims once in a while */
-	PeriodicTViewUpdater updater;
 	
 	/**
 	 * Instantiates a new global claims fragment.
@@ -66,12 +63,7 @@ public class GlobalClaimsFragment extends Fragment implements TView {
 		tv_global_error = (TextView) rootView.findViewById(R.id.tv_global_claims_error);
 		
 		update(null);
-		
-		// UPDATER TESTED HERE ( Updater not practical for GlobalClaimsList atm
-		// 		b/c GlobalClaimsList is rescrolled to the top )
-		//updater = new PeriodicTViewUpdater();
-		//updater.addView(GlobalClaimsFragment.this);
-		//updater.startRepeatingTask();
+
 		
 		lv_global_list.setOnItemClickListener(new OnItemClickListener() {
 			@Override
@@ -155,38 +147,27 @@ public class GlobalClaimsFragment extends Fragment implements TView {
 										if (c.getComments() == null || c.getComments().equals("null"))
 											c.setComments(input.getText().toString());
 										else 
-											c.setComments(c.getComments() + "\n" + input.getText().toString());											
-										//int old_status = c.getStatus();
+											c.setComments(c.getComments() + "\n" + input.getText().toString());	
+
 										try {
-											//c.setStatus(getActivity(), claim_status_use );
-											//if ( itemId == R.id.op_approve ){
-											Log.e("PRE", "PREREV");
+											
 											c.setStatus(getActivity(), claim_status_use);
-											Log.e("prestatus", c.getStatus() + "");
 											new ElasticSearchEngineClaims().reviewClaim(getActivity(), c.getUuid(), c.getComments(), claim_status_use);
-											Log.e("poststatus", c.getStatus() + "");
-											Log.e("POST", "POSTREV");
-											//} else {
-												//new ElasticSearchEngine().returnClaim(getActivity(), c.getUuid(), c.getComments());
-											//}
+											
 										} catch(IOException e) {
-											//FIXME: Do something about elastic search fail
-											//c.setStatus(getActivity(), old_status);
-											Log.e("EXCPET", "EXCEPT");
+
 										}
 										
 										try {
 											Thread.sleep(3000);
 										} catch (InterruptedException e) {
-											// TODO Auto-generated catch block
-											e.printStackTrace();
 										}
 										update(null);
 									}
 								}
 							});
 						}
-						//update(null);
+
 						AlertDialog build = builder.create();
 						if (item.getItemId() != R.id.op_view_global)
 							build.show();
@@ -218,8 +199,7 @@ public class GlobalClaimsFragment extends Fragment implements TView {
 		try {
 			listOfClaims = new ElasticSearchEngineClaims().getClaimsForGlobalClaimList(getActivity());
 		} catch (IOException e) {
-			//FIXME: Do something about elastic search fail
-			e.printStackTrace();
+
 			listOfClaims = null;
 		}
 		if (listOfClaims == null ){
