@@ -19,10 +19,10 @@ import android.util.Log;
  * @author crinklaw
  *
  */
-public class ElasticSearchEngine {
+public class ElasticSearchEngineClaims {
 
 	
-	private final ElasticSearchEngineUnthreaded elasicSearchEngineUnthreaded = new ElasticSearchEngineUnthreaded();
+	private final ElasticSearchEngineUnthreadedClaims elasicSearchEngineUnthreaded = new ElasticSearchEngineUnthreadedClaims();
 	
 	
 	

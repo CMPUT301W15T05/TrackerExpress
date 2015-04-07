@@ -1,5 +1,7 @@
 package group5.trackerexpress;
 
+import java.io.IOException;
+
 import com.google.android.gms.maps.model.LatLng;
 
 import android.app.AlertDialog;
@@ -181,26 +183,25 @@ public class CreateAccountActivity extends AccountFormActivity {
 		@Override
 		protected Integer doInBackground(Void... params) {
 
-//			String[] credentials = new EmailElasticSearchEngine().getCredentials();
-			String[] credentials = new String[0];
+			User[] users;
+			try {
+				users = new ElasticSearchEngineUser().getUsers(CreateAccountActivity.this);
+			} catch (IOException e1) {
+				return NETWORK_ERROR;
+			}
 
-			for (String credential : credentials) {
-				String[] pieces = credential.split(":");
-				
+			for (User user : users) {
 				// Account already exists
-				if (pieces[0].equals(mEmail)) {
+				if (user.getEmail().equals(mEmail)) {
 					return EMAIL_TAKEN;
 				}
 			}
-
-//			new EmailElasticSearchEngine().addCredential(mEmail + ":" + mPassword);
-			
 
 			User user = Controller.getUser(CreateAccountActivity.this);
 			user.setName(CreateAccountActivity.this, mName);
 			user.setEmail(CreateAccountActivity.this, mEmail);
 			user.setPassword(CreateAccountActivity.this, mPassword);
-			
+
 			return ACCOUNT_SUCCESS;
 		}
 
@@ -260,9 +261,7 @@ public class CreateAccountActivity extends AccountFormActivity {
 
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-				Intent intent = new Intent(CreateAccountActivity.this, MainActivity.class);
-		    	startActivity(intent);
-				finish();
+				finishActivity();
 			}
 			
 		});
@@ -291,10 +290,24 @@ public class CreateAccountActivity extends AccountFormActivity {
 	        	// Do nothing
 	        }
 
-			Intent intent = new Intent(CreateAccountActivity.this, MainActivity.class);
-	    	startActivity(intent);
-			finish();
+			
+			finishActivity();
+			
+
 	    }
+	}
+
+	private void finishActivity() {
+		try {
+			new ElasticSearchEngineUser().insertUser(CreateAccountActivity.this, Controller.getUser(CreateAccountActivity.this));
+		} catch (IOException e) {
+			//FIXME: Deal with failure to upload new user when creating account
+			e.printStackTrace();
+		}
+		
+		Intent intent = new Intent(CreateAccountActivity.this, MainActivity.class);
+    	startActivity(intent);
+		finish();
 	}
 
 }

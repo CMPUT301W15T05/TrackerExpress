@@ -239,7 +239,7 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 	    /**
 	     * On click listener for add destination button in EditClaimActivity.
 	     */
-		Button editDestinationButton = (Button) findViewById(R.id.buttonAddDestination);
+		final Button editDestinationButton = (Button) findViewById(R.id.buttonAddDestination);
 		
 		editDestinationButton.setOnClickListener(new View.OnClickListener() {	
 			/** Make add destination button clickable
@@ -261,6 +261,7 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 					}
 					createDestinationButton(destinationList, newDestination,doNothing);
 				}else{
+					editDestinationButton.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.MULTIPLY);
 					Toast.makeText(getApplicationContext(), "This function requires a network!", Toast.LENGTH_SHORT).show();
 				}
 				
@@ -427,6 +428,7 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 	    	endDateButton.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.CLEAR);
 	    	finishedButton.setText("Edit Tags");
 	    }
+
 	}
 
 

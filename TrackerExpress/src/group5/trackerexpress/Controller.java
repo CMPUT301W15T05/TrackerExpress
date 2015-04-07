@@ -62,6 +62,12 @@ public class Controller {
 		return user;
 	}
 	
+
+	public static void setUser(Context context, User user2) {
+		user = user2;
+		user2.notifyViews(context);
+	}
+	
 	/**
 	 * Gets the claim based on the claim id
 	 * 
@@ -113,7 +119,7 @@ public class Controller {
 			Claim[] localListOfClaims = Controller.getClaimList(context).toList();
 			Claim[] elasticListOfClaims;
 			try {
-				elasticListOfClaims = (new ElasticSearchEngine()).getClaims(context);
+				elasticListOfClaims = (new ElasticSearchEngineClaims()).getClaims(context);
 			} catch (IOException e) {
 				//FIXME: Notify user of elastic search fail
 				e.printStackTrace();
@@ -143,4 +149,5 @@ public class Controller {
 			}
 		}
 	}
+
 }
