@@ -12,14 +12,30 @@
         android:hint="Description..."
         android:inputType="textCapSentences" />
 
-    <Button
-        android:id="@+id/tvExpenseDate"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="showDatePickerDialog"
-        android:padding="13dp"
-        android:text="Date"
-        android:textSize="18sp" />
+        android:orientation="horizontal"
+        android:weightSum="100" >
+
+        <Button
+            android:id="@+id/tvExpenseDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="showDatePickerDialog"
+            android:padding="13dp"
+            android:text="Date"
+            android:textSize="18sp" />
+
+        <Button
+            android:id="@+id/expenseLocationButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="13dp"
+            android:textSize="18sp"
+            android:text="Location" />
+
+    </LinearLayout>
 
     <Spinner
         android:id="@+id/editExpenseCategorySpinner"

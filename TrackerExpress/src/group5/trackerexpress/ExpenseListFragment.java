@@ -144,8 +144,8 @@ public class ExpenseListFragment extends Fragment implements TView {
 		if ( ! myClaimListVersion ||
 				claim.getStatus() == Claim.APPROVED || 
 				claim.getStatus() == Claim.SUBMITTED ){
-			popup.getMenu().getItem(R.id.op_edit_expense).setVisible(false);
-			popup.getMenu().getItem(R.id.op_delete_expense).setVisible(false);
+			popup.getMenu().findItem(R.id.op_edit_expense).setVisible(false);
+			popup.getMenu().findItem(R.id.op_delete_expense).setVisible(false);
 		}
 	}
 	
@@ -154,6 +154,7 @@ public class ExpenseListFragment extends Fragment implements TView {
 	 */
 	@Override
 	public void update(TModel model) {
+		Log.e("HELLO", "HEEEEEEEEEEEEEEELLLLLLLLLLLLLOOOOOOOOOOO");
 		if (claim.getExpenseList().size() > 0)
 			lv_expense_list.setAdapter( new ExpenseListAdapter(getActivity(), 
 						claim.getExpenseList().toList()));
