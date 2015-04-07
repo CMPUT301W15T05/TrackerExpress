@@ -121,7 +121,7 @@ public class ClaimList extends TModel{
 	 * 
 	 * @return claim as array sorted from oldest to newest.
 	 */
-	public ArrayList<Claim> toListWithReverseSorting(){
+	public Claim[] toListWithReverseSorting(){
 		ArrayList<Claim> claimList = new ArrayList<Claim>(claims.values());
 		
 		Comparator<Claim> comparator = new Comparator<Claim>(){
@@ -132,7 +132,8 @@ public class ClaimList extends TModel{
 		};
 		
 		Collections.sort(claimList, comparator);
-		return claimList;
+		Claim[] claimArray = claimList.toArray(new Claim[0]);
+		return claimArray;
 	}
 	
 	
