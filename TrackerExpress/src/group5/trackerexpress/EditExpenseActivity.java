@@ -142,7 +142,7 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 	protected void deleteReceipt() {
 		// TODO Auto-generated method stub
 		receiptUri = null;
-		imgButton.setImageResource(R.drawable.a);
+		imgButton.setImageResource(R.drawable.image_button_hint);
 		deleteImage.setVisibility(View.GONE);
 		
 	}
