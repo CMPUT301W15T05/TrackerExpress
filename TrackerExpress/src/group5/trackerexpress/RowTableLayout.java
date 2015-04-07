@@ -44,9 +44,9 @@ public class RowTableLayout {
 		
 		int padding = 0;
 		if (newSection) {
-			padding = smallPadding;
-		} else {
 			padding = largePadding;
+		} else {
+			padding = smallPadding;
 		}
 
 		tr.setPadding(0, padding, 0, 0);

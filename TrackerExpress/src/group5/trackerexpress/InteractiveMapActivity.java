@@ -113,7 +113,7 @@ public class InteractiveMapActivity extends BasicMapActivity
 				if (lastMarker != null) {
 					returnIntent.putExtra("resultLatLng", lastMarker.getPosition());
 					returnIntent.putExtra("resultTitle", lastMarker.getTitle());
-					System.out.println("Result ok");
+
 					setResult(RESULT_OK, returnIntent);
 				} else {
 					setResult(RESULT_CANCELED, returnIntent);
@@ -284,7 +284,6 @@ public class InteractiveMapActivity extends BasicMapActivity
         public void onResult(PlaceBuffer places) {
             if (!places.getStatus().isSuccess()) {
                 // Request did not complete successfully
-            	// TODO: Some sort of message
                 return;
             }
             
@@ -327,13 +326,15 @@ public class InteractiveMapActivity extends BasicMapActivity
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
 
-        // TODO(Developer): Check error code and notify the user of error state and resolution.
-        Toast.makeText(this,
-                "Could not connect to Google API Client: Error " + connectionResult.getErrorCode(),
+        Toast.makeText(this, "Could not connect to Google Services",
                 Toast.LENGTH_SHORT).show();
 
         // Disable API access in the adapter because the client was not initialised correctly.
         mAdapter.setGoogleApiClient(null);
+
+		Intent returnIntent = new Intent();
+		setResult(RESULT_CANCELED, returnIntent);
+        finish();
 
     }
 
@@ -342,26 +343,19 @@ public class InteractiveMapActivity extends BasicMapActivity
         // Successfully connected to the API client. Pass it to the adapter to enable API access.
         mAdapter.setGoogleApiClient(mGoogleApiClient);
 
-		System.out.println("CONNECTED " + intentDestination);
         // User already selected a location; abort
 		if (lastMarker != null) {
-			System.out.println("LAST MARKER IS NULL");
 			return;
 		}
 		
 		if (intentLatLng != null) {
-        	System.out.println("NOT NULL");
 			makeLatLngMarker(intentLatLng, intentDestination, MAX_AUTO_ZOOM);
 		} else if (intentDestination != null) {
-			System.out.println("ATTEMPTING SEARCH");
 			mAutocompleteView.setText(intentDestination);
-			System.out.println("TEXT SET");
 			
 			if (intentDestination.length() > 1) {
-				System.out.println("GREATER THAN ONE, STARTING FILTER");
 				mAdapter.getFilter().filter(intentDestination, new Filter.FilterListener() {
 	                public void onFilterComplete(int count) {
-	        			System.out.println("FILTER COUNT: " + count);
 	                	if (count > 0) {
 	                		getAutocompleteResult(0);
 	                	}

@@ -16,10 +16,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.TableLayout;
-import android.widget.TableRow;
 import android.widget.TextView;
-import android.widget.Toast;
 
 /**
  * Fragment that handles the tab that displays claim properties in the view claim activity.
@@ -33,10 +30,6 @@ public class ViewClaimFragment extends Fragment implements TView {
 	
 	final String myFormat = "MM/dd/yyyy"; //In which you need put here
 	final SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
-
-	private TableRow.LayoutParams trlp = 
-			new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, 
-					TableRow.LayoutParams.WRAP_CONTENT);
 	
 	private View rootView;
 	private Claim claim;
@@ -81,16 +74,20 @@ public class ViewClaimFragment extends Fragment implements TView {
 			duration = " - " + sdf.format(endDate.getTime());
 		}
 		
+
+        RowTableLayout rtl = new RowTableLayout(rootView, getActivity());
+        rtl.setPadding(2, 12);
+		
 		if (datePrefix != null) {
-			insertRow(R.id.viewClaimDateTable, datePrefix + duration, true);
+			rtl.insertRow(R.id.viewClaimDateTable, datePrefix + duration, true);
 		}
 		
 		// Inserting description
 		String claimDescription = claim.getDescription();
 		
-		if (claimDescription != null) {
-			insertRow(R.id.viewClaimDescriptionTable, getString(R.string.view_claim_description), true);
-			insertRow(R.id.viewClaimDescriptionTable, claimDescription, false);
+		if (claimDescription != null && !claimDescription.isEmpty()) {
+			rtl.insertRow(R.id.viewClaimDescriptionTable, getString(R.string.view_claim_description), true);
+			rtl.insertRow(R.id.viewClaimDescriptionTable, claimDescription, false);
 		}
 		
 		// Inserting destinations
@@ -99,11 +96,11 @@ public class ViewClaimFragment extends Fragment implements TView {
 		if (destinations.size() > 0) {
 			String destination;
 			
-			insertRow(R.id.viewClaimDestinationTable, getString(R.string.view_claim_destinations), true);
+			rtl.insertRow(R.id.viewClaimDestinationTable, getString(R.string.view_claim_destinations), true);
 			
 			for (int i = 0; i < destinations.size(); i++){
 				destination = destinations.get(i).getName() + " - " + destinations.get(i).getDescription();
-				insertRow(R.id.viewClaimDestinationTable, destination, false);
+				rtl.insertRow(R.id.viewClaimDestinationTable, destination, false);
 			}
 		}
 		
@@ -113,10 +110,10 @@ public class ViewClaimFragment extends Fragment implements TView {
 		if (expenseList.toList().size() > 0) {
 			String[] expenses = expenseList.toStringTotalCurrencies().split(", ");
 
-			insertRow(R.id.viewClaimAmountSpentTable, getString(R.string.view_claim_ammount_spent), true);
+			rtl.insertRow(R.id.viewClaimAmountSpentTable, getString(R.string.view_claim_ammount_spent), true);
 			
 			for (int i = 0; i < expenses.length; i++) {
-				insertRow(R.id.viewClaimAmountSpentTable, expenses[i], false);
+				rtl.insertRow(R.id.viewClaimAmountSpentTable, expenses[i], false);
 			}
 			
 		}
@@ -126,12 +123,12 @@ public class ViewClaimFragment extends Fragment implements TView {
 		
 		
 		if (tagList != null && tagList.size() > 0) {
-			insertRow(R.id.viewClaimTagsTable, getString(R.string.view_claim_tags), true);
+			rtl.insertRow(R.id.viewClaimTagsTable, getString(R.string.view_claim_tags), true);
 			TagMap tagMap = Controller.getTagMap(getActivity());
 			
 			for (int i = 0; i < tagList.size(); i++) {
 				Tag tag = tagMap.getTag(tagList.get(i));
-				insertRow(R.id.viewClaimTagsTable, tag.toString(), false);
+				rtl.insertRow(R.id.viewClaimTagsTable, tag.toString(), false);
 			}
 			
 		}
@@ -143,7 +140,6 @@ public class ViewClaimFragment extends Fragment implements TView {
 			
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
     			alertDialog.setTitle("Comments from: " + claim.getApproverName());
     			alertDialog.setMessage(claim.getComments());
@@ -158,37 +154,6 @@ public class ViewClaimFragment extends Fragment implements TView {
 		
 		
 		return rootView;
-	}
-	
-	private void insertRow(int viewID, String text, boolean newSection) {
-		// Create a new row to be added
-		TableLayout tl = (TableLayout) rootView.findViewById(viewID);
-		TableRow tr = new TableRow(getActivity());
-		tr.setLayoutParams(trlp);
-		
-		int padding = 0;
-		if (newSection) {
-			padding = 12;
-		} else {
-			padding = 2;
-		}
-
-		tr.setPadding(0, padding, 0, 0);
-		
-		// Create the TextView to be added to the row content
-		TextView tv = new TextView(getActivity());
-		if (newSection) {
-			tv.setTextSize(20);
-		} else {
-			tv.setTextSize(16);
-		}
-		tv.setText(text);
-		tv.setLayoutParams(trlp);
-		
-		// Add TextView to row
-		tr.addView(tv);
-		
-		tl.addView(tr, new TableLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT, TableLayout.LayoutParams.WRAP_CONTENT));
 	}
 
 	/* (non-Javadoc)
