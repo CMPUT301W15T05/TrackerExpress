@@ -127,7 +127,8 @@ public class ExpenseListAdapter extends ArrayAdapter<Expense> {
 		if (e.getReceipt() != null){
 			
 			Bitmap sourceBitmap = e.getReceipt().getBitmap();
-			Bitmap rotatedBitmap = editBitmap.rotateBitmap(sourceBitmap);
+			//KNOWN ISSUE: Photo needs to be rotated on emulator, but not on actual phone.
+			Bitmap rotatedBitmap = editBitmap.rotateBitmap(sourceBitmap); 
 			Bitmap resizedBitmap = editBitmap.resizeBitmap(rotatedBitmap, 640);
 			holder.receipt.setImageBitmap(resizedBitmap);
 		}
