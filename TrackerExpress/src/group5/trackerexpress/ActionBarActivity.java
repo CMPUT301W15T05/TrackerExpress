@@ -5,6 +5,7 @@ import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -47,17 +48,26 @@ ActionBar.TabListener{
 		// Set up the ViewPager with the sections adapter.
 		mViewPager = (ViewPager) findViewById(pagerID);
 		mViewPager.setAdapter(spa);
-
+		
+		
 		// When swiping between different sections, select the corresponding
 		// tab. We can also use ActionBar.Tab#select() to do this if we have
 		// a reference to the Tab.
 		mViewPager
-				.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
-					@Override
-					public void onPageSelected(int position) {
-						actionBar.setSelectedNavigationItem(position);
-					}
-				});
+			.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+				@Override
+				public void onPageSelected(int position) {
+					actionBar.setSelectedNavigationItem(position);
+				}
+
+				@Override
+				public void onPageScrollStateChanged(int arg0) {					
+				}
+
+				@Override
+				public void onPageScrolled(int arg0, float arg1, int arg2) {
+				}
+			});
 		
 		// For each of the sections in the app, add a tab to the action bar.
 		for (int i = 0; i < spa.getCount(); i++) {

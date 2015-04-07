@@ -3,37 +3,24 @@ package group5.trackerexpress;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Locale;
 import java.util.UUID;
-import group5.trackerexpress.EditBitmap;
 
-import android.app.AlertDialog;
-import android.app.DialogFragment;
-import android.content.DialogInterface;
+import group5.trackerexpress.EditBitmap;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
@@ -50,6 +37,8 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 	private Spinner categorySpinner, currencySpinner;
 	
 	private TextWatcher currencyWatcher;
+	
+	private Button deleteImage;
 	
 	/** The image button. */
 	private ImageButton imgButton;
@@ -74,14 +63,24 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 	
 	/** The Claim UUID and the Expense UUID. */
 	private UUID claimId, expenseId;
-	
+
 	EditBitmap editBitmap = new EditBitmap();
 
+	/** checks if the claim is new and cancel's appropriately */
+	private boolean isNewClaim;
+
+
+	/** checks if the claim has been saved and cancel's appropriately */
+	private boolean isSaved;
+	
 	final String myFormat = "EEEE MMMM dd, yyyy"; //In which you need put here
 	final SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
 
 	/** The expense in question */
 	private Expense expense;
+	
+	/** The claim of the expense in question */
+	private Claim claim;
 
 
 	@Override
@@ -92,9 +91,12 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 		final Intent intent = this.getIntent();
 	    claimId = (UUID)intent.getSerializableExtra("claimUUID");
 	    expenseId = (UUID)intent.getSerializableExtra("expenseUUID");
+	    isNewClaim = intent.getBooleanExtra("isNewClaim", false);
+	    isSaved = false;
 	    
 	    expense = Controller.getExpense(EditExpenseActivity.this, claimId, expenseId);
-			    
+	    claim = Controller.getClaim(this, claimId);
+	    
 		initializeVariables();
 		
 	    // The date button that shows a date dialog
@@ -110,12 +112,23 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 	    		takeAPhoto();
 		    }
 		});
+	    
+	    deleteImage.setOnClickListener(new Button.OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				deleteReceipt();
+			}
+	    	
+	    });
 	
 	    
 	  //the cancel expense button
 	    cancelExpenseButton.setOnClickListener(new Button.OnClickListener(){
 	    	public void onClick(View v) {
 	    		cancelCheck(EditExpenseActivity.this);
+	    		
+	    		
 		    }
 		});
 	    
@@ -130,6 +143,14 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 	}
 
 	
+	protected void deleteReceipt() {
+		// TODO Auto-generated method stub
+		receiptUri = null;
+		imgButton.setImageResource(R.drawable.a);
+		
+	}
+
+
 	/**
 	 * Initialize variables.
 	 */
@@ -140,6 +161,7 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 		amount = (EditText) findViewById(R.id.editExpenseAmount);
 		imgButton = (ImageButton) findViewById(R.id.editExpenseTakeAPhoto);
 		dateButton = (Button) findViewById(R.id.tvExpenseDate);
+		deleteImage = (Button) findViewById(R.id.deleteImageButton);
 		
 		dateSelection = Calendar.getInstance();
 		dateButton.setText(sdf.format(dateSelection.getTime()));
@@ -179,12 +201,26 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 	    
 	    if ( expense.getReceipt() != null ){
 			imgButton.setImageDrawable(expense.getReceipt().getDrawable());
+			deleteImage.setVisibility(View.VISIBLE);
+	    } else {
+	    	deleteImage.setVisibility(View.GONE);
 	    }
 	    
 	    if ( !expense.isComplete()){
 	    	statusCheckBox.setChecked(true);
 	    }
+	    
+	    statusCheckBox.setChecked(! expense.isComplete());
+	    
+	}
 	
+	@Override
+	public void onStop(){
+		super.onStop();
+		
+		if ( isNewClaim && ! isSaved ){
+			claim.getExpenseList().removeExpense(EditExpenseActivity.this, expense.getUuid());
+		}
 	}
 	
 	@Override
@@ -196,7 +232,6 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 	
 	/** The Constant CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE. */
 	private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
-
 
 	/**
 	 * Take a photo.
@@ -230,8 +265,9 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 				Bitmap rotatedBitmap = editBitmap.rotateBitmap(sourceBitmap);
 				Bitmap resizedBitmap = editBitmap.resizeBitmap(rotatedBitmap, 640);
 				imgButton.setImageBitmap(resizedBitmap);
-				
-				
+				deleteImage.setVisibility(View.VISIBLE);
+				//imgButton.setImageURI(receiptUri);
+
 			} else if (resultCode == RESULT_CANCELED){
 				Toast.makeText(EditExpenseActivity.this, "Canceled", Toast.LENGTH_SHORT).show();
 			} else{
@@ -268,12 +304,16 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 		
 		if ( receiptUri != null ){
 			expense.setReceipt(this, new Receipt(receiptUri.getPath()));
+		}else{
+			expense.setReceipt(this, null);
 		}
 		
 		expense.setComplete(this, complete);
 		expense.setDate(this, dateSelection);
 		expense.setCategory(this, categorySelection);
 		expense.setCurrency(this, currencySelection);
+		
+		isSaved = true;
 		
 		finish();
 	}

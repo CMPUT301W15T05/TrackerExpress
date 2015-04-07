@@ -56,7 +56,7 @@ public class ElasticSearchEngine {
 		for (Claim claim : claimsUnfiltered){
 			if (    !claim.getSubmitterEmail().equals(Controller.getUser(context).getEmail()) &&
 					(claim.getApproverEmail() == null || claim.getApproverEmail().equals(Controller.getUser(context).getEmail())) &&
-					 claim.getStatus() == Claim.SUBMITTED){
+					 claim.getStatus() != Claim.IN_PROGRESS){
 				
 				claims.add(claim);
 			}

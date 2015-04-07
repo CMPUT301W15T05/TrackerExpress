@@ -1,23 +1,17 @@
 package group5.trackerexpress;
 
-import java.util.ArrayList;
-
 import android.content.Intent;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.PopupMenu;
-import android.widget.TextView;
 import android.widget.Button;
-import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
 /**
@@ -62,9 +56,6 @@ public class ExpenseListFragment extends Fragment implements TView {
 		View rootView = inflater.inflate(R.layout.fragment_expense_list,
 				container, false);
 		
-		TextView title = (TextView) rootView.findViewById(R.id.tv_expense_list_title);
-		ImageView receiptView = (ImageView) rootView.findViewById(R.id.iv_expense_receipt); 
-		
 		// Fragment's views
 		lv_expense_list = (ListView) rootView.findViewById(R.id.lv_my_expenses);
 		lv_expense_list.setItemsCanFocus(true);
@@ -90,6 +81,7 @@ public class ExpenseListFragment extends Fragment implements TView {
 				Intent intent = new Intent( getActivity(), EditExpenseActivity.class );
 				intent.putExtra("claimUUID", claim.getUuid());
 				intent.putExtra("expenseUUID", exp.getUuid());
+            	intent.putExtra("isNewClaim", true);
 				
 				startActivity(intent);
 			}	
@@ -144,8 +136,8 @@ public class ExpenseListFragment extends Fragment implements TView {
 		if ( ! myClaimListVersion ||
 				claim.getStatus() == Claim.APPROVED || 
 				claim.getStatus() == Claim.SUBMITTED ){
-			popup.getMenu().getItem(R.id.op_edit_expense).setVisible(false);
-			popup.getMenu().getItem(R.id.op_delete_expense).setVisible(false);
+			popup.getMenu().findItem(R.id.op_edit_expense).setVisible(false);
+			popup.getMenu().findItem(R.id.op_delete_expense).setVisible(false);
 		}
 	}
 	
