@@ -14,8 +14,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.location.Location;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
@@ -590,16 +588,7 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 				}
 			});
 			
-			helperBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-
-				/** Back out the activity without doing anything
-				 * @see android.content.DialogInterface.OnClickListener#onClick(android.content.DialogInterface, int)
-				 */
-				@Override
-				  public void onClick(DialogInterface dialog, int which) {
-				   /** Do nothing */
-				  }
-			});
+			helperBuilder.setNegativeButton("Cancel", doNothingClicker);
 			
 			
 			AlertDialog helpDialog = helperBuilder.create();

@@ -101,6 +101,8 @@ ActionBar.TabListener {
 	}
 	
 	public void editAccount(MenuItem menu) {
+		Intent intent = new Intent(this, EditAccountActivity.class);
+    	startActivity(intent);
 	}
 	
 	/**
