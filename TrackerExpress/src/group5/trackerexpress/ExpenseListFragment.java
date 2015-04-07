@@ -112,6 +112,8 @@ public class ExpenseListFragment extends Fragment implements TView {
                         	intent.putExtra("expenseUUID", clickedOnExpense.getUuid());
                         	startActivity(intent);
                         	break;
+                        case R.id.op_view_image:
+                        	
                         default: break;
                         }
                         
