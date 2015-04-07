@@ -124,7 +124,6 @@ public class ExpenseListFragment extends Fragment implements TView {
                         	LatLng latlng = new LatLng(clickedOnExpense.getLatitude(), clickedOnExpense.getLongitude());
                         	intent = new Intent (getActivity(), MapActivity.class);
                         	intent.putExtra("latlng", latlng);
-<<<<<<< HEAD
                         	break;
                         	
                         case R.id.op_view_image:                      	
@@ -133,7 +132,6 @@ public class ExpenseListFragment extends Fragment implements TView {
                         	if(receipt != null){
                         		intent.putExtra("filePath", receipt.getPath());
                         		startActivity(intent);
-                        		
                         	}else{
                         		AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
                     			alertDialog.setTitle("Warning");
@@ -144,10 +142,10 @@ public class ExpenseListFragment extends Fragment implements TView {
                     			});
                     			alertDialog.show();
                         	}
-              
                         	break;
 
-                        default: break;
+                        default: 
+                        	break;
                         }
                         
                         return true;
