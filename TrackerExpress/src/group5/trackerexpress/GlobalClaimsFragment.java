@@ -38,8 +38,6 @@ public class GlobalClaimsFragment extends Fragment implements TView {
 	/** The error notice xml item */
 	private TextView tv_global_error;
 	
-	/** Updates global claims once in a while */
-	PeriodicTViewUpdater updater;
 	
 	/**
 	 * Instantiates a new global claims fragment.
@@ -66,12 +64,7 @@ public class GlobalClaimsFragment extends Fragment implements TView {
 		tv_global_error = (TextView) rootView.findViewById(R.id.tv_global_claims_error);
 		
 		update(null);
-		
-		// UPDATER TESTED HERE ( Updater not practical for GlobalClaimsList atm
-		// 		b/c GlobalClaimsList is rescrolled to the top )
-		//updater = new PeriodicTViewUpdater();
-		//updater.addView(GlobalClaimsFragment.this);
-		//updater.startRepeatingTask();
+
 		
 		lv_global_list.setOnItemClickListener(new OnItemClickListener() {
 			@Override
