@@ -217,19 +217,20 @@ public class ElasticSearchEngineClaims {
 
 	public void reviewClaim(Context context, UUID id, String comments, final int status) throws IOException {
 		
-		if (!Controller.isInternetConnected(context))
-			throw new IOException();
+		Claim claim = getClaim(context, id);
 		
-		final UUID idFinal = id;
-		final String commentsFinal = comments;
-		final String approverName = Controller.getUser(context).getName();
-		final String approverEmail = Controller.getUser(context).getEmail();
-
+		claim.setComments(comments);
+		claim.setStatus(null, status);
+		claim.setApproverEmail(null, Controller.getUser(context).getEmail());
+		claim.setApproverName(null, Controller.getUser(context).getName());
+		
+		final Claim claimFinal = claim;
+		
 		Thread thread = new Thread(new Runnable(){
 			@Override
 			public void run() {
 				try {
-					elasicSearchEngineUnthreaded.reviewClaim(idFinal, commentsFinal, approverName, approverEmail, status);
+					elasicSearchEngineUnthreaded.submitClaim(claimFinal);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -237,11 +238,7 @@ public class ElasticSearchEngineClaims {
 		});
 
 		thread.start();
-		/*try {
-			thread.join();
-		} catch (InterruptedException e) {
-			throw new RuntimeException();
-		}*/
+
 	}
 
 

@@ -1,5 +1,8 @@
 package group5.trackerexpress;
 
+import java.io.IOException;
+import java.util.UUID;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -11,20 +14,35 @@ import android.widget.ImageView;
 
 public class ViewImageDialog extends Activity {
 
-    private ImageView receiptImageView;
+	private ImageView receiptImageView;
 
-    EditBitmap editBitmap = new EditBitmap();
-    
-    protected void onCreate(Bundle savedInstanceState) {
+	EditBitmap editBitmap = new EditBitmap();
+
+	protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.image_dialog);
         
         receiptImageView = (ImageView)findViewById(R.id.ivReceipt);
 
         Intent intent = getIntent();
-        String filePath = (String) intent.getStringExtra("filePath");
+        UUID claimUuid = (UUID) intent.getSerializableExtra("claimId");
+        UUID expenseUuid = (UUID) intent.getSerializableExtra("expenseId");        
+        Claim claim;
         
-        Bitmap bitmap = BitmapFactory.decodeFile(filePath);
+        Bitmap bitmap;
+		try {
+			claim = new ElasticSearchEngineClaims().getClaim(this, claimUuid);
+			
+			bitmap = claim.getExpenseList().getExpense(expenseUuid).getReceipt().getBitmap();			
+		} catch (IOException e) {
+			e.printStackTrace();
+			throw new RuntimeException();
+		} catch (ExpenseNotFoundException e) {
+			e.printStackTrace();
+			throw new RuntimeException();			
+		}
+		
+        
         Bitmap rotatedBitmap = editBitmap.rotateBitmap(bitmap);
         receiptImageView.setImageBitmap(rotatedBitmap);
         

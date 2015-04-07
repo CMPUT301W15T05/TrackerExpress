@@ -151,7 +151,11 @@ public class GlobalClaimsFragment extends Fragment implements TView {
 										Toast.makeText(getActivity(), "Comments Required", Toast.LENGTH_LONG).show();
 									} else {
 										Toast.makeText(getActivity(), toast_part_use + " Claim", Toast.LENGTH_LONG).show();
-										c.setComments(c.getComments() + '\n' + input.getText().toString());
+										
+										if (c.getComments() == null || c.getComments().equals("null"))
+											c.setComments(input.getText().toString());
+										else 
+											c.setComments(c.getComments() + "\n" + input.getText().toString());											
 										//int old_status = c.getStatus();
 										try {
 											//c.setStatus(getActivity(), claim_status_use );
