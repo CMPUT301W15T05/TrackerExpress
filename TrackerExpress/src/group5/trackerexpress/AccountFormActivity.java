@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 /**
  * Super class for CreateAccount and Login Activities
+ * that contains their necessary string checking functions
  * 
  * @author Peter Crinklaw, Randy Hu, Parash Rahman, Jesse Emery, Sean Baergen, Rishi Barnwal
  * @version Part 4
@@ -18,10 +19,10 @@ import android.widget.TextView;
  */
 public class AccountFormActivity extends Activity {
 
-	/** The progress view. */
+	/** The progress view for setting spinners of each activity. */
 	private View mProgressView;
 	
-	/** The form view. */
+	/** The form view for setting spinners of each activity. */
 	private View mFormView;
 	
 	/**

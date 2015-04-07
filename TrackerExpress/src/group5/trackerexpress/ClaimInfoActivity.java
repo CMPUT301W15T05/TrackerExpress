@@ -4,16 +4,17 @@ import java.io.IOException;
 import java.util.Locale;
 import java.util.UUID;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.util.Log;
+import android.view.Menu;
 
 /**
- * Displays information about claims. Contains a fragment for the expense list and the claim property view.
+ * Displays information about claims. 
+ * Contains a fragment for the expense list and the claim property view.
+ * 
  * @author Peter Crinklaw, Randy Hu, Parash Rahman, Jesse Emery, Sean Baergen, Rishi Barnwal
  * @version Part 4
  */
@@ -24,53 +25,44 @@ public class ClaimInfoActivity extends ActionBarActivity {
 	
 	/** The Constant INDEX_OF_EXPENSE_LIST_TAB. */
 	private static final int INDEX_OF_EXPENSE_LIST_TAB = 1;
-
-	private static Context instance;
 	
 	/** the claim to be viewed */
 	private Claim claim;
 	
-	/** tells the expense list fragment if it should
-	 *  be able to add expenses
+	/** 
+	 * 	tells the expense list fragment if it should
+	 *  be able to add expenses (the version of claim list)
 	 */
 	private boolean myClaimListVersion;
 	
-	/* (non-Javadoc)
-	 * @see group5.trackerexpress.ActionBarActivity#onCreate(android.os.Bundle)
+	/**
+	 * Sets up the tabs and their titles
+	 * 
 	 */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_claim_info);
 
-		instance = this;
-
 		final Intent intent = this.getIntent();
 		
+		/** gets the claim in question's id to retrieve the claim from the controller */
 		UUID serializedId = (UUID) intent.getSerializableExtra("claimUUID");
-
+		
+		/** Runs activity like MyClaims tab would like if there is a special intent extra */
 		myClaimListVersion = intent.getBooleanExtra("fromMyClaims", false);
-		
-		Log.i("myMessage", Boolean.toString(myClaimListVersion));
-		
+				
+		// Determines where to get the claim from
 		if ( myClaimListVersion ){
+			// Get claim from Controller if MyClaims tab called
 	    	claim = Controller.getClaim(this, serializedId);
 		} else {
-			// FIXME: This junk can be moved somewhere else
-			Claim[] claims;
+			// Get claim from Elastic Search if GlobalClaims tab called
 			try {
-				claims = (new ElasticSearchEngine()).getClaims(this);
+				claim = (new ElasticSearchEngine()).getClaim(ClaimInfoActivity.this, serializedId);
 			} catch (IOException e) {
-				//FIXME: Notify user of elastic search fail
 				e.printStackTrace();
-				claims = new Claim[0];
-			}
-			for ( Claim c : claims ){
-				if ( c.getUuid().equals( serializedId ) ){
-					claim = c;
-					break;
-				}
-			}
+			}			
 		}
 	    
 		// Create the adapter that will return a fragment for each of the three
@@ -80,6 +72,7 @@ public class ClaimInfoActivity extends ActionBarActivity {
 		
 		setUpActionBar(mSectionsPagerAdapter, R.id.pager_activity_claim_info);
 	}
+
 
 	/**
 	 * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
@@ -96,8 +89,8 @@ public class ClaimInfoActivity extends ActionBarActivity {
 			super(fm);
 		}
 
-		/* (non-Javadoc)
-		 * @see group5.trackerexpress.SectionsPagerAdapter#getItem(int)
+		/**
+		 * Display fragment depending on index of fragment called
 		 */
 		@Override
 		public Fragment getItem(int position) {
@@ -114,16 +107,18 @@ public class ClaimInfoActivity extends ActionBarActivity {
 				case INDEX_OF_EXPENSE_LIST_TAB:
 					fragment = new ExpenseListFragment(claim, myClaimListVersion);
 					break;
-				default: Log.i("myMessage", "This should never happen");
+				default: break;
 			}
 		
 			fragment.setArguments(args);
 			
-			return fragment;//PlaceholderFragment.newInstance(position + 1);
+			return fragment;
 		}
 
-		/* (non-Javadoc)
-		 * @see group5.trackerexpress.SectionsPagerAdapter#getCount()
+		/**
+		 * Simply returns the number of tabs of this activity
+		 * 
+		 * @return number of tabs of this activity
 		 */
 		@Override
 		public int getCount() {
@@ -131,8 +126,8 @@ public class ClaimInfoActivity extends ActionBarActivity {
 			return 2;
 		}
 
-		/* (non-Javadoc)
-		 * @see android.support.v4.view.PagerAdapter#getPageTitle(int)
+		/**
+		 * Sets the proper page title based on index of current tab
 		 */
 		@Override
 		public CharSequence getPageTitle(int position) {
@@ -145,11 +140,6 @@ public class ClaimInfoActivity extends ActionBarActivity {
 			}
 			return null;
 		}
-	}
-	
-
-	public static Context getThis() {
-		return instance;
 	}
 
 }

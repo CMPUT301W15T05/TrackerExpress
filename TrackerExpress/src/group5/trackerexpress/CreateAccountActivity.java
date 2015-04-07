@@ -34,30 +34,32 @@ public class CreateAccountActivity extends AccountFormActivity {
 	/** The Constant NETWORK_ERROR. */
 	public static final int NETWORK_ERROR = 2;
 	
-	/** The m auth task. */
+	/** The authorizing task. */
 	private UserAccountTask mAuthTask = null;
 	// UI references.
-	/** The m email view. */
+	/** The email text field. */
 	private EditText mEmailView;
 	
-	/** The m password view. */
+	/** The password text field. */
 	private EditText mPasswordView;
 	
-	/** The m confirm password view. */
+	/** The confirmation password text field. */
 	private EditText mConfirmPasswordView;
 	
-	/** The m name view. */
+	/** The name text view. */
 	private EditText mNameView;
 	
-	/* (non-Javadoc)
-	 * @see android.app.Activity#onCreate(android.os.Bundle)
+	/**
+	 * OnCreate initializes all the views and their hints
+	 * 		and also the button onClickListeners that are 
+	 * 		necessary when creating an account
 	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_create_account);
 		
-		
+		// retrieves the email and password text views
 		mEmailView = (EditText) findViewById(R.id.createAccountEmailText);
 		mPasswordView = (EditText) findViewById(R.id.createAccountPasswordText);
 		
@@ -67,9 +69,11 @@ public class CreateAccountActivity extends AccountFormActivity {
 		mPasswordView.setHint(Html.fromHtml("<font size=\"16\">" + hintText[0] 
 				+ " " + "</font>" + "<small>" + hintText[1] + "</small>" ));
 		
+		// retrieves the confirmation password and name text views
 		mConfirmPasswordView = (EditText) findViewById(R.id.createAccountConfirmPasswordText);
 		mNameView = (EditText) findViewById(R.id.createAccountNameText);
 		
+		// The create account button will attempt to create an account when clicked
 		Button mConfirmCreateAccountButton = (Button) findViewById(R.id.confirmCreateAccountButton);
 		mConfirmCreateAccountButton.setOnClickListener(new OnClickListener() {
 			@Override
@@ -78,6 +82,7 @@ public class CreateAccountActivity extends AccountFormActivity {
 			}
 		});
 		
+		// the cancel create account button will just end the activity
 		Button mCancelCreateAccountButton = (Button) findViewById(R.id.cancelCreateAccountButton);
 		mCancelCreateAccountButton.setOnClickListener(new OnClickListener() {
 			@Override

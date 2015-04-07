@@ -75,7 +75,7 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 	private Location location;
 
 
-	EditBitmap editBitmap = new EditBitmap();
+	EditBitmap editBitmap;
 
 	/** checks if the claim is new and cancel's appropriately */
 	private boolean isNewExpense;
@@ -98,6 +98,8 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 	    claimId = (UUID)intent.getSerializableExtra("claimUUID");
 	    isNewExpense = intent.getBooleanExtra("isNewExpense", false);
 
+	    editBitmap = new EditBitmap();
+	    
 	    if ( ! isNewExpense ){
 	    	expenseId = (UUID)intent.getSerializableExtra("expenseUUID");
 	    	expense = Controller.getExpense(EditExpenseActivity.this, claimId, expenseId);
@@ -260,10 +262,12 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 		    }
 		    
 		    if ( expense.getReceipt() != null ){
-				imgButton.setImageDrawable(expense.getReceipt().getDrawable());
+		    	//KNOWN ISSUE: Photo needs to be rotated on emulator, but not on actual phone.
+				imgButton.setImageBitmap(editBitmap.rotateBitmap(expense.getReceipt().getBitmap()));
 				receiptUri = Uri.parse(expense.getReceipt().getPath());
 				deleteImage.setVisibility(View.VISIBLE);
 		    } else {
+		    	imgButton.setImageResource(R.drawable.image_button_hint);
 		    	deleteImage.setVisibility(View.GONE);
 		    }
 		    
@@ -323,6 +327,7 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 				Log.e("STRING", "PHOTO TAKEN");
 				Drawable photo = Drawable.createFromPath(receiptUri.getPath());
 				Bitmap sourceBitmap = ((BitmapDrawable)photo).getBitmap();
+				//KNOWN ISSUE: Photo needs to be rotated on emulator, but not on actual phone.
 				Bitmap rotatedBitmap = editBitmap.rotateBitmap(sourceBitmap);
 				Bitmap resizedBitmap = editBitmap.resizeBitmap(rotatedBitmap, 640);
 				imgButton.setImageBitmap(resizedBitmap);

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     
-    <string name="app_name">TrackerExpress</string>
+    <string name="app_name">Tracker Express</string>
     <string name="hello_world">Hello world!</string>
     <string name="place_autocomplete_hint">Enter a place name or address</string>
     <string name="confirm_geolocation">OK</string>

@@ -14,6 +14,8 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.location.Location;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
@@ -65,8 +67,8 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 	EditText DesName;
     EditText DesRea;
 	
-	/** The Location. */
-	private Location location;
+    /** location of destination */
+    private Location location;
 	
 	/** The des list view. */
 	private ListView desListView;
@@ -83,9 +85,10 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 	/** The Destination. */
 	private ArrayList<Destination> destinationList;
 	
-	/** The adapter2. */
+	/** The adapter for the Destination List. */
 	private ArrayAdapter<String> destinationAdapter;
 	
+	/** The array adapter for the Tag List */
 	private ArrayAdapter<Tag> tagAdapter;
 	
 	/** The new destination. */
@@ -244,11 +247,23 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 			 */
 			@Override
 			public void onClick(View v) {
-				/** check if the user pressed create new claim or edit existing claim button from MainActivity.*/
-				if (isNewClaim != true){
-					destinationList = claim.getDestinationList();
+				
+				
+				/**
+				 * The if statement checks for network connectivity, if network is connected, 
+				 * add destination button willwork. If not message will be displayed to remind user.
+				 */
+				
+				if (Controller.isInternetConnected(getApplicationContext())){
+					/** check if the user pressed create new claim or edit existing claim button from MainActivity.*/
+					if (isNewClaim != true){
+						destinationList = claim.getDestinationList();
+					}
+					createDestinationButton(destinationList, newDestination,doNothing);
+				}else{
+					Toast.makeText(getApplicationContext(), "This function requires a network!", Toast.LENGTH_SHORT).show();
 				}
-				createDestinationButton(destinationList,newDestination,doNothing);
+				
 			}
 		});
 		
@@ -316,6 +331,7 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 				}
 			
 				/** this statement checks if the text fields are valid or not and display error message.*/
+
 				
 				if ( claimNameView.getText().toString().isEmpty() ){
 			    	claimNameView.setError( "Name is required!" );
@@ -412,7 +428,7 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 	    	finishedButton.setText("Edit Tags");
 	    }
 	}
-	
+
 
 	/**
      * On click listener for the back button(soft key). Calls "safe guard" method if user accidently 

@@ -27,6 +27,7 @@ public class Expense extends TModel{
 	/** The currency of the expense. */
 	private String currency;
 	
+	/** The receipt. */
 	private Receipt receipt;
 	
 	/** The category of the expense. */

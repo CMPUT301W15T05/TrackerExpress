@@ -64,6 +64,9 @@ public class ExpenseListAdapter extends ArrayAdapter<Expense> {
 		/** The status. */
 		public TextView status;
 		
+		/** The status of geolocation. */
+		public TextView geolocation;
+		
 		/** The receipt. */
 		public ImageView receipt;
 	}
@@ -86,6 +89,7 @@ public class ExpenseListAdapter extends ArrayAdapter<Expense> {
 			holder.amount = (TextView) v.findViewById(R.id.tv_expense_list_amount);
 			holder.receipt = (ImageView) v.findViewById(R.id.iv_expense_receipt);
 			holder.status = (TextView) v.findViewById(R.id.tv_expense_list_status);
+			holder.geolocation = (TextView) v.findViewById(R.id.tv_expense_has_location);
 
 			v.setTag(holder);
 		} else {
@@ -99,6 +103,12 @@ public class ExpenseListAdapter extends ArrayAdapter<Expense> {
 			holder.status.setText("");
 		}else{
 			holder.status.setText("INCOMPLETE");
+		}
+		
+		if(e.getLocation() != null){
+			holder.geolocation.setText("LOCATION SET");
+		}else{
+			holder.geolocation.setText("LOCATION NOT SET");
 		}
 		
 		if (e.getDate() != null) {
@@ -117,7 +127,8 @@ public class ExpenseListAdapter extends ArrayAdapter<Expense> {
 		if (e.getReceipt() != null){
 			
 			Bitmap sourceBitmap = e.getReceipt().getBitmap();
-			Bitmap rotatedBitmap = editBitmap.rotateBitmap(sourceBitmap);
+			//KNOWN ISSUE: Photo needs to be rotated on emulator, but not on actual phone.
+			Bitmap rotatedBitmap = editBitmap.rotateBitmap(sourceBitmap); 
 			Bitmap resizedBitmap = editBitmap.resizeBitmap(rotatedBitmap, 640);
 			holder.receipt.setImageBitmap(resizedBitmap);
 		}

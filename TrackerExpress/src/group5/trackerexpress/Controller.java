@@ -1,9 +1,8 @@
 package group5.trackerexpress;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.UUID;
 
+import java.io.IOException;
+import java.util.UUID;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -17,14 +16,19 @@ import android.util.Log;
  */
 public class Controller {
 
-	/** The claims. */
+	/** The claims saved locally */
 	private static ClaimList claimList;
+	
+	/** the tag map for tag information */
 	private static TagMap tagMap;
+	
+	/** the user of the application */
 	private static User user;
 	
 	/**
 	 * Gets the static claim list, newing it if necessary
 	 *
+	 * @param context: if newing is necessary
 	 * @return the claim list
 	 */
 	public static ClaimList getClaimList(Context context){
@@ -36,8 +40,8 @@ public class Controller {
 	/**
 	 * Gets the static tag map, newing it if necessary
 	 * 
-	 * @param context
-	 * @return
+	 * @param context: to instantiate the tagmap if necessary
+	 * @return the tagMap
 	 */
 
 	public static TagMap getTagMap(Context context){
@@ -49,8 +53,8 @@ public class Controller {
 	/**
 	 * Gets the User data object. Right now there is but one user per phone
 	 * 
-	 * @param context
-	 * @return
+	 * @param context: to instantiate the user if necessary
+	 * @return the User
 	 */
 	public static User getUser(Context context){
 		if (user == null)
@@ -89,7 +93,8 @@ public class Controller {
 	 * Checks if internet is connected.
 	 * 
 	 * @param: context
-	 * @return boolean based on if internet is connected
+	 * @return true if internet is connected
+	 * 			false if internet is disconnected
 	 */
 	public static boolean isInternetConnected(Context context){
 		ConnectivityManager cm =
@@ -102,48 +107,8 @@ public class Controller {
 		return isConnected;
 	}
 	
-	/**
-	 * Returns a list of filtered Claims for the MyClaims Fragment.
-	 * 
-	 * @param: context
-	 * @return: list of filtered Claims depending on tags selected
-	 */
-	public static Claim[] getFilteredClaims(Context context){	
-		Claim[] listOfClaims = Controller.getClaimList(context).toList();		
-		ArrayList<Claim> filteredClaims = new ArrayList<Claim>();
-
-		ArrayList<Tag> listOfTags = Controller.getTagMap(context).toList();
-		ArrayList<Tag> filterTags = new ArrayList<Tag>();
-		
-		for ( Tag t : listOfTags ){
-			if ( t.isSelected() ){
-				filterTags.add(t);
-			}
-		}
-		
-		// If all the tags are selected
-		if ( filterTags.size() == listOfTags.size() ) {
-			// Do not filter out anything
-			// Even those without tags
-			return listOfClaims;
-		} else {	
-			for ( Claim c : listOfClaims ){
-				ArrayList<UUID> tempTags = c.getTagsIds(context);
-				for ( Tag t : filterTags ){
-					if ( tempTags.contains(t.getUuid()) ){
-						filteredClaims.add(c);
-						break;
-					}
-				}
-			}
-		}
-		
-		return filteredClaims.toArray(new Claim[filteredClaims.size()]);
-	}
-
-	
 	public static void updateClaimsFromInternet(Context context){
-
+		// updates the claims from the internet if it is connected
 		if ( isInternetConnected(context) ){
 			Claim[] localListOfClaims = Controller.getClaimList(context).toList();
 			Claim[] elasticListOfClaims;

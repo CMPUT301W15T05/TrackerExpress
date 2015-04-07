@@ -3,8 +3,6 @@ package group5.trackerexpress;
  * 
  */
 
-import group5.trackerexpress.ElasticSearchClient.ElasticSearchResponse;
-import group5.trackerexpress.ElasticSearchClient.ElasticSearchSearchResponse;
 
 import java.io.BufferedReader;
 import java.io.IOException;

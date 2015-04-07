@@ -10,7 +10,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 /**
- * Class that is extended by classes that use tab bars.
+ * Class that is extended by classes that use tabs
+ * 
  * @author Peter Crinklaw, Randy Hu, Parash Rahman, Jesse Emery, Sean Baergen, Rishi Barnwal
  * @version Part 4
  */
@@ -81,8 +82,9 @@ ActionBar.TabListener {
 		}
 	}
 	
-	/* (non-Javadoc)
-	 * @see group5.trackerexpress.ActionBarActivity#onCreateOptionsMenu(android.view.Menu)
+	/** 
+	 * Inflate the menu; this adds items to the action bar if it is present.
+	 * Subclasses must override.
 	 */
 	@Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -99,11 +101,10 @@ ActionBar.TabListener {
 	}
 	
 	public void editAccount(MenuItem menu) {
-		
 	}
 	
-	/* (non-Javadoc)
-	 * @see android.app.ActionBar.TabListener#onTabSelected(android.app.ActionBar.Tab, android.app.FragmentTransaction)
+	/**
+	 * Sets the screen to the selected tab 
 	 */
 	@Override
 	public void onTabSelected(ActionBar.Tab tab,
@@ -113,16 +114,18 @@ ActionBar.TabListener {
 		mViewPager.setCurrentItem(tab.getPosition());
 	}
 
-	/* (non-Javadoc)
-	 * @see android.app.ActionBar.TabListener#onTabUnselected(android.app.ActionBar.Tab, android.app.FragmentTransaction)
+	/**
+	 * Does nothing when the tab is unselected 
+	 * (needed to override this)
 	 */
 	@Override
 	public void onTabUnselected(ActionBar.Tab tab,
 			FragmentTransaction fragmentTransaction) {
 	}
 
-	/* (non-Javadoc)
-	 * @see android.app.ActionBar.TabListener#onTabReselected(android.app.ActionBar.Tab, android.app.FragmentTransaction)
+	/**
+	 * Does nothing special when tab is reselected
+	 * (needed to override this)
 	 */
 	@Override
 	public void onTabReselected(ActionBar.Tab tab,
