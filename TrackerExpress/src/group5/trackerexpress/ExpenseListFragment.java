@@ -130,7 +130,8 @@ public class ExpenseListFragment extends Fragment implements TView {
                         	intent = new Intent(getActivity(), ViewImageDialog.class);
                         	Receipt receipt = clickedOnExpense.getReceipt();
                         	if(receipt != null){
-                        		intent.putExtra("filePath", receipt.getPath());
+                        		intent.putExtra("claimId", claim.getUuid());
+                        		intent.putExtra("expenseId", clickedOnExpense.getUuid());
                         		startActivity(intent);
                         	}else{
                         		AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());

@@ -148,8 +148,10 @@ public class Controller {
 					if (!found)
 						continue;
 					if ( index != -1 && elasticListOfClaims[index].getStatus() != Claim.SUBMITTED) {
-							claimList.getClaim(c.getUuid()).setStatus(context, elasticListOfClaims[index].getStatus());
-							claimList.getClaim(c.getUuid()).setComments(elasticListOfClaims[index].getComments());
+						claimList.getClaim(c.getUuid()).setStatus(context, elasticListOfClaims[index].getStatus());
+						claimList.getClaim(c.getUuid()).setComments(elasticListOfClaims[index].getComments());
+						claimList.getClaim(c.getUuid()).setApproverEmail(context, elasticListOfClaims[index].getApproverEmail());
+						claimList.getClaim(c.getUuid()).setApproverName(context, elasticListOfClaims[index].getApproverName());
 					}
 				}
 			}
