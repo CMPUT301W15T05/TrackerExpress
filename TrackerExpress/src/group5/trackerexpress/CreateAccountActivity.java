@@ -1,6 +1,11 @@
 package group5.trackerexpress;
 
+import com.google.android.gms.maps.model.LatLng;
+
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Html;
@@ -9,6 +14,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 /**
@@ -29,30 +35,32 @@ public class CreateAccountActivity extends AccountFormActivity {
 	/** The Constant NETWORK_ERROR. */
 	public static final int NETWORK_ERROR = 2;
 	
-	/** The m auth task. */
+	/** The authorizing task. */
 	private UserAccountTask mAuthTask = null;
 	// UI references.
-	/** The m email view. */
+	/** The email text field. */
 	private EditText mEmailView;
 	
-	/** The m password view. */
+	/** The password text field. */
 	private EditText mPasswordView;
 	
-	/** The m confirm password view. */
+	/** The confirmation password text field. */
 	private EditText mConfirmPasswordView;
 	
-	/** The m name view. */
+	/** The name text view. */
 	private EditText mNameView;
 	
-	/* (non-Javadoc)
-	 * @see android.app.Activity#onCreate(android.os.Bundle)
+	/**
+	 * OnCreate initializes all the views and their hints
+	 * 		and also the button onClickListeners that are 
+	 * 		necessary when creating an account
 	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_create_account);
 		
-		
+		// retrieves the email and password text views
 		mEmailView = (EditText) findViewById(R.id.createAccountEmailText);
 		mPasswordView = (EditText) findViewById(R.id.createAccountPasswordText);
 		
@@ -62,9 +70,11 @@ public class CreateAccountActivity extends AccountFormActivity {
 		mPasswordView.setHint(Html.fromHtml("<font size=\"16\">" + hintText[0] 
 				+ " " + "</font>" + "<small>" + hintText[1] + "</small>" ));
 		
+		// retrieves the confirmation password and name text views
 		mConfirmPasswordView = (EditText) findViewById(R.id.createAccountConfirmPasswordText);
 		mNameView = (EditText) findViewById(R.id.createAccountNameText);
 		
+		// The create account button will attempt to create an account when clicked
 		Button mConfirmCreateAccountButton = (Button) findViewById(R.id.confirmCreateAccountButton);
 		mConfirmCreateAccountButton.setOnClickListener(new OnClickListener() {
 			@Override
@@ -73,6 +83,7 @@ public class CreateAccountActivity extends AccountFormActivity {
 			}
 		});
 		
+		// the cancel create account button will just end the activity
 		Button mCancelCreateAccountButton = (Button) findViewById(R.id.cancelCreateAccountButton);
 		mCancelCreateAccountButton.setOnClickListener(new OnClickListener() {
 			@Override
@@ -204,11 +215,9 @@ public class CreateAccountActivity extends AccountFormActivity {
 			// Had to do if/else block because switch statements wouldn't break
 			// properly with finish()
 			if (success == ACCOUNT_SUCCESS) {
-				Intent intent = new Intent(CreateAccountActivity.this, MainActivity.class);
-		    	startActivity(intent);
 				User user = Controller.getUser(CreateAccountActivity.this);
-				user.setSignedIn(true);
-				finish();
+				user.setSignedIn(CreateAccountActivity.this, true);
+				mapPopUp();
 			} else if (success == EMAIL_TAKEN) {
 				showProgress(false);
 				setError(mEmailView, R.string.error_email_taken);
@@ -231,6 +240,61 @@ public class CreateAccountActivity extends AccountFormActivity {
 			showProgress(false);
 		}
 	}
+	
+	private void mapPopUp() {
+		AlertDialog.Builder builder = new AlertDialog.Builder(CreateAccountActivity.this);
+		builder.setTitle("Home Location");
+		builder.setMessage("Would you like to add a location to your profile?");
+		
+		builder.setPositiveButton("Add location", new DialogInterface.OnClickListener() {
 
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				Intent intent = new Intent(CreateAccountActivity.this, MapActivity.class);
+				startActivityForResult(intent, 1);
+			}
+			
+		});
+		
+		builder.setNegativeButton("Not now", new DialogInterface.OnClickListener() {
+
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				Intent intent = new Intent(CreateAccountActivity.this, MainActivity.class);
+		    	startActivity(intent);
+				finish();
+			}
+			
+		});
+	}
+	
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+	    if (requestCode == 1) {
+	        if (resultCode == RESULT_OK){
+	            LatLng latLng = data.getParcelableExtra("resultLatLng");
+	            String title = data.getStringExtra("resultTitle");
+	            
+	            System.out.println("GOT " + title);
+	            System.out.println("GOT" + latLng.latitude + " " + latLng.longitude);
+	            
+	            Location location = new Location(title);
+	            
+	            location.setProvider(title);
+	            location.setLatitude(latLng.latitude);
+	            location.setLongitude(latLng.longitude);
+
+				User user = Controller.getUser(CreateAccountActivity.this);
+	            user.setLocation(location);
+	            
+	        } else if (resultCode == RESULT_CANCELED) {
+	        	// Do nothing
+	        }
+
+			Intent intent = new Intent(CreateAccountActivity.this, MainActivity.class);
+	    	startActivity(intent);
+			finish();
+	    }
+	}
 
 }

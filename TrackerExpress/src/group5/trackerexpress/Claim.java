@@ -2,45 +2,47 @@ package group5.trackerexpress;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.UUID;
 
 import android.content.Context;
 
 
 /**
- * The Class Claim.
+ * The Class Claim holds the claim's expense items and 
+ * information about the claim like the title, author, etc.
+ * 
  * @author Peter Crinklaw, Randy Hu, Parash Rahman, Jesse Emery, Sean Baergen, Rishi Barnwal
  * @version Part 4
  */
 public class Claim extends TModel implements Comparable<Claim>{
 	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
-	/** The name of the claim creator*/
+	/** The name of the user submiter (for elastic search server) */
 	private String submitterName;
+	
+	/** the email of the claim submitter */
 	private String submitterEmail;
 	
-	/** The name of the claim creator*/
+	/** The name of the claim approver */
 	private String approverName;
+	
+	/** the email of the claim approver */
 	private String approverEmail;	
 	
-	/** The claim name. */
+	/** The name the user places on the claim */
 	private String claimName;
 	
-	/** The Description of the claim. */
+	/** The description of the claim. */
 	private String description;
 	
 	/** The list of expenses for the claim. */
 	private ExpenseList expenseList;
 	
-	/** The destinations visited in claim. */
+	/** The destinations visited in the claim. */
 	private ArrayList<Destination> destinations;
 	
-	/** The status of the claim (in_progress, submitted, returned, or approved. */
+	/** The status of the claim (in_progress, submitted, returned, or approved) */
 	private int status; 
 	
 	/** The start date of the claim. */
@@ -91,7 +93,7 @@ public class Claim extends TModel implements Comparable<Claim>{
 	}
 	
 	/**
-	 * Checks if is incomplete.
+	 * Checks if claim is incomplete.
 	 *
 	 * @return true, if is incomplete
 	 */
@@ -128,7 +130,7 @@ public class Claim extends TModel implements Comparable<Claim>{
 	}
 	
 	/**
-	 * Gets the Comments from the approver
+	 * Gets the comments from the approver
 	 * 
 	 * @return the comments
 	 */
@@ -139,7 +141,7 @@ public class Claim extends TModel implements Comparable<Claim>{
 	/**
 	 * Sets the comments from the approver
 	 * 
-	 * @param comments
+	 * @param the comments
 	 */
 	public void setComments(String comments) {
 		this.comments = comments;
@@ -167,7 +169,9 @@ public class Claim extends TModel implements Comparable<Claim>{
 	}	
 	
 	/**
-	 * Gets the user name.
+	 * Gets the submitters username.
+	 * This function does not need context
+	 * because it will not be updating views.
 	 *
 	 * @return the user name
 	 */
@@ -176,7 +180,9 @@ public class Claim extends TModel implements Comparable<Claim>{
 	}
 	
 	/**
-	 * Set User name.
+	 * Set the submitters username.
+	 * This function needs context because
+	 * it will be updating views.
 	 *
 	 * @param context Needed for file IO
 	 * @param submitterName the name
@@ -188,16 +194,20 @@ public class Claim extends TModel implements Comparable<Claim>{
 	
 	
 	/**
-	 * Gets the user name.
+	 * Gets the submitters name
+	 * This function does not need context
+	 * since it will not be updating views.
 	 *
-	 * @return the user name
+	 * @return the username
 	 */
 	public String getSubmitterEmail(){
 		return submitterEmail;
 	}
 	
 	/**
-	 * Set User name.
+	 * Sets the submitters email.
+	 * This function needs context because
+	 * it will be updating views.
 	 *
 	 * @param context Needed for file IO
 	 * @param submitterName the name
@@ -206,8 +216,6 @@ public class Claim extends TModel implements Comparable<Claim>{
 		this.submitterEmail = submitterEmail;
 		notifyViews(context);
 	}
-	
-	
 	
 	/**
 	 * Gets the user name.
@@ -219,7 +227,9 @@ public class Claim extends TModel implements Comparable<Claim>{
 	}
 	
 	/**
-	 * Set User name.
+	 * Sets the submitters name.
+	 * This function needs context because
+	 * it will be updating views.
 	 *
 	 * @param context Needed for file IO
 	 * @param submitterName the name
@@ -231,7 +241,9 @@ public class Claim extends TModel implements Comparable<Claim>{
 	
 	
 	/**
-	 * Gets the user name.
+	 * Sets the approvers email.
+	 * This function does not need context
+	 * since it will not be updating views.
 	 *
 	 * @return the user name
 	 */
@@ -240,7 +252,9 @@ public class Claim extends TModel implements Comparable<Claim>{
 	}
 	
 	/**
-	 * Set User name.
+	 * Sets the approvers email.
+	 * This function needs context because
+	 * it will be updating views.
 	 *
 	 * @param context Needed for file IO
 	 * @param submitterName the name
@@ -251,7 +265,7 @@ public class Claim extends TModel implements Comparable<Claim>{
 	}	
 	
 	/**
-	 * Gets the claim name.
+	 * Gets the name the user set on the claim
 	 *
 	 * @return the claim name
 	 */
@@ -260,7 +274,7 @@ public class Claim extends TModel implements Comparable<Claim>{
 	}
 
 	/**
-	 * Sets the claim name.
+	 * Sets the name the user wants on the claim
 	 *
 	 * @param context Needed for file IO
 	 * @param claimName the claim name
@@ -333,7 +347,7 @@ public class Claim extends TModel implements Comparable<Claim>{
 	}
 		
 	/**
-	 * Adds the destination.
+	 * Adds the destination with its parameters
 	 *
 	 * @param context Needed for file IO
 	 * @param place the location of destination
@@ -350,7 +364,7 @@ public class Claim extends TModel implements Comparable<Claim>{
 	
 	
 	/**
-	 * Sets the destination.
+	 * Sets the destination list
 	 *
 	 * @param context Needed for file IO
 	 * @param destination the destination
@@ -363,23 +377,24 @@ public class Claim extends TModel implements Comparable<Claim>{
 	/**
 	 * Creates string of all destinations.
 	 *
-	 * @return the string
+	 * @return formatted string of all the destinations
 	 */
 	public String toStringDestinations(){
-		// Get the destinations in a list format
+		// Get the destinations in a comma list format.
 		String str_destinations = "";
 		for ( int i = 0; i < destinations.size() - 1; i++ ){
 			str_destinations += destinations.get(i).getName() + ", ";
 		}
+		// If last destination in list, doesn't append comma at end.
 		if (destinations.size()>0)
 			str_destinations += destinations.get(destinations.size() - 1).getName();
 		return str_destinations;
 	}
 	
 	/**
-	 * Gets the destination.
+	 * Gets the destination list.
 	 *
-	 * @return the destination
+	 * @return the destination list
 	 */
 	public ArrayList<Destination> getDestinationList() {
 		return destinations;
@@ -389,10 +404,10 @@ public class Claim extends TModel implements Comparable<Claim>{
 	 * Sets the description.
 	 *
 	 * @param context Needed for file IO
-	 * @param Description the description
+	 * @param description the description
 	 */
-	public void setDescription(Context context, String Description){
-		this.description = Description;
+	public void setDescription(Context context, String description){
+		this.description = description;
 		notifyViews(context);
 	}
 	
@@ -417,6 +432,14 @@ public class Claim extends TModel implements Comparable<Claim>{
 		notifyViews(context);
 	}
 	
+	
+	/**
+	 * Function that sets the status without notifying views.
+	 * Necessary for calling this method within an update method.
+	 * 
+	 * @param context
+	 * @param status
+	 */
 	public void setStatusNoNotify(Context context, int status) {
 		this.status = status;
 		Controller.getTagMap(context).saveData(context);
@@ -425,7 +448,7 @@ public class Claim extends TModel implements Comparable<Claim>{
 	}
 	
 	/**
-	 * Gets the status.
+	 * Gets the status of the claim.
 	 *
 	 * @return the status
 	 */
@@ -436,7 +459,7 @@ public class Claim extends TModel implements Comparable<Claim>{
 
 	/**
 	 * Updates claim status and sets comments. Does NOT update views.
-	 * Needed becuase this must be called from within an update method.
+	 * Needed because this must be called from within an update method.
 	 * 
 	 * @param context
 	 * @param comments
@@ -448,6 +471,7 @@ public class Claim extends TModel implements Comparable<Claim>{
 
 	/** 
 	 * compares the claim start date with the instance's start date
+	 * 
 	 * @param arg0 The Claim to be compared
 	 * @return the result of the comparison as an int
 	 */
@@ -499,10 +523,12 @@ public class Claim extends TModel implements Comparable<Claim>{
 		TagMap tm = Controller.getTagMap(context);
 		ArrayList<UUID> tagUuids = getTagsIds(context);
 		
+		// tags seperated by commas
 		for ( int i = 0; i < tagUuids.size() - 1; i++ ) {
 			stringTags += tm.getTag(tagUuids.get(i)).toString() + ", "; 
 		}
 		
+		// Last tag in list does not have a comma appended to it
 		if ( tagUuids.size() > 0 ){
 			stringTags += tm.getTag(tagUuids.get(tagUuids.size() - 1)).toString();
 		}

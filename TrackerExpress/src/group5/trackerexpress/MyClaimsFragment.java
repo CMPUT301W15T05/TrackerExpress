@@ -20,6 +20,7 @@ import android.widget.AdapterView.OnItemClickListener;
 
 /**
  * Displays the list of claims made by the current user.
+ * 
  * @author Peter Crinklaw, Randy Hu, Parash Rahman, Jesse Emery, Sean Baergen, Rishi Barnwal
  * @version Part 4
  */
@@ -180,7 +181,7 @@ public class MyClaimsFragment extends Fragment implements TView {
 		// TODO Auto-generated method stub
 
 		MainClaimListAdapter adapter;
-		Claim[] listOfClaims = Controller.getFilteredClaims(getActivity());
+		Claim[] listOfClaims = ClaimList.getFilteredClaims(getActivity());
 
 		adapter= new MainClaimListAdapter(getActivity(), listOfClaims);
 		

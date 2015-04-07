@@ -25,6 +25,7 @@ public class ElasticSearchEngine {
 	private final ElasticSearchEngineUnthreaded elasicSearchEngineUnthreaded = new ElasticSearchEngineUnthreaded();
 	
 	
+	
 	private UncaughtExceptionHandler uncaughtExceptionHandler = new UncaughtExceptionHandler() {
 		
 		@Override
@@ -41,7 +42,6 @@ public class ElasticSearchEngine {
 	
 	volatile Throwable threadException;
 	
-
 	public Claim[] getClaims(Context context) throws IOException {
 		
 		if (!Controller.isInternetConnected(context))
@@ -100,7 +100,12 @@ public class ElasticSearchEngine {
 	}
 	
 	
-	
+	/**
+	 * Get claim from Elastic Search server
+	 * 
+	 * @param claimUUID: desired claim's uuid
+	 * @return claim if it is in server, else will return null
+	 */
 	public Claim getClaim(Context context, UUID id) throws IOException {
 		
 		if (!Controller.isInternetConnected(context))
@@ -177,6 +182,16 @@ public class ElasticSearchEngine {
 		}		
 
 	}
+
+	// Warning! This deletes all user claims
+	public void deleteClaims() {
+		Claim[] claims = elasicSearchEngineUnthreaded.getClaims();
+		
+		for (Claim claim : claims) {
+			elasicSearchEngineUnthreaded.deleteClaim(claim.getUuid());
+		}
+	}
+
 
 	public void deleteClaim(Context context, UUID id) throws IOException {
 		final UUID idFinal = id;

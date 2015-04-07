@@ -2,20 +2,21 @@ package group5.trackerexpress;
 
 import android.app.ActionBar;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 /**
- * Class that is extended by classes that use tab bars.
+ * Class that is extended by classes that use tabs
+ * 
  * @author Peter Crinklaw, Randy Hu, Parash Rahman, Jesse Emery, Sean Baergen, Rishi Barnwal
  * @version Part 4
  */
 public abstract class ActionBarActivity extends FragmentActivity implements
-ActionBar.TabListener{
+ActionBar.TabListener {
 
 	/**
 	 * The {@link ViewPager} that will host the section contents.
@@ -81,30 +82,29 @@ ActionBar.TabListener{
 		}
 	}
 	
-	// Inflate the menu; this adds items to the action bar if it is present.
-	/* (non-Javadoc)
-	 * @see android.app.Activity#onCreateOptionsMenu(android.view.Menu)
+	/** 
+	 * Inflate the menu; this adds items to the action bar if it is present.
+	 * Subclasses must override.
 	 */
 	@Override
-	public abstract boolean onCreateOptionsMenu(Menu menu);
-
-	/* (non-Javadoc)
-	 * @see android.app.Activity#onOptionsItemSelected(android.view.MenuItem)
-	 */
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
-		int id = item.getItemId();
-		if (id == R.id.action_settings) {
-			return true;
-		}
-		return super.onOptionsItemSelected(item);
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+	
+	public void signOut(MenuItem menu) {
+		Intent intent = new Intent(this, LoginActivity.class);
+    	startActivity(intent);
+    	Controller.getUser(this).setSignedIn(this, false);
+    	finish();
 	}
 	
-	/* (non-Javadoc)
-	 * @see android.app.ActionBar.TabListener#onTabSelected(android.app.ActionBar.Tab, android.app.FragmentTransaction)
+	public void editAccount(MenuItem menu) {
+	}
+	
+	/**
+	 * Sets the screen to the selected tab 
 	 */
 	@Override
 	public void onTabSelected(ActionBar.Tab tab,
@@ -114,16 +114,18 @@ ActionBar.TabListener{
 		mViewPager.setCurrentItem(tab.getPosition());
 	}
 
-	/* (non-Javadoc)
-	 * @see android.app.ActionBar.TabListener#onTabUnselected(android.app.ActionBar.Tab, android.app.FragmentTransaction)
+	/**
+	 * Does nothing when the tab is unselected 
+	 * (needed to override this)
 	 */
 	@Override
 	public void onTabUnselected(ActionBar.Tab tab,
 			FragmentTransaction fragmentTransaction) {
 	}
 
-	/* (non-Javadoc)
-	 * @see android.app.ActionBar.TabListener#onTabReselected(android.app.ActionBar.Tab, android.app.FragmentTransaction)
+	/**
+	 * Does nothing special when tab is reselected
+	 * (needed to override this)
 	 */
 	@Override
 	public void onTabReselected(ActionBar.Tab tab,

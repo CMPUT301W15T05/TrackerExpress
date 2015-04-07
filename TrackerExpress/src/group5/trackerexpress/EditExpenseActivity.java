@@ -76,7 +76,7 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 	private Location location;
 
 
-	EditBitmap editBitmap = new EditBitmap();
+	EditBitmap editBitmap;
 
 	/** checks if the claim is new and cancel's appropriately */
 	private boolean isNewExpense;
@@ -99,6 +99,8 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 	    claimId = (UUID)intent.getSerializableExtra("claimUUID");
 	    isNewExpense = intent.getBooleanExtra("isNewExpense", false);
 
+	    editBitmap = new EditBitmap();
+	    
 	    if ( ! isNewExpense ){
 	    	expenseId = (UUID)intent.getSerializableExtra("expenseUUID");
 	    	expense = Controller.getExpense(EditExpenseActivity.this, claimId, expenseId);

@@ -1,7 +1,5 @@
 package group5.trackerexpress;
 
-import java.io.Serializable;
-
 import android.location.Location;
 
 /**
@@ -12,9 +10,7 @@ import android.location.Location;
  * @version Part 4
  */
 public class Destination {
-	
-	private static final long serialVersionUID = 1L;
-	
+		
 	/** The name of the destination */
 	private String name;
 	
