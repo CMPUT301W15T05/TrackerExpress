@@ -145,8 +145,7 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 	    createExpenseButton.setOnClickListener(new Button.OnClickListener(){
 			public void onClick(View v) {
 	    		if ( ! statusCheckBox.isChecked() && ( description.getText().toString().length() == 0 || 
-	    									amount.getText().toString().length() == 0 || 
-	    									receiptUri == null) ) {
+	    									amount.getText().toString().length() == 0)) {
 	    			AlertDialog.Builder alertDialog = new AlertDialog.Builder(EditExpenseActivity.this);
 	    			alertDialog.setTitle("Warning");
 	    			alertDialog.setMessage("You are adding an incomplete expense that isn't flagged as incomplete.");
