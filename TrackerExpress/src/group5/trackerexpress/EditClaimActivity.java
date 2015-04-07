@@ -86,6 +86,7 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 	
 	/** The check correctness. */
 	private Boolean checkCorrectness;
+	private Boolean comingFromMap = false;
 
 	/** The Destination. */
 	private ArrayList<Destination> destination;
@@ -144,6 +145,13 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 		ClaimTitle = (EditText) findViewById(R.id.editClaimTitle);
 		limitLength(ClaimTitle, 20);
 		
+<<<<<<< HEAD
+=======
+		StartDateYear = (Button) findViewById(R.id.editClaimStartDateYear);
+
+		EndDateYear = (Button) findViewById(R.id.editClaimEndDateYear);
+
+>>>>>>> 414745fa09f80138444fcdaca05c525dfd376fe2
 		Description = (EditText) findViewById(R.id.editClaimDescription);
 		
 		desListView = (ListView) findViewById(R.id.listViewDestinations);
@@ -759,10 +767,15 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 		/** for editing a existing destination */ 
 		case editDestination:
 			clicked_destination = position;
-			DesName.setText(destination2.get(position).getName());
-			DesRea.setText(destination2.get(position).getDescription());
+			
+			if (!comingFromMap) {
+				System.out.println("Latitude was set as " + destination.get(position).getLatitude());
+				System.out.println("Not coming from map");
+				DesName.setText(destination2.get(position).getName());
+				DesRea.setText(destination2.get(position).getDescription());
+				location = destination2.get(position).getLocation();
+			}
 			final String oldDestination = destination2.get(position).toString();
-			location = destination2.get(position).getLocation();
 			dialog(helperBuilder,DesName, DesRea, location,position, oldDestination, editDestination);
 			
 			
@@ -808,6 +821,12 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 				
 				System.out.println("GOING IN");
 				Log.e("START", "GOING IN");
+				if (location != null) {
+					System.out.println("LOCATION IS 5: " + location.getLatitude() + " " + location.getLongitude());
+				} else {
+					System.out.println("LOCATION IS NULL 5");
+					
+				}
 		    	EditClaimActivity.this.startActivityForResult(intent, 1);
 			}
 			
@@ -819,7 +838,8 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 			 * @see android.content.DialogInterface.OnClickListener#onClick(android.content.DialogInterface, int)
 			 */
 			public void onClick(DialogInterface dialog, int which) {
-						
+				System.out.println("Latitude set as " + destination.get(position).getLatitude());
+				location = null;
 			}
 		});
 				
@@ -831,35 +851,43 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 
 	    if (requestCode == 1) {
 	    	String lastDest = DesName.getText().toString();
-	    	Location lastLoc = location;
+	    	String lastRea = DesRea.getText().toString();
+	    	comingFromMap = true;
 	        if (clicked_destination == -1) {
 		        createDestinationButton(destination, newDestination,clicked_destination);
 	        } else {
 		        createDestinationButton(destination, editDestination,clicked_destination);
 	        }
+	        DesRea.setText(lastRea);
 	        
 	        if(resultCode == RESULT_OK){
 	            LatLng latLng = data.getParcelableExtra("resultLatLng");
 	            String title = data.getStringExtra("resultTitle");
 	            System.out.println("TITLE IS " + title);
 	            
-	            
-	            if (lastLoc != null) {
-	            	lastLoc.setLongitude(latLng.longitude);
-	            	lastLoc.setLatitude(latLng.latitude);
-	            	lastLoc.setProvider(title);
+	            if (location == null) {
+	            	location = new Location("");
 	            }
 	            
+	            location.setLongitude(latLng.longitude);
+	            location.setLatitude(latLng.latitude);
+	            
+	            
 	            if (lastDest.isEmpty()) {
+	            	System.out.println("Des is empty " + title);
 	            	DesName.setText(title);
 	            }
 	            
 	        } else if (resultCode == RESULT_CANCELED) {
 	            //Write your code if there's no result
 	        }
-	        if (lastDest.isEmpty()) {
+	        
+	        if (DesName.getText().toString().isEmpty()) {
             	DesName.setText(lastDest);
 	        }
+	        
+
+	    	comingFromMap = false;
 	    }
 	    
 	}
@@ -896,6 +924,9 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 		Destination travelInfo = new Destination();
 		travelInfo.setName(place);
 		travelInfo.setDescription(reason); 
+		System.out.println("HEREEREJHASJKDHJKASHD");
+		travelInfo.setLocation(location);
+		location = null;
 		switch(i){
 		case newDestination:
 			adapter2.add(place + " - " + reason);
