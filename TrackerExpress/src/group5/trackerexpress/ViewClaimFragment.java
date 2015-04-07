@@ -54,6 +54,8 @@ public class ViewClaimFragment extends Fragment implements TView {
 
 		title.setText(claim.getClaimName());
 		
+		claim.addView(ViewClaimFragment.this);
+		
 		// User name
 		TextView nameInfo = (TextView) rootView.findViewById(R.id.viewClaimNameInfo);
 		nameInfo.setText(" " + claim.getSubmitterName());
