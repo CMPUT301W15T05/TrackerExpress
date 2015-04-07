@@ -210,7 +210,12 @@ public class MyClaimsFragment extends Fragment implements TView {
 
 		MainClaimListAdapter adapter;
 		Claim[] listOfClaims = ClaimList.getFilteredClaims(getActivity());
-		System.out.println("Context: " + getActivity().toString());
+		
+		if (getActivity() != null) {
+			System.out.println("Context: " + getActivity().toString());
+		} else {
+			System.out.println("Its null!");
+		}
 		adapter= new MainClaimListAdapter(getActivity(), listOfClaims);
 		
 		lv_claim_list.setAdapter(adapter);

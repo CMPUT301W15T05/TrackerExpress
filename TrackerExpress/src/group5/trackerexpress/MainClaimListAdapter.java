@@ -49,8 +49,14 @@ public class MainClaimListAdapter extends ArrayAdapter<Claim> {
 		super(context, R.layout.fragment_my_claims_item, claims);
 		this.claimList = claims;
 		this.context = context;
-		this.distanceOrderedClaims = new ArrayList<Claim>( 
-				Arrays.asList( ClaimList.sortClaimsByLocation(context, claims)) ); 
+		Claim[] claimList = ClaimList.sortClaimsByLocation(context, claims);
+		
+		if (claimList != null) {
+			this.distanceOrderedClaims = new ArrayList<Claim>( 
+					Arrays.asList( claimList) );
+		} else {
+			this.distanceOrderedClaims = null;
+		}
 	}
 	
 	/**
