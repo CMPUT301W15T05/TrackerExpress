@@ -7,6 +7,7 @@ import java.util.Locale;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,8 @@ import android.widget.TextView;
  * The Class ExpenseListAdapter.
  */
 public class ExpenseListAdapter extends ArrayAdapter<Expense> {
+	
+	EditBitmap editBitmap = new EditBitmap();
 	
 	final String myFormat = "MM/dd/yyyy"; //In which you need put here
 	final SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
@@ -108,11 +111,17 @@ public class ExpenseListAdapter extends ArrayAdapter<Expense> {
 			holder.amount.setText(amountSpent + " " + e.getCurrency());
 		} 
 
-		if (e.getCategory() != null)
+		if (e.getCategory() != null){
 			holder.category.setText(e.getCategory());
+		}
 		
-		if (e.getReceipt() != null)
-			holder.receipt.setImageBitmap(e.getReceipt().getBitmap());
+		if (e.getReceipt() != null){
+			
+			Bitmap sourceBitmap = e.getReceipt().getBitmap();
+			Bitmap rotatedBitmap = editBitmap.rotateBitmap(sourceBitmap);
+			Bitmap resizedBitmap = editBitmap.resizeBitmap(rotatedBitmap, 640);
+			holder.receipt.setImageBitmap(resizedBitmap);
+		}
 		
 		return v;
 	}

@@ -8,6 +8,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.UUID;
+import group5.trackerexpress.EditBitmap;
 
 import android.app.AlertDialog;
 import android.app.DialogFragment;
@@ -15,6 +16,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -73,6 +75,7 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 	/** The Claim UUID and the Expense UUID. */
 	private UUID claimId, expenseId;
 	
+	EditBitmap editBitmap = new EditBitmap();
 
 	final String myFormat = "EEEE MMMM dd, yyyy"; //In which you need put here
 	final SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
@@ -223,8 +226,12 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 			if (resultCode == RESULT_OK){
 				Toast.makeText(EditExpenseActivity.this, "Photo Set", Toast.LENGTH_SHORT).show(); 
 				Drawable photo = Drawable.createFromPath(receiptUri.getPath());
-				imgButton.setImageDrawable(photo);
-				//imgButton.setImageURI(receiptUri);
+				Bitmap sourceBitmap = ((BitmapDrawable)photo).getBitmap();
+				Bitmap rotatedBitmap = editBitmap.rotateBitmap(sourceBitmap);
+				Bitmap resizedBitmap = editBitmap.resizeBitmap(rotatedBitmap, 640);
+				imgButton.setImageBitmap(resizedBitmap);
+				
+				
 			} else if (resultCode == RESULT_CANCELED){
 				Toast.makeText(EditExpenseActivity.this, "Canceled", Toast.LENGTH_SHORT).show();
 			} else{
@@ -288,22 +295,5 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 			}
 		}
 		return index;
-	} 
-	
-	
-	/** resizes the receipt bitmap */
-	public Bitmap getResizedBitmap(Bitmap image, int maxSize) {
-        int width = image.getWidth();
-        int height = image.getHeight();
-
-        float bitmapRatio = (float)width / (float) height;
-        if (bitmapRatio > 1) {
-            width = maxSize;
-            height = (int) (width / bitmapRatio);
-        } else {
-            height = maxSize;
-            width = (int) (height * bitmapRatio);
-        }
-        return Bitmap.createScaledBitmap(image, width, height, true);
-	}
+	} 	
 }
