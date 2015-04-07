@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.text.Editable;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -15,7 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -37,14 +35,14 @@ public class TagListFragment extends Fragment implements TView {
 	/** The ListView of tags */
 	private ListView lv_tag_list;
 
-	/** The return Value of the Input Box. */
-	private Editable value = null;
-
 	/** The button Add Tag. */
 	private Button b_add_tag;
 	
 	/** The button that Selects All tags **/
 	private Button b_select_all;
+
+	/** Checks if all tags are selected **/
+	private Boolean all_selected;
 
 	/**
 	 * Instantiates a new tag list fragment.
@@ -66,15 +64,16 @@ public class TagListFragment extends Fragment implements TView {
 		lv_tag_list = (ListView) rootView.findViewById(R.id.lv_tags);
 		lv_tag_list.setItemsCanFocus(true);
 
+		b_add_tag = (Button) rootView.findViewById(R.id.b_add_tag);
+		b_select_all = (Button) rootView.findViewById(R.id.b_select_all);
+		
 		this.update(null);
 
 		final TagMap mapOfTags = getTagMap(getActivity());
 
-		mapOfTags.addView(this);
+		//mapOfTags.addView(this);
 		getTagMap(getActivity()).addView(this);
 
-		b_add_tag = (Button) rootView.findViewById(R.id.b_add_tag);
-		b_select_all = (Button) rootView.findViewById(R.id.b_select_all);
 		
 		b_add_tag.setOnClickListener(new Button.OnClickListener() {
 			public void onClick(View v) {
@@ -85,11 +84,8 @@ public class TagListFragment extends Fragment implements TView {
 		b_select_all.setOnClickListener(new Button.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				ArrayList<Tag> tm = getTagMap(getActivity()).toList();
-				for ( Tag t : tm ){
-					t.setSelected(getActivity(), true);
-				}
+				getTagMap(getActivity()).selectAll(getActivity(), !all_selected);
+				
 			}
 			
 		});
@@ -134,7 +130,6 @@ public class TagListFragment extends Fragment implements TView {
 					break;
 				case R.id.op_edit_tag:
 					getName(t);
-					value = null;
 					break;
 				default:
 					break;
@@ -195,10 +190,11 @@ public class TagListFragment extends Fragment implements TView {
 
 	                @Override
 	                public void onClick(View view) {
-	                	String sInput = input.getText().toString();
+	                	String sInput = input.getText().toString().trim();
 
 	                	if (sInput.isEmpty()) {
 	                		input.setError("Enter a tag name");
+	                		input.setText(sInput);
 	                		return;
 	                	}
 	                	
@@ -207,6 +203,7 @@ public class TagListFragment extends Fragment implements TView {
 	    	        	try {
 	    	        		tagMap.searchForTagByString(sInput);
 	                		input.setError("Tag already exists");
+	                		input.setText(sInput);
 	    	        		return;
 	    	        	} catch (IllegalAccessException e) {
 	    	        		Toast.makeText(getActivity(), "New Tag", Toast.LENGTH_SHORT).show();
@@ -234,10 +231,23 @@ public class TagListFragment extends Fragment implements TView {
 	 */
 	@Override
 	public void update(TModel model) {
-		ArrayList<Tag> listOfTags = getTagMap(getActivity()).toList();
+		
+		TagMap tagMap = getTagMap(getActivity());
+		
+		ArrayList<Tag> listOfTags = tagMap.toList();
 		if (listOfTags == null) {
 			listOfTags = new ArrayList<Tag>();
 		}
+		
+		int checked = tagMap.numChecked();
+		if (checked == listOfTags.size() ) {
+			b_select_all.setText(R.string.button_deselect_all);
+			all_selected = true;
+		} else {
+			b_select_all.setText(R.string.button_select_all);
+			all_selected = false;
+		}
+		
 		MainTagListAdapter a = new MainTagListAdapter(getActivity(), listOfTags);
 		lv_tag_list.setAdapter(a);
 	}

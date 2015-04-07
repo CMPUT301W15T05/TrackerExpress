@@ -4,7 +4,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Locale;
-import java.util.Random;
 
 import android.content.Context;
 import android.util.DisplayMetrics;

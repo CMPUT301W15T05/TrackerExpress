@@ -56,16 +56,12 @@ public class LoginActivity extends AccountFormActivity {//implements LoaderCallb
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		User user = Controller.getUser(LoginActivity.this);
-		System.out.println(user.getName() + " " + user.getEmail() + " " + user.isSignedIn());
 		if (user.isSignedIn()) {
-			System.out.println("Signed In! 1");
 			Intent intent = new Intent(LoginActivity.this, MainActivity.class);
 	    	startActivity(intent);
 			finish();
-			System.out.println("Signed In! 2");
 		}
 		super.onCreate(savedInstanceState);
-		System.out.println("Not Signed In!");
 		
 		setContentView(R.layout.activity_login);
 
@@ -215,8 +211,6 @@ public class LoginActivity extends AccountFormActivity {//implements LoaderCallb
 		    	startActivity(intent);
 				User user = Controller.getUser(LoginActivity.this);
 				user.setSignedIn(LoginActivity.this, true);
-				User user2 = Controller.getUser(LoginActivity.this);
-				System.out.println("SUCCEZZ " + user2.getName() + " " + user2.getEmail() + " " + user2.isSignedIn());
 				finish();
 			} else if (success == WRONG_PASSWORD) {
 				showProgress(false);

@@ -15,7 +15,6 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.location.Location;
 import android.os.Bundle;
-import android.text.Editable;
 import android.text.InputType;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -66,8 +65,7 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 	EditText DesName;
     EditText DesRea;
 	
-	/** The Tag name. */
-	private EditText TagName;
+	/** The Location. */
 	private Location location;
 	
 	/** The des list view. */
@@ -77,19 +75,18 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 	private ListView tagListView;
 	
 	/** The tags of claim. */
-	final private ArrayList<Tag> tagsOfClaim = new ArrayList<Tag>();
+	private ArrayList<Tag> tagList;
 	
 	/** The check correctness. */
-	private Boolean checkCorrectness;
 	private Boolean comingFromMap = false;
 
 	/** The Destination. */
-	private ArrayList<Destination> destination;
+	private ArrayList<Destination> destinationList;
 	
 	/** The adapter2. */
-	private ArrayAdapter<String> adapter2;
+	private ArrayAdapter<String> destinationAdapter;
 	
-	private ArrayAdapter<Tag> adapter;
+	private ArrayAdapter<Tag> tagAdapter;
 	
 	/** The new destination. */
 	private final int newDestination = 1;
@@ -103,9 +100,9 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 	private final int doNothing = 5;
 	
 	/** The my calendar. */
-	private Calendar myCalendar = Calendar.getInstance();
+	private Calendar startDateSelection;
 	
-	private Calendar myCalendar2 = Calendar.getInstance();
+	private Calendar endDateSelection;
 	
 	/**
 	 * @see android.app.Activity#onCreate(android.os.Bundle)
@@ -118,7 +115,8 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 		/**Initialize the dummy destination 2d array which will 
 		be used to store destination and reason of travel for both edit claim and create new claim.*/
 		
-		destination = new ArrayList<Destination>();
+		destinationList = new ArrayList<Destination>();
+		tagList = new ArrayList<Tag>();
 		
 		final Claim newclaim = new Claim("");
 		
@@ -133,11 +131,9 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 		claimTitleView = (EditText) findViewById(R.id.editClaimTitle);
 		limitLength(claimTitleView, 20);
 		
-		startDateButton = (Button) findViewById(R.id.editClaimStartDateYear);
-
-		endDateButton = (Button) findViewById(R.id.editClaimEndDateYear);
+		startDateButton = (Button) findViewById(R.id.editClaimStartDate);
+		endDateButton = (Button) findViewById(R.id.editClaimEndDate);
 		descriptionView = (EditText) findViewById(R.id.editClaimDescription);
-		
 		desListView = (ListView) findViewById(R.id.listViewDestinations);
 		tagListView = (ListView) findViewById(R.id.listViewTagsEditClaim);
 		tagListView.setItemsCanFocus(true);
@@ -184,8 +180,8 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
                     	
                         switch(item.getItemId()){
                         case R.id.op_edit_claim_delete_tag: 
-                        	tagsOfClaim.remove(t);
-                        	updateTagListView(new ArrayList<Tag>(tagsOfClaim));
+                        	tagList.remove(t);
+                        	updateTagListView(tagList);
                         	break;
                         	default: break;
                         }
@@ -206,10 +202,10 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 		
 		final Intent intent = this.getIntent();
 	    final boolean isNewClaim = (boolean) intent.getBooleanExtra("isNewClaim", true);
-	    final ClaimList newclaimlist = Controller.getClaimList(EditClaimActivity.this);
+	    final ClaimList newClaimList = Controller.getClaimList(EditClaimActivity.this);
 	    
 	    UUID serialisedId = (UUID) intent.getSerializableExtra("claimUUID");
-	    final Claim claim = Controller.getClaimList(EditClaimActivity.this).getClaim(serialisedId);
+	    final Claim claim = newClaimList.getClaim(serialisedId);
 	    
 	    /**
 		 * http://stackoverflow.com/questions/14933330/datepicker-how-to-popup-datepicker-when-click-on-edittext
@@ -217,52 +213,25 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 		 */
 
 		if (isNewClaim == true){
-			
-			startDateButton.setOnClickListener(new TextView.OnClickListener(){
-				public void onClick(View v) {
-					showDatePickerDialog(v, myCalendar);
-				}
-			});
-		
-			endDateButton.setOnClickListener(new TextView.OnClickListener(){
-				public void onClick(View v) {
-					showDatePickerDialog(v, myCalendar2);
-				}
-			});
+			startDateSelection = Calendar.getInstance();
+			endDateSelection = Calendar.getInstance();
 		} else{
-			
-			if (claim.getStartDate() == null || claim.getEndDate() == null){
-				if (claim.getStartDate() == null){
-					myCalendar = Calendar.getInstance();
-				}
-				if (claim.getEndDate() == null){
-					myCalendar2 = Calendar.getInstance();
-				}
-			}
-			
-			if (claim.getStartDate() != null || claim.getEndDate() != null){
-				if(claim.getStartDate() != null){
-					myCalendar = claim.getStartDate();
-				}
-				if (claim.getEndDate() != null){
-					myCalendar2 = claim.getEndDate();
-				}
-			}
-			
-			
-			startDateButton.setOnClickListener(new TextView.OnClickListener(){
-				public void onClick(View v) {
-					showDatePickerDialog(v, myCalendar);
-				}
-			});
-		
-			endDateButton.setOnClickListener(new TextView.OnClickListener(){
-				public void onClick(View v) {
-					showDatePickerDialog(v, myCalendar2);
-				}
-			});
-			
+			startDateSelection = claim.getStartDate();
+			endDateSelection = claim.getEndDate();
 		}
+			
+			
+		startDateButton.setOnClickListener(new TextView.OnClickListener(){
+			public void onClick(View v) {
+				showDatePickerDialog(v, startDateSelection);
+			}
+		});
+		
+		endDateButton.setOnClickListener(new TextView.OnClickListener(){
+			public void onClick(View v) {
+				showDatePickerDialog(v, endDateSelection);
+			}
+		});
 	    
 	    /**
 	     * On click listener for add destination button in EditClaimActivity.
@@ -277,64 +246,49 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 			public void onClick(View v) {
 				/** check if the user pressed create new claim or edit existing claim button from MainActivity.*/
 				if (isNewClaim != true){
-					destination = claim.getDestinationList();
+					destinationList = claim.getDestinationList();
 				}
-				createDestinationButton(destination,newDestination,doNothing);
+				createDestinationButton(destinationList,newDestination,doNothing);
 			}
 		});
 		
-		Button done = (Button) findViewById(R.id.buttonCreateClaim);
+		Button finishedButton = (Button) findViewById(R.id.buttonCreateClaim);
 		
 		/**
 		 * Checks if the user wants to edit an existing claim or create a new claim.
 		 * If existing claim, set text to the completed ListViews and ExitTexts.
 		 */
 	    if (isNewClaim == true){
-		    done.setText("Create Claim");
-		    DestinationListview(desListView,destination);
-		    updateTagListView(new ArrayList<Tag>(tagsOfClaim));
-		    if (Controller.getUser(EditClaimActivity.this).getName().toString()!=null){
+		    finishedButton.setText("Create Claim");
+		    if (Controller.getUser(EditClaimActivity.this).getName().toString()!=null) {
 		    	claimNameView.setText(Controller.getUser(EditClaimActivity.this).getName().toString());
 		    }
+		    
 		   		
 	    } else {
-	    	String tags = claim.toStringTags(this);
-		   	done.setText("Edit Claim");
-		   	destination = claim.getDestinationList();
+		   	finishedButton.setText("Edit Claim");
+		   	destinationList = claim.getDestinationList();
 		    claimNameView.setText(claim.getSubmitterName());
 			claimTitleView.setText(claim.getClaimName());
-					
-			if ( claim.getStartDate() != null ){
-				startDateButton.setText(sdf.format(claim.getStartDate().getTime()));
-/*				StartDateMonth.setText(String.valueOf(claim.getStartDate().getMM()));
-				StartDateDay.setText(String.valueOf(claim.getStartDate().getDD()));
-				*/
-			}
-					
-			if ( claim.getEndDate() != null ){
-				endDateButton.setText(sdf.format(claim.getEndDate().getTime()));
-/*				EndDateMonth.setText(String.valueOf(claim.getEndDate().getMM()));
-				EndDateDay.setText(String.valueOf(claim.getEndDate().getDD()));
-				*/
-			}
 			descriptionView.setText(String.valueOf(claim.getDescription()));
-			DestinationListview(desListView,destination);
 			
 			try {
-				StringTagToArray(tags);
+				StringTagToArray(claim.toStringTags(this));
 			} catch (IllegalAccessException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			
-			updateTagListView(new ArrayList<Tag>(tagsOfClaim));
-			
+			updateTagListView(tagList);
 	    }
+	    
+	    setDestinationAdapter(destinationList);
+	    startDateButton.setText(sdf.format(startDateSelection.getTime()));
+	    endDateButton.setText(sdf.format(endDateSelection.getTime()));
 	    
 	    /**
 	     *  On item click for the destination and reason ListView.
 	     */
-	    desListView.setOnItemClickListener(onListClick);
+	    desListView.setOnItemClickListener(onDestinationListClick);
 	    
 	    
 	    /**
@@ -342,112 +296,84 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 		 * was pressed from the previous activity). Saving the edited/new claim will be triggered only when the 
 		 * edit claim/create claim button is pressed. 
 		 */
-	    done.setOnClickListener(new View.OnClickListener() {	
+	    finishedButton.setOnClickListener(new View.OnClickListener() {	
 			/** make edit/create claim button clickable
 			 * @see android.view.View.OnClickListener#onClick(android.view.View)
 			 */
 			@Override
 			public void onClick(View v) {
 		        
-				
 				/** this procedure will check if the claim name is repeated */
-				boolean repeatedClaimName = false;
-/*				boolean bothdates = false;
-				
-				if (StartDateYear.getText().toString().length() > 0
-					&& EndDateYear.getText().toString().length() > 0){
-					myCalendar.set
-					myCalendar2
-					double i = myCalendar.compareTo(myCalendar2);
-				}
-*/	
 				Claim[] claims = Controller.getClaimList(EditClaimActivity.this).toList();
+				String sTitle = claimTitleView.getText().toString();
 				for ( Claim c : claims ){
-						if ( c.getClaimName().equals( claimTitleView.getText().toString() )
-							&& ( isNewClaim || ! c.getUuid().equals(claim.getUuid())) ){
-						repeatedClaimName = true;
+					if ( c.getClaimName().equals( sTitle )
+							&& ( isNewClaim || ! c.getUuid().equals(claim.getUuid())) ) {
+						claimTitleView.setError( "Repeated claim name!" );
+						claimTitleView.requestFocus();
+						return;
 					}
 				}
 			
 				/** this statement checks if the text fields are valid or not and display error message.*/
-/*				if( ClaimName.getText().toString().length() == 0 || ClaimTitle.getText().toString().length() == 0 ){
-				    if ( ClaimName.getText().toString().length() == 0 ){
-				    	ClaimName.setError( "Name is required!" );
-				    	ClaimName.requestFocus();
-				    }
-				    else if ( ClaimTitle.getText().toString().length() == 0 ){
-				    	ClaimTitle.setError( "Title is required!" );
-				    	ClaimTitle.requestFocus();
-				    }
-				}
-				if (myCalendar.compareTo(myCalendar2)>0){
-					EndDateYear.setError("End date is SMALLER than start date!");
-					EndDateYear.requestFocus();
-				}*/
+				
+				if ( claimNameView.getText().toString().isEmpty() ){
+			    	claimNameView.setError( "Name is required!" );
+			    	claimNameView.requestFocus();
+			    	return;
+			    }
+			    else if ( claimTitleView.getText().toString().isEmpty() ){
+			    	claimTitleView.setError( "Title is required!" );
+			    	claimTitleView.requestFocus();
+			    	return;
+			    }
 
-				myCalendar.set(Calendar.HOUR, 0);
-				myCalendar.set(Calendar.MINUTE, 0);
-				myCalendar.set(Calendar.SECOND, 0);
-				myCalendar.set(Calendar.MILLISECOND, 0);
-				myCalendar2.set(Calendar.HOUR, 0);
-				myCalendar2.set(Calendar.MINUTE, 0);
-				myCalendar2.set(Calendar.SECOND, 0);
-				myCalendar2.set(Calendar.MILLISECOND, 0);
+				startDateSelection.set(Calendar.HOUR, 0);
+				startDateSelection.set(Calendar.MINUTE, 0);
+				startDateSelection.set(Calendar.SECOND, 0);
+				startDateSelection.set(Calendar.MILLISECOND, 0);
+				endDateSelection.set(Calendar.HOUR, 0);
+				endDateSelection.set(Calendar.MINUTE, 0);
+				endDateSelection.set(Calendar.SECOND, 0);
+				endDateSelection.set(Calendar.MILLISECOND, 0);
 				
-				if (repeatedClaimName || claimNameView.getText().toString().length() == 0 || claimTitleView.getText().toString().length() == 0) {
-				
-					if (repeatedClaimName){
-						claimTitleView.setError( "Repeated claim name!" );
-						claimTitleView.requestFocus();
-					} 
-					else if ( claimNameView.getText().toString().length() == 0 ){
-				    	claimNameView.setError( "Name is required!" );
-				    	claimNameView.requestFocus();
-				    }
-				    else if ( claimTitleView.getText().toString().length() == 0 ){
-				    	claimTitleView.setError( "Title is required!" );
-				    	claimTitleView.requestFocus();
-				    }
-				
-				} else if (myCalendar.compareTo(myCalendar2) == 1) {
+				if (startDateSelection.compareTo(endDateSelection) == 1) {
 					Toast.makeText(getApplicationContext(), "End Date cannot be before Start Date!", Toast.LENGTH_SHORT).show();
-
-				} else {
+					return;
+				}
+				
 				/**
 				 *  Saves user input into claim class.(calling each method)
 				 */
-					Toast.makeText(EditClaimActivity.this, "Updating", Toast.LENGTH_SHORT). show();
+				Toast.makeText(EditClaimActivity.this, "Updating", Toast.LENGTH_SHORT). show();
 					
-					/** Saving new tags */
+				/** Saving new tags */
 					
-					TagMap tagMap = Controller.getTagMap(EditClaimActivity.this);
-					ArrayList<Tag> current = tagMap.toList();
+				TagMap tagMap = Controller.getTagMap(EditClaimActivity.this);
 					
-					for ( Tag t : tagsOfClaim ){
-						if ( ! current.contains(t) ){
-							tagMap.addTag(EditClaimActivity.this, t);
-						}
+				for ( Tag t : tagList ){
+					if ( ! tagMap.contains(t.getUuid()) ){
+						tagMap.addTag(EditClaimActivity.this, t);
 					}
-					
-					if (isNewClaim == true){
-						editclaim(newclaim);
-						newclaimlist.addClaim(EditClaimActivity.this, newclaim);
-						newclaim.setDestinationList(EditClaimActivity.this, destination);
-						checkCompleteness(newclaim);
-						
-						
-					} else{
-						editclaim(claim);
-						claim.setDestinationList(EditClaimActivity.this, destination);
-						checkCompleteness(claim);
-						
-					}
-					
-					/**
-					 *  launch MainClaimActivity.
-					 */
-					finish();
 				}
+					
+				if (isNewClaim == true) {
+					editclaim(newclaim);
+					newClaimList.addClaim(EditClaimActivity.this, newclaim);
+					newclaim.setDestinationList(EditClaimActivity.this, destinationList);
+					checkCompleteness(newclaim);
+						
+				} else{
+					editclaim(claim);
+					claim.setDestinationList(EditClaimActivity.this, destinationList);
+					checkCompleteness(claim);
+						
+				}
+					
+				/**
+				 *  Return to the activity that called this.
+				 */
+				finish();
 			}
 		});
 	    
@@ -483,9 +409,8 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 	    	//from http://stackoverflow.com/questions/8743120/how-to-grey-out-a-button accessed 06/04/2015
 	    	startDateButton.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.CLEAR);
 	    	endDateButton.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.CLEAR);
-	    	done.setText("Edit Tags");
+	    	finishedButton.setText("Edit Tags");
 	    }
-	    
 	}
 	
 
@@ -507,12 +432,11 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 	public void returnDate(View view, Calendar date) {
 		if (view == startDateButton) {
 			startDateButton.setText(sdf.format(date.getTime()));
-			myCalendar = date;
+			startDateSelection = date;
 		} else if (view == endDateButton) {
-				endDateButton.setText(sdf.format(date.getTime()));
-				myCalendar2 = date;
-			}
-		
+			endDateButton.setText(sdf.format(date.getTime()));
+			endDateSelection = date;
+		}
     }
 	
 	
@@ -546,7 +470,7 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 		final AutoCompleteTextView input = new AutoCompleteTextView(EditClaimActivity.this);
 
 		final TagMap tagMap = Controller.getTagMap(EditClaimActivity.this);
-		ArrayList<String> tags = tagMap.getTagStrings(tagsOfClaim);
+		ArrayList<String> tags = tagMap.getTagStrings(tagList);
 		
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(EditClaimActivity.this, R.layout.edit_claim_drop_down_item, tags);
 		input.setAdapter(adapter);
@@ -583,17 +507,19 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 
 	                @Override
 	                public void onClick(View view) {
-	                	String sInput = input.getText().toString();
+	                	String sInput = input.getText().toString().trim();
 
 	                	if (sInput.isEmpty()) {
 	                		input.setError("Enter a tag name");
+	                		input.setText(sInput);
 	                		return;
 	                	}
 	                	
 	                	// Tag has already been added
-	                	for (Tag t : tagsOfClaim) {
+	                	for (Tag t : tagList) {
 	                		if (t.toString().equals(sInput)) {
 		                		input.setError("Tag already added to claim");
+		                		input.setText(sInput);
 	                			return;
 	                		}
 	                	}
@@ -606,8 +532,8 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 	    	        		newTag = new Tag(sInput);
 	    	        	}
 	    	        	
-	    	        	tagsOfClaim.add(newTag);
-			    		updateTagListView(tagsOfClaim);
+	    	        	tagList.add(newTag);
+			    		updateTagListView(tagList);
 	                	
 	                    helpDialog.dismiss();
 	                }
@@ -622,7 +548,7 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 	 * Make the items in destination ListView clickable and generate 
 	 * a popup box asking user what to do.
 	 */
-	private AdapterView.OnItemClickListener onListClick = new AdapterView.OnItemClickListener() {
+	private AdapterView.OnItemClickListener onDestinationListClick = new AdapterView.OnItemClickListener() {
 
 		@Override
 		public void onItemClick(AdapterView<?> parent, View view, final int position,
@@ -632,13 +558,6 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 			 */
 			AlertDialog.Builder helperBuilder = new AlertDialog.Builder(EditClaimActivity.this);
 			
-/*		helperBuilder.setPositiveButton("Edit", new DialogInterface.OnClickListener(){
-
-			public void onClick(DialogInterface dialog, int which){
-					createDestinationButton(destination,editDestination,position);
-				}
-			});*/
-			
 			helperBuilder.setPositiveButton("Delete", new DialogInterface.OnClickListener(){
 				
 				/** When the delete button is pressed, the item in the dummy listview will be deleted and adapter updated
@@ -646,10 +565,10 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 				 */
 				@Override
 				public void onClick(DialogInterface dialog, int which){
-					String toRemove = adapter2.getItem(position);
-					adapter2.remove(toRemove);
-					destination.remove(position);
-					adapter2.notifyDataSetChanged();
+					String toRemove = destinationAdapter.getItem(position);
+					destinationAdapter.remove(toRemove);
+					destinationList.remove(position);
+					destinationAdapter.notifyDataSetChanged();
 				}
 			});
 			
@@ -688,9 +607,9 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 		
 		String Descrip = descriptionView.getText().toString();
 		
-		d2=myCalendar2;
+		d2=endDateSelection;
 		
-		d1=myCalendar;
+		d1=startDateSelection;
 			
 		if (aftermath.length() > 0 || aftermath2.length() > 0){
 			if ( aftermath.length() > 0 ){
@@ -710,7 +629,7 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 		
 		claim.getTagsIds(this).clear();
 		
-		for (Tag tag: tagsOfClaim)
+		for (Tag tag: tagList)
 			claim.getTagsIds(this).add(tag.getUuid());
 
 		
@@ -787,24 +706,23 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 			}
 		});
 		
-		helperBuilder.setNeutralButton("Tag Location?", new DialogInterface.OnClickListener() {
+		helperBuilder.setNeutralButton("Add GeoLocation", new DialogInterface.OnClickListener() {
 
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				Log.e("NEUTRAL", "NEUTRAL");
-				Intent intent = new Intent(EditClaimActivity.this, MapActivity.class);
-				
-				if (!desName.getText().toString().isEmpty()) {
-					System.out.println("Putting extra destination " + desName.getText().toString());
-					Log.e("DESTINATION", "Putting extra destination " + desName.getText().toString());
-					intent.putExtra("destination", desName.getText().toString());
-				}
+				Intent intent = new Intent(EditClaimActivity.this, InteractiveMapActivity.class);
 				
 				if (location != null) {
 					System.out.println("Putting extra location");
 					Log.e("LOC", "Putting extra location " + desName.getText().toString());
 					LatLng newlatlng = new LatLng(location.getLatitude(), location.getLongitude());
 					intent.putExtra("latlng", newlatlng);
+					intent.putExtra("destination", location.getProvider());
+				} else if (!desName.getText().toString().isEmpty()) {
+					System.out.println("Putting extra destination " + desName.getText().toString());
+					Log.e("DESTINATION", "Putting extra destination " + desName.getText().toString());
+					intent.putExtra("destination", desName.getText().toString());
 				}
 				
 				System.out.println("GOING IN");
@@ -841,9 +759,9 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 	    	String lastRea = DesRea.getText().toString();
 	    	comingFromMap = true;
 	        if (clicked_destination == -1) {
-		        createDestinationButton(destination, newDestination,clicked_destination);
+		        createDestinationButton(destinationList, newDestination,clicked_destination);
 	        } else {
-		        createDestinationButton(destination, editDestination,clicked_destination);
+		        createDestinationButton(destinationList, editDestination,clicked_destination);
 	        }
 	        DesRea.setText(lastRea);
 	        
@@ -856,6 +774,7 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 	            	location = new Location("");
 	            }
 	            
+	            location.setProvider(title);
 	            location.setLongitude(latLng.longitude);
 	            location.setLatitude(latLng.latitude);
 	            
@@ -889,10 +808,10 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 			tagList = Controller.getTagMap(this).toList();
 		}
 
-		adapter = new ArrayAdapter<Tag>(this,  
+		tagAdapter = new ArrayAdapter<Tag>(this,  
 		          R.layout.edit_claim_listview, 
 		          tagList);
-		tagListView.setAdapter(adapter);
+		tagListView.setAdapter(tagAdapter);
 	}
 	
 	/**
@@ -916,32 +835,36 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 		location = null;
 		switch(i){
 		case newDestination:
-			adapter2.add(place + " - " + reason);
-			adapter2.notifyDataSetChanged();
-			destination.add(travelInfo);
+			destinationAdapter.add(place + " - " + reason);
+			destinationAdapter.notifyDataSetChanged();
+			destinationList.add(travelInfo);
 			break;
 		case editDestination:
-			adapter2.insert(place + " - " + reason, position);
-			adapter2.remove(oldDestination);
-			destination.set(position,travelInfo);
-			adapter2.notifyDataSetChanged();
+			destinationAdapter.insert(place + " - " + reason, position);
+			destinationAdapter.remove(oldDestination);
+			destinationList.set(position,travelInfo);
+			destinationAdapter.notifyDataSetChanged();
 		}	
 	}
 	
 	/**
-	 * Destination listview.
+	 * Set the destintion list adapter
 	 *
-	 * @param myListView the my list view
-	 * @param destination2 the destination
+	 * @param destinations the destination
 	// set adapter for destination
 	*/
-	public void DestinationListview(ListView myListView, ArrayList<Destination> destination2){
+	public void setDestinationAdapter(ArrayList<Destination> destinations){
 		
-		ArrayList<String> destinationArray = destinationReason(destination2);
-		adapter2 = new ArrayAdapter<String>(this,  
+		ArrayList<String> destinationReasonList = new ArrayList<String>();
+		
+		for (int i = 0; i< destinations.size(); i++){
+			destinationReasonList.add(destinations.get(i).toString());
+		}
+		
+		destinationAdapter = new ArrayAdapter<String>(this,  
 		          R.layout.edit_claim_listview, 
-		          destinationArray);
-		myListView.setAdapter(adapter2);
+		          destinationReasonList);
+		desListView.setAdapter(destinationAdapter);
 	}
 	
 	
@@ -952,7 +875,7 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 		for (int i =0; i < part.length; i++){
 			newTag = Controller.getTagMap(getBaseContext()).
 					searchForTagByString(part[i]);
-			tagsOfClaim.add(newTag);
+			tagList.add(newTag);
 		}
 	}
 
@@ -960,18 +883,17 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 	/**
 	 * Destination reason.
 	 *
-	 * @param destination2 the destination2
+	 * @param destinations the destination2
 	 * @return the array list
 	// Concatenate destination into one string to display it on simple ListView adapter
 	 */
-	public ArrayList<String> destinationReason(ArrayList<Destination> destination2){
-		final ArrayList<String> destinationreason = new ArrayList<String>();
-		String destination_reason = "";
-		for (int i = 0; i< destination2.size(); i++){
-			destination_reason = destination2.get(i).toString();
-			destinationreason.add(destination_reason);
+	public ArrayList<String> assembleDestinationList(ArrayList<Destination> destinations){
+		ArrayList<String> destinationReasonList = new ArrayList<String>();
+		for (int i = 0; i< destinations.size(); i++){
+			destinationReasonList.add(destinations.get(i).toString());
 		}
-		return destinationreason;
+		
+		return destinationReasonList;
 	}
 
 }

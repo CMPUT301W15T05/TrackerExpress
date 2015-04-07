@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
-import android.util.Log;
 
 /**
  * TModel is the parent of all models in our app. It allows models to
@@ -14,7 +13,7 @@ import android.util.Log;
  * @author Peter Crinklaw, Randy Hu, Parash Rahman, Jesse Emery, Sean Baergen, Rishi Barnwal
  * @version Part 4
  */
-public class TModel implements Serializable{
+public class TModel implements Serializable {
     
     /** The Constant serialVersionUID. */
 	private static final long serialVersionUID = 1L;

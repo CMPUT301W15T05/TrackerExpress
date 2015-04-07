@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="group5.trackerexpress.MapActivity">
+    tools:context="group5.trackerexpress.InteractiveMapActivity">
     
     <fragment
         android:id="@+id/map"
@@ -31,7 +31,8 @@
         android:hint="@string/place_autocomplete_hint"
         android:textColor="@android:color/primary_text_light"
         android:background="@drawable/rectangle"
-        android:singleLine="true" />
+        android:singleLine="true"
+        android:visibility="gone" />
 
     <ImageButton
         android:id="@+id/confirm_geolocation_button"

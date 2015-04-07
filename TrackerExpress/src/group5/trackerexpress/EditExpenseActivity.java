@@ -19,7 +19,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -42,8 +41,6 @@ import com.google.android.gms.maps.model.LatLng;
 public class EditExpenseActivity extends EditableActivity implements DatePickerFragment.TheListener{
 	/** The category and currency. */
 	private Spinner categorySpinner, currencySpinner;
-	
-	private TextWatcher currencyWatcher;
 	
 	private Button deleteImage;
 	
@@ -178,18 +175,24 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 				Log.e("GetLocation", "GetLocation");
 				Claim c = Controller.getClaimList(getApplication()).getClaim(claimId);
 				LatLng newlatlng;
+				String destination;
 				try {
 					newlatlng = new LatLng(location.getLatitude(), location.getLongitude());
+					destination = location.getProvider();
 				} catch (Exception e) {
 					try {
-						Destination d = c.getDestinationList().get(0);
-						newlatlng = new LatLng(d.getLatitude(), d.getLongitude());
+						Location l = c.getDestinationList().get(0).getLocation();
+						newlatlng = new LatLng(l.getLatitude(), l.getLongitude());
+						destination = l.getProvider();
 					} catch (Exception e1) {
 						newlatlng = null;
+						destination = null;
 					}
 				}
-				Intent intentLoc = new Intent(EditExpenseActivity.this, MapActivity.class);
+				
+				Intent intentLoc = new Intent(EditExpenseActivity.this, InteractiveMapActivity.class);
 				intentLoc.putExtra("latlng", newlatlng);
+				intentLoc.putExtra("destination", destination);
 				System.out.println("GOING IN");
 				Log.e("START", "GOING IN");
 		    	EditExpenseActivity.this.startActivityForResult(intentLoc, 1);
@@ -330,28 +333,19 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 			} else{
 				Toast.makeText(EditExpenseActivity.this, "Error", Toast.LENGTH_SHORT).show();
 			}
-		}
-		
-		if (requestCode == 1){
-		    Location lastLoc = location;
-		    //Log.e("IS NULL?", (lastLoc == null)+"");
+		} else if (requestCode == 1){
 	        if(resultCode == RESULT_OK){
 	            LatLng latLng = data.getParcelableExtra("resultLatLng");
 	            String title = data.getStringExtra("resultTitle");
 	            Toast.makeText(getApplication(), latLng.toString(), Toast.LENGTH_LONG).show();
 	            System.out.println("TITLE IS " + title);
-	            lastLoc = new Location(title);
-	            /*location.setLatitude(latLng.latitude);
+	            location.setProvider(title);
+	            
 	            location.setLongitude(latLng.longitude);
-	            location.setProvider(title);*/
-	            //if (lastLoc != null) {
-	            	lastLoc.setLongitude(latLng.longitude);
-	            	lastLoc.setLatitude(latLng.latitude);
-	            	lastLoc.setProvider(title);
-	            //}
+	            location.setLatitude(latLng.latitude);
+	            location.setProvider(title);
 			        
 	            b_getlocation.setText("View Location");
-		        location = lastLoc;
 	            
 	        } else if (resultCode == RESULT_CANCELED) {
 	            //Write your code if there's no result

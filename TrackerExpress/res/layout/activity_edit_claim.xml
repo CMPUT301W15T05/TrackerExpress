@@ -28,7 +28,7 @@
         android:layout_height="80sp"
         android:ems="10"
         android:hint="@string/promote_description"
-        android:inputType="textMultiLine" />
+        android:inputType="textMultiLine|textCapSentences" />
     
     <TextView
             android:id="@+id/textViewClaimStartDate"
@@ -42,7 +42,7 @@
         android:orientation="horizontal" >
 
         <Button
-            android:id="@+id/editClaimStartDateYear"
+            android:id="@+id/editClaimStartDate"
             style="?android:attr/buttonStyleSmall"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -62,7 +62,7 @@
         android:orientation="horizontal" >
 
         <Button
-            android:id="@+id/editClaimEndDateYear"
+            android:id="@+id/editClaimEndDate"
             style="?android:attr/buttonStyleSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
