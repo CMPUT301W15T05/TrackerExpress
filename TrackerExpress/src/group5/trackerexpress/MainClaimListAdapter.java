@@ -190,7 +190,6 @@ public class MainClaimListAdapter extends ArrayAdapter<Claim> {
 			holder.distanceView.setVisibility( View.GONE );
 		} else {
 			holder.distanceView.setVisibility( View.VISIBLE );
-			
 
 			DisplayMetrics metrics = context.getResources().getDisplayMetrics();
 			int screenWidth = metrics.widthPixels;

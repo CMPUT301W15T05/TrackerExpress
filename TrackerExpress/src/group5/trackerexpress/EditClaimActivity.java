@@ -144,13 +144,6 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 		ClaimTitle = (EditText) findViewById(R.id.editClaimTitle);
 		limitLength(ClaimTitle, 20);
 		
-		StartDateYear = (Button) findViewById(R.id.editClaimStartDateYear);
-//		StartDateMonth = (EditText) findViewById(R.id.editClaimStartDateMonth);
-//		StartDateDay = (EditText) findViewById(R.id.editClaimStartDateDay);
-
-		EndDateYear = (Button) findViewById(R.id.editClaimEndDateYear);
-//		EndDateMonth = (EditText) findViewById(R.id.editClaimEndDateMonth);
-//		EndDateDay = (EditText) findViewById(R.id.editClaimEndDateDay);
 		Description = (EditText) findViewById(R.id.editClaimDescription);
 		
 		desListView = (ListView) findViewById(R.id.listViewDestinations);
@@ -232,7 +225,6 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 		 */
 
 		if (isNewClaim == true){
-			
 			StartDateYear.setOnClickListener(new TextView.OnClickListener(){
 				public void onClick(View v) {
 					showDatePickerDialog(v, myCalendar);

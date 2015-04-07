@@ -143,7 +143,6 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 	    
 	    //the create expense button
 	    createExpenseButton.setOnClickListener(new Button.OnClickListener(){
-	    	@SuppressWarnings("deprecation")
 			public void onClick(View v) {
 	    		if ( ! statusCheckBox.isChecked() && ( description.getText().toString().length() == 0 || 
 	    									amount.getText().toString().length() == 0 || 
@@ -245,7 +244,7 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 			if (expense.getTitle() != null){
 		    	description.setText(expense.getTitle().toString());
 		    }
-			
+						
 		    if ( expense.getAmount() != null ){
 		    	amount.setText(Double.toString(expense.getAmount()));
 		    }
@@ -260,6 +259,7 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 		    
 		    if ( expense.getReceipt() != null ){
 				imgButton.setImageDrawable(expense.getReceipt().getDrawable());
+				receiptUri = Uri.parse(expense.getReceipt().getPath());
 				deleteImage.setVisibility(View.VISIBLE);
 		    } else {
 		    	deleteImage.setVisibility(View.GONE);
@@ -362,7 +362,6 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 	}
 	
     
-	@SuppressWarnings("deprecation")
 	public void editExpense(Expense expense) {
 		if ( isNewExpense ){
 			expense = new Expense();
