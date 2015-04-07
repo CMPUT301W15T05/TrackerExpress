@@ -3,6 +3,7 @@ package group5.trackerexpress;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
+import android.util.Log;
 
 /**
  * Class to rotate and scale down the bitmap images captured by the user.
