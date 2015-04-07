@@ -2,12 +2,14 @@ package group5.trackerexpress;
 
 import android.content.Intent;
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.PopupMenu;
@@ -113,6 +115,7 @@ public class ExpenseListFragment extends Fragment implements TView {
                         	startActivity(intent);
                         	break;
                         case R.id.op_view_image:
+                        	
                         	
                         default: break;
                         }
