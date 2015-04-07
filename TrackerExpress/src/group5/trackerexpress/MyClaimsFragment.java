@@ -118,6 +118,7 @@ public class MyClaimsFragment extends Fragment implements TView {
 								} catch (IOException e) {
 									e.printStackTrace();
 								}
+                        		Toast.makeText(getActivity(), "Submitting", Toast.LENGTH_LONG).show();
                         		
                         	}
                         	break;

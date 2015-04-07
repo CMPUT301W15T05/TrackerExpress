@@ -23,7 +23,7 @@ public class TagMap extends TModel{
 	/**
 	 * generate serial number for Serializable type
 	 */
-	private static final long serialVersionUID = 6425570581599584964L;
+	private static final long serialVersionUID = 1L;
 
 	/** The Constant FILENAME. */
 	private static final String FILENAME = "tags.sav";
@@ -155,6 +155,7 @@ public class TagMap extends TModel{
 	public ArrayList<Tag> toList() {
 		return new ArrayList<Tag>(tags.values());
 	}
+	
 	/**
 	 * adds view to be updated
 	 * @param view TView to be updated
@@ -168,6 +169,30 @@ public class TagMap extends TModel{
 		}
 	}
 
+	// Makes an array list of tag strings not including the tag strings passed in
+	public ArrayList<String> getTagStrings(ArrayList<Tag> tagList) {
+		
+		ArrayList<String> tagStrings = new ArrayList<String>();
+		for (Tag tag : tagList) {
+			tagStrings.add(tag.toString());
+		}
+		
+		ArrayList<String> newTagStrings = new ArrayList<String>();
+		
+		Iterator<Entry<UUID, Tag>> it = tags.entrySet().iterator();
+		String tag;
+		while (it.hasNext()) {
+			tag = it.next().getValue().toString();
+			if (tagStrings.contains(tag)) {
+				tagStrings.remove(tag);
+			} else {
+				newTagStrings.add(tag);
+			}
+		}
+		
+		return newTagStrings;
+	}
+	
 	/**
 	 * Searches for a tag by string value
 	 * 
@@ -177,8 +202,9 @@ public class TagMap extends TModel{
 	 */
 	public Tag searchForTagByString(String string) throws IllegalAccessException {
 		Iterator<Entry<UUID, Tag>> it = tags.entrySet().iterator();
+		Tag tag;
 		while (it.hasNext()){
-			Tag tag = it.next().getValue();
+			tag = it.next().getValue();
 			if (tag.toString().equals(string))
 				return tag;
 		}

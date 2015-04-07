@@ -50,6 +50,7 @@ public class ExpenseList extends TModel{
 		expenseList.add(expense);
 		expenseIds.add(expense.getUuid());
 		expense.addViews(this.views);
+		notifyViews(context);
 	}
 	
 	/**
@@ -111,11 +112,8 @@ public class ExpenseList extends TModel{
 				}
 			}
 		}
-		
-		Log.i("Jiya re", "Jiya re size: " + Integer.toString(currencies.size()));
-		
+				
 		for ( int i = 0; i < currencies.size() - 1; i++ ){
-			Log.i("Jiya re", "Jiya Re " + ret + " what");
 			ret += amounts.get(i) + " " + currencies.get(i) + ", ";
 		}
 		if ( currencies.size() > 0 ){

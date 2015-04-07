@@ -40,6 +40,8 @@ public class Expense extends TModel{
 	
 	private Location location;
 	
+	private boolean hasLocation = false;
+	
 	/**
 	 * Instantiates a new expense.
 	 */
@@ -260,6 +262,14 @@ public class Expense extends TModel{
 	 */
 	public void setLocation(Location location) {
 		this.location = location;
+	}
+
+	public boolean isHasLocation() {
+		return hasLocation;
+	}
+
+	public void setHasLocation(boolean hasLocation) {
+		this.hasLocation = hasLocation;
 	}
 	
 }

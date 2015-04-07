@@ -139,9 +139,9 @@ public class User extends TModel{
 			this.name = user.getName();
 		} catch (FileNotFoundException e) {
 			System.err.println ("File doesnt exist.");
-			this.email = "fuckedupbeyondallbelief@example.com";
+			this.email = "em2@example.com";
 			this.password = "password";
-			this.name = "Art Vandelay";
+			this.name = "Em2";
 		} catch (IOException e) {
 			throw new RuntimeException();
 		}

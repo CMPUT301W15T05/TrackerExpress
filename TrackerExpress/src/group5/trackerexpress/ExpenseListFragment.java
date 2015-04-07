@@ -1,13 +1,17 @@
 package group5.trackerexpress;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import android.content.Intent;
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.PopupMenu;
@@ -95,7 +99,8 @@ public class ExpenseListFragment extends Fragment implements TView {
 				popup.getMenuInflater().inflate(R.menu.expense_list_popup, popup.getMenu());
 				
 				onPrepareOptionsMenu(popup);
-				
+				if (!clickedOnExpense.isHasLocation() || myClaimListVersion)
+					popup.getMenu().findItem(R.id.op_view_location).setVisible(false);
 				// Popup menu item click listener
 				popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
 					
@@ -112,8 +117,13 @@ public class ExpenseListFragment extends Fragment implements TView {
                         	intent.putExtra("expenseUUID", clickedOnExpense.getUuid());
                         	startActivity(intent);
                         	break;
+
+                        case R.id.op_view_location:
+                        	LatLng latlng = new LatLng(clickedOnExpense.getLatitude(), clickedOnExpense.getLongitude());
+                        	intent = new Intent (getActivity(), MapActivity.class);
+                        	intent.putExtra("latlng", latlng);
                         case R.id.op_view_image:
-                        	
+
                         default: break;
                         }
                         
