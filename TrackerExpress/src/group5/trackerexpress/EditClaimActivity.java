@@ -110,9 +110,9 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 	private Date endDate;
 	
 	/** The my calendar. */
-	private Calendar myCalendar = Calendar.getInstance();
+	private Calendar myCalendar;
 	
-	private Calendar myCalendar2 = Calendar.getInstance();
+	private Calendar myCalendar2;
 	
 	/**
 	 * @see android.app.Activity#onCreate(android.os.Bundle)
@@ -132,6 +132,9 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 		/**
 		 *  Assign each EditText to a variable.
 		 */
+		
+		myCalendar = Calendar.getInstance();
+		myCalendar2 = Calendar.getInstance();
 		
 		ClaimName = (EditText) findViewById(R.id.editClaimName);	
 		limitLength(ClaimName, 20);
@@ -418,9 +421,8 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 				    	ClaimTitle.requestFocus();
 				    }
 				
-				} else if (myCalendar.compareTo(myCalendar2) == 1) {
+				} else if ( myCalendar.compareTo(myCalendar2) == 1 ){
 					Toast.makeText(getApplicationContext(), "End Date cannot be before Start Date!", Toast.LENGTH_SHORT).show();
-
 				} else {
 				/**
 				 *  Saves user input into claim class.(calling each method)
@@ -444,6 +446,7 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 						
 						
 					} else{
+						Log.i("myMessage", "2");
 						editclaim(claim);
 						claim.setDestinationList(EditClaimActivity.this, destination);
 						checkCompleteness(claim);
@@ -693,14 +696,16 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 		
 		String Descrip = Description.getText().toString();
 		
-		d2=myCalendar2;
+		d2 = myCalendar2;
 		
-		d1=myCalendar;
+		d1 = myCalendar;
 			
 		if (aftermath.length() > 0 || aftermath2.length() > 0){
 			if ( aftermath.length() > 0 ){
+				Log.i("myMessage", "1");
 		    	claim.setStartDate(this, d1);
-			}
+		    	Log.i("myMessage", "1.2");
+		    }
 		    if ( aftermath2.length() > 0 ){
 		    	claim.setEndDate(this, d2);
 		    }
