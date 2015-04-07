@@ -108,7 +108,7 @@ public class ElasticSearchEngineTest extends ActivityInstrumentationTestCase2<Te
 			Thread.sleep(2000);
 
 
-			elasticSearchEngine.approveClaim(getActivity(), claim.getUuid(), "Comment");
+			elasticSearchEngine.reviewClaim(getActivity(), claim.getUuid(), "Comment", Claim.APPROVED);
 
 			Thread.sleep(1000);
 
@@ -143,7 +143,7 @@ public class ElasticSearchEngineTest extends ActivityInstrumentationTestCase2<Te
 			Thread.sleep(1000);
 
 
-			elasticSearchEngine.returnClaim(getActivity(), claim.getUuid(), "test comment");
+			elasticSearchEngine.reviewClaim(getActivity(), claim.getUuid(), "test comment", Claim.RETURNED);
 
 			Thread.sleep(1000);
 
