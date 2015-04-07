@@ -304,7 +304,9 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 		    done.setText("Create Claim");
 		    DestinationListview(desListView,destination);
 		    updateTagListView(new ArrayList<Tag>(tagsOfClaim));
-		    
+		    if (Controller.getUser(EditClaimActivity.this).getName().toString()!=null){
+		    	ClaimName.setText(Controller.getUser(EditClaimActivity.this).getName().toString());
+		    }
 		   		
 	    } else {
 	    	String tags = claim.toStringTags(this);
