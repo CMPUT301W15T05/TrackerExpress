@@ -67,10 +67,7 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 	EditBitmap editBitmap = new EditBitmap();
 
 	/** checks if the claim is new and cancel's appropriately */
-	private boolean isNewClaim;
-
-	/** checks if the claim has been saved and cancel's appropriately */
-	private boolean isSaved;
+	private boolean isNewExpense;
 	
 	final String myFormat = "EEEE MMMM dd, yyyy"; //In which you need put here
 	final SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
@@ -88,11 +85,13 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 		
 		final Intent intent = this.getIntent();
 	    claimId = (UUID)intent.getSerializableExtra("claimUUID");
-	    expenseId = (UUID)intent.getSerializableExtra("expenseUUID");
-	    isNewClaim = intent.getBooleanExtra("isNewClaim", false);
-	    isSaved = false;
+	    isNewExpense = intent.getBooleanExtra("isNewExpense", false);
+
+	    if ( ! isNewExpense ){
+	    	expenseId = (UUID)intent.getSerializableExtra("expenseUUID");
+	    	expense = Controller.getExpense(EditExpenseActivity.this, claimId, expenseId);
+	    }
 	    
-	    expense = Controller.getExpense(EditExpenseActivity.this, claimId, expenseId);
 	    claim = Controller.getClaim(this, claimId);
 	    
 		initializeVariables();
@@ -121,7 +120,7 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 	    });
 	
 	    
-	  //the cancel expense button
+	    //the cancel expense button
 	    cancelExpenseButton.setOnClickListener(new Button.OnClickListener(){
 	    	public void onClick(View v) {
 	    		cancelCheck(EditExpenseActivity.this);
@@ -180,34 +179,37 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 		createExpenseButton = (Button) findViewById(R.id.editExpenseCreateExpenseButton);
 		
 		// If expense already has values, plug them in
-		if (expense.getTitle() != null){
-	    	description.setText(expense.getTitle().toString());
-	    }
-		
-	    if ( expense.getAmount() != null ){
-	    	amount.setText(Double.toString(expense.getAmount()));
-	    }
-	    
-	    if ( expense.getCurrency() != null ){
-	    	currencySpinner.setSelection(getIndex(currencySpinner, expense.getCurrency()));
-	    }
-
-	    if ( expense.getCategory() != null ){
-	    	categorySpinner.setSelection(getIndex(categorySpinner, expense.getCategory()));
-	    }
-	    
-	    if ( expense.getReceipt() != null ){
-			imgButton.setImageDrawable(expense.getReceipt().getDrawable());
-			deleteImage.setVisibility(View.VISIBLE);
-	    } else {
-	    	deleteImage.setVisibility(View.GONE);
-	    }
-	    
-	    if ( !expense.isComplete()){
-	    	statusCheckBox.setChecked(true);
-	    }
-	    
-	    statusCheckBox.setChecked(! expense.isComplete());
+		if ( ! isNewExpense ){
+			if (expense.getTitle() != null){
+		    	description.setText(expense.getTitle().toString());
+		    }
+			
+		    if ( expense.getAmount() != null ){
+		    	amount.setText(Double.toString(expense.getAmount()));
+		    }
+		    
+		    if ( expense.getCurrency() != null ){
+		    	currencySpinner.setSelection(getIndex(currencySpinner, expense.getCurrency()));
+		    }
+	
+		    if ( expense.getCategory() != null ){
+		    	categorySpinner.setSelection(getIndex(categorySpinner, expense.getCategory()));
+		    }
+		    
+		    if ( expense.getReceipt() != null ){
+				imgButton.setImageDrawable(expense.getReceipt().getDrawable());
+				deleteImage.setVisibility(View.VISIBLE);
+		    } else {
+		    	deleteImage.setVisibility(View.GONE);
+		    }
+		    
+		    if ( !expense.isComplete()){
+		    	statusCheckBox.setChecked(true);
+		    }
+		    
+		    statusCheckBox.setChecked(! expense.isComplete());
+		    
+		}
 	    
 	}
 	
@@ -265,7 +267,11 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 	}
 	
     
-	public void editExpense(final Expense expense) {		
+	public void editExpense(Expense expense) {
+		if ( isNewExpense ){
+			expense = new Expense();
+		}
+		
 		String title = description.getText().toString();
 	
 		expense.setTitle(this, title);
@@ -301,7 +307,9 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 		expense.setCategory(this, categorySelection);
 		expense.setCurrency(this, currencySelection);
 		
-		isSaved = true;
+		if ( isNewExpense ){
+			claim.getExpenseList().addExpense(this, expense);
+		}
 		
 		finish();
 	}
