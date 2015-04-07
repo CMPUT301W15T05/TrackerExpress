@@ -6,15 +6,17 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 import java.util.UUID;
+
+import group5.trackerexpress.EditBitmap;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -61,9 +63,12 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 	
 	/** The Claim UUID and the Expense UUID. */
 	private UUID claimId, expenseId;
-	
+
+	EditBitmap editBitmap = new EditBitmap();
+
 	/** checks if the claim is new and cancel's appropriately */
 	private boolean isNewClaim;
+
 
 	/** checks if the claim has been saved and cancel's appropriately */
 	private boolean isSaved;
@@ -142,6 +147,7 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 		// TODO Auto-generated method stub
 		receiptUri = null;
 		imgButton.setImageResource(R.drawable.a);
+		deleteImage.setVisibility(View.GONE);
 		
 	}
 
@@ -256,9 +262,13 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 			if (resultCode == RESULT_OK){
 				Toast.makeText(EditExpenseActivity.this, "Photo Set", Toast.LENGTH_SHORT).show(); 
 				Drawable photo = Drawable.createFromPath(receiptUri.getPath());
-				imgButton.setImageDrawable(photo);
+				Bitmap sourceBitmap = ((BitmapDrawable)photo).getBitmap();
+				Bitmap rotatedBitmap = editBitmap.rotateBitmap(sourceBitmap);
+				Bitmap resizedBitmap = editBitmap.resizeBitmap(rotatedBitmap, 640);
+				imgButton.setImageBitmap(resizedBitmap);
 				deleteImage.setVisibility(View.VISIBLE);
 				//imgButton.setImageURI(receiptUri);
+
 			} else if (resultCode == RESULT_CANCELED){
 				Toast.makeText(EditExpenseActivity.this, "Canceled", Toast.LENGTH_SHORT).show();
 			} else{
@@ -326,22 +336,5 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 			}
 		}
 		return index;
-	} 
-	
-	
-	/** resizes the receipt bitmap */
-	public Bitmap getResizedBitmap(Bitmap image, int maxSize) {
-        int width = image.getWidth();
-        int height = image.getHeight();
-
-        float bitmapRatio = (float)width / (float) height;
-        if (bitmapRatio > 1) {
-            width = maxSize;
-            height = (int) (width / bitmapRatio);
-        } else {
-            height = maxSize;
-            width = (int) (height * bitmapRatio);
-        }
-        return Bitmap.createScaledBitmap(image, width, height, true);
-	}
+	} 	
 }
