@@ -13,21 +13,24 @@ import android.content.Context;
 import android.util.Log;
 
 /**
- * Performs elastic search operations needed by this app.
+ * Performs elastic search operations on claim objects.
  * 
+ * Each method works by starting a thread and calling methods of 
+ * ElasticSearchEngineClaimsUnthreaded 
  * 
  * @author crinklaw
  *
  */
 public class ElasticSearchEngineClaims {
 
-	
+
 	private final ElasticSearchEngineUnthreadedClaims elasicSearchEngineUnthreaded = new ElasticSearchEngineUnthreadedClaims();
-	
-	
-	
+
+	/**
+	 * Catches exceptions thrown by elsatic search threads.
+	 */
 	private UncaughtExceptionHandler uncaughtExceptionHandler = new UncaughtExceptionHandler() {
-		
+
 		@Override
 		public void uncaughtException(Thread thread, Throwable ex) {
 			threadException = ex;
@@ -39,14 +42,20 @@ public class ElasticSearchEngineClaims {
 			}
 		}
 	};
-	
+
 	volatile Throwable threadException;
-	
+
+	/**
+	 * Gets all claims from elastic search server
+	 * @param context
+	 * @return
+	 * @throws IOException
+	 */
 	public Claim[] getClaims(Context context) throws IOException {
-		
+
 		if (!Controller.isInternetConnected(context))
 			throw new IOException();
-		
+
 		final Claim[][] claims = new Claim[1][];
 
 		Thread thread = new Thread(new Runnable(){
@@ -56,23 +65,23 @@ public class ElasticSearchEngineClaims {
 			}
 		});
 
-		
+
 		threadException = null;
-		
+
 		thread.start();
 		try {
 			thread.join();
 		} catch (InterruptedException e) {
 			throw new IOException();
 		}
-		
+
 		if (threadException != null){
 			throw new IOException();
 		}
-		
+
 		return claims[0];
 	}
-	
+
 	/**
 	 * Gets the claims that user can approve, i.e. claims that will appear in Global claims list. 
 	 * As of now, that means claims that have no attached approver besides the current user,
@@ -80,26 +89,26 @@ public class ElasticSearchEngineClaims {
 	 * @return filtered claims list
 	 */
 	public Claim[] getClaimsForGlobalClaimList(Context context) throws IOException {
-		
+
 		if (!Controller.isInternetConnected(context))
 			throw new IOException();
-		
+
 		Claim[] claimsUnfiltered = getClaims(context);
 		List<Claim> claims = new ArrayList<Claim>();
 		Log.e("USER", Controller.getUser(context).getEmail().toString());
 		for (Claim claim : claimsUnfiltered){
 			if (    !claim.getSubmitterEmail().equals(Controller.getUser(context).getEmail()) &&
 					(claim.getApproverEmail() == null || claim.getApproverEmail().equals(Controller.getUser(context).getEmail())) &&
-					 claim.getStatus() != Claim.IN_PROGRESS){
-				
+					claim.getStatus() != Claim.IN_PROGRESS){
+
 				claims.add(claim);
 			}
 		}
-		
+
 		return claims.toArray(new Claim[claims.size()]);
 	}
-	
-	
+
+
 	/**
 	 * Get claim from Elastic Search server
 	 * 
@@ -107,10 +116,10 @@ public class ElasticSearchEngineClaims {
 	 * @return claim if it is in server, else will return null
 	 */
 	public Claim getClaim(Context context, UUID id) throws IOException {
-		
+
 		if (!Controller.isInternetConnected(context))
 			throw new IOException();
-		
+
 		final Claim[] claim = new Claim[1];
 		final UUID idFinal = id;
 
@@ -136,15 +145,21 @@ public class ElasticSearchEngineClaims {
 
 
 
-
+	/**
+	 * Sets a claims status to submitted and inserts it into es server.
+	 * 
+	 * @param context
+	 * @param claim to be inserted
+	 * @throws IOException
+	 */
 	public void submitClaim(Context context, Claim claim) throws IOException {
-		
+
 		if (!Controller.isInternetConnected(context))
 			throw new IOException();
-		
+
 		claim.setSubmitterName(context, Controller.getUser(context).getName());
 		claim.setSubmitterEmail(context, Controller.getUser(context).getEmail());
-		
+
 		//convert UriBitmaps to actual bitmaps
 		for (Expense expense : claim.getExpenseList().toList()){
 
@@ -154,7 +169,7 @@ public class ElasticSearchEngineClaims {
 
 		}
 		final Claim claimFinal = claim;
-		
+
 		Thread thread = new Thread(new Runnable(){
 			@Override
 			public void run() {
@@ -167,13 +182,13 @@ public class ElasticSearchEngineClaims {
 		});
 
 		thread.start();
-		
+
 		try {
 			thread.join();
 		} catch (InterruptedException e) {
 			throw new RuntimeException();
 		}
-		
+
 		//switch back for saving:
 		for (Expense expense : claim.getExpenseList().toList()){
 			try {
@@ -183,19 +198,28 @@ public class ElasticSearchEngineClaims {
 
 	}
 
-	// Warning! This deletes all user claims
+	/**
+	 * Deletes all user claims.
+	 */
 	public void deleteClaims() {
 		Claim[] claims = elasicSearchEngineUnthreaded.getClaims();
-		
+
 		for (Claim claim : claims) {
 			elasicSearchEngineUnthreaded.deleteClaim(claim.getUuid());
 		}
 	}
 
 
+	/**
+	 * Deletes a claim from server.
+	 * 
+	 * @param context
+	 * @param id
+	 * @throws IOException
+	 */
 	public void deleteClaim(Context context, UUID id) throws IOException {
 		final UUID idFinal = id;
-		
+
 		if (!Controller.isInternetConnected(context))
 			throw new IOException();
 
@@ -214,18 +238,26 @@ public class ElasticSearchEngineClaims {
 	}
 
 
-
+	/**
+	 * Updates a claim's status, adds comments, and sets approver.
+	 * 
+	 * @param context
+	 * @param id
+	 * @param comments
+	 * @param status
+	 * @throws IOException
+	 */
 	public void reviewClaim(Context context, UUID id, String comments, final int status) throws IOException {
-		
+
 		Claim claim = getClaim(context, id);
-		
+
 		claim.setComments(comments);
 		claim.setStatus(null, status);
 		claim.setApproverEmail(null, Controller.getUser(context).getEmail());
 		claim.setApproverName(null, Controller.getUser(context).getName());
-		
+
 		final Claim claimFinal = claim;
-		
+
 		Thread thread = new Thread(new Runnable(){
 			@Override
 			public void run() {
@@ -240,38 +272,4 @@ public class ElasticSearchEngineClaims {
 		thread.start();
 
 	}
-
-
-	/*public void returnClaim(Context context, UUID id, String comments) throws IOException {
-		
-		if (!Controller.isInternetConnected(context))
-			throw new IOException();
-		
-		final UUID idFinal = id;
-		final String commentsFinal = comments;
-		final String approverName = Controller.getUser(context).getName();
-		final String approverEmail = Controller.getUser(context).getEmail();
-
-		Thread thread = new Thread(new Runnable(){
-			@Override
-			public void run() {
-				try {
-					elasicSearchEngineUnthreaded.returnClaim(idFinal, commentsFinal, approverName, approverEmail);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-		
-		thread.setUncaughtExceptionHandler(uncaughtExceptionHandler);
-
-		thread.start();
-		try {
-			thread.join();
-		} catch (InterruptedException e) {
-			throw new RuntimeException();
-		}
-	}*/
-
-
 }

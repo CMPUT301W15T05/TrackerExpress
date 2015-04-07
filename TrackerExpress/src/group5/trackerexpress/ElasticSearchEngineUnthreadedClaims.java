@@ -53,7 +53,9 @@ public class ElasticSearchEngineUnthreadedClaims {
 	private static final String HTTP_PATH = "http://cmput301.softwareprocess.es:8080/testing/group5claimsBitmaps/";
 
 	/**
-	 * @return
+	 * Gets claims from es server
+	 * 
+	 * @return all claims
 	 */
 	public Claim[] getClaims() {
 
@@ -99,7 +101,11 @@ public class ElasticSearchEngineUnthreadedClaims {
 	}
 	
 	/**
-	 * @return
+	 * Gets a claim 
+	 * 
+	 * @param id of the claim
+	 * 
+	 * @return the claim
 	 */
 	public Claim getClaim(UUID id) {
 
@@ -131,7 +137,7 @@ public class ElasticSearchEngineUnthreadedClaims {
 	
 
 	/**
-	 * 
+	 * Inserts a claim into server
 	 * 
 	 * @param claim
 	 */
@@ -181,7 +187,10 @@ public class ElasticSearchEngineUnthreadedClaims {
 	
 	
 	
-	
+	/**
+	 * Delete's claim from server
+	 * @param id
+	 */
 	public void deleteClaim(UUID id){
 		try {
 			HttpDelete httpDelete = new HttpDelete(HTTP_PATH + id);
@@ -209,59 +218,7 @@ public class ElasticSearchEngineUnthreadedClaims {
 		}
 	}	
 	
-	public void reviewClaim(UUID id, String comments, String approverName, String approverEmail, int statusIn){
-		try {
-			HttpPost updateRequest = new HttpPost(HTTP_PATH + id + "/_update");
-			String query = "{\"doc\": {" +
-					" \"status\"        :   " + statusIn + ", "   +
-					" \"comments\"      : \"" + comments       + "\", " +
-					" \"approverName\"  : \"" + approverName   + "\", " +		
-					" \"approverEmail\" : \"" + approverEmail  + "\" " +							
-					" }}";
-			StringEntity stringentity = new StringEntity(query);
-			
-			updateRequest.setHeader("Accept","application/json");
-			updateRequest.setEntity(stringentity);
-			
-			HttpResponse response = httpclient.execute(updateRequest);
-			String status = response.getStatusLine().toString();
-			System.out.println(status);
 
-			String json = getEntityContent(response);
-			//		updateRequest.releaseConnection();
-		}
-		catch(IOException E){
-			throw new RuntimeException();
-		}
-	}	
-	
-	
-	/*public void returnClaim(UUID id, String comments, String approverName, String approverEmail){
-		try {
-			HttpPost updateRequest = new HttpPost(HTTP_PATH + id + "/_update");
-			String query = "{\"doc\": {" +
-					" \"status\"        :   " + Claim.RETURNED + ","   +
-					" \"comments\"      : \"" + comments       + "\"," +
-					" \"approverName\"  : \"" + approverName   + "\"," +		
-					" \"approverEmail\" : \"" + approverEmail  + "\" " +							
-					" }}";
-			StringEntity stringentity = new StringEntity(query);
-
-			updateRequest.setHeader("Accept","application/json");
-			updateRequest.setEntity(stringentity);
-
-			HttpResponse response = httpclient.execute(updateRequest);
-			String status = response.getStatusLine().toString();
-			System.out.println(status);
-
-			String json = getEntityContent(response);
-			//		updateRequest.releaseConnection();
-		}
-		catch(IOException E){
-			throw new RuntimeException();
-		}
-	}	*/
-	
 	/**
 	 * get the http response and return json string
 	 */

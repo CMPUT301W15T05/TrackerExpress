@@ -13,29 +13,22 @@ import android.content.Context;
 import android.util.Log;
 
 /**
- * Performs elastic search operations needed by this app.
- * 
+ * Performs elastic search operations needed for user 
+ * account management
  * 
  * @author crinklaw
- *
  */
 public class ElasticSearchEngineUser {
 
 	
 	private final ElasticSearchEngineUnthreadedUser elasicSearchEngineUnthreaded = new ElasticSearchEngineUnthreadedUser();
-
-	/*
-	private UncaughtExceptionHandler uncaughtExceptionHandler = new UncaughtExceptionHandler() {
-		
-		@Override
-		public void uncaughtException(Thread thread, Throwable ex) {
-			threadException = ex;
-		}
-	};
 	
-	
-	volatile Throwable threadException;
-	 */	
+	/**
+	 * Gets all users from server
+	 * @param context
+	 * @return
+	 * @throws IOException
+	 */
 	public User[] getUsers(Context context) throws IOException {
 		
 		if (!Controller.isInternetConnected(context))
@@ -60,6 +53,12 @@ public class ElasticSearchEngineUser {
 		return users[0];
 	}
 
+	/**
+	 * Adds user to server
+	 * @param context
+	 * @param user
+	 * @throws IOException
+	 */
 	public void insertUser(Context context, User user) throws IOException {
 		
 		if (!Controller.isInternetConnected(context))

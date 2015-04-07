@@ -265,10 +265,18 @@ public class Expense extends TModel{
 		this.location = location;
 	}
 
+	/**
+	 * Checks if it has a location.
+	 * @return
+	 */
 	public boolean isHasLocation() {
 		return hasLocation;
 	}
 
+	/**
+	 * Sets if it has a location.
+	 * @param hasLocation
+	 */
 	public void setHasLocation(boolean hasLocation) {
 		this.hasLocation = hasLocation;
 	}

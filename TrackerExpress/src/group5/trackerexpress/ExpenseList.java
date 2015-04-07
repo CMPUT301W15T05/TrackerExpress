@@ -92,8 +92,8 @@ public class ExpenseList extends TModel{
 	}
 	
 	/**
-	 * To string total currencies.
-	 *
+	 * Gets total currencies as string
+	 * 
 	 * @return the string
 	 */
 	public String toStringTotalCurrencies(){

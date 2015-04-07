@@ -17,14 +17,15 @@ import android.provider.MediaStore.Files;
  */
 public class Receipt extends TModel {
 	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	/** The path of the image. May or may not be null*/
 	protected String path;
 
+	/**
+	 * Path to the file, if stored locally.
+	 * @return
+	 */
 	public String getPath() {
 		return path;
 	}
@@ -41,6 +42,12 @@ public class Receipt extends TModel {
 		this.byteArray = null;
 	}
 
+	/**
+	 * Gets bitmap from byte array is not null. Otherwise, gets from file system
+	 * using uri path.
+	 * 
+	 * @return the bitmap
+	 */
 	public Bitmap getBitmap(){
 		if (byteArray == null) {
 			return getBitmapFromPath();
@@ -52,7 +59,8 @@ public class Receipt extends TModel {
 	
 
 	/**
-	 * Call this before saving to elastic search
+	 * Call this before saving to elastic search. Otherwise, images won't
+	 * be saved.
 	 */
 	public void switchToStoringActualBitmap(){
 		this.byteArray = getByteArrayFromPath();
@@ -61,7 +69,7 @@ public class Receipt extends TModel {
 	
 
 	/**
-	 * Call this file is saved. Needed because saving an actual
+	 * Call this before file is saved. Needed because saving an actual
 	 * bitmap is too slow.
 	 */
 	public void stopStoringActualBitmap(){
@@ -114,6 +122,9 @@ public class Receipt extends TModel {
 	}
 
 	/**
+	 * Gets a drawable. Will NOT work for global claims.
+	 * 
+	 * @deprecated
 	 * @return
 	 */
 	public Drawable getDrawable() {

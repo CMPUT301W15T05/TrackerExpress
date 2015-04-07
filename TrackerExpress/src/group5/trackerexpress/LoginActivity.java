@@ -242,9 +242,10 @@ public class LoginActivity extends AccountFormActivity {//implements LoaderCallb
 		}
 	}
 
-	// http://www.androiddom.com/2011/06/displaying-android-pop-up-dialog_13.html 11/03/15
 	/**
 	 * Show pop up.
+	 * 
+	 * http://www.androiddom.com/2011/06/displaying-android-pop-up-dialog_13.html 11/03/15
 	 */
 	private void showPopUp() {
 

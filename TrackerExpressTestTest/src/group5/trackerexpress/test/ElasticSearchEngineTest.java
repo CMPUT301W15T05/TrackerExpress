@@ -87,7 +87,7 @@ public class ElasticSearchEngineTest extends ActivityInstrumentationTestCase2<Te
 
 			elasticSearchEngine.deleteClaim(getActivity(), claim.getUuid());
 
-			Thread.sleep(1000);
+			Thread.sleep(2000);
 
 			claims = elasticSearchEngine.getClaims(getActivity());
 			assertEquals(sizeBefore, claims.length);

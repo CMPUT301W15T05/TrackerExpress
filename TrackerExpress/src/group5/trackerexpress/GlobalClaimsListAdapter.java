@@ -12,6 +12,11 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+/**
+ * Displays the list of global claims.
+ * 
+ * @author crinklaw
+ */
 public class GlobalClaimsListAdapter extends ArrayAdapter<Claim> {
 	public static final String approvedStatus = "APPROVED";
 	public static final String returnedStatus = "RETURNED";

@@ -161,6 +161,11 @@ public class ExpenseListFragment extends Fragment implements TView {
 		return rootView;
 	}
 
+	/**
+	 * Prepares the options menu for list 
+	 * 
+	 * @param popup
+	 */
 	public void onPrepareOptionsMenu( PopupMenu popup ){
 		if ( ! myClaimListVersion ||
 				claim.getStatus() == Claim.APPROVED || 

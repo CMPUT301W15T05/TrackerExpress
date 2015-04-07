@@ -4,9 +4,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class SectionsPagerAdapter.
+ * The Class SectionsPagerAdapter. Allows for tabbed interfaces.
  * @author Peter Crinklaw, Randy Hu, Parash Rahman, Jesse Emery, Sean Baergen, Rishi Barnwal
  * @version Part 4
  */

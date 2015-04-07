@@ -220,7 +220,7 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 
 
 	/**
-	 * Initialize variables.
+	 * Initialize variables; Views and such
 	 */
 	private void initializeVariables() {
 		
@@ -306,7 +306,7 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 	private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
 
 	/**
-	 * Take a photo.
+	 * Takes a photo. Calls camera app and gets result
 	 */
 	public void takeAPhoto() {
 		String folder = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Tracker Express";
@@ -327,6 +327,9 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 		startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
 	}
 
+	/**
+	 * Handles termination of activities
+	 */
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		// TODO Auto-generated method stub
 		if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE){
@@ -371,7 +374,11 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 		}
 	}
 	
-    
+    /**
+     * Modifies an expense's properties.
+     * 
+     * @param expense
+     */
 	public void editExpense(Expense expense) {
 		if ( isNewExpense ){
 			expense = new Expense();

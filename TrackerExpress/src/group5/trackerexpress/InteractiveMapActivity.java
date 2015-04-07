@@ -61,6 +61,9 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+/**
+ * Map for our app. Lets user search for locations and set locations.
+ */
 public class InteractiveMapActivity extends BasicMapActivity 
 			implements  OnMapClickListener, OnMapLongClickListener, 
 			GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks {
@@ -124,6 +127,9 @@ public class InteractiveMapActivity extends BasicMapActivity
 		});
     }
     
+    /**
+     * Autocompletion of search field
+     */
     private void setAutoCompleteListeners() {
     	
         // Register a listener that receives callbacks when a suggestion has been selected
@@ -221,8 +227,11 @@ public class InteractiveMapActivity extends BasicMapActivity
 		    public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 		});
     }
-
-    // http://stackoverflow.com/questions/15412943/hide-soft-keyboard-on-losing-focus 03/04/2015
+    
+    /**
+     * http://stackoverflow.com/questions/15412943/hide-soft-keyboard-on-losing-focus 03/04/2015
+     * Hides the keypad
+     */
     private void hideKeypad() {
 
     	// With the dummy Linear Layout in the xml, clear focus selects that 
@@ -401,6 +410,9 @@ public class InteractiveMapActivity extends BasicMapActivity
 		
 	}
 	
+	/**
+	 * Moves the map to a specified location.
+	 */
 	@Override
 	public void goToLocation(LatLng latLng, Integer newZoom) {
 		super.goToLocation(latLng, newZoom);

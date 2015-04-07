@@ -134,7 +134,7 @@ public class Claim extends TModel implements Comparable<Claim>{
 	 * 
 	 * @return the comments
 	 */
-	String getComments() {
+	public String getComments() {
 		return comments;
 	}
 

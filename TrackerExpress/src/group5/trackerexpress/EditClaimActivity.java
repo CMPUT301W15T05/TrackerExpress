@@ -37,9 +37,10 @@ import android.widget.Toast;
 import com.google.android.gms.maps.model.LatLng;
 
 /**
- * The Class EditClaimActivity.
- */
-/**
+ * Allows the creation and modification of claims.
+ * Passed a claim uuid, which it uses to grab the claim to modify or
+ * create from the file system.
+ *
  * @author Peter Crinklaw, Randy Hu, Parash Rahman, Jesse Emery, Sean Baergen, Rishi Barnwal
  * @version Part 4
  *
@@ -99,10 +100,8 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 	
 	private int clicked_destination = -1;
 	
-	/** The do nothing. */
 	private final int doNothing = 5;
 	
-	/** The my calendar. */
 	private Calendar startDateSelection;
 	
 	private Calendar endDateSelection;
@@ -445,7 +444,7 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 	    }
 	    return super.onKeyDown(keyCode, event);
 	}
-	
+
 	@Override
 	public void returnDate(View view, Calendar date) {
 		if (view == startDateButton) {
@@ -608,10 +607,9 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 	};
 	
 	/**
-	 * Editclaim.
+	 * Get info from user and add it to claim.
 	 *
 	 * @param claim the claim
-	 * Get info from user and add it to claim.
 	 */
 	private void editclaim(final Claim claim) {
 		// TODO Auto-generated method stub
@@ -709,6 +707,17 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 				
 	}
 	
+	/**
+	 * Makes a dialog.
+	 * 
+	 * @param helperBuilder
+	 * @param desName
+	 * @param desRea
+	 * @param location2
+	 * @param position
+	 * @param oldDestination
+	 * @param editDestination2
+	 */
 	private void dialog(Builder helperBuilder, final EditText desName, final EditText desRea, Location location2, final int position, final String oldDestination, final int editDestination2){
 		
 		helperBuilder.setPositiveButton("Done", new DialogInterface.OnClickListener() {
@@ -770,6 +779,9 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 		helperDialog.show();
 	}
 	
+	/**
+	 * Handle finishing of expense activity.
+	 */
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
 	    if (requestCode == 1) {
@@ -885,7 +897,11 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 		desListView.setAdapter(destinationAdapter);
 	}
 	
-	
+	/**
+	 * Converts string tag to array
+	 * @param stringTag
+	 * @throws IllegalAccessException
+	 */
 	private void StringTagToArray(String stringTag) throws IllegalAccessException {
 		// TODO Auto-generated method stub
 		Tag newTag;
@@ -899,11 +915,10 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 
 
 	/**
-	 * Destination reason.
+	 * Concatenate destination into one string to display it on simple ListView adapter
 	 *
 	 * @param destinations the destination2
 	 * @return the array list
-	// Concatenate destination into one string to display it on simple ListView adapter
 	 */
 	public ArrayList<String> assembleDestinationList(ArrayList<Destination> destinations){
 		ArrayList<String> destinationReasonList = new ArrayList<String>();

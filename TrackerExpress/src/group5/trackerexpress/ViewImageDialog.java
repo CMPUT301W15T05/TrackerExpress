@@ -12,6 +12,12 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
 
+/**
+ * Allows images to be blown up. Gets passed a claim id and expense id, and gets bitmap
+ * from server. 
+ * 
+ * @author crinklaw
+ */
 public class ViewImageDialog extends Activity {
 
 	private ImageView receiptImageView;

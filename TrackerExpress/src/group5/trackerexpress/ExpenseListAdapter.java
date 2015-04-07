@@ -20,7 +20,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 /**
- * The Class ExpenseListAdapter.
+ * Displays expense list inside of view claim activity.
+ * 
+ * @author group5
  */
 public class ExpenseListAdapter extends ArrayAdapter<Expense> {
 	

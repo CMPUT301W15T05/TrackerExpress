@@ -9,6 +9,10 @@ import android.widget.TableRow;
 import android.widget.TableRow.LayoutParams;
 import android.widget.TextView;
 
+/**
+ * Creates a row table. Needed by Map activities and view claim fragment.
+ * @author crinklaw
+ */
 public class RowTableLayout {
 	private View rootView;
 	private Context context;
