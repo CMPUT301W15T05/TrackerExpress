@@ -7,8 +7,10 @@ import java.util.Calendar;
 import java.util.Locale;
 import java.util.UUID;
 
+import group5.trackerexpress.EditBitmap;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.net.Uri;
@@ -67,18 +69,29 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 	/** The Claim UUID and the Expense UUID. */
 	private UUID claimId, expenseId;
 	
-	/** The Button to attach location ot expense**/
+	/** The Button to attach location ot expense */
 	private Button b_getlocation;
 	
+	/** The location for the expense */
 	private Location location;
-	
 
+
+	EditBitmap editBitmap = new EditBitmap();
+
+	/** checks if the claim is new and cancel's appropriately */
+	private boolean isNewClaim;
+
+	/** checks if the claim has been saved and cancel's appropriately */
+	private boolean isSaved;
+	
 	final String myFormat = "EEEE MMMM dd, yyyy"; //In which you need put here
 	final SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
 
 	/** The expense in question */
 	private Expense expense;
-
+	
+	/** The claim of the expense in question */
+	private Claim claim;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -88,9 +101,12 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 		final Intent intent = this.getIntent();
 	    claimId = (UUID)intent.getSerializableExtra("claimUUID");
 	    expenseId = (UUID)intent.getSerializableExtra("expenseUUID");
+	    isNewClaim = intent.getBooleanExtra("isNewClaim", false);
+	    isSaved = false;
 	    
 	    expense = Controller.getExpense(EditExpenseActivity.this, claimId, expenseId);
-			    
+	    claim = Controller.getClaim(this, claimId);
+	    
 		initializeVariables();
 		
 	    // The date button that shows a date dialog
@@ -112,7 +128,6 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 			@Override
 			public void onClick(View v) {
 				deleteReceipt();
-				
 			}
 	    	
 	    });
@@ -163,7 +178,8 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 	protected void deleteReceipt() {
 		// TODO Auto-generated method stub
 		receiptUri = null;
-		imgButton.setImageResource(R.drawable.a);
+		imgButton.setImageResource(R.drawable.image_button_hint);
+		deleteImage.setVisibility(View.GONE);
 		
 	}
 
@@ -220,17 +236,20 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 	    if ( expense.getReceipt() != null ){
 			imgButton.setImageDrawable(expense.getReceipt().getDrawable());
 			deleteImage.setVisibility(View.VISIBLE);
-	    }else{
+	    } else {
 	    	deleteImage.setVisibility(View.GONE);
 	    }
 	    
 	    if ( !expense.isComplete()){
 	    	statusCheckBox.setChecked(true);
 	    }
-	
+
 	    location = expense.getLocation();
 	    if (location != null)
 	    	b_getlocation.setText("View Location");
+	    
+	    statusCheckBox.setChecked(! expense.isComplete());
+
 	    
 	}
 	
@@ -243,7 +262,6 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 	
 	/** The Constant CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE. */
 	private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
-
 
 	/**
 	 * Take a photo.
@@ -273,9 +291,13 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 			if (resultCode == RESULT_OK){
 				Toast.makeText(EditExpenseActivity.this, "Photo Set", Toast.LENGTH_SHORT).show(); 
 				Drawable photo = Drawable.createFromPath(receiptUri.getPath());
-				imgButton.setImageDrawable(photo);
+				Bitmap sourceBitmap = ((BitmapDrawable)photo).getBitmap();
+				Bitmap rotatedBitmap = editBitmap.rotateBitmap(sourceBitmap);
+				Bitmap resizedBitmap = editBitmap.resizeBitmap(rotatedBitmap, 640);
+				imgButton.setImageBitmap(resizedBitmap);
 				deleteImage.setVisibility(View.VISIBLE);
 				//imgButton.setImageURI(receiptUri);
+
 			} else if (resultCode == RESULT_CANCELED){
 				Toast.makeText(EditExpenseActivity.this, "Canceled", Toast.LENGTH_SHORT).show();
 			} else{
@@ -349,6 +371,7 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 		expense.setCategory(this, categorySelection);
 		expense.setCurrency(this, currencySelection);
 		expense.setLocation(location);
+		isSaved = true;
 		finish();
 	}
 
@@ -369,22 +392,5 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 			}
 		}
 		return index;
-	} 
-	
-	
-	/** resizes the receipt bitmap */
-	public Bitmap getResizedBitmap(Bitmap image, int maxSize) {
-        int width = image.getWidth();
-        int height = image.getHeight();
-
-        float bitmapRatio = (float)width / (float) height;
-        if (bitmapRatio > 1) {
-            width = maxSize;
-            height = (int) (width / bitmapRatio);
-        } else {
-            height = maxSize;
-            width = (int) (height * bitmapRatio);
-        }
-        return Bitmap.createScaledBitmap(image, width, height, true);
-	}
+	} 	
 }

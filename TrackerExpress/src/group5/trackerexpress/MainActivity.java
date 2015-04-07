@@ -54,7 +54,7 @@ public class MainActivity extends ActionBarActivity {
 		     @Override
 		     public void onPageSelected(int position){
 		    	 Fragment visible = getVisibleFragment();
-		    	 
+		    	 getActionBar().setSelectedNavigationItem(position);
 		    	 ((TView)visible).update(null);
 		     }
 

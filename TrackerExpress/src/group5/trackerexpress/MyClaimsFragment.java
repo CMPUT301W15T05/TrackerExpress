@@ -44,8 +44,7 @@ public class MyClaimsFragment extends Fragment implements TView {
 	 **/
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		
+			Bundle savedInstanceState) {		
 		View rootView = inflater.inflate(R.layout.fragment_my_claims,
 				container, false);
 		
@@ -99,7 +98,6 @@ public class MyClaimsFragment extends Fragment implements TView {
                         	intent = new Intent( getActivity(), EditClaimActivity.class );
                         	intent.putExtra( "isNewClaim", false );
                         	intent.putExtra("claimUUID", clickedOnClaim.getUuid());
-                        	Log.i("myMessage", "hi");
                         	startActivity(intent);
                         	break;
                         case R.id.op_view_claim:
@@ -114,6 +112,7 @@ public class MyClaimsFragment extends Fragment implements TView {
                         	} else {
                         		//FIXME: Handle connectivity error
                         		new ElasticSearchEngine().submitClaim(getActivity(), clickedOnClaim);
+                        		
                         	}
                         	break;
                         case R.id.op_add_expense:
