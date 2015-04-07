@@ -88,10 +88,6 @@ public class ElasticSearchEngine {
 		List<Claim> claims = new ArrayList<Claim>();
 		Log.e("USER", Controller.getUser(context).getEmail().toString());
 		for (Claim claim : claimsUnfiltered){
-			Log.e(claim.getClaimName(), claim.getSubmitterEmail());
-			try{
-			Log.e(claim.getClaimName(), claim.getApproverEmail());
-			} catch (NullPointerException e) {Log.e(claim.getClaimName(), "NULL APPROVER");}
 			if (    !claim.getSubmitterEmail().equals(Controller.getUser(context).getEmail()) &&
 					(claim.getApproverEmail() == null || claim.getApproverEmail().equals(Controller.getUser(context).getEmail())) &&
 					 claim.getStatus() != Claim.IN_PROGRESS){
@@ -141,10 +137,8 @@ public class ElasticSearchEngine {
 		if (!Controller.isInternetConnected(context))
 			throw new IOException();
 		
-		claim.setStatus(context, Claim.SUBMITTED);
 		claim.setSubmitterName(context, Controller.getUser(context).getName());
 		claim.setSubmitterEmail(context, Controller.getUser(context).getEmail());
-		Log.e("RECEIPTSUBMIT", "Submitting Receipt");
 		
 		//convert UriBitmaps to actual bitmaps
 		for (Expense expense : claim.getExpenseList().toList()){
@@ -154,7 +148,6 @@ public class ElasticSearchEngine {
 			} catch (NullPointerException e) {}
 
 		}
-		Log.e("RECEIPTSTORED", "Submitted RECEIPT!!!!!!");
 		final Claim claimFinal = claim;
 		
 		Thread thread = new Thread(new Runnable(){
@@ -185,8 +178,6 @@ public class ElasticSearchEngine {
 
 	}
 
-
-
 	public void deleteClaim(Context context, UUID id) throws IOException {
 		final UUID idFinal = id;
 		
@@ -209,7 +200,7 @@ public class ElasticSearchEngine {
 
 
 
-	public void approveClaim(Context context, UUID id, String comments) throws IOException {
+	public void reviewClaim(Context context, UUID id, String comments, final int status) throws IOException {
 		
 		if (!Controller.isInternetConnected(context))
 			throw new IOException();
@@ -223,7 +214,7 @@ public class ElasticSearchEngine {
 			@Override
 			public void run() {
 				try {
-					elasicSearchEngineUnthreaded.approveClaim(idFinal, commentsFinal, approverName, approverEmail);
+					elasicSearchEngineUnthreaded.reviewClaim(idFinal, commentsFinal, approverName, approverEmail, status);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -239,7 +230,7 @@ public class ElasticSearchEngine {
 	}
 
 
-	public void returnClaim(Context context, UUID id, String comments) throws IOException {
+	/*public void returnClaim(Context context, UUID id, String comments) throws IOException {
 		
 		if (!Controller.isInternetConnected(context))
 			throw new IOException();
@@ -263,12 +254,12 @@ public class ElasticSearchEngine {
 		thread.setUncaughtExceptionHandler(uncaughtExceptionHandler);
 
 		thread.start();
-		/*try {
+		try {
 			thread.join();
 		} catch (InterruptedException e) {
 			throw new RuntimeException();
-		}*/
-	}
+		}
+	}*/
 
 
 }

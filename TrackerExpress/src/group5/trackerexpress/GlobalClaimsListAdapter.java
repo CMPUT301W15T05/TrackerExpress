@@ -115,7 +115,7 @@ public class GlobalClaimsListAdapter extends ArrayAdapter<Claim> {
 			holder.status.setText(returnedStatus + " BY: " + c.getApproverName());
 			break;
 		case Claim.SUBMITTED:
-			holder.status.setText(submittedStatus + " BY: " + c.getSubmitterName());
+			holder.status.setText(submittedStatus);
 			break;
 		}
 		

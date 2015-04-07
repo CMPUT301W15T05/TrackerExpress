@@ -209,11 +209,11 @@ public class ElasticSearchEngineUnthreaded {
 		}
 	}	
 	
-	public void approveClaim(UUID id, String comments, String approverName, String approverEmail){
+	public void reviewClaim(UUID id, String comments, String approverName, String approverEmail, int statusIn){
 		try {
 			HttpPost updateRequest = new HttpPost(HTTP_PATH + id + "/_update");
 			String query = "{\"doc\": {" +
-					" \"status\"        :   " + Claim.APPROVED + ", "   +
+					" \"status\"        :   " + statusIn + ", "   +
 					" \"comments\"      : \"" + comments       + "\", " +
 					" \"approverName\"  : \"" + approverName   + "\", " +		
 					" \"approverEmail\" : \"" + approverEmail  + "\" " +							
@@ -236,7 +236,7 @@ public class ElasticSearchEngineUnthreaded {
 	}	
 	
 	
-	public void returnClaim(UUID id, String comments, String approverName, String approverEmail){
+	/*public void returnClaim(UUID id, String comments, String approverName, String approverEmail){
 		try {
 			HttpPost updateRequest = new HttpPost(HTTP_PATH + id + "/_update");
 			String query = "{\"doc\": {" +
@@ -260,7 +260,7 @@ public class ElasticSearchEngineUnthreaded {
 		catch(IOException E){
 			throw new RuntimeException();
 		}
-	}	
+	}	*/
 	
 	/**
 	 * get the http response and return json string
