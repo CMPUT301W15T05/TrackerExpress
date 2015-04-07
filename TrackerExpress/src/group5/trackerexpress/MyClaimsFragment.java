@@ -2,6 +2,8 @@ package group5.trackerexpress;
 
 import java.io.IOException;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -114,15 +116,38 @@ public class MyClaimsFragment extends Fragment implements TView {
             					Toast.makeText(getActivity(), "Can't submit, claim is incomplete.", Toast.LENGTH_SHORT). show();
                         	} else {
                         		//FIXME: Handle connectivity error
-                        		int old_status = clickedOnClaim.getStatus();
-                        		try {
-                        			clickedOnClaim.setStatus(getActivity(), Claim.SUBMITTED);
-                        			new ElasticSearchEngineClaims().submitClaim(getActivity(), clickedOnClaim);
-								} catch (IOException e) {
-									clickedOnClaim.setStatus(getActivity(), old_status);
-									throw new RuntimeException();
-								}
-                        		Toast.makeText(getActivity(), "Submitting", Toast.LENGTH_LONG).show();
+                        		AlertDialog.Builder incBuilder = new AlertDialog.Builder(getActivity());
+                        		incBuilder.setMessage("Warning");
+                        		incBuilder.setMessage("You are submitting a claim with incomplete expenses. Do you wish to continue?");
+                        		incBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            	    				public void onClick(DialogInterface dialog, int which) {
+            	    					/*int old_status = clickedOnClaim.getStatus();
+                                		try {
+                                			clickedOnClaim.setStatus(getActivity(), Claim.SUBMITTED);
+                                			new ElasticSearchEngineClaims().submitClaim(getActivity(), clickedOnClaim);
+        								} catch (IOException e) {
+        									clickedOnClaim.setStatus(getActivity(), old_status);
+        									throw new RuntimeException();
+        								}
+                                		Toast.makeText(getActivity(), "Submitting", Toast.LENGTH_LONG).show();*/
+            	    					int old_status = clickedOnClaim.getStatus();
+                                		try {
+                                			clickedOnClaim.setStatus(getActivity(), Claim.SUBMITTED);
+                                			new ElasticSearchEngineClaims().submitClaim(getActivity(), clickedOnClaim);
+        								} catch (IOException e) {
+        									clickedOnClaim.setStatus(getActivity(), old_status);
+        									throw new RuntimeException();
+        								}
+                                		Toast.makeText(getActivity(), "Submitting", Toast.LENGTH_LONG).show();
+            	    				}
+            	    			});
+                        		incBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							// Do nothing
+						}
+					});
+                    incBuilder.show();
                         		
                         	}
                         	break;
