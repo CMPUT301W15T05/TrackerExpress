@@ -136,7 +136,12 @@ public class MainClaimListAdapter extends ArrayAdapter<Claim> {
 		
 		// Print currency totals
 		holder.amounts.setText("Currency Totals: " + c.getExpenseList().toStringTotalCurrencies());
-				
+		
+		ArrayList<Expense> e = c.getExpenseList().toList();
+		if ( e.size() > 0 ){
+			Log.i("myMessage", "Jiya re " + e.get(0).getAmount() + " " + e.get(0).getCurrency() );
+		}
+		
 		// Print incompleteness indicator
 		if ( c.isIncomplete() ){
 			holder.isIncompleteStatus.setText(incompleteString);
