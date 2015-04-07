@@ -400,12 +400,14 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 		expense.setDate(this, dateSelection);
 		expense.setCategory(this, categorySelection);
 		expense.setCurrency(this, currencySelection);
-		expense.setLocation(location);
+		if (location != null){
+			expense.setLocation(location);
+			expense.setHasLocation(true);
+		}
 
 		if ( isNewExpense ){
 			claim.getExpenseList().addExpense(this, expense);
 		}		
-
 		finish();
 
 	}
