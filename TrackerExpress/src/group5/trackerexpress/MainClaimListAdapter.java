@@ -136,7 +136,7 @@ public class MainClaimListAdapter extends ArrayAdapter<Claim> {
 		
 		// Print currency totals
 		holder.amounts.setText("Currency Totals: " + c.getExpenseList().toStringTotalCurrencies());
-		
+				
 		// Print incompleteness indicator
 		if ( c.isIncomplete() ){
 			holder.isIncompleteStatus.setText(incompleteString);
@@ -183,8 +183,7 @@ public class MainClaimListAdapter extends ArrayAdapter<Claim> {
 		} else {
 			holder.toDate.setVisibility(View.INVISIBLE);
 		}
-		
-		
+				
 		// Print distance color indicator
 		int destinationSize = c.getDestinationList().size();
 		if ( destinationSize == 0 ){
@@ -211,8 +210,6 @@ public class MainClaimListAdapter extends ArrayAdapter<Claim> {
 				holder.distanceView.setBackgroundColor(context.getResources().getColor(R.color.furthest));
 			}
 		}
-		
-		
 		
 		return v;
 	}
