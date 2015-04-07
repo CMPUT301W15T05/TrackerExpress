@@ -64,16 +64,6 @@ public class MainActivity extends ActionBarActivity {
 		     public void onPageScrollStateChanged(int arg0) {}
 		  });
 	}
-
-	/* (non-Javadoc)
-	 * @see group5.trackerexpress.ActionBarActivity#onCreateOptionsMenu(android.view.Menu)
-	 */
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.main, menu);
-		return true;
-	}
 	
 	/**
 	 * Returns the fragment currently on screen

@@ -143,6 +143,14 @@ public class ElasticSearchEngine {
 
 	}
 
+	// Warning! This deletes all user claims
+	public void deleteClaims() {
+		Claim[] claims = elasicSearchEngineUnthreaded.getClaims();
+		
+		for (Claim claim : claims) {
+			deleteClaim(claim.getUuid());
+		}
+	}
 
 
 	public void deleteClaim(UUID id){

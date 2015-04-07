@@ -2,6 +2,7 @@ package group5.trackerexpress;
 
 import android.app.ActionBar;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
@@ -15,7 +16,7 @@ import android.view.MenuItem;
  * @version Part 4
  */
 public abstract class ActionBarActivity extends FragmentActivity implements
-ActionBar.TabListener{
+ActionBar.TabListener {
 
 	/**
 	 * The {@link ViewPager} that will host the section contents.
@@ -81,26 +82,25 @@ ActionBar.TabListener{
 		}
 	}
 	
-	// Inflate the menu; this adds items to the action bar if it is present.
 	/* (non-Javadoc)
-	 * @see android.app.Activity#onCreateOptionsMenu(android.view.Menu)
+	 * @see group5.trackerexpress.ActionBarActivity#onCreateOptionsMenu(android.view.Menu)
 	 */
 	@Override
-	public abstract boolean onCreateOptionsMenu(Menu menu);
-
-	/* (non-Javadoc)
-	 * @see android.app.Activity#onOptionsItemSelected(android.view.MenuItem)
-	 */
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
-		int id = item.getItemId();
-		if (id == R.id.action_settings) {
-			return true;
-		}
-		return super.onOptionsItemSelected(item);
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+	
+	public void signOut(MenuItem menu) {
+		Intent intent = new Intent(this, LoginActivity.class);
+    	startActivity(intent);
+    	Controller.getUser(this).setSignedIn(this, false);
+    	finish();
+	}
+	
+	public void editAccount(MenuItem menu) {
+		
 	}
 	
 	/* (non-Javadoc)

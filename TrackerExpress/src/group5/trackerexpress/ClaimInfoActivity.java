@@ -10,7 +10,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.util.Log;
-import android.view.Menu;
 
 /**
  * Displays information about claims. Contains a fragment for the expense list and the claim property view.
@@ -73,16 +72,6 @@ public class ClaimInfoActivity extends ActionBarActivity {
 				getSupportFragmentManager());
 		
 		setUpActionBar(mSectionsPagerAdapter, R.id.pager_activity_claim_info);
-	}
-
-	/* (non-Javadoc)
-	 * @see group5.trackerexpress.ActionBarActivity#onCreateOptionsMenu(android.view.Menu)
-	 */
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.claim_info, menu);
-		return true;
 	}
 
 	/**
