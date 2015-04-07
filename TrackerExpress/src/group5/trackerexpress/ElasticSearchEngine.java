@@ -108,9 +108,11 @@ public class ElasticSearchEngine {
 		
 		//convert UriBitmaps to actual bitmaps
 		for (Expense expense : claim.getExpenseList().toList()){
+
 			try {
 				expense.getReceipt().switchToStoringActualBitmap();
 			} catch (NullPointerException e) {}
+
 		}
 
 		final Claim claimFinal = claim;

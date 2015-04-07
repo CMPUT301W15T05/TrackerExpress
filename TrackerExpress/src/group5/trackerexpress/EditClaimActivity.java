@@ -635,28 +635,15 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 			 */
 			AlertDialog.Builder helperBuilder = new AlertDialog.Builder(EditClaimActivity.this);
 			
-			helperBuilder.setPositiveButton("Edit", new DialogInterface.OnClickListener(){
-				/** When edit button is pressed, opens the destination popup
-				 * @see android.content.DialogInterface.OnClickListener#onClick(android.content.DialogInterface, int)
-				 */
-				public void onClick(DialogInterface dialog, int which){
+/*		helperBuilder.setPositiveButton("Edit", new DialogInterface.OnClickListener(){
+
+			public void onClick(DialogInterface dialog, int which){
 					createDestinationButton(destination,editDestination,position);
 				}
-			});
+			});*/
 			
-			helperBuilder.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
-
-				/** Back out the activity without doing anything
-				 * @see android.content.DialogInterface.OnClickListener#onClick(android.content.DialogInterface, int)
-				 */
-				@Override
-				  public void onClick(DialogInterface dialog, int which) {
-				   /** Do nothing */
-				  }
-			});
-			
-			helperBuilder.setNegativeButton("Delete", new DialogInterface.OnClickListener(){
-			
+			helperBuilder.setPositiveButton("Delete", new DialogInterface.OnClickListener(){
+				
 				/** When the delete button is pressed, the item in the dummy listview will be deleted and adapter updated
 				 * @see android.content.DialogInterface.OnClickListener#onClick(android.content.DialogInterface, int)
 				 */
@@ -668,6 +655,19 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 					adapter2.notifyDataSetChanged();
 				}
 			});
+			
+			helperBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+
+				/** Back out the activity without doing anything
+				 * @see android.content.DialogInterface.OnClickListener#onClick(android.content.DialogInterface, int)
+				 */
+				@Override
+				  public void onClick(DialogInterface dialog, int which) {
+				   /** Do nothing */
+				  }
+			});
+			
+			
 			AlertDialog helpDialog = helperBuilder.create();
 			helpDialog.show();
 		}
