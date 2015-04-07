@@ -192,7 +192,8 @@ public class MainClaimListAdapter extends ArrayAdapter<Claim> {
 		int destinationSize = c.getDestinationList().size();
 		if ( destinationSize == 0 ){
 			holder.distanceView.setVisibility( View.GONE );
-		} else {
+		} else if (distanceOrderedClaims != null) {
+			
 			holder.distanceView.setVisibility( View.VISIBLE );
 
 			DisplayMetrics metrics = context.getResources().getDisplayMetrics();
