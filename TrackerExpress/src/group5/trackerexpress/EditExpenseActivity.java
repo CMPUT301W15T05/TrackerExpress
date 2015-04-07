@@ -43,8 +43,6 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 	/** The category and currency. */
 	private Spinner categorySpinner, currencySpinner;
 	
-	private TextWatcher currencyWatcher;
-	
 	private Button deleteImage;
 	
 	/** The image button. */
@@ -257,7 +255,7 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 		    }
 		    
 		    if ( expense.getReceipt() != null ){
-				imgButton.setImageDrawable(expense.getReceipt().getDrawable());
+				imgButton.setImageBitmap(editBitmap.rotateBitmap(expense.getReceipt().getBitmap()));
 				receiptUri = Uri.parse(expense.getReceipt().getPath());
 				deleteImage.setVisibility(View.VISIBLE);
 		    } else {
