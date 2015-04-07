@@ -25,8 +25,8 @@ public class ViewImageDialog extends Activity {
         String filePath = (String) intent.getStringExtra("filePath");
         
         Bitmap bitmap = BitmapFactory.decodeFile(filePath);
-        Bitmap rotatedBitmap = editBitmap.rotateBitmap(bitmap);
-        receiptImageView.setImageBitmap(rotatedBitmap);
+       // Bitmap rotatedBitmap = editBitmap.rotateBitmap(bitmap);
+        receiptImageView.setImageBitmap(bitmap);
         
         receiptImageView.setClickable(true);
 

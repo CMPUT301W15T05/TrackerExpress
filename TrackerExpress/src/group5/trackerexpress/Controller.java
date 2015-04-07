@@ -104,9 +104,13 @@ public class Controller {
 	 * @return true if internet is connected
 	 * 			false if internet is disconnected
 	 */
-	public static boolean isInternetConnected(Context context){
-		ConnectivityManager cm =
-		        (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+	public static boolean isInternetConnected(Context contextIn){
+		ConnectivityManager cm;
+		try {
+			cm = (ConnectivityManager) contextIn.getSystemService(Context.CONNECTIVITY_SERVICE);
+		} catch (Exception e) {
+			cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+		}
 		 
 		NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
 		boolean isConnected = activeNetwork != null &&
