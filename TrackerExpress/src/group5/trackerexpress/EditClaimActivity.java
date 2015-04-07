@@ -475,6 +475,8 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 	/**
 	 * This function will check for network connectivity for add destination button 
 	 * since every destination requires geolocation and geolocation map requires network to function.
+	 * function taken from: 
+	 * http://stackoverflow.com/questions/1560788/how-to-check-internet-access-on-android-inetaddress-never-timeouts  4/7/2015
 	 * @return
 	 */
 	protected boolean isOnline() {
