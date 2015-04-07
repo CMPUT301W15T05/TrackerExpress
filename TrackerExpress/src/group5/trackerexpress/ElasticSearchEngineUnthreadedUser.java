@@ -40,7 +40,7 @@ import com.google.gson.reflect.TypeToken;
  * 
  *  @See ElasticSearchEngine
  */
-public class ElasticSearchEngineUnthreaded {
+public class ElasticSearchEngineUnthreadedUser {
 
 	// Http Connector
 	private HttpClient httpclient = new DefaultHttpClient();
@@ -50,12 +50,12 @@ public class ElasticSearchEngineUnthreaded {
 	/**
 	 * 
 	 */
-	private static final String HTTP_PATH = "http://cmput301.softwareprocess.es:8080/testing/group5claimsBitmaps/";
+	private static final String HTTP_PATH = "http://cmput301.softwareprocess.es:8080/testing/group5users/";
 
 	/**
 	 * @return
 	 */
-	public Claim[] getClaims() {
+	public User[] getUsers() {
 
 		try {
 			HttpPost searchRequest = new HttpPost(HTTP_PATH + "_search?pretty=1");
@@ -76,72 +76,32 @@ public class ElasticSearchEngineUnthreaded {
 			ElasticSearchSearchResponse esResponse = gson.fromJson(json, elasticSearchSearchResponseType);
 			//System.err.println(esResponse);
 
-			ArrayList<Claim> credentials = new ArrayList<Claim>();
-			for (ElasticSearchResponse claimResponse : esResponse.getHits()) {
-				Claim claim = claimResponse.getSource();
-				credentials.add(claim);
+			ArrayList<User> users = new ArrayList<User>();
+			for (ElasticSearchResponse userResponse : esResponse.getHits()) {
+				User user = userResponse.getSource();
+				users.add(user);
 			}
 			//searchRequest.getEntity().consumeContent();
-
-			//return in reverse sorted order:
-			Collections.sort(credentials, new Comparator<Claim>(){
-				@Override
-				public int compare(Claim arg0, Claim arg1) {
-					return -1 * arg0.compareTo(arg1);
-				}
-			});
 			
-			return credentials.toArray(new Claim[credentials.size()]);
+			return users.toArray(new User[users.size()]);
 			
 		} catch(IOException e){
 			throw new RuntimeException();
 		}
 	}
-	
-	/**
-	 * @return
-	 */
-	public Claim getClaim(UUID id) {
 
-		try{
-			HttpGet getRequest = new HttpGet(HTTP_PATH + id);
-
-			getRequest.addHeader("Accept","application/json");
-
-			HttpResponse response = httpclient.execute(getRequest);
-
-			String status = response.getStatusLine().toString();
-			System.out.println(status);
-
-			String json = getEntityContent(response);
-
-			Type elasticSearchResponseType = new TypeToken<ElasticSearchResponse>(){}.getType();
-			ElasticSearchResponse esResponse = gson.fromJson(json, elasticSearchResponseType);
-
-			return esResponse.getSource();
-
-		} catch (ClientProtocolException e) {
-			throw new RuntimeException();
-		} catch (IOException e) {
-			throw new RuntimeException();
-		}
-	}
-	
-	
-	
 
 	/**
 	 * 
 	 * 
-	 * @param claim
+	 * @param user
 	 */
-	public void submitClaim(Claim claim) {
+	public void submitUser(User user) {
 		try {
-			Log.e("CLAIM SUBMITTING:", claim.getClaimName());
-			HttpPost httpPost = new HttpPost(HTTP_PATH + claim.getUuid());
+			HttpPost httpPost = new HttpPost(HTTP_PATH + user.getUuid());
 			StringEntity stringentity = null;
 
-			stringentity = new StringEntity(gson.toJson(claim));
+			stringentity = new StringEntity(gson.toJson(user));
 
 			httpPost.setHeader("Accept","application/json");
 			Log.e("SetingEnttity", "SettingEntity");
@@ -179,88 +139,7 @@ public class ElasticSearchEngineUnthreaded {
 		}
 	}		
 	
-	
-	
-	
-	public void deleteClaim(UUID id){
-		try {
-			HttpDelete httpDelete = new HttpDelete(HTTP_PATH + id);
-			httpDelete.addHeader("Accept","application/json");
 
-			HttpResponse response = httpclient.execute(httpDelete);
-
-			String status = response.getStatusLine().toString();
-			System.out.println(status);
-
-			HttpEntity entity = response.getEntity();
-			BufferedReader br = new BufferedReader(new InputStreamReader(entity.getContent()));
-			String output;
-			System.err.println("Output from Server -> ");
-			while ((output = br.readLine()) != null) {
-				System.err.println(output);
-			}
-			entity.consumeContent();
-
-			//		httpDelete.releaseConnection();
-
-		}
-		catch (IOException e){
-			throw new RuntimeException();
-		}
-	}	
-	
-	public void reviewClaim(UUID id, String comments, String approverName, String approverEmail, int statusIn){
-		try {
-			HttpPost updateRequest = new HttpPost(HTTP_PATH + id + "/_update");
-			String query = "{\"doc\": {" +
-					" \"status\"        :   " + statusIn + ", "   +
-					" \"comments\"      : \"" + comments       + "\", " +
-					" \"approverName\"  : \"" + approverName   + "\", " +		
-					" \"approverEmail\" : \"" + approverEmail  + "\" " +							
-					" }}";
-			StringEntity stringentity = new StringEntity(query);
-			
-			updateRequest.setHeader("Accept","application/json");
-			updateRequest.setEntity(stringentity);
-			
-			HttpResponse response = httpclient.execute(updateRequest);
-			String status = response.getStatusLine().toString();
-			System.out.println(status);
-
-			String json = getEntityContent(response);
-			//		updateRequest.releaseConnection();
-		}
-		catch(IOException E){
-			throw new RuntimeException();
-		}
-	}	
-	
-	
-	/*public void returnClaim(UUID id, String comments, String approverName, String approverEmail){
-		try {
-			HttpPost updateRequest = new HttpPost(HTTP_PATH + id + "/_update");
-			String query = "{\"doc\": {" +
-					" \"status\"        :   " + Claim.RETURNED + ","   +
-					" \"comments\"      : \"" + comments       + "\"," +
-					" \"approverName\"  : \"" + approverName   + "\"," +		
-					" \"approverEmail\" : \"" + approverEmail  + "\" " +							
-					" }}";
-			StringEntity stringentity = new StringEntity(query);
-
-			updateRequest.setHeader("Accept","application/json");
-			updateRequest.setEntity(stringentity);
-
-			HttpResponse response = httpclient.execute(updateRequest);
-			String status = response.getStatusLine().toString();
-			System.out.println(status);
-
-			String json = getEntityContent(response);
-			//		updateRequest.releaseConnection();
-		}
-		catch(IOException E){
-			throw new RuntimeException();
-		}
-	}	*/
 	
 	/**
 	 * get the http response and return json string
@@ -289,8 +168,8 @@ public class ElasticSearchEngineUnthreaded {
 	    public Collection<ElasticSearchResponse> getHits() {
 	        return hits.getHits();        
 	    }
-	    public Collection<Claim> getSources() {
-	        Collection<Claim> out = new ArrayList<Claim>();
+	    public Collection<User> getSources() {
+	        Collection<User> out = new ArrayList<User>();
 	        for (ElasticSearchResponse essrt : getHits()) {
 	            out.add( essrt.getSource() );
 	        }
@@ -308,9 +187,9 @@ public class ElasticSearchEngineUnthreaded {
 	    String _id;
 	    int _version;
 	    boolean exists;
-	    Claim _source;
+	    User _source;
 	    double max_score;
-	    public Claim getSource() {
+	    public User getSource() {
 	        return _source;
 	    }
 	}

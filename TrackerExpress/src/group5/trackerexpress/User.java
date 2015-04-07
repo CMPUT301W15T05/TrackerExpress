@@ -2,6 +2,7 @@ package group5.trackerexpress;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.UUID;
 
 import android.content.Context;
 import android.location.Location;
@@ -36,6 +37,8 @@ public class User extends TModel{
 	/** The location of the user */
 	private Location location;
 	
+	private UUID uuid = UUID.randomUUID();
+	
 	/**
 	 * Instantiates a new user.
 	 *
@@ -44,6 +47,11 @@ public class User extends TModel{
 	public User(Context context) {
 		loadData(context);
 		System.out.println("Getting the new user");
+	}
+	
+	
+	public UUID getUuid(){
+		return uuid;
 	}
 	
 	/**

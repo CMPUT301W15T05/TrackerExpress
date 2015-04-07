@@ -59,7 +59,7 @@ public class ClaimInfoActivity extends ActionBarActivity {
 		} else {
 			// Get claim from Elastic Search if GlobalClaims tab called
 			try {
-				claim = (new ElasticSearchEngine()).getClaim(ClaimInfoActivity.this, serializedId);
+				claim = (new ElasticSearchEngineClaims()).getClaim(ClaimInfoActivity.this, serializedId);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}			

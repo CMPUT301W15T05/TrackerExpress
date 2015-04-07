@@ -24,8 +24,8 @@ import com.google.gson.Gson;
 
 import android.test.ActivityInstrumentationTestCase2;
 import group5.trackerexpress.Claim;
-import group5.trackerexpress.ElasticSearchEngine;
-import group5.trackerexpress.ElasticSearchEngineUnthreaded;
+import group5.trackerexpress.ElasticSearchEngineClaims;
+import group5.trackerexpress.ElasticSearchEngineUnthreadedClaims;
 import group5.trackerexpress.MainActivity;
 import group5.trackerexpress.TestActivity;
 import group5.trackerexpress.User;
@@ -39,7 +39,7 @@ import junit.framework.TestCase;
 public class ElasticSearchEngineTest extends ActivityInstrumentationTestCase2<TestActivity> {
 
 
-	private ElasticSearchEngine elasticSearchEngine;
+	private ElasticSearchEngineClaims elasticSearchEngine;
 	private Claim claim;
 	private User user;
 	private UUID id;
@@ -52,7 +52,7 @@ public class ElasticSearchEngineTest extends ActivityInstrumentationTestCase2<Te
 	}
 
 	public void setUp(){
-		elasticSearchEngine = new ElasticSearchEngine();
+		elasticSearchEngine = new ElasticSearchEngineClaims();
 		claim = new Claim("Name");
 		user = new User(getActivity());
 		user.setEmail(getActivity(), "foo@example.com");

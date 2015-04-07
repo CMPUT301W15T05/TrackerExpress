@@ -159,7 +159,7 @@ public class GlobalClaimsFragment extends Fragment implements TView {
 											Log.e("PRE", "PREREV");
 											c.setStatus(getActivity(), claim_status_use);
 											Log.e("prestatus", c.getStatus() + "");
-											new ElasticSearchEngine().reviewClaim(getActivity(), c.getUuid(), c.getComments(), claim_status_use);
+											new ElasticSearchEngineClaims().reviewClaim(getActivity(), c.getUuid(), c.getComments(), claim_status_use);
 											Log.e("poststatus", c.getStatus() + "");
 											Log.e("POST", "POSTREV");
 											//} else {
@@ -212,7 +212,7 @@ public class GlobalClaimsFragment extends Fragment implements TView {
 	public void update(TModel model) {
 		Claim[] listOfClaims;
 		try {
-			listOfClaims = new ElasticSearchEngine().getClaimsForGlobalClaimList(getActivity());
+			listOfClaims = new ElasticSearchEngineClaims().getClaimsForGlobalClaimList(getActivity());
 		} catch (IOException e) {
 			//FIXME: Do something about elastic search fail
 			e.printStackTrace();

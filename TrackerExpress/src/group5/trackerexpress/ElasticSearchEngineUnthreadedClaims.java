@@ -1,39 +1,33 @@
-package group5.trackerexpress;
 /**
  * 
  */
-
+package group5.trackerexpress;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.List;
 import java.util.UUID;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-//import org.apache.http.client.fluent.Content;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.util.EntityUtils;
+
+import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-
 
 /**
  * Performs elastic search operations. 
@@ -46,36 +40,25 @@ import com.google.gson.reflect.TypeToken;
  * 
  *  @See ElasticSearchEngine
  */
-public class ElasticSearchClient<T extends Serializable & Identifiable> {
-	
+public class ElasticSearchEngineUnthreadedClaims {
+
 	// Http Connector
 	private HttpClient httpclient = new DefaultHttpClient();
 
 	// JSON Utilities
 	private Gson gson = new Gson();
-
-	private String httpPath;
-
-	private Type elasticSearchSearchResponseType;
-	private Type elasticSearchResponseType;
-
-	public ElasticSearchClient(String httpPath2, Type elasticSearchResponseType, Type elasticSearchSearchResponseType) {
-		this.httpPath = httpPath;
-		this.elasticSearchResponseType = elasticSearchResponseType;
-		this.elasticSearchSearchResponseType = elasticSearchSearchResponseType;
-	}
-
-
-
-
+	/**
+	 * 
+	 */
+	private static final String HTTP_PATH = "http://cmput301.softwareprocess.es:8080/testing/group5claimsBitmaps/";
 
 	/**
 	 * @return
 	 */
-	public ArrayList<T> getAll() {
+	public Claim[] getClaims() {
 
 		try {
-			HttpPost searchRequest = new HttpPost(httpPath + "_search?pretty=1");
+			HttpPost searchRequest = new HttpPost(HTTP_PATH + "_search?pretty=1");
 			//String query = 	"{\"query\" : {\"query_string\" : {\"default_field\" : \"ingredients\",\"query\" : \"" + str + "\"}}}";
 			//StringEntity stringentity = new StringEntity(query);
 
@@ -89,18 +72,26 @@ public class ElasticSearchClient<T extends Serializable & Identifiable> {
 
 			String json = getEntityContent(response);
 
-			//Type elasticSearchSearchResponseType = new TypeToken<ElasticSearchSearchResponse>(){}.getType();
-			ElasticSearchSearchResponse<T> esResponse = gson.fromJson(json, elasticSearchSearchResponseType);
+			Type elasticSearchSearchResponseType = new TypeToken<ElasticSearchSearchResponse>(){}.getType();
+			ElasticSearchSearchResponse esResponse = gson.fromJson(json, elasticSearchSearchResponseType);
 			//System.err.println(esResponse);
 
-			ArrayList<T> objects = new ArrayList<T>();
-			for (ElasticSearchResponse<T> objectResponse : esResponse.getHits()) {
-				T object = objectResponse.getSource();
-				objects.add(object);
+			ArrayList<Claim> credentials = new ArrayList<Claim>();
+			for (ElasticSearchResponse claimResponse : esResponse.getHits()) {
+				Claim claim = claimResponse.getSource();
+				credentials.add(claim);
 			}
 			//searchRequest.getEntity().consumeContent();
+
+			//return in reverse sorted order:
+			Collections.sort(credentials, new Comparator<Claim>(){
+				@Override
+				public int compare(Claim arg0, Claim arg1) {
+					return -1 * arg0.compareTo(arg1);
+				}
+			});
 			
-			return objects;
+			return credentials.toArray(new Claim[credentials.size()]);
 			
 		} catch(IOException e){
 			throw new RuntimeException();
@@ -110,10 +101,10 @@ public class ElasticSearchClient<T extends Serializable & Identifiable> {
 	/**
 	 * @return
 	 */
-	public T get(UUID id) {
+	public Claim getClaim(UUID id) {
 
 		try{
-			HttpGet getRequest = new HttpGet(httpPath + id);
+			HttpGet getRequest = new HttpGet(HTTP_PATH + id);
 
 			getRequest.addHeader("Accept","application/json");
 
@@ -124,8 +115,8 @@ public class ElasticSearchClient<T extends Serializable & Identifiable> {
 
 			String json = getEntityContent(response);
 
-			//Type elasticSearchResponseType = new TypeToken<ElasticSearchResponse<T>>(){}.getType();
-			ElasticSearchResponse<T> esResponse = gson.fromJson(json, elasticSearchResponseType);
+			Type elasticSearchResponseType = new TypeToken<ElasticSearchResponse>(){}.getType();
+			ElasticSearchResponse esResponse = gson.fromJson(json, elasticSearchResponseType);
 
 			return esResponse.getSource();
 
@@ -142,19 +133,24 @@ public class ElasticSearchClient<T extends Serializable & Identifiable> {
 	/**
 	 * 
 	 * 
-	 * @param object
+	 * @param claim
 	 */
-	public void insert(T object) {
+	public void submitClaim(Claim claim) {
 		try {
-			HttpPost httpPost = new HttpPost(httpPath + object.getUuid());
+			Log.e("CLAIM SUBMITTING:", claim.getClaimName());
+			HttpPost httpPost = new HttpPost(HTTP_PATH + claim.getUuid());
 			StringEntity stringentity = null;
 
-			stringentity = new StringEntity(gson.toJson(object));
+			stringentity = new StringEntity(gson.toJson(claim));
 
 			httpPost.setHeader("Accept","application/json");
-
+			Log.e("SetingEnttity", "SettingEntity");
 			httpPost.setEntity(stringentity);
-			HttpResponse response = httpclient.execute(httpPost);
+			HttpResponse response = null;
+			Log.e("ABOUT", "About to execute");
+			response = httpclient.execute(httpPost);
+			Log.e("AFTER", "Executed");
+
 
 			//Response code:
 			String status = response.getStatusLine().toString();
@@ -186,9 +182,9 @@ public class ElasticSearchClient<T extends Serializable & Identifiable> {
 	
 	
 	
-	public void delete(UUID id){
+	public void deleteClaim(UUID id){
 		try {
-			HttpDelete httpDelete = new HttpDelete(httpPath + id);
+			HttpDelete httpDelete = new HttpDelete(HTTP_PATH + id);
 			httpDelete.addHeader("Accept","application/json");
 
 			HttpResponse response = httpclient.execute(httpDelete);
@@ -213,11 +209,16 @@ public class ElasticSearchClient<T extends Serializable & Identifiable> {
 		}
 	}	
 	
-	public void update(UUID id, String updateString){
+	public void reviewClaim(UUID id, String comments, String approverName, String approverEmail, int statusIn){
 		try {
-			HttpPost updateRequest = new HttpPost(httpPath + id + "/_update");
-
-			StringEntity stringentity = new StringEntity(updateString);
+			HttpPost updateRequest = new HttpPost(HTTP_PATH + id + "/_update");
+			String query = "{\"doc\": {" +
+					" \"status\"        :   " + statusIn + ", "   +
+					" \"comments\"      : \"" + comments       + "\", " +
+					" \"approverName\"  : \"" + approverName   + "\", " +		
+					" \"approverEmail\" : \"" + approverEmail  + "\" " +							
+					" }}";
+			StringEntity stringentity = new StringEntity(query);
 			
 			updateRequest.setHeader("Accept","application/json");
 			updateRequest.setEntity(stringentity);
@@ -235,6 +236,31 @@ public class ElasticSearchClient<T extends Serializable & Identifiable> {
 	}	
 	
 	
+	/*public void returnClaim(UUID id, String comments, String approverName, String approverEmail){
+		try {
+			HttpPost updateRequest = new HttpPost(HTTP_PATH + id + "/_update");
+			String query = "{\"doc\": {" +
+					" \"status\"        :   " + Claim.RETURNED + ","   +
+					" \"comments\"      : \"" + comments       + "\"," +
+					" \"approverName\"  : \"" + approverName   + "\"," +		
+					" \"approverEmail\" : \"" + approverEmail  + "\" " +							
+					" }}";
+			StringEntity stringentity = new StringEntity(query);
+
+			updateRequest.setHeader("Accept","application/json");
+			updateRequest.setEntity(stringentity);
+
+			HttpResponse response = httpclient.execute(updateRequest);
+			String status = response.getStatusLine().toString();
+			System.out.println(status);
+
+			String json = getEntityContent(response);
+			//		updateRequest.releaseConnection();
+		}
+		catch(IOException E){
+			throw new RuntimeException();
+		}
+	}	*/
 	
 	/**
 	 * get the http response and return json string
@@ -254,33 +280,18 @@ public class ElasticSearchClient<T extends Serializable & Identifiable> {
 	}
 	
 	
-	
-	public class ElasticSearchResponse<T1> {
-	    String _index;
-	    String _type;
-	    String _id;
-	    int _version;
-	    boolean exists;
-	    T1 _source;
-	    double max_score;
-	    public T1 getSource() {
-	        return _source;
-	    }
-	}
-	
-	
-	public class ElasticSearchSearchResponse<T2> {
+	private class ElasticSearchSearchResponse {
 	    int took;
 	    boolean timed_out;
 	    transient Object _shards;
-	    Hits<T2> hits;
+	    Hits hits;
 	    boolean exists;    
-	    public Collection<ElasticSearchResponse<T2>> getHits() {
+	    public Collection<ElasticSearchResponse> getHits() {
 	        return hits.getHits();        
 	    }
-	    public Collection<T2> getSources() {
-	        Collection<T2> out = new ArrayList<T2>();
-	        for (ElasticSearchResponse<T2> essrt : getHits()) {
+	    public Collection<Claim> getSources() {
+	        Collection<Claim> out = new ArrayList<Claim>();
+	        for (ElasticSearchResponse essrt : getHits()) {
 	            out.add( essrt.getSource() );
 	        }
 	        return out;
@@ -291,16 +302,30 @@ public class ElasticSearchClient<T extends Serializable & Identifiable> {
 	}
 	
 	
-	public class Hits<T3> {
+	private class ElasticSearchResponse {
+	    String _index;
+	    String _type;
+	    String _id;
+	    int _version;
+	    boolean exists;
+	    Claim _source;
+	    double max_score;
+	    public Claim getSource() {
+	        return _source;
+	    }
+	}
+	
+	public class Hits {
 	    int total;
 	    double max_score;
-	    Collection<ElasticSearchResponse<T3>> hits;
-	    public Collection<ElasticSearchResponse<T3>> getHits() {
+	    Collection<ElasticSearchResponse> hits;
+	    public Collection<ElasticSearchResponse> getHits() {
 	        return hits;
 	    }
 	    public String toString() {
 	        return (super.toString()+","+total+","+max_score+","+hits);
 	    }
 	}
+
 
 }

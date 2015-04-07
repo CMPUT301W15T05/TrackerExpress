@@ -1,5 +1,7 @@
 package group5.trackerexpress;
 
+import java.io.IOException;
+
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -168,20 +170,20 @@ public class LoginActivity extends AccountFormActivity {//implements LoaderCallb
 		@Override
 		protected Integer doInBackground(Void... params) {
 
-			//FIXME: Compare credentials against server
-			if (true){
-				return SIGN_IN_SUCCESS; 
+
+			User[] users;
+			try {
+				users = new ElasticSearchEngineUser().getUsers(LoginActivity.this);
+			} catch (IOException e) {
+				return NETWORK_ERROR;
 			}
-			
-			String[] credentials = new EmailElasticSearchEngine().getCredentials();
 
 			
-			for (String credential : credentials) {
-				String[] pieces = credential.split(":");
-				
+			for (User user : users) {
+
 				// Account exists
-				if (pieces[0].equals(mEmail)) {
-					if (pieces[1].equals(mPassword)) {
+				if (user.getEmail().equals(mEmail)) {
+					if (user.getPassword().equals(mPassword)) {
 						// Return here if the password matches.
 						return SIGN_IN_SUCCESS;
 					}
@@ -192,6 +194,7 @@ public class LoginActivity extends AccountFormActivity {//implements LoaderCallb
 					}
 				}
 			}
+
 
 			// email wasn't found in database
 			return NEEDS_ACCOUNT;

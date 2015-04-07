@@ -117,7 +117,7 @@ public class MyClaimsFragment extends Fragment implements TView {
                         		int old_status = clickedOnClaim.getStatus();
                         		try {
                         			clickedOnClaim.setStatus(getActivity(), Claim.SUBMITTED);
-                        			new ElasticSearchEngine().submitClaim(getActivity(), clickedOnClaim);
+                        			new ElasticSearchEngineClaims().submitClaim(getActivity(), clickedOnClaim);
 								} catch (IOException e) {
 									clickedOnClaim.setStatus(getActivity(), old_status);
 									throw new RuntimeException();
