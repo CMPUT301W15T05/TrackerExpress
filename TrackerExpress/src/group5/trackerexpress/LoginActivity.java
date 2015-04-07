@@ -58,6 +58,7 @@ public class LoginActivity extends AccountFormActivity {//implements LoaderCallb
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		User user = Controller.getUser(LoginActivity.this);
+		Controller.setContext(getBaseContext());
 		if (user.isSignedIn()) {
 			Intent intent = new Intent(LoginActivity.this, MainActivity.class);
 	    	startActivity(intent);
@@ -71,8 +72,7 @@ public class LoginActivity extends AccountFormActivity {//implements LoaderCallb
 		mEmailView = (AutoCompleteTextView) findViewById(R.id.logInEmailText);
 		
 		// Autocomplete is not necessary, but might be implemented later
-		//populateAutoComplete();
-
+		//populateAutoComplete()
 		mPasswordView = (EditText) findViewById(R.id.logInPasswordText);
 		mPasswordView
 				.setOnEditorActionListener(new TextView.OnEditorActionListener() {

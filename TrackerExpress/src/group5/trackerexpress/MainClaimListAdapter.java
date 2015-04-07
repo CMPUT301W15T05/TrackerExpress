@@ -46,7 +46,7 @@ public class MainClaimListAdapter extends ArrayAdapter<Claim> {
 	 * @param claims the claims
 	 */
 	public MainClaimListAdapter(Context context, Claim[] claims){
-		super(context, R.layout.fragment_my_claims_item, claims);
+		super(Controller.getContext(),R.layout.fragment_my_claims_item, claims);
 		this.claimList = claims;
 		this.context = context;
 		Claim[] claimList = ClaimList.sortClaimsByLocation(context, claims);

@@ -234,6 +234,12 @@ public class MyClaimsFragment extends Fragment implements TView {
 		} else {
 			System.out.println("Its null!");
 		}
+		try {
+			Thread.sleep(200);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		adapter= new MainClaimListAdapter(getActivity(), listOfClaims);
 		
 		lv_claim_list.setAdapter(adapter);

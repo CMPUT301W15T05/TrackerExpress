@@ -25,6 +25,8 @@ public class Controller {
 	/** the user of the application */
 	private static User user;
 	
+	/** The context of the Base Activity*/
+	private static Context context;
 	/**
 	 * Gets the static claim list, newing it if necessary
 	 *
@@ -148,6 +150,14 @@ public class Controller {
 				}
 			}
 		}
+	}
+
+	public static Context getContext() {
+		return context;
+	}
+
+	public static void setContext(Context context) {
+		Controller.context = context;
 	}
 
 }
