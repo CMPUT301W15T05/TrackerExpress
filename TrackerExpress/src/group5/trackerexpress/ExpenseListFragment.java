@@ -1,19 +1,20 @@
 package group5.trackerexpress;
 
+import com.google.android.gms.maps.model.LatLng;
 
 import android.content.Intent;
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.AdapterView;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.PopupMenu;
-import android.widget.TextView;
 import android.widget.Button;
 import android.widget.AdapterView.OnItemClickListener;
 
@@ -59,15 +60,12 @@ public class ExpenseListFragment extends Fragment implements TView {
 		View rootView = inflater.inflate(R.layout.fragment_expense_list,
 				container, false);
 		
-		TextView title = (TextView) rootView.findViewById(R.id.tv_expense_list_title);
-		ImageView receiptView = (ImageView) rootView.findViewById(R.id.iv_expense_receipt); 
-		
 		// Fragment's views
 		lv_expense_list = (ListView) rootView.findViewById(R.id.lv_my_expenses);
 		lv_expense_list.setItemsCanFocus(true);
 		
 		update(null);
-		claim.addView(this);
+		claim.getExpenseList().addView(this);
 
 		b_add_expense = (Button) rootView.findViewById(R.id.b_add_expense);
 		if (claim.getStatus() == Claim.SUBMITTED || claim.getStatus() == Claim.APPROVED)
@@ -80,13 +78,9 @@ public class ExpenseListFragment extends Fragment implements TView {
 		b_add_expense.setOnClickListener(new Button.OnClickListener(){
 			@Override
 			public void onClick(View v) {
-				Expense exp = new Expense();
-				
-				claim.getExpenseList().addExpense(getActivity(), exp);
-
 				Intent intent = new Intent( getActivity(), EditExpenseActivity.class );
 				intent.putExtra("claimUUID", claim.getUuid());
-				intent.putExtra("expenseUUID", exp.getUuid());
+            	intent.putExtra("isNewExpense", true);
 				
 				startActivity(intent);
 			}	
@@ -105,7 +99,8 @@ public class ExpenseListFragment extends Fragment implements TView {
 				popup.getMenuInflater().inflate(R.menu.expense_list_popup, popup.getMenu());
 				
 				onPrepareOptionsMenu(popup);
-				
+				if (!clickedOnExpense.isHasLocation() || myClaimListVersion)
+					popup.getMenu().findItem(R.id.op_view_location).setVisible(false);
 				// Popup menu item click listener
 				popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
 					
@@ -122,6 +117,13 @@ public class ExpenseListFragment extends Fragment implements TView {
                         	intent.putExtra("expenseUUID", clickedOnExpense.getUuid());
                         	startActivity(intent);
                         	break;
+
+                        case R.id.op_view_location:
+                        	LatLng latlng = new LatLng(clickedOnExpense.getLatitude(), clickedOnExpense.getLongitude());
+                        	intent = new Intent (getActivity(), MapActivity.class);
+                        	intent.putExtra("latlng", latlng);
+                        case R.id.op_view_image:
+
                         default: break;
                         }
                         
@@ -141,8 +143,8 @@ public class ExpenseListFragment extends Fragment implements TView {
 		if ( ! myClaimListVersion ||
 				claim.getStatus() == Claim.APPROVED || 
 				claim.getStatus() == Claim.SUBMITTED ){
-			popup.getMenu().getItem(R.id.op_edit_expense).setVisible(false);
-			popup.getMenu().getItem(R.id.op_delete_expense).setVisible(false);
+			popup.getMenu().findItem(R.id.op_edit_expense).setVisible(false);
+			popup.getMenu().findItem(R.id.op_delete_expense).setVisible(false);
 		}
 	}
 	
@@ -154,6 +156,12 @@ public class ExpenseListFragment extends Fragment implements TView {
 		if (claim.getExpenseList().size() > 0)
 			lv_expense_list.setAdapter( new ExpenseListAdapter(getActivity(), 
 						claim.getExpenseList().toList()));
+	}
+	
+	@Override
+	public void onDestroy(){
+		claim.getExpenseList().deleteView(this);
+		super.onDestroy();
 	}
 
 }

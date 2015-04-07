@@ -1,12 +1,10 @@
 package group5.trackerexpress;
 
 import java.util.Calendar;
-import java.util.Date;
 import java.util.UUID;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.net.Uri;
+import android.location.Location;
 
 /**
  * An expense item hold data for a signle purchase, as well as a photo and location.
@@ -29,8 +27,7 @@ public class Expense extends TModel{
 	/** The currency of the expense. */
 	private String currency;
 	
-	/** The receipt path. */
-	private String uriPath;
+	private Receipt receipt;
 	
 	/** The category of the expense. */
 	private String category;
@@ -40,6 +37,10 @@ public class Expense extends TModel{
 
 	/** The status of the expense (incompleteness). */
 	private boolean complete = true; 
+	
+	private Location location;
+	
+	private boolean hasLocation = false;
 	
 	/**
 	 * Instantiates a new expense.
@@ -190,16 +191,85 @@ public class Expense extends TModel{
 		notifyViews(context);
 		
 	}
-	
 
-	
-	public String getUriPath(){
-		return uriPath;
+	/**
+	 * gets the receipt
+	 * @return
+	 */
+	public Receipt getReceipt(){
+		return receipt;
 	}
 	
-	public void setUri(Context context, String receiptUri){
-		this.uriPath = receiptUri;
+	/**
+	 * sets the reciept
+	 * @param context Needed for saving
+	 * @param receipt
+	 */
+	public void setReceipt(Context context, Receipt receipt){
+		this.receipt = receipt;
 		notifyViews(context);
+	}
+
+	/**
+	 * sets the longitude of destination
+	 * 
+	 * @param lon: longitude
+	 */
+	public void setLongitude(double lon){
+		location.setLongitude(lon);
+	}
+	
+	/**
+	 * sets the latitude of destination
+	 * 
+	 * @param lat: latitude
+	 */
+	public void setLatitude(double lat){
+		location.setLatitude(lat);
+	}
+	
+	/**
+	 * gets the longitude of destination
+	 * 
+	 * @return longitude of destination
+	 */
+	public double getLongitude(){
+		return location.getLongitude();
+	}
+	
+	/**
+	 * gets the latitude of destination
+	 * 
+	 * @return latitude of destination
+	 */
+	public double getLatitude(){
+		return location.getLatitude();
+	}
+
+	/**
+	 * gets the location object of the destination
+	 * 
+	 * @return location object
+	 */
+	public Location getLocation() {
+		return location;
+	}
+	
+	/**
+	 * sets the location object of the destination
+	 * 
+	 * @param location
+	 */
+	public void setLocation(Location location) {
+		this.location = location;
+	}
+
+	public boolean isHasLocation() {
+		return hasLocation;
+	}
+
+	public void setHasLocation(boolean hasLocation) {
+		this.hasLocation = hasLocation;
 	}
 	
 }

@@ -36,7 +36,7 @@ public class GlobalClaimsFragment extends Fragment implements TView {
 	private TextView tv_global_error;
 	
 	/** Updates global claims once in a while */
-//	PeriodicTViewUpdater updater;
+	PeriodicTViewUpdater updater;
 	
 	/**
 	 * Instantiates a new global claims fragment.
@@ -195,7 +195,7 @@ public class GlobalClaimsFragment extends Fragment implements TView {
 	 */
 	@Override
 	public void update(TModel model) {
-		Claim[] listOfClaims = new ElasticSearchEngine().getClaims();
+		Claim[] listOfClaims = new ElasticSearchEngine().getClaimsForGlobalClaimList(getActivity());
 		if (listOfClaims == null ){
 			tv_global_error.setVisibility(View.VISIBLE);
 			return;

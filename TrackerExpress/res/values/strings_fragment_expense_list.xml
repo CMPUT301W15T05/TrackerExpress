@@ -2,4 +2,6 @@
 <resources>
     <string name="edit_expense">Edit Expense</string>
     <string name="delete_expense">Delete Expense</string>
+    <string name="view_image">View Image</string>
+    <string name="view_location">View Location</string>
 </resources>

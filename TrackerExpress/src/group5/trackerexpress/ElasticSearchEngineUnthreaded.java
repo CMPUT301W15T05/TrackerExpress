@@ -23,7 +23,8 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.util.EntityUtils;
+
+import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -49,7 +50,7 @@ public class ElasticSearchEngineUnthreaded {
 	/**
 	 * 
 	 */
-	private static final String HTTP_PATH = "http://cmput301.softwareprocess.es:8080/testing/group5claims/";
+	private static final String HTTP_PATH = "http://cmput301.softwareprocess.es:8080/testing/group5claimsBitmaps/";
 
 	/**
 	 * @return
@@ -136,6 +137,7 @@ public class ElasticSearchEngineUnthreaded {
 	 */
 	public void submitClaim(Claim claim) {
 		try {
+			Log.e("CLAIM SUBMITTING:", claim.getClaimName());
 			HttpPost httpPost = new HttpPost(HTTP_PATH + claim.getUuid());
 			StringEntity stringentity = null;
 

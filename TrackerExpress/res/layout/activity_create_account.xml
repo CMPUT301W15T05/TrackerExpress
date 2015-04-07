@@ -21,17 +21,12 @@
         android:layout_marginBottom="80dp"
         android:visibility="gone" />
 
-    <ScrollView
-        android:id="@+id/create_account_form"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="bottom" >
-
         <LinearLayout
             android:id="@+id/email_create_account_form"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_gravity="bottom"
+            android:gravity="bottom"
             android:orientation="vertical" >
 
             <TextView
@@ -100,7 +95,5 @@
                 android:text="@string/action_cancel_create_account"
                 android:textStyle="bold" />
         </LinearLayout>
-
-    </ScrollView>
 
 </LinearLayout>

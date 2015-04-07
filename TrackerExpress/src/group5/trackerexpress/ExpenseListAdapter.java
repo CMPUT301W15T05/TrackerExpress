@@ -7,6 +7,7 @@ import java.util.Locale;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,8 @@ import android.widget.TextView;
  * The Class ExpenseListAdapter.
  */
 public class ExpenseListAdapter extends ArrayAdapter<Expense> {
+	
+	EditBitmap editBitmap = new EditBitmap();
 	
 	final String myFormat = "MM/dd/yyyy"; //In which you need put here
 	final SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
@@ -68,7 +71,6 @@ public class ExpenseListAdapter extends ArrayAdapter<Expense> {
 	/* (non-Javadoc)
 	 * @see android.widget.ArrayAdapter#getView(int, android.view.View, android.view.ViewGroup)
 	 */
-	@SuppressWarnings("deprecation")
 	@Override
 	public View getView(final int position, View convertView, ViewGroup parent){
 		View v = convertView;
@@ -107,14 +109,18 @@ public class ExpenseListAdapter extends ArrayAdapter<Expense> {
 			String amountSpent = String.valueOf(e.getAmount());
 			holder.amount.setText(amountSpent + " " + e.getCurrency());
 		} 
+
+		if (e.getCategory() != null){
+			holder.category.setText(e.getCategory());
+		}
 		
-		holder.category.setText(e.getCategory());
-		
-		BitmapFactory.Options options = new BitmapFactory.Options();
-		options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-		Bitmap bitmap = BitmapFactory.decodeFile((e.getUriPath()), options);
-		
-		holder.receipt.setImageBitmap(bitmap);
+		if (e.getReceipt() != null){
+			
+			Bitmap sourceBitmap = e.getReceipt().getBitmap();
+			Bitmap rotatedBitmap = editBitmap.rotateBitmap(sourceBitmap);
+			Bitmap resizedBitmap = editBitmap.resizeBitmap(rotatedBitmap, 640);
+			holder.receipt.setImageBitmap(resizedBitmap);
+		}
 		
 		return v;
 	}

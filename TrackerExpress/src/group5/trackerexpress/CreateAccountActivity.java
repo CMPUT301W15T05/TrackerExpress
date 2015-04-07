@@ -84,7 +84,7 @@ public class CreateAccountActivity extends AccountFormActivity {
 		});
 
 		// These are used in showProgress()
-		setFormView(findViewById(R.id.create_account_form));
+		setFormView(findViewById(R.id.email_create_account_form));
 		setProgressView(findViewById(R.id.create_account_progress));
 	}
 	

@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.UUID;
 
 import android.content.Context;
+import android.util.Log;
 
 /**
  * Performs elastic search operations needed by this app.
@@ -52,11 +53,15 @@ public class ElasticSearchEngine {
 		
 		Claim[] claimsUnfiltered = getClaims();
 		List<Claim> claims = new ArrayList<Claim>();
-		
+		Log.e("USER", Controller.getUser(context).getEmail().toString());
 		for (Claim claim : claimsUnfiltered){
+			Log.e(claim.getClaimName(), claim.getSubmitterEmail());
+			try{
+			Log.e(claim.getClaimName(), claim.getApproverEmail());
+			} catch (NullPointerException e) {Log.e(claim.getClaimName(), "NULL APPROVER");}
 			if (    !claim.getSubmitterEmail().equals(Controller.getUser(context).getEmail()) &&
 					(claim.getApproverEmail() == null || claim.getApproverEmail().equals(Controller.getUser(context).getEmail())) &&
-					 claim.getStatus() == Claim.SUBMITTED){
+					 claim.getStatus() != Claim.IN_PROGRESS){
 				
 				claims.add(claim);
 			}
@@ -100,6 +105,15 @@ public class ElasticSearchEngine {
 		claim.setStatus(context, Claim.SUBMITTED);
 		claim.setSubmitterName(context, Controller.getUser(context).getName());
 		claim.setSubmitterEmail(context, Controller.getUser(context).getEmail());
+		
+		//convert UriBitmaps to actual bitmaps
+		for (Expense expense : claim.getExpenseList().toList()){
+
+			try {
+				expense.getReceipt().switchToStoringActualBitmap();
+			} catch (NullPointerException e) {}
+
+		}
 
 		final Claim claimFinal = claim;
 		
@@ -115,6 +129,18 @@ public class ElasticSearchEngine {
 		});
 
 		thread.start();
+		
+		try {
+			thread.join();
+		} catch (InterruptedException e) {
+			throw new RuntimeException();
+		}
+		
+		//switch back for saving:
+		for (Expense expense : claim.getExpenseList().toList()){
+			expense.getReceipt().stopStoringActualBitmap();
+		}		
+
 	}
 
 

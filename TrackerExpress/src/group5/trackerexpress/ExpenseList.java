@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 import android.content.Context;
+import android.util.Log;
 
 /**
  * Holds the expenses for a single claim.
@@ -100,28 +101,30 @@ public class ExpenseList extends TModel{
 		ArrayList<Double> amounts = new ArrayList<Double>();
 		
 		for ( Expense e: expenseList ){
-			int index = currencies.indexOf( e.getCurrency() );
-			if ( index != -1 && e.getAmount() != null ){
-				amounts.set(index, amounts.get(index) + e.getAmount() );
-			} else {
-				if ( e.getCurrency() != null && e.getAmount() != null ){
-					currencies.add(e.getCurrency() );
-					amounts.add(e.getAmount());
+			if ( e.getAmount() != null && e.getCurrency() != null ){
+				int index = currencies.indexOf( e.getCurrency() );
+				if ( index != -1 ){
+					amounts.set(index, amounts.get(index) + e.getAmount() );
+				} else {
+					currencies.add( e.getCurrency() );
+					amounts.add( e.getAmount() );
 				}
 			}
 		}
 		
+		Log.i("Jiya re", "Jiya re size: " + Integer.toString(currencies.size()));
+		
 		for ( int i = 0; i < currencies.size() - 1; i++ ){
+			Log.i("Jiya re", "Jiya Re " + ret + " what");
 			ret += amounts.get(i) + " " + currencies.get(i) + ", ";
 		}
-		if ( currencies.size() > 1 ){
+		if ( currencies.size() > 0 ){
 			ret += amounts.get(amounts.size()-1) + " " + currencies.get(currencies.size()-1);
 		}
 		
 		return ret;
 	}
-	
-	
+
 	
 	/**
 	 * adds view to be updated
@@ -132,6 +135,16 @@ public class ExpenseList extends TModel{
 		super.addView(view);
 		for (Expense expense : expenseList)
 			expense.addView(view);
+	}
+
+	/**
+	 * @param expenseListFragment
+	 */
+	public void deleteView(TView view) {
+		super.deleteView(view);
+		for (Expense expense : expenseList){
+			expense.deleteView(view);
+		}
 	}
 	
 }

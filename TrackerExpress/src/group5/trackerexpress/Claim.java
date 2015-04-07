@@ -109,6 +109,24 @@ public class Claim extends TModel implements Comparable<Claim>{
 		this.incomplete = incomplete;
 		notifyViews(context);
 	}
+	
+	
+	/**
+	 * Checks if there are any incomplete expenses
+	 * 
+	 * @return true if there is an incomplete expense
+	 * 			false if all expenses are complete
+	 */
+	public boolean hasIncompleteExpense(){
+		for (Expense e: expenseList.toList() ){
+			if ( ! e.isComplete() ){
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
 	/**
 	 * Gets the Comments from the approver
 	 * 
@@ -415,14 +433,7 @@ public class Claim extends TModel implements Comparable<Claim>{
 		return status;
 	}
 	
-	/**
-	 * Updates claim status and sets comments. Does NOT update views.
-	 * Needed becuase this must be called from within an update method.
-	 * 
-	 * @param context
-	 * @param comments
-	 */
-	
+
 	/**
 	 * Updates claim status and sets comments. Does NOT update views.
 	 * Needed becuase this must be called from within an update method.
@@ -444,8 +455,15 @@ public class Claim extends TModel implements Comparable<Claim>{
 	public int compareTo(Claim arg0) {
 		if (startDate == null){
 			return -1;
+		} else if (arg0 == null){
+			return 1;
 		}
-		return startDate.compareTo(arg0.getStartDate());
+		
+		if ( arg0.getStartDate() == null ){
+			return 1;
+		}
+		
+		return (startDate.compareTo(arg0.getStartDate()))*-1;
 	}
 
 	/**

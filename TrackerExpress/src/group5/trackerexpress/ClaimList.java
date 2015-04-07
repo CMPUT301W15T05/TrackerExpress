@@ -14,6 +14,7 @@ import java.util.UUID;
 import java.util.Map.Entry;
 
 import android.content.Context;
+import android.location.Location;
 
 
 /**
@@ -120,7 +121,7 @@ public class ClaimList extends TModel{
 	 * 
 	 * @return claim as array sorted from oldest to newest.
 	 */
-	public ArrayList<Claim> toListWithReverseSorting(){
+	public Claim[] toListWithReverseSorting(){
 		ArrayList<Claim> claimList = new ArrayList<Claim>(claims.values());
 		
 		Comparator<Claim> comparator = new Comparator<Claim>(){
@@ -131,7 +132,8 @@ public class ClaimList extends TModel{
 		};
 		
 		Collections.sort(claimList, comparator);
-		return claimList;
+		Claim[] claimArray = claimList.toArray(new Claim[0]);
+		return claimArray;
 	}
 	
 	
@@ -176,5 +178,51 @@ public class ClaimList extends TModel{
 		} catch (IOException e) {
 			throw new RuntimeException();
 		}
+	}
+	
+	/** Sorts the passed list of claims by how far they are from the user's location */
+	public static Claim[] sortClaimsByLocation(Context context, Claim[] claimList){
+		Claim[] ret = claimList.clone();
+		
+		final Location userLoc = Controller.getUser(context).getLocation();
+
+		// This is for testing purposes
+		if ( userLoc == null ){
+			return ret;
+		}
+		
+		Arrays.sort(claimList, new Comparator<Claim>() {
+
+			@Override
+			public int compare(Claim lhs, Claim rhs) {
+				// TODO Auto-generated method stub
+				if ( lhs.getDestinationList() == null ){
+					return -1;
+				} else if ( rhs.getDestinationList() == null ){
+					return 1;
+				}
+				
+				ArrayList<Destination> lDesList = lhs.getDestinationList();
+				ArrayList<Destination> rDesList = rhs.getDestinationList();
+				
+				if ( lDesList.size() == 0 || lDesList.get(0).getLocation() == null ){
+					return -1;
+				} else if ( rDesList.size() == 0 || rDesList.get(0).getLocation() == null ){
+					return 1;
+				}
+				
+				Location lLoc = lDesList.get(0).getLocation();
+				Location rLoc = rDesList.get(0).getLocation();
+				
+				if ( userLoc.distanceTo(lLoc) < userLoc.distanceTo(rLoc) ){
+					return -1;
+				} else {
+					return 1;
+				}
+			}
+			
+		});
+		
+		return ret;
 	}
 }
