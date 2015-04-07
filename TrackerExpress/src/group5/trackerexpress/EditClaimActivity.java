@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
 import java.util.UUID;
+
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.Context;
@@ -13,6 +14,8 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.location.Location;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputType;
@@ -31,6 +34,7 @@ import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.google.android.gms.maps.model.LatLng;
 
 /**
@@ -272,11 +276,19 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 			 */
 			@Override
 			public void onClick(View v) {
+				
+				
 				/** check if the user pressed create new claim or edit existing claim button from MainActivity.*/
-				if (isNewClaim != true){
-					destination = claim.getDestinationList();
+				
+				if (isOnline()){
+					if (isNewClaim != true){
+						destination = claim.getDestinationList();
+					}
+					createDestinationButton(destination,newDestination,doNothing);
+				}else{
+					Toast.makeText(getApplicationContext(), "This function requires a network!", Toast.LENGTH_SHORT).show();
 				}
-				createDestinationButton(destination,newDestination,doNothing);
+				
 			}
 		});
 		
@@ -485,6 +497,14 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 	    
 	}
 	
+
+	protected boolean isOnline() {
+		ConnectivityManager cm =
+		        (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+		    NetworkInfo netInfo = cm.getActiveNetworkInfo();
+		    return netInfo != null && netInfo.isConnectedOrConnecting();
+	}
+
 
 	/**
      * On click listener for the back button(soft key). Calls "safe guard" method if user accidently 

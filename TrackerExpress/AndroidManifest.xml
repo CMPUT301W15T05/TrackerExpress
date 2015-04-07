@@ -7,7 +7,9 @@
     <uses-sdk
         android:minSdkVersion="17"
         android:targetSdkVersion="17" />
-
+    
+	<!-- Permission for add destination button -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     
     <!-- Add permission for camera (android.permission.CAMERA) -->
     <uses-permission android:name="android.permission.CAMERA" />
