@@ -3,39 +3,31 @@ package group5.trackerexpress;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Locale;
 import java.util.UUID;
 
-import android.app.AlertDialog;
-import android.app.DialogFragment;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
-import android.widget.AdapterView;
+import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.Toast;
+
+import com.google.android.gms.maps.model.LatLng;
 
 /**
  * Allows creation and editing of an expense. Editing is just like creation, except some
@@ -74,6 +66,11 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 	
 	/** The Claim UUID and the Expense UUID. */
 	private UUID claimId, expenseId;
+	
+	/** The Button to attach location ot expense**/
+	private Button b_getlocation;
+	
+	private Location location;
 	
 
 	final String myFormat = "EEEE MMMM dd, yyyy"; //In which you need put here
@@ -136,8 +133,32 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 		    }
 		});
 	    
+	    b_getlocation.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				Log.e("GetLocation", "GetLocation");
+				Claim c = Controller.getClaimList(getApplication()).getClaim(claimId);
+				LatLng newlatlng;
+				try {
+					newlatlng = new LatLng(location.getLatitude(), location.getLongitude());
+				} catch (Exception e) {
+					try {
+						Destination d = c.getDestinationList().get(0);
+						newlatlng = new LatLng(d.getLatitude(), d.getLongitude());
+					} catch (Exception e1) {
+						newlatlng = null;
+					}
+				}
+				Intent intentLoc = new Intent(EditExpenseActivity.this, MapActivity.class);
+				intentLoc.putExtra("latlng", newlatlng);
+				System.out.println("GOING IN");
+				Log.e("START", "GOING IN");
+		    	EditExpenseActivity.this.startActivityForResult(intentLoc, 1);
+			}
+		});
 	}
-
 	
 	protected void deleteReceipt() {
 		// TODO Auto-generated method stub
@@ -158,6 +179,7 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 		imgButton = (ImageButton) findViewById(R.id.editExpenseTakeAPhoto);
 		dateButton = (Button) findViewById(R.id.tvExpenseDate);
 		deleteImage = (Button) findViewById(R.id.deleteImageButton);
+		b_getlocation = (Button) findViewById(R.id.expenseLocationButton);
 		
 		dateSelection = Calendar.getInstance();
 		dateButton.setText(sdf.format(dateSelection.getTime()));
@@ -206,6 +228,10 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 	    	statusCheckBox.setChecked(true);
 	    }
 	
+	    location = expense.getLocation();
+	    if (location != null)
+	    	b_getlocation.setText("View Location");
+	    
 	}
 	
 	@Override
@@ -256,6 +282,34 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 				Toast.makeText(EditExpenseActivity.this, "Error", Toast.LENGTH_SHORT).show();
 			}
 		}
+		
+		if (requestCode == 1){
+		    Location lastLoc = location;
+		    //Log.e("IS NULL?", (lastLoc == null)+"");
+	        if(resultCode == RESULT_OK){
+	            LatLng latLng = data.getParcelableExtra("resultLatLng");
+	            String title = data.getStringExtra("resultTitle");
+	            Toast.makeText(getApplication(), latLng.toString(), Toast.LENGTH_LONG).show();
+	            System.out.println("TITLE IS " + title);
+	            lastLoc = new Location(title);
+	            /*location.setLatitude(latLng.latitude);
+	            location.setLongitude(latLng.longitude);
+	            location.setProvider(title);*/
+	            //if (lastLoc != null) {
+	            	lastLoc.setLongitude(latLng.longitude);
+	            	lastLoc.setLatitude(latLng.latitude);
+	            	lastLoc.setProvider(title);
+	            //}
+			        
+	            b_getlocation.setText("View Location");
+		        location = lastLoc;
+	            
+	        } else if (resultCode == RESULT_CANCELED) {
+	            //Write your code if there's no result
+	        	Toast.makeText(getApplication(), "Cancelled", Toast.LENGTH_SHORT).show();
+	        }
+	        
+		}
 	}
 	
     
@@ -294,7 +348,7 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 		expense.setDate(this, dateSelection);
 		expense.setCategory(this, categorySelection);
 		expense.setCurrency(this, currencySelection);
-		
+		expense.setLocation(location);
 		finish();
 	}
 

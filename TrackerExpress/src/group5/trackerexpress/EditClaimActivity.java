@@ -69,6 +69,7 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 	
 	/** The Tag name. */
 	private EditText TagName;
+	
 	private Location location;
 	
 	/** The des list view. */
