@@ -42,9 +42,7 @@ import com.google.android.gms.maps.model.LatLng;
 public class EditExpenseActivity extends EditableActivity implements DatePickerFragment.TheListener{
 	/** The category and currency. */
 	private Spinner categorySpinner, currencySpinner;
-	
-	private TextWatcher currencyWatcher;
-	
+		
 	private Button deleteImage;
 	
 	/** The image button. */
@@ -78,7 +76,7 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 	private Location location;
 
 
-	EditBitmap editBitmap = new EditBitmap();
+	EditBitmap editBitmap;
 
 	/** checks if the claim is new and cancel's appropriately */
 	private boolean isNewExpense;
@@ -101,6 +99,8 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 	    claimId = (UUID)intent.getSerializableExtra("claimUUID");
 	    isNewExpense = intent.getBooleanExtra("isNewExpense", false);
 
+	    editBitmap = new EditBitmap();
+	    
 	    if ( ! isNewExpense ){
 	    	expenseId = (UUID)intent.getSerializableExtra("expenseUUID");
 	    	expense = Controller.getExpense(EditExpenseActivity.this, claimId, expenseId);

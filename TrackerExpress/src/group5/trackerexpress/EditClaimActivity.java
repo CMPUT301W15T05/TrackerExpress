@@ -7,7 +7,6 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.UUID;
-
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.Context;
@@ -33,7 +32,6 @@ import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.google.android.gms.maps.model.LatLng;
 
 /**
@@ -67,9 +65,8 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 	EditText DesName;
     EditText DesRea;
 	
-	/** The Tag name. */
-	private EditText TagName;
-	private Location location;
+    /** location of destination */
+    private Location location;
 	
 	/** The des list view. */
 	private ListView desListView;
@@ -84,15 +81,15 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 	final private HashSet<Tag> tagsOfClaim = new HashSet<Tag>();
 	
 	/** The check correctness. */
-	private Boolean checkCorrectness;
 	private Boolean comingFromMap = false;
 
 	/** The Destination. */
 	private ArrayList<Destination> destination;
 	
-	/** The adapter2. */
+	/** The adapter for the Destination List */
 	private ArrayAdapter<String> adapter2;
 	
+	/** array adapter for the Tag List */
 	private ArrayAdapter<Tag> adapter;
 	
 	/** The new destination. */
@@ -105,10 +102,6 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 	
 	/** The do nothing. */
 	private final int doNothing = 5;
-	
-	private Date startDate; 
-	
-	private Date endDate;
 	
 	/** The my calendar. */
 	private Calendar myCalendar = Calendar.getInstance();

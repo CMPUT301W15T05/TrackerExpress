@@ -22,6 +22,30 @@ public class ElasticSearchEngine {
 	
 	private final ElasticSearchEngineUnthreaded elasicSearchEngineUnthreaded = new ElasticSearchEngineUnthreaded();
 	
+	/**
+	 * Get claim from Elastic Search server
+	 * 
+	 * @param claimUUID: desired claim's uuid
+	 * @return claim if it is in server, else will return null
+	 */
+	public Claim getClaim( Claim claimUUID ){
+		// Gets the claims from the elastic search server
+		Claim[] claims = this.getClaims();
+		
+		// The claim that will be returned
+		Claim ret = null;
+		
+		// Compares the desired claim's uuid to that of the
+		// elastic search claims till there is a match
+		for ( Claim c : claims ){
+			if ( c.getUuid().equals( claimUUID ) ){
+				ret = c;
+				break;
+			}
+		}
+		
+		return ret;
+	}
 
 	public Claim[] getClaims() {
 		
