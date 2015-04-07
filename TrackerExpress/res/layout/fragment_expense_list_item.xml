@@ -56,6 +56,6 @@
         android:layout_height="110dp"
         android:layout_alignParentEnd="true"
         android:scaleType="fitCenter"
-        android:src="@drawable/a" />
+        android:src="@drawable/image_button_hint" />
 
 </RelativeLayout>

@@ -74,14 +74,9 @@ public class ExpenseListFragment extends Fragment implements TView {
 		b_add_expense.setOnClickListener(new Button.OnClickListener(){
 			@Override
 			public void onClick(View v) {
-				Expense exp = new Expense();
-				
-				claim.getExpenseList().addExpense(getActivity(), exp);
-
 				Intent intent = new Intent( getActivity(), EditExpenseActivity.class );
 				intent.putExtra("claimUUID", claim.getUuid());
-				intent.putExtra("expenseUUID", exp.getUuid());
-            	intent.putExtra("isNewClaim", true);
+            	intent.putExtra("isNewExpense", true);
 				
 				startActivity(intent);
 			}	

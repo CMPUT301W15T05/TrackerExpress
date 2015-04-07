@@ -8,16 +8,21 @@ import java.util.Locale;
 import java.util.UUID;
 
 import group5.trackerexpress.EditBitmap;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -25,6 +30,8 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.Toast;
+
+import com.google.android.gms.maps.model.LatLng;
 
 /**
  * Allows creation and editing of an expense. Editing is just like creation, except some
@@ -63,15 +70,18 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 	
 	/** The Claim UUID and the Expense UUID. */
 	private UUID claimId, expenseId;
+	
+	/** The Button to attach location ot expense */
+	private Button b_getlocation;
+	
+	/** The location for the expense */
+	private Location location;
+
 
 	EditBitmap editBitmap = new EditBitmap();
 
 	/** checks if the claim is new and cancel's appropriately */
-	private boolean isNewClaim;
-
-
-	/** checks if the claim has been saved and cancel's appropriately */
-	private boolean isSaved;
+	private boolean isNewExpense;
 	
 	final String myFormat = "EEEE MMMM dd, yyyy"; //In which you need put here
 	final SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
@@ -82,7 +92,6 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 	/** The claim of the expense in question */
 	private Claim claim;
 
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -90,11 +99,13 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 		
 		final Intent intent = this.getIntent();
 	    claimId = (UUID)intent.getSerializableExtra("claimUUID");
-	    expenseId = (UUID)intent.getSerializableExtra("expenseUUID");
-	    isNewClaim = intent.getBooleanExtra("isNewClaim", false);
-	    isSaved = false;
+	    isNewExpense = intent.getBooleanExtra("isNewExpense", false);
+
+	    if ( ! isNewExpense ){
+	    	expenseId = (UUID)intent.getSerializableExtra("expenseUUID");
+	    	expense = Controller.getExpense(EditExpenseActivity.this, claimId, expenseId);
+	    }
 	    
-	    expense = Controller.getExpense(EditExpenseActivity.this, claimId, expenseId);
 	    claim = Controller.getClaim(this, claimId);
 	    
 		initializeVariables();
@@ -123,7 +134,7 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 	    });
 	
 	    
-	  //the cancel expense button
+	    //the cancel expense button
 	    cancelExpenseButton.setOnClickListener(new Button.OnClickListener(){
 	    	public void onClick(View v) {
 	    		cancelCheck(EditExpenseActivity.this);
@@ -132,19 +143,66 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 	    
 	    //the create expense button
 	    createExpenseButton.setOnClickListener(new Button.OnClickListener(){
-	    	public void onClick(View v) {
-	    		Toast.makeText(EditExpenseActivity.this, "Updating", Toast.LENGTH_SHORT). show();
-	    	    editExpense(expense);
+	    	@SuppressWarnings("deprecation")
+			public void onClick(View v) {
+	    		if ( ! statusCheckBox.isChecked() && ( description.getText().toString().length() == 0 || 
+	    									amount.getText().toString().length() == 0 || 
+	    									receiptUri == null) ) {
+	    			AlertDialog.Builder alertDialog = new AlertDialog.Builder(EditExpenseActivity.this);
+	    			alertDialog.setTitle("Warning");
+	    			alertDialog.setMessage("You are adding an incomplete expense that isn't flagged as incomplete.");
+	    			alertDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+	    				public void onClick(DialogInterface dialog, int which) {
+	    					Toast.makeText(EditExpenseActivity.this, "Updating", Toast.LENGTH_SHORT). show();
+	    					editExpense(expense);
+	    				}
+	    			});
+	    			alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							// Do nothing
+						}
+					});
+	    			alertDialog.show();
+	    		}else{
+	    			Toast.makeText(EditExpenseActivity.this, "Updating", Toast.LENGTH_SHORT). show();
+	    			editExpense(expense);
+	    		}
 		    }
 		});
 	    
+	    // the get location button
+	    b_getlocation.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				Log.e("GetLocation", "GetLocation");
+				Claim c = Controller.getClaimList(getApplication()).getClaim(claimId);
+				LatLng newlatlng;
+				try {
+					newlatlng = new LatLng(location.getLatitude(), location.getLongitude());
+				} catch (Exception e) {
+					try {
+						Destination d = c.getDestinationList().get(0);
+						newlatlng = new LatLng(d.getLatitude(), d.getLongitude());
+					} catch (Exception e1) {
+						newlatlng = null;
+					}
+				}
+				Intent intentLoc = new Intent(EditExpenseActivity.this, MapActivity.class);
+				intentLoc.putExtra("latlng", newlatlng);
+				System.out.println("GOING IN");
+				Log.e("START", "GOING IN");
+		    	EditExpenseActivity.this.startActivityForResult(intentLoc, 1);
+			}
+		});
 	}
-
 	
 	protected void deleteReceipt() {
 		// TODO Auto-generated method stub
 		receiptUri = null;
-		imgButton.setImageResource(R.drawable.a);
+		imgButton.setImageResource(R.drawable.image_button_hint);
 		deleteImage.setVisibility(View.GONE);
 		
 	}
@@ -161,6 +219,7 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 		imgButton = (ImageButton) findViewById(R.id.editExpenseTakeAPhoto);
 		dateButton = (Button) findViewById(R.id.tvExpenseDate);
 		deleteImage = (Button) findViewById(R.id.deleteImageButton);
+		b_getlocation = (Button) findViewById(R.id.expenseLocationButton);
 		
 		dateSelection = Calendar.getInstance();
 		dateButton.setText(sdf.format(dateSelection.getTime()));
@@ -182,40 +241,44 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 		createExpenseButton = (Button) findViewById(R.id.editExpenseCreateExpenseButton);
 		
 		// If expense already has values, plug them in
-		if (expense.getTitle() != null){
-	    	description.setText(expense.getTitle().toString());
-	    }
-		
-	    if ( expense.getAmount() != null ){
-	    	amount.setText(Double.toString(expense.getAmount()));
-	    }
-	    
-	    if ( expense.getCurrency() != null ){
-	    	currencySpinner.setSelection(getIndex(currencySpinner, expense.getCurrency()));
-	    }
-
-	    if ( expense.getCategory() != null ){
-	    	categorySpinner.setSelection(getIndex(categorySpinner, expense.getCategory()));
-	    }
-	    
-	    if ( expense.getReceipt() != null ){
-			imgButton.setImageDrawable(expense.getReceipt().getDrawable());
-			deleteImage.setVisibility(View.VISIBLE);
-	    } else {
-	    	deleteImage.setVisibility(View.GONE);
-	    }
-	    
-	    if ( !expense.isComplete()){
-	    	statusCheckBox.setChecked(true);
-	    }
-	    
-	    statusCheckBox.setChecked(! expense.isComplete());
-	    
-	}
+		if ( ! isNewExpense ){
+			if (expense.getTitle() != null){
+		    	description.setText(expense.getTitle().toString());
+		    }
+			
+		    if ( expense.getAmount() != null ){
+		    	amount.setText(Double.toString(expense.getAmount()));
+		    }
+		    
+		    if ( expense.getCurrency() != null ){
+		    	currencySpinner.setSelection(getIndex(currencySpinner, expense.getCurrency()));
+		    }
 	
-	@Override
-	public void onStop(){
-		super.onStop();
+		    if ( expense.getCategory() != null ){
+		    	categorySpinner.setSelection(getIndex(categorySpinner, expense.getCategory()));
+		    }
+		    
+		    if ( expense.getReceipt() != null ){
+				imgButton.setImageDrawable(expense.getReceipt().getDrawable());
+				deleteImage.setVisibility(View.VISIBLE);
+		    } else {
+		    	deleteImage.setVisibility(View.GONE);
+		    }
+		    
+		    if ( !expense.isComplete()){
+		    	statusCheckBox.setChecked(true);
+		    } else {
+		    	statusCheckBox.setChecked(false);
+		    }
+		    
+		    location = expense.getLocation();
+		    if (location != null)
+		    	b_getlocation.setText("View Location");
+		    
+		    statusCheckBox.setChecked(! expense.isComplete());
+		    
+		}
+	    
 	}
 	
 	@Override
@@ -261,7 +324,6 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 				Bitmap resizedBitmap = editBitmap.resizeBitmap(rotatedBitmap, 640);
 				imgButton.setImageBitmap(resizedBitmap);
 				deleteImage.setVisibility(View.VISIBLE);
-				//imgButton.setImageURI(receiptUri);
 
 			} else if (resultCode == RESULT_CANCELED){
 				Toast.makeText(EditExpenseActivity.this, "Canceled", Toast.LENGTH_SHORT).show();
@@ -269,12 +331,44 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 				Toast.makeText(EditExpenseActivity.this, "Error", Toast.LENGTH_SHORT).show();
 			}
 		}
+		
+		if (requestCode == 1){
+		    Location lastLoc = location;
+		    //Log.e("IS NULL?", (lastLoc == null)+"");
+	        if(resultCode == RESULT_OK){
+	            LatLng latLng = data.getParcelableExtra("resultLatLng");
+	            String title = data.getStringExtra("resultTitle");
+	            Toast.makeText(getApplication(), latLng.toString(), Toast.LENGTH_LONG).show();
+	            System.out.println("TITLE IS " + title);
+	            lastLoc = new Location(title);
+	            /*location.setLatitude(latLng.latitude);
+	            location.setLongitude(latLng.longitude);
+	            location.setProvider(title);*/
+	            //if (lastLoc != null) {
+	            	lastLoc.setLongitude(latLng.longitude);
+	            	lastLoc.setLatitude(latLng.latitude);
+	            	lastLoc.setProvider(title);
+	            //}
+			        
+	            b_getlocation.setText("View Location");
+		        location = lastLoc;
+	            
+	        } else if (resultCode == RESULT_CANCELED) {
+	            //Write your code if there's no result
+	        	Toast.makeText(getApplication(), "Cancelled", Toast.LENGTH_SHORT).show();
+	        }
+	        
+		}
 	}
 	
     
-	public void editExpense(final Expense expense) {		
+	@SuppressWarnings("deprecation")
+	public void editExpense(Expense expense) {
+		if ( isNewExpense ){
+			expense = new Expense();
+		}
+		
 		String title = description.getText().toString();
-	
 		expense.setTitle(this, title);
 	
 		String amt = amount.getText().toString();
@@ -307,10 +401,14 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 		expense.setDate(this, dateSelection);
 		expense.setCategory(this, categorySelection);
 		expense.setCurrency(this, currencySelection);
-		
-		isSaved = true;
-		
+		expense.setLocation(location);
+
+		if ( isNewExpense ){
+			claim.getExpenseList().addExpense(this, expense);
+		}		
+
 		finish();
+
 	}
 
 	
@@ -330,5 +428,6 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 			}
 		}
 		return index;
-	} 	
+	} 
+	
 }
