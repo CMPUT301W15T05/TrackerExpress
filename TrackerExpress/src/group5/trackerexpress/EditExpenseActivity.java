@@ -127,8 +127,6 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 	    cancelExpenseButton.setOnClickListener(new Button.OnClickListener(){
 	    	public void onClick(View v) {
 	    		cancelCheck(EditExpenseActivity.this);
-	    		
-	    		
 		    }
 		});
 	    
@@ -217,10 +215,6 @@ public class EditExpenseActivity extends EditableActivity implements DatePickerF
 	@Override
 	public void onStop(){
 		super.onStop();
-		
-		if ( isNewClaim && ! isSaved ){
-			claim.getExpenseList().removeExpense(EditExpenseActivity.this, expense.getUuid());
-		}
 	}
 	
 	@Override
