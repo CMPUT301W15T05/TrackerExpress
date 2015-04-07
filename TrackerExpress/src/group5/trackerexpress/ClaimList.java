@@ -246,7 +246,7 @@ public class ClaimList extends TModel{
 
 		// This is for testing purposes for when the user DNE
 		if ( userLoc == null ){
-			return ret;
+			return null;
 		}
 		
 		// This sort uses a comparator that does a lot of null checks/

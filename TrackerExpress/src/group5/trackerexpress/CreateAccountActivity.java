@@ -201,13 +201,6 @@ public class CreateAccountActivity extends AccountFormActivity {
 			user.setName(CreateAccountActivity.this, mName);
 			user.setEmail(CreateAccountActivity.this, mEmail);
 			user.setPassword(CreateAccountActivity.this, mPassword);
-			
-			try {
-				new ElasticSearchEngineUser().insertUser(CreateAccountActivity.this, user);
-			} catch (IOException e) {
-				//FIXME: Deal with failure to upload new user when creating account
-				e.printStackTrace();
-			}
 
 			return ACCOUNT_SUCCESS;
 		}
@@ -268,9 +261,7 @@ public class CreateAccountActivity extends AccountFormActivity {
 
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-				Intent intent = new Intent(CreateAccountActivity.this, MainActivity.class);
-		    	startActivity(intent);
-				finish();
+				finishActivity();
 			}
 			
 		});
@@ -299,10 +290,24 @@ public class CreateAccountActivity extends AccountFormActivity {
 	        	// Do nothing
 	        }
 
-			Intent intent = new Intent(CreateAccountActivity.this, MainActivity.class);
-	    	startActivity(intent);
-			finish();
+			
+			finishActivity();
+			
+
 	    }
+	}
+
+	private void finishActivity() {
+		try {
+			new ElasticSearchEngineUser().insertUser(CreateAccountActivity.this, Controller.getUser(CreateAccountActivity.this));
+		} catch (IOException e) {
+			//FIXME: Deal with failure to upload new user when creating account
+			e.printStackTrace();
+		}
+		
+		Intent intent = new Intent(CreateAccountActivity.this, MainActivity.class);
+    	startActivity(intent);
+		finish();
 	}
 
 }

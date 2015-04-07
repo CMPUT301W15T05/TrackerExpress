@@ -62,6 +62,12 @@ public class Controller {
 		return user;
 	}
 	
+
+	public static void setUser(Context context, User user2) {
+		user = user2;
+		user2.notifyViews(context);
+	}
+	
 	/**
 	 * Gets the claim based on the claim id
 	 * 
@@ -143,4 +149,5 @@ public class Controller {
 			}
 		}
 	}
+
 }
