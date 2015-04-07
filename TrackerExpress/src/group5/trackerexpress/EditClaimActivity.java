@@ -145,13 +145,11 @@ public class EditClaimActivity extends EditableActivity implements DatePickerFra
 		ClaimTitle = (EditText) findViewById(R.id.editClaimTitle);
 		limitLength(ClaimTitle, 20);
 		
-<<<<<<< HEAD
-=======
+
 		StartDateYear = (Button) findViewById(R.id.editClaimStartDateYear);
 
 		EndDateYear = (Button) findViewById(R.id.editClaimEndDateYear);
 
->>>>>>> 414745fa09f80138444fcdaca05c525dfd376fe2
 		Description = (EditText) findViewById(R.id.editClaimDescription);
 		
 		desListView = (ListView) findViewById(R.id.listViewDestinations);
