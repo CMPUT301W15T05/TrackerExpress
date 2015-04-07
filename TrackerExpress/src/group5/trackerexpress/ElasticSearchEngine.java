@@ -136,7 +136,9 @@ public class ElasticSearchEngine {
 		
 		//switch back for saving:
 		for (Expense expense : claim.getExpenseList().toList()){
-			expense.getReceipt().stopStoringActualBitmap();
+			try {
+				expense.getReceipt().stopStoringActualBitmap();
+			} catch (NullPointerException e) {}
 		}		
 
 	}
