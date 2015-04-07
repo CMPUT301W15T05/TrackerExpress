@@ -8,5 +8,9 @@
     <item 
         android:id="@+id/op_delete_expense"
         android:title="@string/delete_expense" />    
+        
+    <item 
+        android:id="@+id/op_view_image"
+        android:title="@string/view_image" />
 
 </menu>
