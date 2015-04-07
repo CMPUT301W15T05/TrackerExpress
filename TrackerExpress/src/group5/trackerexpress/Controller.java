@@ -1,5 +1,6 @@
 package group5.trackerexpress;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -148,7 +149,14 @@ public class Controller {
 
 		if ( isInternetConnected(context) ){
 			Claim[] localListOfClaims = Controller.getClaimList(context).toList();
-			Claim[] elasticListOfClaims = (new ElasticSearchEngine()).getClaims();
+			Claim[] elasticListOfClaims;
+			try {
+				elasticListOfClaims = (new ElasticSearchEngine()).getClaims(context);
+			} catch (IOException e) {
+				//FIXME: Notify user of elastic search fail
+				e.printStackTrace();
+				elasticListOfClaims = new Claim[0];
+			}
 			for ( Claim c : localListOfClaims ){
 				Log.i("TESTING", c.getUuid().toString() + c.getClaimName());
 				if ( c.getStatus() == Claim.SUBMITTED){
