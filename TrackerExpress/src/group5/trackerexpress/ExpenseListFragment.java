@@ -124,6 +124,7 @@ public class ExpenseListFragment extends Fragment implements TView {
                         	LatLng latlng = new LatLng(clickedOnExpense.getLatitude(), clickedOnExpense.getLongitude());
                         	intent = new Intent (getActivity(), BasicMapActivity.class);
                         	intent.putExtra("latlng", latlng);
+                        	startActivity(intent);
                         	break;
                         	
                         case R.id.op_view_image:                      	
