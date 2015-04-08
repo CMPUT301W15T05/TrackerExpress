@@ -50,7 +50,7 @@ public class ElasticSearchEngineUnthreadedUser {
 	/**
 	 * 
 	 */
-	private static final String HTTP_PATH = "http://cmput301.softwareprocess.es:8080/testing/group5users/";
+	private static final String HTTP_PATH = "http://cmput301.softwareprocess.es:8080/cmput301w15t05/users/";
 
 	/**
 	 * Gets all registerd users from server

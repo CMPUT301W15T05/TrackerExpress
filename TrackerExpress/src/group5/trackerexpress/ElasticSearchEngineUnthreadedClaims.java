@@ -50,7 +50,7 @@ public class ElasticSearchEngineUnthreadedClaims {
 	/**
 	 * 
 	 */
-	private static final String HTTP_PATH = "http://cmput301.softwareprocess.es:8080/testing/group5claims/";
+	private static final String HTTP_PATH = "http://cmput301.softwareprocess.es:8080/cmput301w15t05/claims/";
 
 	/**
 	 * Gets claims from es server
