@@ -2,7 +2,7 @@
 
 DEMO for TrackerExpress application
 
-http://youtu.be/SPJStiSIbSU
+https://www.youtube.com/watch?v=xCO7B4XmR0c
 
 ###Note!  
 Doing a fresh clone on any machine other than a lab mmachine might require you (in eclipse) to go to:  
